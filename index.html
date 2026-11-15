@@ -1429,7 +1429,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .intent{flex-direction:row!important;align-items:center;white-space:nowrap;overflow:hidden;width:max-content;max-width:420px;min-height:0!important;padding:4px 8px!important;gap:6px!important}
 .intent b{display:inline!important;flex:none;font-size:12px!important}
 .intent .itg{display:inline!important;margin:0!important;flex:none;font-size:11px!important}
-.intent .idsc{flex:0 1 auto;min-width:0;overflow:hidden;text-ellipsis:ellipsis;text-overflow:ellipsis;font-size:11px}.pcw .pc .pimg.art{position:absolute;left:50%;bottom:0;top:auto;width:auto;height:128%;max-width:none;margin:0;transform:translateX(-50%)}.kitrow{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.kopt{border:1px solid var(--line2);border-radius:8px;padding:6px 8px;cursor:pointer;background:var(--ink2);font-size:12px}.kopt i{display:block;font-style:normal;font-size:10px;color:var(--muted)}.kopt p{margin:2px 0 0;font-size:11.5px;color:var(--muted)}.kopt.on{border-color:#ffd25a;box-shadow:0 0 0 1px #ffd25a inset}.kopt.lock{opacity:.5;cursor:default}.cbo{font-style:normal;font-weight:700;color:#9aa}.cbo.on{color:#ffd25a;animation:warn 1.2s ease-in-out infinite}.genb{color:#ffd25a;font-weight:700}.awk{font-style:normal;color:#ffd25a;font-weight:700;font-size:.92em}.awk-list p{margin:3px 0;font-size:12px}.awk-list p.on{color:#ffd25a}.awk-list p.off{color:var(--muted);opacity:.6}
+.intent .idsc{flex:0 1 auto;min-width:0;overflow:hidden;text-ellipsis:ellipsis;text-overflow:ellipsis;font-size:11px}.pcw .pc .pimg.art{position:absolute;left:50%;bottom:0;top:auto;width:auto;height:128%;max-width:none;margin:0;transform:translateX(-50%)}.kitrow{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.kopt{border:1px solid var(--line2);border-radius:8px;padding:6px 8px;cursor:pointer;background:var(--ink2);font-size:12px}.kopt i{display:block;font-style:normal;font-size:10px;color:var(--muted)}.kopt p{margin:2px 0 0;font-size:11.5px;color:var(--muted)}.kopt.on{border-color:#ffd25a;box-shadow:0 0 0 1px #ffd25a inset}.kopt.lock{opacity:.5;cursor:default}.cbo{font-style:normal;font-weight:700;color:#9aa}.cbo.on{color:#ffd25a;animation:warn 1.2s ease-in-out infinite}.genb{color:#ffd25a;font-weight:700}.sk b span.aw,.sk-h span.aw,.aw,.num.aw,.cg .ds .num.aw,.fight .cmd .sbtn p .num.aw{color:#ffd400;font-weight:800;font-style:normal;text-shadow:0 0 6px rgba(255,200,0,.45)}.sk b span.aw,.sk-h span.aw{color:#ffd400!important;font-size:inherit}.awk-list p{margin:3px 0;font-size:12px}.awk-list p.on{color:#ffd25a}.awk-list p.off{color:var(--muted);opacity:.6}
 .sk-h b .eli{margin-right:5px;vertical-align:-1px}
 .fight .abf{right:52px}
 .mutebtn{position:absolute;z-index:20;right:12px;top:8px;width:32px;height:26px;border-radius:6px;border:1px solid var(--line2);background:rgba(8,4,6,.6);color:var(--gold);font-size:14px;display:grid;place-items:center}
@@ -3801,7 +3801,7 @@ function renderTeam() {
   <div class="det"><h2>${own ? c.name : "???"}</h2><div class="ti">${own ? c.title : "Héros non obtenu"}</div>
    <div class="chs">${own ? mkChips(c) : ""}</div><span class="stars" style="font-size:15px">${own ? mkStar(own) : ""}</span>
    <div class="stt"><div>PV<b>${own ? fmt(st.hp) : "???"}</b></div><div>ATK<b>${own ? fmt(st.atk) : "???"}</b></div><div>DEF<b>${own ? fmt(st.def) : "???"}</b></div></div>
-   ${own ? c.skills.map((sk, i) => `<div class="sk"><b>${sk.n}<span>Recharge ${sk.cd} tours</span></b><p>${sk.d}${awTag(id, i)}</p></div>`).join("") : `<p class="note">Invoque ce héros pour découvrir ses capacités.</p>`}
+   ${own ? c.skills.map((sk, i) => `<div class="sk"><b>${sk.n}<span>Recharge ${awRcg(id, i, sk.cd)}</span></b><p>${awDesc(id, sk, i)}</p></div>`).join("") : `<p class="note">Invoque ce héros pour découvrir ses capacités.</p>`}
    <div class="roles2">${Object.keys(ROLE).map((k) => `<span class="chip2 ${roles.has(k) ? "ok" : ""}">${ROLE[k].k} ${ROLE[k].n}</span>`).join("")}</div>
    <div class="act">${btn}</div></div></div>`;
   hydratePx(app);
@@ -3846,7 +3846,7 @@ function showDetail(id) {
         <div class="statrow"><div class="stat"><span>PV</span><b>${own ? fmt(st.hp) : "???"}</b></div><div class="stat"><span>ATK</span><b>${own ? fmt(st.atk) : "???"}</b></div><div class="stat"><span>DEF</span><b>${own ? fmt(st.def) : "???"}</b></div></div>
       </div></div>
     <p class="note" style="margin-top:10px" ${own ? "" : "hidden"}>Chaque doublon invoqué ajoute une étoile (+10 % de stats et une amélioration de sort, max 5★). Au-delà, il est converti en jade. Dégâts ${ROLE[c.role].dt === "p" ? "physiques" : "magiques"}.</p>
-    ${own ? "" : `<div class="sk-list"><p class="note">Héros non débloqué : invoque-le pour découvrir ses capacités.</p>${[1, 2, 3].map(() => `<div class="sk"><div class="sk-h"><b>???</b><span>???</span></div><p>???</p></div>`).join("")}</div>`}<div class="sk-list" ${own ? "" : "hidden"}><div class="sk"><div class="sk-h"><b>Attaque · Garde</b><span>Sans recharge</span></div><p>Attaque : 100 % ATK ${ROLE[c.role].dt === "p" ? "physique" : "magique"} de son élément. Garde : −50 % de dégâts subis jusqu'au prochain tour et recharges −1${c.role === "tank" ? ", et provoque le boss" : ""}.</p></div>${c.skills.map((s, i) => `<div class="sk"><div class="sk-h"><b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(s.el) : ""}${s.n}</b><span>Recharge ${s.cd} tours</span></div><p>${s.d}${awTag(id, i)}</p></div>`).join("")}${awList(id)}${kitList(id)}</div>
+    ${own ? "" : `<div class="sk-list"><p class="note">Héros non débloqué : invoque-le pour découvrir ses capacités.</p>${[1, 2, 3].map(() => `<div class="sk"><div class="sk-h"><b>???</b><span>???</span></div><p>???</p></div>`).join("")}</div>`}<div class="sk-list" ${own ? "" : "hidden"}><div class="sk"><div class="sk-h"><b>Attaque · Garde</b><span>Sans recharge</span></div><p>Attaque : 100 % ATK ${ROLE[c.role].dt === "p" ? "physique" : "magique"} de son élément. Garde : −50 % de dégâts subis jusqu'au prochain tour et recharges −1${c.role === "tank" ? ", et provoque le boss" : ""}.</p></div>${c.skills.map((s, i) => `<div class="sk"><div class="sk-h"><b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(s.el) : ""}${s.n}</b><span>Recharge ${awRcg(id, i, s.cd)}</span></div><p>${awDesc(id, s, i)}</p></div>`).join("")}${awList(id)}${kitList(id)}</div>
     <div class="d-acts">${own && !S.run ? `<button class="btn ${inTeam ? "ghost" : ""}" data-act="togd" data-id="${id}">${inTeam ? "Retirer de l'équipe" : "Ajouter à l'équipe"}</button>` : ""}<button class="btn ghost" data-act="closesheet">Fermer</button></div>
   </div>`;
   document.body.appendChild(sh);
@@ -4161,7 +4161,8 @@ const AWK = [
 ];
 const awMul = (id, si) => { const st = stars(id); return si === 0 && st >= 2 ? 1.1 : si === 2 && st >= 5 ? 1.5 : 1; };
 const awCd = (id, si) => (si === 2 && stars(id) >= 4) || (si === 1 && stars(id) >= 3) ? 1 : 0;
-const awTag = (id, si) => { const m = awMul(id, si), c = awCd(id, si); return (m > 1 || c) ? ` <em class="awk">★ ${m > 1 ? "+" + Math.round((m - 1) * 100) + " %" : ""}${m > 1 && c ? " · " : ""}${c ? "recharge −1" : ""}</em>` : ""; };
+const awRcg = (id, si, cd) => { const c = awCd(id, si), n = c ? Math.max(1, cd - c) : cd, u = n > 1 ? "tours" : "tour"; return c ? `<span class="aw">${n}</span> ${u}` : `${n} ${u}`; };
+const awDesc = (id, sk, si) => { const m = awMul(id, si); return m > 1 ? sk.d.replace(/(\d+(?:,\d+)?) % ATK/g, (x, n) => `<span class="aw">${+(parseFloat(n.replace(",", ".")) * m).toFixed(1).replace(".", ",").replace(",0", "")} % ATK</span>`) : sk.d; };
 const awList = (id) => `<div class="sk awk-list"><div class="sk-h"><b>Éveil</b><span>${stars(id) || 0} / 5 ★</span></div>${AWK.map((a, k) => a ? `<p class="${stars(id) >= k + 1 ? "on" : "off"}">${a.t}</p>` : "").join("")}</div>`;
 // ===================== VOIES ALTERNATIVES ET COMBOS =====================
 const ALT = {
@@ -4438,7 +4439,7 @@ function skDmgVal(h, pct, i) { const b = F.boss; return hAtk(h) * (pct / 100) * 
 function skHealVal(h, pct, i) { return hAtk(h) * (pct / 100) * skPw(h, i) * (1 + (md().heal || 0)); }
 function skDesc(h, sk, i) {
   let t = sk.d; const heal = sk.fx.some((f) => f.k === "heal");
-  t = t.replace(/(\d+(?:,\d+)?) % ATK/g, (m, n) => { const v = parseFloat(n.replace(",", ".")); return `<span class="num">${fmt(heal ? skHealVal(h, v, i) : skDmgVal(h, v, i))}</span>${heal ? " PV" : " dégâts"}`; });
+  t = t.replace(/(\d+(?:,\d+)?) % ATK/g, (m, n) => { const v = parseFloat(n.replace(",", ".")); return `<span class="num${awMul(h.id, i) > 1 ? " aw" : ""}">${fmt(heal ? skHealVal(h, v, i) : skDmgVal(h, v, i))}</span>${heal ? " PV" : " dégâts"}`; });
   t = t.replace(/(?<![\dà] ?)(?<!à )(\d+) % (?:de ses )?PV(?: max)?/g, (m, n) => `<span class="num">${fmt(h.maxHp * n / 100)}</span> PV`);
   t = t.replace(/(\d+) %\/tour/g, (m, n) => `<span class="num">${fmt(h.maxHp * n / 100)}</span> PV/tour`);
   return t.replace(/ à <span/g, " : <span");
@@ -4459,7 +4460,7 @@ function renderSkills() {
   box.innerHTML = launchHtml() + `<div class="vrow">
     <button class="bbtn" data-act="skill" data-i="atk" ${dis} aria-label="Attaque" title="Attaque : 100 % ATK · ${ELEM[h.el].n} · ${h.dt === "p" ? "physique" : "magique"}"><div class="ic">${eli(h.el)}</div><div class="lb">Attaque</div><div class="vl">${fmt(skDmgVal(h, 100, -1))}</div></button>
     <button class="bbtn grd" data-act="skill" data-i="grd" ${dis} aria-label="Garde" title="Garde : −50 % de dégâts subis"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Garde</div><div class="vl">−50 %</div></button>
-    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 2 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${awTag(h.id, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
+    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 2 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
   </div>`;
 }
 
@@ -4472,7 +4473,7 @@ function gridHtml(h) {
   const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${off || F.busy ? "disabled" : ""}>${inner}</button>`;
   const sk = h.c.skills.map((s, i) => {
     const dmg = s.fx.some((f) => f.k === "dmg" || f.k === "dot"), cd = h.cd[i];
-    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>'}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${awTag(h.id, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
+    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>'}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
   });
   const ready = celReady(), g = F.gauge;
   const cel = cell("cel", `<div class="t">${icEl(h.el)}<b>Celestial</b></div>${ready ? `<div class="ds rd">${skDesc(h, celSk(h), -1)}</div>` : `<div class="pips">${Array.from({ length: 9 }, (_, q) => `<i class="${q < g ? "on" : ""}"></i>`).join("")}</div>`}`, "cel" + (ready ? " ready" : ""), !ready);
