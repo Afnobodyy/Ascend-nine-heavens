@@ -1935,6 +1935,11 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .cc-skip{position:absolute;right:12px;top:10px;z-index:2;background:rgba(8,4,6,.6);color:#f2e7d3;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:6px 12px;font-size:12px}
 /* v53 : plus de vignette sombre (teintes, ombres et grain « cinéma » conservés) */
 .fight .vign{display:none}
+/* calage du décor par boss : zoom (--bsc) depuis le haut pour que les pieds touchent le sol */
+.fight .bgimg{transform:scale(var(--bsc,1));transform-origin:50% 0}
+.fight[data-b=oni]{--bsc:1.07}
+/* le sprite d'Oni est coupé net aux pieds : fondu en bas pour qu'il se pose sur le sol au lieu de s'y enfoncer */
+.fight[data-b=oni] .bossbox .breathe{-webkit-mask-image:linear-gradient(180deg,#000 91%,transparent 99%);mask-image:linear-gradient(180deg,#000 91%,transparent 99%)}
 #fbgx{display:none;position:fixed;inset:0;z-index:0;background:#0b0608 center/cover no-repeat;pointer-events:none}
 #fbgx::after{content:"";position:absolute;inset:0;background:rgba(6,3,5,.4)}
 body:has(.fight) #fbgx{display:block}
@@ -4353,7 +4358,7 @@ function skBanner(kind, who, name, glyph, col) {
 setTimeout(snapBgs, 400);
 function renderFightShell() {
   const b = F.boss, T = BG[b.id] || BG.oni;
-  app.innerHTML = `<div class="fight${S.band ? "" : " ug"}">
+  app.innerHTML = `<div class="fight${S.band ? "" : " ug"}" data-b="${b.id}">
     <div class="ftop"><div class="order" id="forder"></div></div><button class="gearbtn" data-act="settings" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.4 13a7.9 7.9 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.4 7.4 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.6 11a7.9 7.9 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7 1l.4 2.6c0 .2.3.4.5.4h4c.2 0 .5-.2.5-.4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.5 1c.2.1.5 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg></button>
     <div class="scene" id="scene" style="--glow:${T.glow};--fog:${T.fog}">
       <div class="cam" id="cam">
