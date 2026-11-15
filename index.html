@@ -1521,6 +1521,34 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .vban .vn{font-family:var(--display);font-weight:800;font-size:19px;color:#f2e7d3;letter-spacing:.02em;text-shadow:0 1px 3px #000}
 .vban.boss{border-color:#d8452f;background:linear-gradient(180deg,rgba(54,16,14,.96),rgba(16,6,6,.96));box-shadow:0 0 0 1px #000,0 6px 18px rgba(0,0,0,.6),0 0 22px rgba(216,69,47,.45),inset 0 1px 0 rgba(255,150,120,.35)}
 .vban.boss .vg{--c:#ff6a52}.vban.boss .vw{color:#ff9a8a}
+
+/* HUD équipe (haut droite) : fiches de vie, statuts, capacités planifiées */
+.fight .ohb{display:none!important}
+.fight #bint{display:none!important}
+.vroster{position:absolute;right:10px;top:44px;width:226px;z-index:30;display:flex;flex-direction:column;gap:4px}
+.vro{position:relative;display:grid;grid-template-columns:26px 1fr auto;column-gap:7px;align-items:center;background:linear-gradient(90deg,rgba(14,8,11,.6),rgba(14,8,11,.88));border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:3px 8px 4px 4px;transition:transform .2s}
+.vro .face{grid-row:1/3;width:26px;height:26px;border-radius:4px;background:#2b1a21;overflow:hidden;align-self:start;margin-top:1px}
+.vro .face img{display:block;width:26px;height:26px;object-fit:cover;object-position:50% 3%;transform:scale(2.3);transform-origin:50% 0;max-width:none}
+.vro .vn{display:flex;gap:4px;align-items:center;min-width:0}
+.vro b{font-size:12px}.vro .hpn{font-size:10.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.vro .hpn.low{color:#ff8a78}.vro .hpn small{font-weight:600;color:#9fd4ff;font-size:10px}
+.vro .bar{grid-column:2/4;height:5px;position:relative}
+.vro .bar i.sh{position:absolute;top:0;bottom:0;background:rgba(120,190,255,.85)}
+.vro.active{border-color:#e2b250;box-shadow:0 0 10px rgba(226,178,80,.35);transform:translateX(-12px)}
+.vro.aim{border-color:#ff4a3a}
+.vro.aim b::after{content:" ⚔";color:#ff6a5a;font-size:10px}
+.vro.vplanned{box-shadow:inset 3px 0 0 #ffd25a}
+.vro.dead{opacity:.45;filter:grayscale(1)}
+.vro .vplan{display:none;position:absolute;right:calc(100% + 6px);top:50%;transform:translateY(-50%);white-space:nowrap;font-size:10.5px;font-weight:700;color:#ffd25a;background:rgba(10,6,8,.88);border:1px solid #ffd25a;border-radius:6px;padding:1px 6px;pointer-events:none}
+.vro .vplan b{display:inline-grid;place-items:center;width:14px;height:14px;border-radius:50%;background:#ffd25a;color:#1a0f08;font-size:9px;margin-right:4px}
+.vro .vplan b::after{content:none}
+.vs{display:inline-flex;align-items:center;gap:1px;height:14px;padding:0 4px 0 3px;border-radius:7px;font-size:9px;font-weight:700;line-height:14px;border:1px solid}
+.vs svg{width:10px;height:10px;flex:none}.vs sub{font-size:9px;margin-left:1px;vertical-align:baseline}
+.vs.good{color:#8fe6c4;background:rgba(76,196,156,.18);border-color:#3ea88a}.vs.bad{color:#ffa99a;background:rgba(255,90,74,.18);border-color:#d4573a}
+.vs.s-poison{color:#c8f08a;background:rgba(120,170,40,.22);border-color:#7da83a}
+.vs.s-guard{color:#a9d4ff;background:rgba(70,130,220,.22);border-color:#4f86d4}
+.vs.s-atk{color:#ffd58a;background:rgba(230,150,40,.22);border-color:#d49a38}
+.vs.s-burn{color:#ffa07a;background:rgba(220,80,40,.22);border-color:#d4573a}
 @keyframes vbanin{0%{opacity:0;transform:translate(-50%,-14px)}12%{opacity:1;transform:translate(-50%,0)}82%{opacity:1}100%{opacity:0}}
 
 </style>
@@ -3845,6 +3873,7 @@ function renderFightShell() {
       <div class="bhud"><div class="bn"><b>${b.name}</b><span class="phase" id="bphase" hidden>PHASE 2</span><div class="wk" id="bwk"></div></div>
         <div class="bar hp"><i id="bhp"></i><i class="sh" id="bsh"></i><span id="bhpt"></span></div><div class="bar pstr" id="bpost"><i id="bposti"></i></div></div>
       <div class="intent" id="bint"></div>
+      <div class="vroster" id="vroster">${F.heroes.map((h, i) => `<div class="vro" id="vro${i}"><span class="face">${heroArt(h.c)}</span><span class="vn"><b>${h.c.name}</b><span class="vsl" style="display:contents"></span></span><span class="hpn"></span><span class="bar"><i class="hpi"></i><i class="sh"></i></span><span class="vplan"></span></div>`).join("")}</div>
       <div class="binfo"><div class="stl" id="bst"></div></div>
     </div>
     <div class="log" id="flog"></div>
@@ -3855,6 +3884,9 @@ function renderFightShell() {
   stopPart = runParticles(document.getElementById("ptc"), b.id);
   fightEnv();
 }
+const VIC = { atk: '<svg viewBox="0 0 24 24"><path d="M12 2l6 8h-4v7h-4v-7H6z" fill="currentColor"/><rect x="6" y="19" width="12" height="3" fill="currentColor"/></svg>', guard: '<svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>', poison: '<svg viewBox="0 0 24 24"><path d="M12 2C9 8 5 11 5 15a7 7 0 0014 0c0-4-4-7-7-13z" fill="currentColor"/><circle cx="9.5" cy="15" r="1.6" fill="#0c0709"/></svg>', burn: '<svg viewBox="0 0 24 24"><path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-4 2-7 2 1 3 2 4-5z" fill="currentColor"/></svg>' };
+const VKEY = { buff: "atk", selfatk: "atk", dr: "guard", poison: "poison", burn: "burn" };
+const vChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : n; const ic = VKEY[s.k]; return `<span class="vs ${ic ? "s-" + ic : good ? "good" : "bad"}" title="${label}">${ic ? VIC[ic] : label.slice(0, 3)}<sub>${s.d}</sub></span>`; }).join("");
 const stChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : n; return `<span class="st ${good ? "good" : "bad"}">${label}<sub>${s.d}</sub></span>`; }).join("");
 function update() {
   if (!F) return;
@@ -3895,6 +3927,17 @@ function update() {
     el.querySelector(".hpt").classList.toggle("low", !h.dead && h.hp / h.maxHp < 0.3);
     el.querySelector(".hst").innerHTML = stChips(h.st);
     const act = F.phase === "player" && !F.pending && F.active === i && !h.dead && !h.acted;
+    { const vr = $("vro" + i); if (vr) {
+      const r = h.hp / h.maxHp, plv = F.plan && F.plan[i];
+      vr.querySelector(".vsl").innerHTML = vChips(h.st);
+      const hn = vr.querySelector(".hpn"); hn.innerHTML = h.dead ? "Tombé" : `${fmt(h.hp)}${h.shield > 0 ? ` <small>+${fmt(h.shield)}</small>` : ""}`; hn.classList.toggle("low", !h.dead && r < 0.3);
+      vr.querySelector(".hpi").style.width = r * 100 + "%";
+      const sh = vr.querySelector(".sh"); sh.style.left = r * 100 + "%"; sh.style.width = Math.min(100 - r * 100, (h.shield / h.maxHp) * 100) + "%";
+      vr.classList.toggle("active", act); vr.classList.toggle("dead", h.dead); vr.classList.toggle("aim", !F.over && !h.dead && aims.includes(h));
+      const show = F.phase === "player" && plv && !h.acted && !h.dead, vp = vr.querySelector(".vplan");
+      vr.classList.toggle("vplanned", !!show);
+      if (show) { const k = planOrder().indexOf(i); vp.innerHTML = `${k >= 0 ? `<b>${k + 1}</b>` : ""}${typeof plv.si === "number" ? getSk(h, plv.si).n : plv.si === "grd" ? "Garde" : "Attaque"}${plv.ti != null ? " → " + F.heroes[plv.ti].c.name : ""}`; vp.style.display = "block"; } else vp.style.display = "none";
+    } }
     [el, pc].forEach((x) => {
       x.classList.toggle("dead", h.dead);
       x.classList.toggle("done", !h.dead && h.acted && F.phase === "player");
