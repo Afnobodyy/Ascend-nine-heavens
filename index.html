@@ -1591,6 +1591,161 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .rules-sheet h3{font-size:18px;margin:0 0 10px}
 .rules-sheet ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;color:#dccdb6;font-size:14px}
 .rules-sheet .cycle{margin-top:12px}
+
+/* ===== v44 : boutons « rouleau de papier » + accueil Le Portail ===== */
+:root{--pap1:#f6ecd8;--pap2:#dccaa6;--pinkb:#2a1810;--pmute:#6a5442;--seal:#b3261e;--rollc:#5a3a24}
+.btn,.btn.red,.btn.ghost,.bbtn,.sbtn,.tabs button,.mutebtn,.skip{background:linear-gradient(180deg,var(--pap1),var(--pap2));color:var(--pinkb);border:0;border-left:6px solid var(--rollc);border-right:6px solid var(--rollc);border-radius:3px;box-shadow:0 3px 0 rgba(0,0,0,.45),0 6px 12px rgba(0,0,0,.35),inset 0 0 14px rgba(120,80,30,.22)}
+.btn{font-family:var(--display);font-weight:800;letter-spacing:.02em}
+.btn.red{background:linear-gradient(180deg,#f6e2d0,#e0b9a0);border-left-color:#7a1410;border-right-color:#7a1410;color:#7a1410}
+.btn.ghost{background:linear-gradient(180deg,rgba(246,236,211,.9),rgba(220,202,166,.9));color:var(--pmute);border-left-color:#7a5a46;border-right-color:#7a5a46}
+.btn:active,.bbtn:active,.sbtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.45),inset 0 0 14px rgba(120,80,30,.22)}
+.btn:disabled{filter:grayscale(1) brightness(.75)}
+.btn.sm{padding:7px 14px}
+.bbtn b,.sbtn b{color:var(--pinkb)}
+.bbtn small,.sbtn p,.sbtn .cdv small{color:var(--pmute)}
+.sbtn .tg{color:#8a2a1c}
+.sbtn.ult{box-shadow:0 3px 0 rgba(0,0,0,.45),0 6px 12px rgba(0,0,0,.35),inset 0 0 0 2px rgba(226,178,80,.85),inset 0 0 14px rgba(120,80,30,.22)}
+.bbtn i{background:rgba(179,38,30,.12);color:var(--seal)}
+.bbtn .ico,.fight .bbtn .ico{color:var(--seal)}
+.bbtn.grd{background:linear-gradient(180deg,#e8eef5,#c3d1e0);border-left-color:#3a5470;border-right-color:#3a5470}
+.bbtn.grd .ico,.fight .cmd .bbtn .ic .ico{color:#2f4f78}
+.bbtn.grd i{color:#2f4f78}
+.bbtn i.eli,.fight .bbtn i.eli{background:color-mix(in srgb,var(--c) 22%,#fff);border:1.5px solid var(--c)}
+.fight .cmd .bbtn{border-left-width:3px;border-right-width:3px;padding-inline:2px!important}
+.fight .cmd .sbtn{border-left-width:4px;border-right-width:4px}
+.fight .cmd .bbtn .lb{color:var(--pinkb);white-space:nowrap}
+.fight .cmd .bbtn .vl{color:#8a2a1c}
+.fight .cmd .bbtn.grd .vl{color:#2f4f78}
+.fight .cmd .sbtn p{color:#4a3a2e}
+.fight .cmd .sbtn p .num{color:#8a2a1c}
+.sbtn .cdv{color:var(--paper)}
+.tabs button{border-radius:3px;padding:5px 12px;color:var(--pmute);border-left-width:4px;border-right-width:4px}
+.tabs button.on{color:var(--seal);font-weight:800;background:linear-gradient(180deg,#fff7e6,#ecd9b4);border-left-color:var(--seal);border-right-color:var(--seal)}
+.mutebtn{color:var(--seal);border-left-width:4px;border-right-width:4px}
+.mutebtn.off{color:#9a8a7a}
+.skip{border-radius:3px;color:var(--pmute);border-left-width:4px;border-right-width:4px}
+.fight .abf{background:linear-gradient(180deg,var(--pap1),var(--pap2))}
+/* accueil */
+.h-home{position:absolute;inset:0;overflow:hidden;background:#0a0608;z-index:1}
+.h-home img.px{image-rendering:pixelated;display:block}
+.h-bg{position:absolute;inset:0;background-size:cover;background-position:50% 55%;image-rendering:pixelated;transform:scale(1.14);transform-origin:40% 0}
+.h-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(5,2,4,.75) 100%)}
+.h-band{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(180deg,transparent,rgba(8,3,5,.88))}
+.h-jade{position:absolute;right:16px;top:12px;display:flex;gap:8px;align-items:center;z-index:9}
+.h-jade .mutebtn{position:static;width:32px;height:32px}
+.h-jade .jade{background:rgba(14,7,10,.72);backdrop-filter:blur(3px);padding:5px 12px 5px 8px;font-size:14px}
+.h-rec{position:absolute;left:16px;top:14px;z-index:9;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.h-rec span{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em}
+.h-rec b{display:block;font-family:var(--display);font-size:15px}
+.h-logo{position:absolute;left:0;right:0;top:34px;text-align:center;line-height:1}
+.h-logo .k{font-family:var(--display);font-weight:800;font-size:118px;color:transparent;background:linear-gradient(180deg,#fff2c4 0%,#f0c561 45%,#a87a24 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 3px 0 #3a230a) drop-shadow(0 0 18px rgba(240,190,80,.45));letter-spacing:.06em}
+.h-logo .a{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.5em;margin-top:10px;color:var(--paper);text-shadow:0 2px 8px #000;text-transform:uppercase}
+.h-logo .n{font-family:var(--display);font-weight:800;font-size:44px;margin-top:6px;color:var(--paper);text-shadow:0 3px 0 #5a140a,0 0 22px rgba(0,0,0,.9);letter-spacing:.04em}
+.h-team{position:absolute;left:50%;bottom:100px;height:215px;transform:translateX(-50%);display:flex;align-items:flex-end}
+.h-hs{position:relative;height:100%;margin-inline:-14px}
+.h-hs img{height:100%;width:auto;filter:drop-shadow(0 8px 10px rgba(0,0,0,.7))}
+.h-hs i{position:absolute;left:8%;right:8%;bottom:-3%;height:9%;background:radial-gradient(ellipse,rgba(0,0,0,.65),transparent 70%)}
+.h-menu{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;align-items:stretch;gap:12px}
+.h-menu .btn,.h-menu .btn.ghost{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}
+.h-menu .h-bt{min-width:104px;padding:10px 14px;gap:2px;font-family:var(--body);font-weight:700}
+.h-bt i{font-style:normal;font-family:var(--display);font-weight:800;font-size:22px;line-height:1;color:var(--seal)}
+.h-bt b{font-size:13px;color:var(--pinkb)}
+.h-bt span{font-size:11px;color:var(--pmute);font-weight:500}
+.h-menu .h-cta{min-width:350px;padding:12px 66px 12px 36px;background:linear-gradient(180deg,#f6ecd8,#e3d1ac)}
+.h-cta b{font-family:var(--display);font-size:23px;font-weight:800;letter-spacing:.03em;color:var(--pinkb)}
+.h-cta small{font-size:11px;font-weight:700;letter-spacing:.1em;margin-top:3px;color:#8a2a1c;font-family:var(--body)}
+.h-cta:after{content:"始";position:absolute;right:16px;top:50%;transform:translateY(-50%) rotate(-6deg);width:40px;height:40px;display:grid;place-items:center;background:var(--seal);color:#f6e6c8;font-family:var(--display);font-weight:800;font-size:22px;border-radius:5px;box-shadow:inset 0 0 0 2px rgba(255,220,190,.35)}
+.h-ab{font-size:11px!important;padding:5px 12px!important}
+.rules-sheet h3{font-size:18px;margin:0 0 10px}
+.rules-sheet ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;color:#dccdb6;font-size:14px}
+.rules-sheet .cycle{margin-top:12px}
+
+/* ===== v45 : menus Équipe (fiche héros) et Invocation (bannière) ===== */
+@property --c{syntax:"<color>";inherits:true;initial-value:#3d8bff}
+.mk,.av{--paper1:#f6ecd8;--paper2:#dccaa6;--ink:#2a1810;--roll:#5a3a24;--seal:#b3261e;--gold:#e2b250}
+.mk{position:absolute;inset:0;overflow:hidden;z-index:2;font-family:var(--body);color:#f2e7d3;background:#0a0608}
+.mk *,.av *{box-sizing:border-box}
+.mk .bgp{position:absolute;inset:0;background-size:cover;background-position:50% 60%;image-rendering:pixelated;transform:scale(1.14);transform-origin:40% 0}
+.mk .vg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,transparent 40%,rgba(5,2,4,.82) 100%)}
+.mk img.px{image-rendering:pixelated}
+.mk .r-R{--rc:#3d8bff;--b1:#1d4a86;--b2:#0b1426}.r-E{--rc:#a75cff;--b1:#4b2380;--b2:#150a26}.r-L{--rc:#ff8a1f;--b1:#9a4c14;--b2:#241005}
+.mk-top{position:absolute;left:0;right:0;top:0;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:30}
+.mk-top .l{display:flex;align-items:center;gap:12px}
+.mk-top .back{padding:6px 14px;font-size:13px}
+.mk-top h2{font-family:var(--display);font-size:22px;margin:0;text-shadow:0 2px 8px #000;display:flex;align-items:baseline;gap:8px}
+.mk-top h2 i{font-style:normal;color:#e2b250;font-size:24px}
+.mk-top .r{display:flex;gap:8px;align-items:center}
+.mk .pill{display:flex;align-items:center;gap:7px;background:rgba(14,7,10,.74);border:1px solid #6a4048;border-radius:99px;padding:4px 12px 4px 7px;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+.mk .pill i{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b8ffe2,#4cc49c 45%,#1d6b52);box-shadow:0 0 8px rgba(76,196,156,.7)}
+.mk .es{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-family:var(--display);font-weight:800;font-size:12px;color:var(--c);background:rgba(10,6,8,.78);border:1.5px solid var(--c)}
+.mk .stars{color:#e2b250;letter-spacing:1px;font-size:12px}.stars u{text-decoration:none;color:rgba(226,178,80,.25)}
+.paper{background:linear-gradient(180deg,var(--paper1),var(--paper2));color:var(--ink);border-left:6px solid var(--roll);border-right:6px solid var(--roll);border-radius:3px;box-shadow:0 3px 0 rgba(0,0,0,.45),0 6px 12px rgba(0,0,0,.35),inset 0 0 14px rgba(120,80,30,.22)}
+.mk .pt{position:relative;width:var(--s,56px);height:var(--s,56px);border-radius:8px;overflow:hidden;border:2px solid var(--rc);background:radial-gradient(ellipse at 50% 35%,var(--b1),var(--b2));flex:none}
+.mk .pt img{position:absolute;left:-12%;top:-5%;width:124%;height:auto}
+.mk .pt.lk img{filter:brightness(0) opacity(.45)}.pt.lk{border-color:#4a2e35;background:#1a0f14}
+.mk .pt.in::after{content:"✓";position:absolute;right:2px;top:2px;width:17px;height:17px;border-radius:50%;background:#e2b250;color:#1b0f08;font-weight:800;font-size:11px;display:grid;place-items:center}
+.mk .pt.L{box-shadow:0 0 10px rgba(255,138,31,.55)}
+.mk .pt .st{position:absolute;left:0;right:0;bottom:0;font-size:8px;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.85));color:#e2b250;padding-top:8px;line-height:1.1}
+.mk .chip2{white-space:nowrap;font-size:11.5px;padding:3px 10px;border-radius:99px;border:1px solid #6a4048;background:rgba(14,7,10,.6);color:#b4a28e;display:inline-flex;gap:5px;align-items:center}
+.mk .chip2.ok{color:#4cc49c;border-color:rgba(76,196,156,.55)}
+.mk .chip2.no{color:#ff8a7a;border-color:rgba(255,120,100,.5)}
+
+/* ============ ÉQUIPE C : fiche héros ============ */
+.tc .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,3,5,.88) 0,rgba(8,3,5,.2) 30%,rgba(8,3,5,.1) 55%,rgba(8,3,5,.9) 100%)}
+.tc .med{position:absolute;left:50%;top:7px;transform:translateX(-50%);display:flex;gap:10px;align-items:center;padding:5px 12px;border-radius:99px;background:rgba(14,7,10,.78);border:1px solid #6a4048;z-index:31}
+.tc .med .pt{--s:42px;border-radius:50%}.tc .med .pt img{left:-18%;top:-4%;width:136%}
+.tc .med .pt.cur{border-color:#e2b250;box-shadow:0 0 0 2px rgba(226,178,80,.45),0 0 14px rgba(226,178,80,.7)}
+.tc .med .em{width:42px;height:42px;border-radius:50%;border:1.5px dashed #6a4048;display:grid;place-items:center;color:#7d6b63;font-size:18px}
+.tc .list{position:absolute;left:14px;top:58px;bottom:14px;width:226px;border-radius:12px;background:rgba(20,12,16,.82);border:1px solid #6a4048;padding:10px}
+.tc .list .tabs2{display:flex;gap:4px;margin-bottom:8px}.tc .list .tabs2 span{flex:1;text-align:center;padding:3px 0;font-family:var(--display);font-size:14px;color:#6a5442;background:linear-gradient(180deg,var(--paper1),var(--paper2));border-radius:3px}
+.tc .list .tabs2 span.on{color:var(--seal);font-weight:800}
+.tc .list .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.tc .list .pt{--s:46px;border-radius:7px}
+.tc .list .pt.cur{border-color:#e2b250;box-shadow:0 0 0 2px #e2b250}
+.tc .stage{position:absolute;left:250px;width:380px;top:50px;bottom:0;display:flex;justify-content:center;align-items:flex-end}
+.tc .stage .kj{position:absolute;top:70px;left:50%;transform:translateX(-50%);font-family:var(--display);font-weight:800;font-size:230px;line-height:1;color:rgba(255,200,120,.1);writing-mode:vertical-rl}
+.tc .stage .gl{position:absolute;bottom:20px;left:50%;width:320px;height:90px;margin-left:-160px;background:radial-gradient(ellipse,rgba(255,170,60,.65),transparent 70%)}
+.tc .stage img{position:relative;height:372px;width:auto;filter:drop-shadow(0 12px 12px rgba(0,0,0,.7));margin-bottom:6px}
+.tc .det{position:absolute;right:14px;top:58px;bottom:14px;width:312px;border-radius:12px;background:rgba(20,12,16,.9);border:1px solid #6a4048;padding:14px 16px;display:flex;flex-direction:column}
+.tc .det h2{margin:0;font-family:var(--display);font-size:28px;line-height:1}.tc .det .ti{color:#b4a28e;font-size:13px;margin-top:3px}
+.tc .det .chs{display:flex;gap:6px;margin:9px 0 6px;flex-wrap:wrap}
+.tc .det .stt{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 10px}
+.tc .det .stt div{background:rgba(255,255,255,.06);border-radius:6px;padding:4px 8px;font-size:11px;color:#b4a28e}.tc .det .stt b{display:block;font-size:17px;color:#f2e7d3;font-variant-numeric:tabular-nums}
+.tc .det .sk{border-top:1px solid #4a2e35;padding:7px 0}.tc .det .sk b{font-size:13.5px;display:flex;justify-content:space-between;color:#f2d28a}.tc .det .sk b span{font-weight:500;font-size:11px;color:#b4a28e}.tc .det .sk p{margin:2px 0 0;font-size:11.5px;line-height:1.35;color:#dccdb6}
+.tc .det .act{margin-top:auto;display:flex;gap:8px}.tc .det .act .btn{flex:1;text-align:center;padding:10px;font-size:14px}
+
+/* ============ INVOCATION D : bannière vedette ============ */
+.sd{background:linear-gradient(115deg,#1a0c12 0,#2b1018 46%,#10080c 100%)}
+.sd::before{content:"";position:absolute;left:-10%;top:-10%;width:70%;height:130%;background:linear-gradient(100deg,transparent 40%,rgba(255,138,31,.2) 40.5%,rgba(255,138,31,.05) 62%,transparent 62.5%);}
+.sd .bigname{position:absolute;left:10px;top:84px;font-family:var(--display);font-weight:800;font-size:170px;line-height:.9;color:transparent;-webkit-text-stroke:2px rgba(255,160,70,.28);letter-spacing:-.02em;white-space:nowrap}
+.sd .hero{position:absolute;left:30px;bottom:0;height:480px;width:340px;display:flex;justify-content:center;align-items:flex-end}.sd .hero::before{content:"";position:absolute;bottom:20px;left:0;right:0;height:300px;background:radial-gradient(ellipse,rgba(255,150,60,.55),transparent 68%)}
+.sd .hero img{position:relative;height:100%;width:auto;filter:drop-shadow(0 12px 14px rgba(0,0,0,.7))}
+.sd .info{position:absolute;left:400px;top:62px;width:290px}
+.sd .info .tag{display:inline-block;background:#ff8a1f;color:#1b0f08;font-weight:800;font-size:11px;letter-spacing:.14em;padding:2px 10px;border-radius:3px}
+.sd .info h2{margin:6px 0 0;font-family:var(--display);font-size:42px;line-height:1}.sd .info .ti{color:#b4a28e;font-size:14px;margin:4px 0 10px}
+.sd .info .chs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.sd .info .sk{font-size:12.5px;line-height:1.4;color:#dccdb6;border-left:3px solid #ff8a1f;padding-left:10px;margin:8px 0}.sd .info .sk b{color:#f2d28a;display:block}
+.sd .dots{position:absolute;left:392px;bottom:34px;display:flex;gap:4px;align-items:center}
+.sd .dots .pt{--s:34px;border-radius:50%;opacity:.55}.sd .dots .pt img{left:-18%;top:-4%;width:136%}.sd .dots .pt.cur{opacity:1;border-color:#ffd27a;box-shadow:0 0 12px rgba(255,170,60,.9);--s:42px}
+.sd .col2{position:absolute;right:20px;top:62px;bottom:18px;width:238px;border-radius:12px;background:rgba(20,12,16,.88);border:1px solid #6a4048;padding:14px;display:flex;flex-direction:column;gap:8px}
+.sd .col2 h3{margin:0;font-family:var(--display);font-size:16px;color:#e2b250}
+.sd .rr{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 10px;border-radius:7px;background:rgba(255,255,255,.05);border-left:4px solid var(--rc)}.sd .rr b{color:var(--rc)}
+.sd .gar{padding:9px 10px;border-radius:8px;background:linear-gradient(135deg,rgba(255,138,31,.22),rgba(255,138,31,.05));border:1px solid rgba(255,138,31,.5);font-size:12.5px}.sd .gar b{font-family:var(--display);font-size:24px;color:#ffb35a}
+.sd .gar i{display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.1);margin-top:6px;overflow:hidden}.sd .gar i s{display:block;height:100%;background:linear-gradient(90deg,#ff8a1f,#ffd27a)}
+.sd .col2 .btns{margin-top:auto;display:flex;flex-direction:column;gap:9px}.sd .col2 .btn{padding:10px;text-align:center;display:flex;flex-direction:column;align-items:center}.sd .col2 .btn b{font-family:var(--display);font-size:19px}.sd .col2 .btn small{display:flex;gap:5px;align-items:center;font-size:12px;font-weight:700;color:#6a5442}.sd .col2 .btn .jg{width:13px;height:13px}.sd .col2 .btn.big{border-left-color:#7a1410;border-right-color:#7a1410}.sd .col2 .btn.big small{color:#8a2a1c}
+
+.sd{background:linear-gradient(115deg,#12080c 0,color-mix(in srgb,var(--rc) 22%,#10080c) 46%,#10080c 100%)}
+.sd::before{background:linear-gradient(100deg,transparent 40%,color-mix(in srgb,var(--rc) 24%,transparent) 40.5%,color-mix(in srgb,var(--rc) 6%,transparent) 62%,transparent 62.5%)}
+.sd .bigname{-webkit-text-stroke:2px color-mix(in srgb,var(--rc) 30%,transparent)}
+.sd .hero::before{background:radial-gradient(ellipse,color-mix(in srgb,var(--rc) 55%,transparent),transparent 68%)}
+.sd .info .tag{background:var(--rc);color:#fff}
+.sd .col2{bottom:auto;background:rgba(20,12,16,.7)}
+.sd .btns2{position:absolute;left:390px;right:20px;bottom:18px;display:flex;gap:14px}
+.sd .btns2 .btn{flex:1;padding:10px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.sd .btns2 .btn b{font-family:var(--display);font-size:20px}.sd .btns2 .btn small{display:flex;gap:5px;align-items:center;font-size:12px;font-weight:700;color:#6a5442}.sd .btns2 .btn .jg{width:13px;height:13px}
+.sd .btns2 .btn.big{border-left-color:#7a1410;border-right-color:#7a1410}.sd .btns2 .btn.big small{color:#8a2a1c}
+.sd .info{top:90px}
+.tc .bgp{transform:scale(1.14) translateX(-44px)}
+.mk-top .r .mutebtn{position:static;width:32px;height:32px;display:grid;place-items:center}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
@@ -3427,19 +3582,36 @@ function showRules() {
   document.body.appendChild(sh);
 }
 
+// ===================== MENUS v45 =====================
+const FEATURED = "p5"; // dernier héros sorti, mis en vedette dans l'invocation
+let teamFocus = null, teamFilter = "all";
+const mkEs = (e) => `<span class="es" style="--c:${ELEM[e].c}">${ELEM[e].k}</span>`;
+const mkStar = (n) => "★".repeat(n) + `<u>${"★".repeat(5 - n)}</u>`;
+const mkPt = (id, x = "", act = "") => { const c = CH[id], o = stars(id); return `<button class="pt r-${c.rar} ${c.rar} ${o ? "" : "lk"} ${x}" ${act ? `data-act="${act}" data-id="${id}"` : ""} aria-label="${o ? c.name : "???"}">${heroArt(c)}</button>`; };
+const mkChips = (c) => `<span class="chip2" style="color:${RAR[c.rar].c};border-color:${RAR[c.rar].c}88">${RAR[c.rar].n}</span><span class="chip2">${ROLE[c.role].k} ${ROLE[c.role].n}</span><span class="chip2" style="color:${ELEM[c.el].c}">${ELEM[c.el].k} ${ELEM[c.el].n}</span>`;
+const mkTop = (t, k) => `<div class="mk-top"><div class="l"><button class="btn sm back" data-act="go" data-to="home">‹ Portail</button><h2><i>${k}</i>${t}</h2></div><div class="r"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="pill"><i></i>${fmt(S.jade)}</span></div></div>`;
+
 // ===================== ÉQUIPE =====================
 function renderTeam() {
   const locked = !!S.run;
-  const owned = Object.keys(S.owned).sort(byRar);
-  const roles = new Set(S.team.map((id) => CH[id].role));
-  app.innerHTML = topbar() + `<main class="scr">
-    <div class="sec-h"><h2>Équipe</h2><span class="note">${S.team.length}/${TEAM_N}</span></div>
-    <p class="note">${locked ? "Ascension en cours : l'équipe est verrouillée jusqu'à la fin." : "Touche un héros pour l'ajouter ou le retirer. Un Gardien et un Soutien rendent l'équipe bien plus solide."}</p>
-    <div class="slots">${[0, 1, 2, 3].map((i) => S.team[i] ? tile(S.team[i], "tog", false) : `<div class="slot empty">Emplacement libre</div>`).join("")}</div>
-    <div class="roles">${Object.keys(ROLE).map((k) => `<span class="rchip ${roles.has(k) ? "ok" : ""}">${ROLE[k].k} ${ROLE[k].n}</span>`).join("")}</div>
-    <div class="sec-h"><h2 style="font-size:18px">Héros obtenus</h2><span class="note">${owned.length}</span></div>
-    <div class="tiles">${owned.map((id) => tile(id, "tog", S.team.includes(id))).join("")}</div>
-  </main>` + nav();
+  if (!teamFocus || !CH[teamFocus]) teamFocus = S.team[0] || Object.keys(S.owned)[0] || CHARS[0].id;
+  const id = teamFocus, c = CH[id], own = stars(id), inTeam = S.team.includes(id), st = heroStats(id, null);
+  const ids = CHARS.map((x) => x.id).filter((x) => teamFilter === "all" || CH[x].role === teamFilter).sort((a, b) => (stars(a) ? 0 : 1) - (stars(b) ? 0 : 1) || byRar(a, b));
+  const roles = new Set(S.team.map((x) => CH[x].role));
+  const slots = [0, 1, 2, 3].map((i) => S.team[i] ? mkPt(S.team[i], S.team[i] === id ? "cur" : "", "tfocus") : `<span class="em">+</span>`).join("");
+  const btn = !own ? `<button class="btn" disabled>Non obtenu</button>` : locked ? `<button class="btn" disabled>Ascension en cours</button>` : `<button class="btn" data-act="togd" data-id="${id}">${inTeam ? "Retirer de l'équipe" : "Ajouter à l'équipe"}</button>`;
+  app.innerHTML = `<div class="mk tc"><div class="bgp" style="background-image:url(${ART["bg:jiangshi"]})"></div><div class="vg"></div><div class="shade"></div>${mkTop("Équipe", "隊")}
+  <div class="med">${slots}</div>
+  <div class="list"><div class="tabs2">${[["all", "全"], ...Object.keys(ROLE).map((k) => [k, ROLE[k].k])].map(([k, g]) => `<span data-act="tfilter" data-f="${k}" class="${teamFilter === k ? "on" : ""}">${g}</span>`).join("")}</div>
+    <div class="grid">${ids.map((x) => mkPt(x, (x === id ? "cur " : "") + (S.team.includes(x) ? "in" : ""), "tfocus")).join("")}</div></div>
+  <div class="stage"><div class="kj">${own ? ROLE[c.role].k : "?"}</div><i class="gl"></i><div class="hsp ${own ? "" : "lk"}">${heroArt(c)}</div></div>
+  <div class="det"><h2>${own ? c.name : "???"}</h2><div class="ti">${own ? c.title : "Héros non obtenu"}</div>
+   <div class="chs">${own ? mkChips(c) : ""}</div><span class="stars" style="font-size:15px">${own ? mkStar(own) : ""}</span>
+   <div class="stt"><div>PV<b>${own ? fmt(st.hp) : "???"}</b></div><div>ATK<b>${own ? fmt(st.atk) : "???"}</b></div><div>DEF<b>${own ? fmt(st.def) : "???"}</b></div></div>
+   ${own ? c.skills.map((sk, i) => `<div class="sk"><b>${sk.n}<span>Recharge ${sk.cd} tours</span></b><p>${sk.d}${awTag(id, i)}</p></div>`).join("") : `<p class="note">Invoque ce héros pour découvrir ses capacités.</p>`}
+   <div class="roles2">${Object.keys(ROLE).map((k) => `<span class="chip2 ${roles.has(k) ? "ok" : ""}">${ROLE[k].k} ${ROLE[k].n}</span>`).join("")}</div>
+   <div class="act">${btn}</div></div></div>`;
+  hydratePx(app);
 }
 function toggleTeam(id) {
   if (S.run) return toast("Termine ou abandonne l'ascension pour changer d'équipe.");
@@ -3489,28 +3661,16 @@ function showDetail(id) {
 
 // ===================== INVOCATION =====================
 function renderSummon() {
-  const feat = CHARS.filter((c) => c.rar === "L");
-  const left = PITY - S.pity;
-  app.innerHTML = topbar() + `<main class="scr two">
-    <section class="banner L">
-      <span class="lbl" style="color:#ffcf8a">Portail des Neuf Cieux</span>
-      <h2>Invocation des héros</h2>
-      <div class="feat">${feat.map((c) => `<div>${heroArt(c)}</div>`).join("")}</div>
-      <div class="rates">
-        <div class="rate" style="--c:var(--rare)"><b>75 %</b><span>Rare</span></div>
-        <div class="rate" style="--c:var(--epic)"><b>20 %</b><span>Épique</span></div>
-        <div class="rate" style="--c:var(--leg)"><b>5 %</b><span>Légendaire</span></div>
-      </div>
-      <div class="pity">Légendaire garanti dans <b>${left}</b> invocation${left > 1 ? "s" : ""}</div>
-      <div class="pitybar"><i style="width:${(S.pity / PITY) * 100}%"></i></div>
-    </section>
-    <div class="sumbtns">
-      <button class="btn" data-act="sum" data-n="1" ${S.jade < SUMMON_COST ? "disabled" : ""}>Invoquer ×1<small>${jadeIcon}${SUMMON_COST}</small></button>
-      <button class="btn red" data-act="sum" data-n="10" ${S.jade < SUMMON10_COST ? "disabled" : ""}>Invoquer ×10<small>${jadeIcon}${SUMMON10_COST} · 1 Épique+ garanti</small></button>
-    </div>
-    <p class="note">Le jade se gagne en battant des boss : plus le ciel est haut, plus la récompense est grande. Un doublon donne une étoile ; à 5★ il rapporte ${DUPE_JADE.R} / ${DUPE_JADE.E} / ${DUPE_JADE.L} jade selon sa rareté.</p>
-    ${S.last && S.last.length ? `<div class="sec-h"><h2 style="font-size:18px">Dernière invocation</h2></div><div class="tiles">${S.last.map((id) => tile(id)).join("")}</div>` : ""}
-  </main>` + nav();
+  const c = CH[FEATURED], left = PITY - S.pity;
+  const rates = [["R", 75], ["E", 20], ["L", 5]];
+  app.innerHTML = `<div class="mk sd r-${c.rar}">${mkTop("Invocation", "召")}<div class="bigname">${c.name.toUpperCase()}</div>
+  <div class="hero">${heroArt(c)}</div>
+  <div class="info"><span class="tag">NOUVEAU HÉROS · ${RAR[c.rar].n.toUpperCase()}</span><h2>${c.name}</h2><div class="ti">${c.title}</div><div class="chs">${mkChips(c)}</div></div>
+  <div class="col2"><h3>Taux d'apparition</h3>${rates.map(([r, p]) => `<div class="rr r-${r}"><span>${RAR[r].n}</span><b>${p} %</b></div>`).join("")}
+   <div class="gar">Légendaire garanti dans <b>${left}</b><i><s style="width:${(S.pity / PITY) * 100}%"></s></i></div></div>
+  <div class="btns2"><button class="btn" data-act="sum" data-n="1" ${S.jade < SUMMON_COST ? "disabled" : ""}><b>Invoquer ×1</b><small>${jadeIcon}${SUMMON_COST}</small></button>
+   <button class="btn big" data-act="sum" data-n="10" ${S.jade < SUMMON10_COST ? "disabled" : ""}><b>Invoquer ×10</b><small>${jadeIcon}${SUMMON10_COST} · 1 Épique+ garanti</small></button></div></div>`;
+  hydratePx(app);
 }
 function rollRarity() {
   S.pity++; S.pulls++;
@@ -4403,9 +4563,12 @@ document.addEventListener("click", (e) => {
     case "detail": showDetail(t.dataset.id); break;
     case "eqalt": setAlt(t.dataset.id, +t.dataset.si, +t.dataset.v); document.querySelectorAll(".sheet").forEach((x) => x.remove()); showDetail(t.dataset.id); break;
     case "tog": toggleTeam(t.dataset.id); break;
+    case "tfocus": teamFocus = t.dataset.id; renderTeam(); break;
+    case "tfilter": teamFilter = t.dataset.f; renderTeam(); break;
     case "togd": document.querySelectorAll(".sheet").forEach((s) => s.remove()); toggleTeam(t.dataset.id); break;
     case "filter": collFilter = t.dataset.f; render(); break;
     case "sum": doSummon(+t.dataset.n); break;
+    case "rules": showRules(); break;
     case "rules": showRules(); break;
     case "start": startRun(); break;
     case "prep": go("prep"); break;
