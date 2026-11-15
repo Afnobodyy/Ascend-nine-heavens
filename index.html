@@ -4471,7 +4471,7 @@ function celCine(h) {
     fight.appendChild(ov);
     requestAnimationFrame(() => ov.classList.add("on"));
     if (CELV.has(h.id)) {
-      vid = document.createElement("video"); vid.className = "cc-vid"; vid.src = `celestial/${h.id}.mp4`; vid.playsInline = true; vid.preload = "auto";
+      vid = document.createElement("video"); vid.className = "cc-vid"; vid.src = `celestial/${h.id}-${F.boss.id}.mp4`; vid.playsInline = true; vid.preload = "auto";
       vid.onended = end; vid.onerror = generic;
       ov.prepend(vid);
       const p = vid.play(); if (p && p.catch) p.catch(generic);
