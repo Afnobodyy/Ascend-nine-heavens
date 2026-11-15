@@ -4935,10 +4935,12 @@ function abandon() {
 }
 function settingsClose() { document.querySelectorAll(".setov").forEach((e) => e.remove()); }
 function settingsOpen(confirm) {
-  const fg = document.querySelector(".fight"); if (!fg) return; settingsClose();
+  let fg = document.querySelector(".fight"), home = false;
+  if (!fg) { if (!confirm) return; fg = document.body; home = true; }
+  settingsClose();
   const v = Math.round(musVolume() * 100);
   fg.insertAdjacentHTML("beforeend", confirm
-    ? `<div class="setov" data-act="setbg"><div class="setp"><h3>Abandonner ?</h3><p>Ton ascension s'arrête ici et la progression du combat sera perdue.</p><div class="two"><button class="no" data-act="setclose">Rester</button><button class="yes" data-act="abandonok">Abandonner</button></div></div></div>`
+    ? `<div class="setov" data-act="setbg"${home ? ' style="position:fixed;--k:1"' : ""}><div class="setp"><h3>Abandonner ?</h3><p>Ton ascension s'arrête ici et la progression du combat sera perdue.</p><div class="two"><button class="no" data-act="setclose">Rester</button><button class="yes" data-act="abandonok">Abandonner</button></div></div></div>`
     : `<div class="setov" data-act="setbg"><div class="setp"><h3>Réglages</h3><div class="srow"><label for="musvol">Musique</label><input type="range" id="musvol" min="0" max="100" step="1" value="${v}"><span class="pct" id="musvolv">${v} %</span></div><button class="give" data-act="abandonask">Abandonner</button><button class="sclose" data-act="setclose">Reprendre le combat</button></div></div>`);
 }
 document.addEventListener("input", (e) => { if (e.target && e.target.id === "musvol") { setMusVolume(e.target.value / 100); const l = document.getElementById("musvolv"); if (l) l.textContent = e.target.value + " %"; } });
@@ -4968,6 +4970,7 @@ document.addEventListener("click", (e) => {
     case "setclose": settingsClose(); break;
     case "setbg": if (e.target === t) settingsClose(); break;
     case "abandonask": settingsOpen(true); break;
+    case "abandon": settingsOpen(true); break;
     case "abandonok": if (F && F.busy) { settingsClose(); toast("Attends la fin du tour pour abandonner."); break; } settingsClose(); abandon(); break;
     case "mute": S.mute = !S.mute; save(); auMute(); t.classList.toggle("off", S.mute); if (!S.mute && F) musStart(); else if (!S.mute) menuStart(); break;
     case "card": applyCard(+t.dataset.i); break;
