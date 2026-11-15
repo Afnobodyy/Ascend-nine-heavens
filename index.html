@@ -1976,10 +1976,12 @@ body:has(.fight) #fbgx{display:block}
 /* anti-scintillement (Chrome mobile : zones noires pendant les coups) : plus de zoom/secousse de caméra, plus de filtre SVG sur les sprites, éclair sans mode de fusion */
 #app .cam.zoom,#app .cam.shake-s,#app .cam.shake-b{animation:none!important}
 .fight .flash{mix-blend-mode:normal}
+.h-ver{position:absolute;right:calc(8px + env(safe-area-inset-right,0px));bottom:calc(2px + env(safe-area-inset-bottom,0px));z-index:5;font:600 10px/1 var(--display,sans-serif);letter-spacing:.06em;color:rgba(255,255,255,.55);text-shadow:0 1px 3px #000;pointer-events:none}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
+const GAME_VERSION = 46; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -3804,7 +3806,7 @@ function renderHome() {
           : `<button class="btn h-cta" data-act="start"><b>Commencer l'ascension</b><small>CIEL 1 · ${nb.name.toUpperCase()}</small></button>`}
       <button class="btn h-bt" data-act="go" data-to="coll"><i>録</i><b>Collection</b><span>${Object.keys(S.owned).length} / ${CHARS.length}</span></button>
       <button class="btn h-bt" data-act="rules"><i>問</i><b>Règles</b><span>comment jouer</span></button>
-    </div></div>`;
+    </div><div class="h-ver">v.${GAME_VERSION}</div></div>`;
 }
 function showRules() {
   const sh = document.createElement("div"); sh.className = "sheet";
