@@ -1889,6 +1889,8 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .cc-bar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:linear-gradient(90deg,#ffd25a,#fff);transform-origin:left;animation:ccbar 3.2s linear forwards}
 .celcine.leg .cc-bar{animation-duration:4s}
 @keyframes ccbar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.cc-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.celcine:has(.cc-vid){background:#000}
 .cc-skip{position:absolute;right:12px;top:10px;z-index:2;background:rgba(8,4,6,.6);color:#f2e7d3;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:6px 12px;font-size:12px}
 </style>
 <div id="app"></div>
@@ -4211,7 +4213,34 @@ function applyCombo(c, h) {
 const comboTag = (h, sk) => { const c = sk.fin && COMBO[sk.fin]; if (!c) return ""; return comboFor(h, sk) ? ` <em class="cbo on">⚡ COMBO ${c.n} prêt</em>` : ` <em class="cbo">⚡ Combo ${c.n}</em>`; };
 
 const CEL_M = 5.5;
-const celSk = (h) => ({ n: "Celestial", d: `Invocation à ${Math.round(CEL_M * 100)} % ATK. Vide la jauge.`, cd: 0, tgt: "boss", cel: true, fx: [{ k: "dmg", m: CEL_M, post: 90 }] });
+const CELX = {
+  t1: { j: "千祈一山", n: "Mille prières, une montagne", m: 4.5, tgt: "allies", d: "Frappe de Terre + bouclier de 10 % PV à l'équipe.", fx: [{ k: "shield", p: 0.1 }] },
+  t2: { j: "橋は落ちず", n: "Le pont ne tombera pas", m: 4.5, tgt: "allies", d: "Équipe quasi invulnérable 1 tour + riposte massive.", fx: [{ k: "dr", p: 0.9, d: 1 }, { k: "counter", p: 1.2, d: 1, on: "self" }] },
+  t3: { j: "岩の目覚め", n: "Le Rocher s'éveille", m: 5.5, tgt: "boss", d: "Dégâts énormes de Terre, ATK du boss −40 % (2 tours).", fx: [{ k: "debuff", s: "atk", p: 0.4, d: 2 }] },
+  t4: { j: "百扇一鏡", n: "Cent éventails, un seul miroir", m: 5, tgt: "allies", d: "Dégâts de Métal, bouclier d'équipe 12 % PV et riposte.", fx: [{ k: "shield", p: 0.12 }, { k: "counter", p: 1.5, d: 1, on: "self" }] },
+  t5: { j: "北、堕つ", n: "Le Nord s'abat", m: 5.5, tgt: "allies", d: "Gros dégâts d'Eau, ATK du boss −30 % (gel), dôme : −50 % dégâts subis et bouclier 15 % PV.", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "dr", p: 0.5, d: 2 }, { k: "shield", p: 0.15 }] },
+  t6: { j: "蒼龍、天を斬れ", n: "Dragon Azur, tranche le ciel", m: 6.5, tgt: "allies", d: "Coup unique très puissant de Bois, ATK d'équipe +20 % (2 tours).", fx: [{ k: "buff", p: 0.2, d: 2 }] },
+  p1: { j: "最後の居合", n: "Dernier iai", m: 5.5, tgt: "boss", d: "Coup unique ignorant 30 % de la défense.", pre: [{ k: "debuff", s: "def", p: 0.3, d: 1 }], fx: [] },
+  p2: { j: "竹槍の森", n: "Forêt de lances", m: 3.5, tgt: "boss", d: "Nombreux petits coups + saignement 3 tours.", hits: 6, fx: [{ k: "dot", s: "bleed", m: 0.35, d: 3 }] },
+  p3: { j: "炎舞千燼", n: "Danse des mille braises", m: 5, tgt: "allies", d: "Coups de Feu, brûlure forte 3 tours, ATK d'équipe +20 % (2 tours).", fx: [{ k: "dot", s: "burn", m: 0.35, d: 3 }, { k: "buff", p: 0.2, d: 2 }] },
+  p4: { j: "百山の虎", n: "Tigre des cent montagnes", m: 5.5, tgt: "boss", d: "Gros coup de Terre + DEF du boss −25 % (2 tours).", fx: [{ k: "debuff", s: "def", p: 0.25, d: 2 }] },
+  p5: { j: "猴王翻天", n: "Le Roi Singe renverse le ciel", m: 6.5, tgt: "allies", d: "Coup colossal de Métal + esquive d'équipe (50 %, 1 tour).", fx: [{ k: "evade", p: 0.5, d: 1, on: "self" }] },
+  p6: { j: "皆既蝕", n: "Éclipse totale", m: 5.5, tgt: "boss", d: "Coup d'exécution : le boss subit +30 % de dégâts (2 tours).", fx: [{ k: "mark", p: 0.3, d: 2 }] },
+  m1: { j: "札の嵐", n: "Tempête de talismans", m: 4.5, tgt: "boss", d: "Dégâts d'Eau + ATK du boss −20 % (gel, 2 tours).", fx: [{ k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+  m2: { j: "失敗仙丹", n: "Pilule de l'immortalité ratée", m: 5, tgt: "boss", d: "Explosion de Feu + brûlure 3 tours.", fx: [{ k: "dot", s: "burn", m: 0.3, d: 3 }] },
+  m3: { j: "九尾九幻", n: "Neuf queues, neuf mirages", m: 5, tgt: "boss", d: "Gros dégâts de Feu + ATK du boss −25 % (2 tours).", fx: [{ k: "debuff", s: "atk", p: 0.25, d: 2 }] },
+  m4: { j: "嵐の詩", n: "Poème de la tempête, dernier vers", m: 5.5, tgt: "boss", d: "Gros dégâts, poison 3 tours et +15 % de dégâts subis par le boss.", fx: [{ k: "dot", s: "poison", m: 0.3, d: 3 }, { k: "mark", p: 0.15, d: 2 }] },
+  m5: { j: "龍王の宮", n: "Palais du Roi Dragon", m: 6.5, tgt: "allies", d: "Plus gros dégât d'Eau + bouclier d'équipe 12 % PV.", fx: [{ k: "shield", p: 0.12 }] },
+  m6: { j: "九鼓の審判", n: "Neuf tambours du Jugement", m: 5, tgt: "boss", d: "Série d'éclairs + ATK du boss −30 % (paralysie, 2 tours).", hits: 3, fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }] },
+  s1: { j: "鈴の桜", n: "Cerisier de la clochette", m: 2.5, tgt: "allies", d: "Soin de 50 % PV à l'équipe + régénération 3 tours.", fx: [{ k: "healPct", p: 0.5 }, { k: "regen", p: 0.06, d: 3 }] },
+  s2: { j: "川の歌", n: "Chant de la rivière", m: 2.5, tgt: "allies", d: "Soin 25 %, retire les malus, ranime les alliés tombés (25 %).", fx: [{ k: "healPct", p: 0.25 }, { k: "cleanse" }, { k: "revive", p: 0.25 }] },
+  s3: { j: "永遠の花見", n: "Hanami éternel", m: 3, tgt: "allies", d: "Résurrection (40 %), soin 20 %, ATK d'équipe +15 % (2 tours).", fx: [{ k: "revive", p: 0.4 }, { k: "healPct", p: 0.2 }, { k: "buff", p: 0.15, d: 2 }] },
+  s4: { j: "万年の茶", n: "Le thé de dix mille ans", m: 2.5, tgt: "allies", d: "Soin 30 % et recharges des alliés −2.", fx: [{ k: "healPct", p: 0.3 }, { k: "cdr", n: 2 }] },
+  s5: { j: "満月の蓮", n: "Lotus de la pleine lune", m: 3.5, tgt: "allies", d: "Résurrection (60 %), soin 30 %, −25 % dégâts subis (2 tours).", fx: [{ k: "revive", p: 0.6 }, { k: "healPct", p: 0.3 }, { k: "dr", p: 0.25, d: 2 }] },
+  s6: { j: "鳳凰の再生", n: "Renaissance du Phénix", m: 4.5, tgt: "allies", d: "Résurrection (50 %), ATK d'équipe +25 % (2 tours), dégâts de Feu au boss.", fx: [{ k: "revive", p: 0.5 }, { k: "buff", p: 0.25, d: 2 }] }
+};
+const CELV = new Set(["p1", "p2", "p3", "p4", "p5"]); // cinématiques vidéo disponibles
+const celSk = (h) => { const x = CELX[h.id]; if (!x) return { n: "Celestial", d: `Invocation à ${Math.round(CEL_M * 100)} % ATK. Vide la jauge.`, cd: 0, tgt: "boss", cel: true, fx: [{ k: "dmg", m: CEL_M, post: 90 }] }; return { n: x.n, d: x.d, cd: 0, tgt: x.tgt, cel: true, fx: [...(x.pre || []), { k: "dmg", m: x.m, post: 90, ...(x.hits ? { hits: x.hits, m: x.m / x.hits } : {}) }, ...x.fx] }; };
 const getSk = (h, si) => (si === "atk" ? BASIC : si === "grd" ? guardSk(h) : si === "cel" ? celSk(h) : h.c.skills[si]);
 const skName = (h, si) => (typeof si === "number" ? getSk(h, si).n : si === "grd" ? "Garde" : si === "cel" ? "Celestial" : "Attaque");
 const celReady = () => F && F.gauge >= 9 && !F.plan.some((p) => p && p.si === "cel");
@@ -4427,16 +4456,27 @@ function layoutFront() {
 function celCine(h) {
   return new Promise((res) => {
     const fight = document.querySelector(".fight"); if (!fight) return res();
-    const leg = h.c.rar === "L", E = ELEM[h.el], ov = document.createElement("div");
+    const leg = h.c.rar === "L", E = ELEM[h.el], X = CELX[h.id] || {}, ov = document.createElement("div");
     ov.className = "celcine" + (leg ? " leg" : ""); ov.style.setProperty("--c", E.c);
-    ov.innerHTML = `<div class="cc-rays"></div><div class="cc-k">${E.k}</div><div class="cc-hero">${heroArt(h.c)}</div><div class="cc-t"><small>CELESTIAL</small><b>${h.c.name}</b></div><div class="cc-bar"></div><button class="cc-skip" data-act="ccskip">Passer ›</button>`;
-    fight.appendChild(ov);
-    if (typeof sfxDiscover === "function") sfxDiscover();
-    let done = false;
-    const end = () => { if (done) return; done = true; ov.classList.remove("on"); setTimeout(() => { ov.remove(); res(); }, 250); };
+    let done = false, vid = null, tm = 0;
+    const end = () => { if (done) return; done = true; clearTimeout(tm); if (vid) { try { vid.pause(); } catch (e) {} } ov.classList.remove("on"); setTimeout(() => { ov.remove(); res(); }, 250); };
     window.__ccskip = end;
+    const generic = () => {
+      if (done) return; if (vid) { vid.remove(); vid = null; }
+      ov.classList.add("gen"); ov.insertAdjacentHTML("afterbegin", `<div class="cc-rays"></div><div class="cc-k">${E.k}</div><div class="cc-hero">${heroArt(h.c)}</div><div class="cc-t"><small>${X.j ? X.j + " · " : ""}CELESTIAL</small><b>${X.n || h.c.name}</b></div><div class="cc-bar"></div>`);
+      if (typeof sfxDiscover === "function") sfxDiscover();
+      clearTimeout(tm); tm = setTimeout(end, leg ? 4000 : 3200);
+    };
+    ov.insertAdjacentHTML("beforeend", `<button class="cc-skip" data-act="ccskip">Passer ›</button>`);
+    fight.appendChild(ov);
     requestAnimationFrame(() => ov.classList.add("on"));
-    setTimeout(end, leg ? 4000 : 3200);
+    if (CELV.has(h.id)) {
+      vid = document.createElement("video"); vid.className = "cc-vid"; vid.src = `celestial/${h.id}.mp4`; vid.playsInline = true; vid.preload = "auto";
+      vid.onended = end; vid.onerror = generic;
+      ov.prepend(vid);
+      const p = vid.play(); if (p && p.catch) p.catch(generic);
+      tm = setTimeout(() => { if (vid && vid.readyState < 2) generic(); }, 2500);
+    } else generic();
   });
 }
 // ===================== PLANIFICATION DU TOUR =====================
