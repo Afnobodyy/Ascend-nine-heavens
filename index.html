@@ -1963,6 +1963,9 @@ body:has(.fight) #fbgx{display:block}
 .cg:disabled:not(.cel) .ds.lk{color:#7b7166}
 .fight.ug .pcw{scale:1.2;transform-origin:50% 100%}
 .fight.ug .pcw .ohb{scale:.8333;transform-origin:50% 100%}
+/* ombres des boss accentuées ; Gashadokuro : ombre épaisse devant le pied coupé */
+#app .fight .bshadow{left:-4%;right:-8%;bottom:-3%;height:24%;background:radial-gradient(ellipse closest-side,rgba(0,0,0,1) 0 58%,rgba(0,0,0,.75) 78%,transparent 100%);filter:blur(1.5px)}
+.fight[data-b=gasha] .bossbox::after{content:"";position:absolute;left:0;width:56%;bottom:-3%;height:15%;z-index:3;pointer-events:none;background:radial-gradient(ellipse closest-side,rgba(0,0,0,1) 0 55%,rgba(0,0,0,.85) 78%,transparent 100%)}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
