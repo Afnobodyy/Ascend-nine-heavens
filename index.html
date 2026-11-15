@@ -1177,7 +1177,7 @@ img.px{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 .flash{position:absolute;inset:0;pointer-events:none;z-index:4;mix-blend-mode:screen;opacity:0;background:radial-gradient(ellipse 40% 35% at var(--lx,50%) 62%,var(--lc,#fff),transparent 70%)}
 .flash.on{animation:lflash .55s ease-out}
 .flash.big{animation:lflash 1s ease-out}
-@keyframes lflash{0%{opacity:0}12%{opacity:.85}100%{opacity:0}}
+@keyframes lflash{0%{opacity:0}12%{opacity:.6}100%{opacity:0}}
 .cam.zoom{animation:czoom .6s cubic-bezier(.2,.8,.3,1)}
 @keyframes czoom{25%{transform:scale(1.07) translate(2%,-1%)}100%{transform:none}}
 .cam.shake-s{animation:shake .3s linear}
@@ -1522,8 +1522,8 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .fight .cmd .sbtn p .num{color:#ffd25a;font-weight:800}
 .fight .cmd .sbtn .cdv{font-size:16px;border-radius:8px}
 /* ombres, lumière de contour, profondeur */
-.fight .pcw .bob,.fight .bossbox .breathe{filter:url(#envf) drop-shadow(calc(var(--skd,1) * -1.5px) -.5px 0 var(--rim,rgba(200,240,230,.55))) contrast(1.12) saturate(1.12)}
-.fight .pcw.p0 .bob,.fight .pcw.p1 .bob{filter:url(#envf) drop-shadow(calc(var(--skd,1) * -1.5px) -.5px 0 var(--rim,rgba(200,240,230,.55))) contrast(1.12) saturate(1.02) brightness(.96)}
+.fight .pcw .bob,.fight .bossbox .breathe{filter:drop-shadow(calc(var(--skd,1) * -1.5px) -.5px 0 var(--rim,rgba(200,240,230,.55))) contrast(1.12) saturate(1.12)}
+.fight .pcw.p0 .bob,.fight .pcw.p1 .bob{filter:drop-shadow(calc(var(--skd,1) * -1.5px) -.5px 0 var(--rim,rgba(200,240,230,.55))) contrast(1.12) saturate(1.02) brightness(.96)}
 .fight .pshadow{left:-14%;right:-14%;bottom:-2%;height:20%;transform:none;background:radial-gradient(ellipse closest-side,rgba(0,0,0,.92) 0 48%,rgba(0,0,0,.55) 72%,transparent 100%);opacity:.6;z-index:0}
 .fight .pshadow::before{content:"";position:absolute;left:-5%;width:140%;top:-5%;height:100%;border-radius:50%;transform:translateX(calc(var(--skd,1) * 48%)) rotate(calc(var(--skd,1) * -7deg));
   background:radial-gradient(ellipse closest-side,rgba(0,0,0,.62) 0 40%,rgba(0,0,0,.3) 70%,transparent 100%);filter:blur(1px)}
@@ -1973,6 +1973,9 @@ body:has(.fight) #fbgx{display:block}
 /* Ryujin : sa queue traîne au bas du sprite, on garde l'ombre d'origine */
 #app .fight[data-b=ryujin] .bshadow{left:2%;right:-4%;bottom:-1%;height:15%;background:radial-gradient(ellipse closest-side,rgba(0,0,0,.95) 0 48%,rgba(0,0,0,.55) 72%,transparent 100%);filter:none}
 .cg .ds .num.aw,.sbtn .num.aw,.num.aw{color:#ffd25a!important}
+/* anti-scintillement (Chrome mobile : zones noires pendant les coups) : plus de zoom/secousse de caméra, plus de filtre SVG sur les sprites, éclair sans mode de fusion */
+#app .cam.zoom,#app .cam.shake-s,#app .cam.shake-b{animation:none!important}
+.fight .flash{mix-blend-mode:normal}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
