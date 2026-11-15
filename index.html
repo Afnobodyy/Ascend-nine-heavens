@@ -3664,8 +3664,8 @@ addEventListener("pointerdown", () => { if (MEN.armed) return; MEN.armed = true;
 
 // ===================== ÉTAT & SAUVEGARDE =====================
 const SAVE_KEY = "neufcieux_v1";
-function newSave() { return { jade: 300, owned: { t1: { st: 1 }, p1: { st: 1 }, m1: { st: 1 }, s1: { st: 1 } }, pity: 0, team: ["t1", "p1", "m1", "s1"], best: 0, run: null, pulls: 0, last: [], band: true }; }
-function load() { try { const t = localStorage.getItem(SAVE_KEY); return t ? Object.assign(newSave(), JSON.parse(t), { band: true }) : null; } catch (e) { return null; } }
+function newSave() { return { jade: 300, owned: { t1: { st: 1 }, p1: { st: 1 }, m1: { st: 1 }, s1: { st: 1 } }, pity: 0, team: ["t1", "p1", "m1", "s1"], best: 0, run: null, pulls: 0, last: [], band: false }; }
+function load() { try { const t = localStorage.getItem(SAVE_KEY); return t ? Object.assign(newSave(), JSON.parse(t), { band: false }) : null; } catch (e) { return null; } }
 function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { } }
 let S = load() || newSave();
 const ROLE_ORD = { tank: 0, phys: 1, mag: 2, sup: 3 };
