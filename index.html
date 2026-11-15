@@ -1534,7 +1534,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .vfl i{position:absolute;inset:0;display:block}
 .vfl .a{background:linear-gradient(180deg,#0e4a5c,#103a4a 60%,#0b2a36);mix-blend-mode:soft-light;opacity:.3}
 .vfl .b{background:radial-gradient(ellipse 60% 55% at 28% 20%,rgba(255,170,90,.75),transparent 70%);mix-blend-mode:soft-light;opacity:.55}
-.vfl .c{background:radial-gradient(ellipse 85% 80% at 50% 50%,transparent 55%,rgba(0,12,18,.65));mix-blend-mode:multiply}
+.vfl .c{display:none}
 .vwash{mix-blend-mode:soft-light;opacity:.25;background:var(--amb-b,rgba(40,80,80,1))}
 .vlight{mix-blend-mode:soft-light;opacity:.55;background:radial-gradient(ellipse 55% 60% at var(--lx,25%) 0%,var(--lcol,rgba(200,240,230,.7)),transparent 75%)}
 .vgrain{opacity:.13;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.4 -.2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -1548,7 +1548,6 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .vban.boss .vg{--c:#ff6a52}.vban.boss .vw{color:#ff9a8a}
 
 /* HUD équipe (haut droite) : fiches de vie, statuts, capacités planifiées */
-.fight .ohb{display:none!important}
 .tgtf{display:none;position:absolute;left:50%;bottom:calc(128% + 6px);transform:translateX(-50%);z-index:8;pointer-events:none;white-space:nowrap;font-size:12px;font-weight:800;letter-spacing:.06em;color:#ff3a2a;background:rgba(20,4,3,.55);border:2px solid #ff3a2a;border-radius:10px;padding:1px 10px 2px;box-shadow:0 0 8px rgba(255,42,26,.55);animation:tgtbob 1s ease-in-out infinite}
 .pcw.aimed .tgtf{display:block}
 @keyframes tgtbob{50%{transform:translate(-50%,-3px)}}
@@ -1835,9 +1834,8 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .fight.ug .mutebtn{left:8px!important;right:auto!important;top:8px!important}
 .fight.ug .uibtn{position:absolute;z-index:20;left:150px;top:8px;width:32px;height:26px;border-radius:6px;border:1px solid var(--line2);background:rgba(8,4,6,.6);color:var(--gold);font-size:14px;display:grid;place-items:center;padding:0}
 .uibtn{display:none}.fight .uibtn{display:grid;position:absolute;z-index:20;left:150px;top:8px;width:32px;height:26px;border-radius:6px;border:1px solid var(--line2);background:rgba(8,4,6,.6);color:var(--gold);font-size:14px;place-items:center;padding:0}
-.fight.ug .vroster{top:8px!important;right:10px!important;width:158px!important}
+.fight.ug .vroster{display:none!important}
 .fight.ug .vro{min-height:44px;box-sizing:border-box}
-.fight.ug .bgimg{transform:scale(1.22);transform-origin:50% 0}
 .fight.ug .bossbox{translate:0 46px}
 .fight.ug .party.n4 .pcw.p0{bottom:8%!important}.fight.ug .party.n4 .pcw.p1{bottom:7%!important}
 .fight.ug .party.n4 .pcw.p2{bottom:3%!important}.fight.ug .party.n4 .pcw.p3{bottom:1%!important}
@@ -1878,7 +1876,6 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .gearbtn{position:absolute;z-index:45;left:calc(10*var(--u));top:calc(8*var(--u));width:calc(36*var(--u));height:calc(36*var(--u));border-radius:calc(8*var(--u));border:calc(1*var(--u)) solid rgba(255,255,255,.18);background:rgba(10,6,8,.7);color:#e2b250;display:grid;place-items:center;padding:0;cursor:pointer}
 .gearbtn svg{width:calc(22*var(--u));height:calc(22*var(--u))}
 #app .fight .uibtn{left:calc(54*var(--u));top:calc(8*var(--u))}
-#app .fight.ug .bgimg{transform:translateY(calc(-62*var(--u))) scale(1.22);transform-origin:50% 0}
 #app .fight.ug .bossbox{translate:0 calc(-30*var(--u));height:58%}
 #app .fight.ug .bhud{width:calc(360*var(--u))!important}
 #app .fight.ug .bhud .bn{flex-wrap:nowrap;white-space:nowrap}
@@ -1936,6 +1933,9 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .cc-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
 .celcine:has(.cc-vid){background:#000}
 .cc-skip{position:absolute;right:12px;top:10px;z-index:2;background:rgba(8,4,6,.6);color:#f2e7d3;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:6px 12px;font-size:12px}
+/* v53 : plus de vignette sombre (teintes, ombres et grain « cinéma » conservés) */
+.fight .vign{display:none}
+.fight .tgtf{display:none!important}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
