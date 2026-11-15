@@ -1523,6 +1523,74 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .vban.boss .vg{--c:#ff6a52}.vban.boss .vw{color:#ff9a8a}
 @keyframes vbanin{0%{opacity:0;transform:translate(-50%,-14px)}12%{opacity:1;transform:translate(-50%,0)}82%{opacity:1}100%{opacity:0}}
 
+
+/* ===== v44 : boutons « rouleau de papier » + accueil Le Portail ===== */
+:root{--pap1:#f6ecd8;--pap2:#dccaa6;--pinkb:#2a1810;--pmute:#6a5442;--seal:#b3261e;--rollc:#5a3a24}
+.btn,.btn.red,.btn.ghost,.bbtn,.sbtn,.tabs button,.mutebtn,.skip{background:linear-gradient(180deg,var(--pap1),var(--pap2));color:var(--pinkb);border:0;border-left:6px solid var(--rollc);border-right:6px solid var(--rollc);border-radius:3px;box-shadow:0 3px 0 rgba(0,0,0,.45),0 6px 12px rgba(0,0,0,.35),inset 0 0 14px rgba(120,80,30,.22)}
+.btn{font-family:var(--display);font-weight:800;letter-spacing:.02em}
+.btn.red{background:linear-gradient(180deg,#f6e2d0,#e0b9a0);border-left-color:#7a1410;border-right-color:#7a1410;color:#7a1410}
+.btn.ghost{background:linear-gradient(180deg,rgba(246,236,211,.9),rgba(220,202,166,.9));color:var(--pmute);border-left-color:#7a5a46;border-right-color:#7a5a46}
+.btn:active,.bbtn:active,.sbtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.45),inset 0 0 14px rgba(120,80,30,.22)}
+.btn:disabled{filter:grayscale(1) brightness(.75)}
+.btn.sm{padding:7px 14px}
+.bbtn b,.sbtn b{color:var(--pinkb)}
+.bbtn small,.sbtn p,.sbtn .cdv small{color:var(--pmute)}
+.sbtn .tg{color:#8a2a1c}
+.sbtn.ult{box-shadow:0 3px 0 rgba(0,0,0,.45),0 6px 12px rgba(0,0,0,.35),inset 0 0 0 2px rgba(226,178,80,.85),inset 0 0 14px rgba(120,80,30,.22)}
+.bbtn i{background:rgba(179,38,30,.12);color:var(--seal)}
+.bbtn .ico,.fight .bbtn .ico{color:var(--seal)}
+.bbtn.grd{background:linear-gradient(180deg,#e8eef5,#c3d1e0);border-left-color:#3a5470;border-right-color:#3a5470}
+.bbtn.grd .ico,.fight .cmd .bbtn .ic .ico{color:#2f4f78}
+.bbtn.grd i{color:#2f4f78}
+.bbtn i.eli,.fight .bbtn i.eli{background:color-mix(in srgb,var(--c) 22%,#fff);border:1.5px solid var(--c)}
+.fight .cmd .bbtn{border-left-width:3px;border-right-width:3px;padding-inline:2px!important}
+.fight .cmd .sbtn{border-left-width:4px;border-right-width:4px}
+.fight .cmd .bbtn .lb{color:var(--pinkb);white-space:nowrap}
+.fight .cmd .bbtn .vl{color:#8a2a1c}
+.fight .cmd .bbtn.grd .vl{color:#2f4f78}
+.fight .cmd .sbtn p{color:#4a3a2e}
+.fight .cmd .sbtn p .num{color:#8a2a1c}
+.sbtn .cdv{color:var(--paper)}
+.tabs button{border-radius:3px;padding:5px 12px;color:var(--pmute);border-left-width:4px;border-right-width:4px}
+.tabs button.on{color:var(--seal);font-weight:800;background:linear-gradient(180deg,#fff7e6,#ecd9b4);border-left-color:var(--seal);border-right-color:var(--seal)}
+.mutebtn{color:var(--seal);border-left-width:4px;border-right-width:4px}
+.mutebtn.off{color:#9a8a7a}
+.skip{border-radius:3px;color:var(--pmute);border-left-width:4px;border-right-width:4px}
+.fight .abf{background:linear-gradient(180deg,var(--pap1),var(--pap2))}
+/* accueil */
+.h-home{position:absolute;inset:0;overflow:hidden;background:#0a0608;z-index:1}
+.h-home img.px{image-rendering:pixelated;display:block}
+.h-bg{position:absolute;inset:0;background-size:cover;background-position:50% 55%;image-rendering:pixelated;transform:scale(1.14);transform-origin:40% 0}
+.h-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(5,2,4,.75) 100%)}
+.h-band{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(180deg,transparent,rgba(8,3,5,.88))}
+.h-jade{position:absolute;right:16px;top:12px;display:flex;gap:8px;align-items:center;z-index:9}
+.h-jade .mutebtn{position:static;width:32px;height:32px}
+.h-jade .jade{background:rgba(14,7,10,.72);backdrop-filter:blur(3px);padding:5px 12px 5px 8px;font-size:14px}
+.h-rec{position:absolute;left:16px;top:14px;z-index:9;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.h-rec span{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em}
+.h-rec b{display:block;font-family:var(--display);font-size:15px}
+.h-logo{position:absolute;left:0;right:0;top:34px;text-align:center;line-height:1}
+.h-logo .k{font-family:var(--display);font-weight:800;font-size:118px;color:transparent;background:linear-gradient(180deg,#fff2c4 0%,#f0c561 45%,#a87a24 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 3px 0 #3a230a) drop-shadow(0 0 18px rgba(240,190,80,.45));letter-spacing:.06em}
+.h-logo .a{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.5em;margin-top:10px;color:var(--paper);text-shadow:0 2px 8px #000;text-transform:uppercase}
+.h-logo .n{font-family:var(--display);font-weight:800;font-size:44px;margin-top:6px;color:var(--paper);text-shadow:0 3px 0 #5a140a,0 0 22px rgba(0,0,0,.9);letter-spacing:.04em}
+.h-team{position:absolute;left:50%;bottom:100px;height:215px;transform:translateX(-50%);display:flex;align-items:flex-end}
+.h-hs{position:relative;height:100%;margin-inline:-14px}
+.h-hs img{height:100%;width:auto;filter:drop-shadow(0 8px 10px rgba(0,0,0,.7))}
+.h-hs i{position:absolute;left:8%;right:8%;bottom:-3%;height:9%;background:radial-gradient(ellipse,rgba(0,0,0,.65),transparent 70%)}
+.h-menu{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;align-items:stretch;gap:12px}
+.h-menu .btn,.h-menu .btn.ghost{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}
+.h-menu .h-bt{min-width:104px;padding:10px 14px;gap:2px;font-family:var(--body);font-weight:700}
+.h-bt i{font-style:normal;font-family:var(--display);font-weight:800;font-size:22px;line-height:1;color:var(--seal)}
+.h-bt b{font-size:13px;color:var(--pinkb)}
+.h-bt span{font-size:11px;color:var(--pmute);font-weight:500}
+.h-menu .h-cta{min-width:350px;padding:12px 66px 12px 36px;background:linear-gradient(180deg,#f6ecd8,#e3d1ac)}
+.h-cta b{font-family:var(--display);font-size:23px;font-weight:800;letter-spacing:.03em;color:var(--pinkb)}
+.h-cta small{font-size:11px;font-weight:700;letter-spacing:.1em;margin-top:3px;color:#8a2a1c;font-family:var(--body)}
+.h-cta:after{content:"始";position:absolute;right:16px;top:50%;transform:translateY(-50%) rotate(-6deg);width:40px;height:40px;display:grid;place-items:center;background:var(--seal);color:#f6e6c8;font-family:var(--display);font-weight:800;font-size:22px;border-radius:5px;box-shadow:inset 0 0 0 2px rgba(255,220,190,.35)}
+.h-ab{font-size:11px!important;padding:5px 12px!important}
+.rules-sheet h3{font-size:18px;margin:0 0 10px}
+.rules-sheet ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;color:#dccdb6;font-size:14px}
+.rules-sheet .cycle{margin-top:12px}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
@@ -3329,33 +3397,34 @@ function go(to) { screen = to; render(); }
 function renderHome() {
   const lead = S.team.filter((id) => CH[id]).map((id) => CH[id]);
   const r = S.run;
-  const art = [lead[1], lead[0], lead[2]].filter(Boolean);
-  app.innerHTML = topbar() + `<main class="scr two">
-    <div class="Lcol"><section class="hero-banner L">
-      <div class="hb-art">${art.map((c, i) => `<div class="hb-spr s${i}">${heroArt(c)}</div>`).join("")}</div>
-      <h1 class="title" style="font-size:36px;line-height:1.05;margin-top:10px"><span class="k">九天</span><span>Ascend:<br>Nine Heavens</span></h1>
-      <p class="tag">Gravis les cieux un boss après l'autre. Chaque victoire rapporte du jade pour invoquer de nouveaux héros.</p>
-    </section>
-    <section class="grid2">
-      <button class="panel link" data-act="go" data-to="summon"><i>召</i><b>Invocation</b><span>${Math.floor(S.jade / SUMMON_COST)} tirage(s) disponible(s)</span></button>
-      <button class="panel link" data-act="go" data-to="coll"><i>録</i><b>Collection</b><span>${Object.keys(S.owned).length} / ${CHARS.length} héros</span></button>
-    </section></div>
-    <section class="panel run-panel">
-      ${r ? `<div class="rp-l"><span class="lbl">Ascension en cours</span><b>Ciel ${r.floor + 1}</b><span>Prochain : ${bossAt(r.floor).b.name}</span></div>
-             <div class="rp-a"><button class="btn" data-act="prep">Continuer</button><button class="btn ghost sm" data-act="abandon" id="abBtn">Abandonner</button></div>`
-           : `<div class="rp-l"><span class="lbl">Record</span><b>${S.best ? "Ciel " + S.best + " franchi" : "Aucun ciel franchi"}</b><span>${lead.length === TEAM_N ? lead.map((c) => c.name).join(" · ") : "Équipe incomplète"}</span></div>
-             <div class="rp-a"><button class="btn" data-act="start">Commencer l'ascension</button></div>`}
-    </section>
-    <section class="panel rules"><h3>Règles de l'ascension</h3><ul>
+  const order = [lead[1], lead[0], lead[3], lead[2]].filter(Boolean);
+  const nb = r ? bossAt(r.floor).b : BOSSES[0];
+  app.innerHTML = `<div class="h-home"><div class="h-bg" style="background-image:url(${ART["bg:kitsune"]})"></div><div class="h-vig"></div><div class="h-band"></div>
+    <div class="h-jade"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="jade">${jadeIcon}${fmt(S.jade)}</span></div>
+    <div class="h-rec"><div><span>${r ? "ASCENSION EN COURS" : "RECORD"}</span><b>${r ? "Ciel " + (r.floor + 1) : S.best ? "Ciel " + S.best + " franchi" : "Aucun ciel franchi"}</b></div>${r ? `<button class="btn ghost sm h-ab" data-act="abandon" id="abBtn">Abandonner</button>` : ""}</div>
+    <div class="h-logo"><div class="k">九天</div><div class="a">Ascend</div><div class="n">Nine Heavens</div></div>
+    <div class="h-team">${order.map((c) => `<div class="h-hs"><i></i>${heroArt(c)}</div>`).join("")}</div>
+    <div class="h-menu">
+      <button class="btn h-bt" data-act="go" data-to="summon"><i>召</i><b>Invocation</b><span>${Math.floor(S.jade / SUMMON_COST)} tirage(s)</span></button>
+      <button class="btn h-bt" data-act="go" data-to="team"><i>隊</i><b>Équipe</b><span>${lead.length === TEAM_N ? lead.map((c) => c.name).slice(0, 2).join(" · ") + "…" : "incomplète"}</span></button>
+      ${r ? `<button class="btn h-cta" data-act="prep"><b>Continuer l'ascension</b><small>CIEL ${r.floor + 1} · ${nb.name.toUpperCase()}</small></button>`
+          : `<button class="btn h-cta" data-act="start"><b>Commencer l'ascension</b><small>CIEL 1 · ${nb.name.toUpperCase()}</small></button>`}
+      <button class="btn h-bt" data-act="go" data-to="coll"><i>録</i><b>Collection</b><span>${Object.keys(S.owned).length} / ${CHARS.length}</span></button>
+      <button class="btn h-bt" data-act="rules"><i>問</i><b>Règles</b><span>comment jouer</span></button>
+    </div></div>`;
+}
+function showRules() {
+  const sh = document.createElement("div"); sh.className = "sheet";
+  sh.innerHTML = `<div class="sheet-in rules-sheet" role="dialog" aria-label="Règles de l'ascension"><h3>Règles de l'ascension</h3><ul>
       <li>Ton équipe de 4 affronte une suite de boss, de plus en plus forts. Après le 8e ciel, le cycle recommence plus dur.</li>
       <li>L'<b>intention</b> du boss est toujours affichée : prépare provocations, boucliers et soins.</li>
       <li>Frapper sa <b>faiblesse</b> élémentaire inflige ×1,5 et use fortement sa <b>posture</b>. Posture à zéro : le boss perd son prochain tour et subit +50 % de dégâts.</li>
       <li>Après chaque victoire, choisis 1 bénédiction parmi 3. Elles durent jusqu'à la fin de l'ascension.</li>
       <li>Au-delà de ${FURY_ROUND} tours, le boss entre en <b>Fureur céleste</b> : +20 % d'ATK à chaque tour.</li>
-      <li>En cas de défaite, l'ascension repart du Ciel 1. Tu gardes tes héros et ton jade.</li>
-    </ul>
-    <div class="cycle">Domine :&nbsp;${["eau", "feu", "metal", "bois", "terre", "eau"].map((e) => elChip(e)).join(" › ")}</div></section>
-  </main>` + nav();
+      <li>En cas de défaite, l'ascension repart du Ciel 1. Tu gardes tes héros et ton jade.</li></ul>
+    <div class="cycle">Domine :&nbsp;${["eau", "feu", "metal", "bois", "terre", "eau"].map((e) => elChip(e)).join(" › ")}</div>
+    <button class="btn wide" style="margin-top:14px" data-act="closesheet">Fermer</button></div>`;
+  document.body.appendChild(sh);
 }
 
 // ===================== ÉQUIPE =====================
@@ -4337,6 +4406,7 @@ document.addEventListener("click", (e) => {
     case "togd": document.querySelectorAll(".sheet").forEach((s) => s.remove()); toggleTeam(t.dataset.id); break;
     case "filter": collFilter = t.dataset.f; render(); break;
     case "sum": doSummon(+t.dataset.n); break;
+    case "rules": showRules(); break;
     case "start": startRun(); break;
     case "prep": go("prep"); break;
     case "fight": startFight(); break;
