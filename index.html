@@ -1819,6 +1819,79 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .unl-acts{display:grid;grid-template-columns:1fr calc(var(--k,1)*45px) 1fr;margin-top:calc(var(--k,1)*12px)}
 .unl-acts div{text-align:center}
 
+
+/* ===== Interface de combat en grille (bas droite) ===== */
+.fight.ug{--u:calc(1px / var(--k,.72))}
+.fight.ug #fsk{position:absolute;z-index:40;right:calc(8*var(--u))!important;bottom:calc(14*var(--u))!important;left:auto!important;top:auto!important;height:auto!important;width:calc(314*var(--u))!important;background:none!important;border:0!important;padding:0!important;backdrop-filter:none!important;display:block}
+.fight.ug #fsk:empty{display:none}
+.fight.ug #fsk .waitmsg{height:auto!important;border-style:solid!important;width:auto!important}
+.fight.ug .vdock,.fight.ug .bhud .bar.hp,.fight.ug .bhud .shieldb,.fight.ug .bhud .phase{display:none!important}
+.fight.ug .abf{left:50px!important;right:auto!important;top:8px!important}
+.fight.ug .mutebtn{left:8px!important;right:auto!important;top:8px!important}
+.fight.ug .uibtn{position:absolute;z-index:20;left:150px;top:8px;width:32px;height:26px;border-radius:6px;border:1px solid var(--line2);background:rgba(8,4,6,.6);color:var(--gold);font-size:14px;display:grid;place-items:center;padding:0}
+.uibtn{display:none}.fight .uibtn{display:grid;position:absolute;z-index:20;left:150px;top:8px;width:32px;height:26px;border-radius:6px;border:1px solid var(--line2);background:rgba(8,4,6,.6);color:var(--gold);font-size:14px;place-items:center;padding:0}
+.fight.ug .vroster{top:8px!important;right:10px!important;width:158px!important}
+.fight.ug .vro{min-height:44px;box-sizing:border-box}
+.fight.ug .bgimg{transform:scale(1.22);transform-origin:50% 0}
+.fight.ug .bossbox{translate:0 46px}
+.fight.ug .party.n4 .pcw.p0{bottom:8%!important}.fight.ug .party.n4 .pcw.p1{bottom:7%!important}
+.fight.ug .party.n4 .pcw.p2{bottom:3%!important}.fight.ug .party.n4 .pcw.p3{bottom:1%!important}
+.fight.ug .pcw{transition:translate .4s ease,opacity .3s,z-index 0s}
+.fight.ug .pcw.dim{opacity:.35}
+.fight.ug .bhud{width:300px!important;right:auto!important;bottom:auto!important;pointer-events:none;align-items:center;transition:none}
+.fight.ug .bhud .bn{justify-content:center;gap:6px}
+.fight.ug .bhud .bn b{font-size:19px;font-family:var(--display);letter-spacing:.04em;text-shadow:0 2px 4px #000,0 0 10px rgba(0,0,0,.8);color:#f2e7d3}
+.gridm{display:grid;grid-template-columns:1fr 1fr;gap:calc(5*var(--u))}
+.cg{position:relative;display:block;text-align:left;box-sizing:border-box;min-height:calc(46*var(--u));padding:calc(4*var(--u)) calc(7*var(--u));background:linear-gradient(90deg,rgba(14,8,11,.6),rgba(14,8,11,.88));color:#f2e7d3;border:calc(1*var(--u)) solid rgba(255,255,255,.12);border-radius:calc(6*var(--u));font:inherit;cursor:pointer}
+.cg::before{content:"";position:absolute;inset:calc(-3*var(--u))}
+.cg.small{min-height:calc(35*var(--u));display:flex;align-items:center}
+.cg.small .t{width:100%}
+.cg .t{display:flex;align-items:center;gap:calc(6*var(--u));min-height:calc(20*var(--u))}
+.cg .t b{font-size:calc(12.5*var(--u));font-weight:600;white-space:nowrap}
+.cg .ic{flex:none;width:calc(18*var(--u));height:calc(18*var(--u));display:grid;place-items:center;padding:0;border:calc(2*var(--u)) solid color-mix(in srgb,var(--c) 55%,transparent);background:rgba(255,255,255,.06);color:var(--c);border-radius:calc(4*var(--u));font-size:calc(11*var(--u));font-weight:900;font-style:normal;-webkit-text-stroke:.5px currentColor}
+.cg .ic svg{width:70%;height:70%;display:block}
+.cg .v{margin-left:auto;font-size:calc(12*var(--u));font-weight:700;color:#fff;white-space:nowrap}
+.cg .ds{margin-top:calc(2*var(--u));font-size:calc(10.5*var(--u));line-height:1.25;color:#c9bfae;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cg .ds .num,.cg .ds em{font-style:normal;color:#fff;font-weight:700}
+.cg .ds.lk{color:#9a8f80}
+.cg.sel{border-color:#e2b250;box-shadow:0 0 calc(10*var(--u)) rgba(226,178,80,.45)}
+.cg:disabled{opacity:.5;cursor:default}
+.cg.cel:disabled{opacity:1}
+.cg.cel{min-height:calc(62*var(--u));padding:calc(3*var(--u)) calc(7*var(--u));background:linear-gradient(180deg,#2c2136,#130e1b);border:calc(2*var(--u)) solid #8a7440;border-radius:calc(7*var(--u));overflow:hidden;box-shadow:inset 0 0 0 calc(1*var(--u)) rgba(0,0,0,.7),inset 0 0 calc(10*var(--u)) rgba(120,90,160,.25),0 0 0 calc(1*var(--u)) #000}
+.cg.cel .ic{background:rgba(255,255,255,.06);border-color:color-mix(in srgb,#d9a35e 55%,transparent)}
+.cg.cel .pips{display:flex;gap:calc(3*var(--u));width:100%;margin-top:calc(5*var(--u))}
+.cg.cel .pips i{display:block;flex:1;height:calc(8*var(--u));border:calc(1*var(--u)) solid #6a5a3a;background:#17111d;transform:skewX(-18deg);border-radius:calc(1*var(--u))}
+.cg.cel .pips i.on{background:linear-gradient(180deg,#ffe9a0,#d99a12);border-color:#ffe08a;box-shadow:0 0 calc(4*var(--u)) rgba(255,210,90,.8)}
+.cg.cel .ds.rd{color:#ffe9b0}
+.cg.cel.ready{border-color:#ffd25a;animation:celglow 1.4s ease-in-out infinite;box-shadow:inset 0 0 0 calc(1*var(--u)) rgba(0,0,0,.6),inset 0 0 calc(16*var(--u)) rgba(255,200,80,.35),0 0 0 calc(1*var(--u)) #000,0 0 calc(14*var(--u)) rgba(255,205,90,.9),0 0 calc(30*var(--u)) rgba(255,180,50,.55)}
+.cg.cel.ready::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,235,170,.28) 50%,transparent 65%);background-size:250% 100%;animation:celsweep 2.4s linear infinite;pointer-events:none}
+.cg.cel.sel{border-color:#fff2b8}
+@keyframes celglow{50%{box-shadow:inset 0 0 0 calc(1*var(--u)) rgba(0,0,0,.6),inset 0 0 calc(22*var(--u)) rgba(255,200,80,.5),0 0 0 calc(1*var(--u)) #000,0 0 calc(22*var(--u)) rgba(255,215,110,1),0 0 calc(40*var(--u)) rgba(255,180,50,.7)}}
+@keyframes celsweep{0%{background-position:150% 0}100%{background-position:-50% 0}}
+.fight.ug #fsk .waitmsg,.fight.ug #fsk .pend{background:rgba(14,8,11,.8);border:calc(1*var(--u)) solid rgba(255,255,255,.12);border-radius:calc(6*var(--u));padding:calc(6*var(--u)) calc(10*var(--u))}
+/* cinématique Celestial */
+.celcine{position:absolute;inset:0;z-index:90;overflow:hidden;opacity:0;transition:opacity .25s;background:radial-gradient(circle at 50% 55%,color-mix(in srgb,var(--c) 40%,#1a0f2a),#07040d 75%);display:grid;place-items:center}
+.celcine.on{opacity:1}
+.cc-rays{position:absolute;inset:-50%;background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--c) 35%,transparent) 0 4deg,transparent 4deg 12deg);animation:ccspin 6s linear infinite;opacity:.55;-webkit-mask-image:radial-gradient(circle,#000 5%,transparent 60%);mask-image:radial-gradient(circle,#000 5%,transparent 60%)}
+.celcine.leg .cc-rays{opacity:.9;animation-duration:3s}
+@keyframes ccspin{to{transform:rotate(360deg)}}
+.cc-k{position:absolute;font-family:var(--display);font-size:340px;line-height:1;color:var(--c);opacity:.28;text-shadow:0 0 40px var(--c);transform:scale(.6);animation:cck 3.4s ease-out forwards}
+@keyframes cck{to{transform:scale(1.15);opacity:.4}}
+.cc-hero{position:relative;height:64%;margin-top:-6%;aspect-ratio:1;display:grid;place-items:end center;transform:translateX(-120%);animation:cch .7s .15s cubic-bezier(.2,.9,.3,1) forwards}
+.celcine.leg .cc-hero{animation-name:cch,ccpulse;animation-duration:.7s,1.1s;animation-delay:.15s,.9s;animation-iteration-count:1,infinite}
+.cc-hero img{height:100%;width:auto;image-rendering:pixelated;filter:drop-shadow(0 0 14px var(--c)) drop-shadow(0 0 40px var(--c))}
+@keyframes cch{to{transform:translateX(0)}}
+@keyframes ccpulse{50%{filter:brightness(1.25)}}
+.cc-t{position:absolute;left:0;right:0;bottom:7%;text-align:center;opacity:0;animation:cct .5s .6s forwards}
+.cc-t small{display:block;letter-spacing:.5em;color:#ffd25a;font-size:12px;text-shadow:0 0 10px #ffb830}
+.cc-t b{display:block;font-family:var(--display);font-size:30px;color:#fff;text-shadow:0 0 14px var(--c),0 2px 4px #000}
+@keyframes cct{to{opacity:1}}
+.cc-bar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:linear-gradient(90deg,#ffd25a,#fff);transform-origin:left;animation:ccbar 3.2s linear forwards}
+.celcine.leg .cc-bar{animation-duration:4s}
+@keyframes ccbar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.cc-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.celcine:has(.cc-vid){background:#000}
+.cc-skip{position:absolute;right:12px;top:10px;z-index:2;background:rgba(8,4,6,.6);color:#f2e7d3;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:6px 12px;font-size:12px}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
@@ -3996,9 +4069,9 @@ function startFight() {
   const m = r.mods || {};
   const heroes = sortRoles(r.heroes.map((x) => x.id)).map((id) => r.heroes.find((x) => x.id === id)).map((rh) => {
     const s = heroStats(rh.id, r), c = kitOf(CH[rh.id]), hp = Math.round(s.hp * rh.hpPct);
-    return { id: rh.id, c, maxHp: s.hp, hp, atk: s.atk, def: s.def, el: c.el, dt: ROLE[c.role].dt, cd: [0, 0, 0], st: [], shield: hp > 0 && m.shield ? Math.round(s.hp * 0.15 * m.shield) : 0, acted: false, dead: hp <= 0 };
+    return { id: rh.id, c, maxHp: s.hp, hp, atk: s.atk, def: s.def, el: c.el, dt: ROLE[c.role].dt, cd: [0, 0, 3], st: [], shield: hp > 0 && m.shield ? Math.round(s.hp * 0.15 * m.shield) : 0, acted: false, dead: hp <= 0 };
   });
-  F = { boss, heroes, round: 1, phase: "player", active: 0, pending: null, busy: false, souls: m.soul || 0, log: [], over: false };
+  F = { boss, heroes, round: 1, phase: "player", active: 0, pending: null, busy: false, souls: m.soul || 0, log: [], over: false, gauge: 0, sel: null, acting: null };
   screen = "fight";
   musStart();
   pickIntent();
@@ -4030,8 +4103,7 @@ function bossTargets() {
 }
 const BASIC = { n: "Attaque", d: "Frappe à 100 % ATK.", cd: 0, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 6 }] };
 function guardSk(h) {
-  return { n: "Garde", d: h.c.role === "tank" ? "−50 % de dégâts subis, provoque le boss et réduit tes recharges d'1 tour." : "−50 % de dégâts subis jusqu'à ton prochain tour et réduit tes recharges d'1 tour.", cd: 0, tgt: "self",
-    fx: [{ k: "dr", p: 0.5, d: 1 }, { k: "cdself", n: 1 }].concat(h.c.role === "tank" ? [{ k: "taunt", d: 1 }] : []) };
+  return { n: "Garde", d: "−50 % de dégâts subis jusqu'à ton prochain tour.", cd: 0, tgt: "self", fx: [{ k: "dr", p: 0.5, d: 1 }] };
 }
 const AWK = [
   null,
@@ -4140,7 +4212,38 @@ function applyCombo(c, h) {
 }
 const comboTag = (h, sk) => { const c = sk.fin && COMBO[sk.fin]; if (!c) return ""; return comboFor(h, sk) ? ` <em class="cbo on">⚡ COMBO ${c.n} prêt</em>` : ` <em class="cbo">⚡ Combo ${c.n}</em>`; };
 
-const getSk = (h, si) => (si === "atk" ? BASIC : si === "grd" ? guardSk(h) : h.c.skills[si]);
+const CEL_M = 5.5;
+const CELX = {
+  t1: { j: "千祈一山", n: "Mille prières, une montagne", m: 4.5, tgt: "allies", d: "Frappe de Terre + bouclier de 10 % PV à l'équipe.", fx: [{ k: "shield", p: 0.1 }] },
+  t2: { j: "橋は落ちず", n: "Le pont ne tombera pas", m: 4.5, tgt: "allies", d: "Équipe quasi invulnérable 1 tour + riposte massive.", fx: [{ k: "dr", p: 0.9, d: 1 }, { k: "counter", p: 1.2, d: 1, on: "self" }] },
+  t3: { j: "岩の目覚め", n: "Le Rocher s'éveille", m: 5.5, tgt: "boss", d: "Dégâts énormes de Terre, ATK du boss −40 % (2 tours).", fx: [{ k: "debuff", s: "atk", p: 0.4, d: 2 }] },
+  t4: { j: "百扇一鏡", n: "Cent éventails, un seul miroir", m: 5, tgt: "allies", d: "Dégâts de Métal, bouclier d'équipe 12 % PV et riposte.", fx: [{ k: "shield", p: 0.12 }, { k: "counter", p: 1.5, d: 1, on: "self" }] },
+  t5: { j: "北、堕つ", n: "Le Nord s'abat", m: 5.5, tgt: "allies", d: "Gros dégâts d'Eau, ATK du boss −30 % (gel), dôme : −50 % dégâts subis et bouclier 15 % PV.", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "dr", p: 0.5, d: 2 }, { k: "shield", p: 0.15 }] },
+  t6: { j: "蒼龍、天を斬れ", n: "Dragon Azur, tranche le ciel", m: 6.5, tgt: "allies", d: "Coup unique très puissant de Bois, ATK d'équipe +20 % (2 tours).", fx: [{ k: "buff", p: 0.2, d: 2 }] },
+  p1: { j: "最後の居合", n: "Dernier iai", m: 5.5, tgt: "boss", d: "Coup unique ignorant 30 % de la défense.", pre: [{ k: "debuff", s: "def", p: 0.3, d: 1 }], fx: [] },
+  p2: { j: "竹槍の森", n: "Forêt de lances", m: 3.5, tgt: "boss", d: "Nombreux petits coups + saignement 3 tours.", hits: 6, fx: [{ k: "dot", s: "bleed", m: 0.35, d: 3 }] },
+  p3: { j: "炎舞千燼", n: "Danse des mille braises", m: 5, tgt: "allies", d: "Coups de Feu, brûlure forte 3 tours, ATK d'équipe +20 % (2 tours).", fx: [{ k: "dot", s: "burn", m: 0.35, d: 3 }, { k: "buff", p: 0.2, d: 2 }] },
+  p4: { j: "百山の虎", n: "Tigre des cent montagnes", m: 5.5, tgt: "boss", d: "Gros coup de Terre + DEF du boss −25 % (2 tours).", fx: [{ k: "debuff", s: "def", p: 0.25, d: 2 }] },
+  p5: { j: "猴王翻天", n: "Le Roi Singe renverse le ciel", m: 6.5, tgt: "allies", d: "Coup colossal de Métal + esquive d'équipe (50 %, 1 tour).", fx: [{ k: "evade", p: 0.5, d: 1, on: "self" }] },
+  p6: { j: "皆既蝕", n: "Éclipse totale", m: 5.5, tgt: "boss", d: "Coup d'exécution : le boss subit +30 % de dégâts (2 tours).", fx: [{ k: "mark", p: 0.3, d: 2 }] },
+  m1: { j: "札の嵐", n: "Tempête de talismans", m: 4.5, tgt: "boss", d: "Dégâts d'Eau + ATK du boss −20 % (gel, 2 tours).", fx: [{ k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+  m2: { j: "失敗仙丹", n: "Pilule de l'immortalité ratée", m: 5, tgt: "boss", d: "Explosion de Feu + brûlure 3 tours.", fx: [{ k: "dot", s: "burn", m: 0.3, d: 3 }] },
+  m3: { j: "九尾九幻", n: "Neuf queues, neuf mirages", m: 5, tgt: "boss", d: "Gros dégâts de Feu + ATK du boss −25 % (2 tours).", fx: [{ k: "debuff", s: "atk", p: 0.25, d: 2 }] },
+  m4: { j: "嵐の詩", n: "Poème de la tempête, dernier vers", m: 5.5, tgt: "boss", d: "Gros dégâts, poison 3 tours et +15 % de dégâts subis par le boss.", fx: [{ k: "dot", s: "poison", m: 0.3, d: 3 }, { k: "mark", p: 0.15, d: 2 }] },
+  m5: { j: "龍王の宮", n: "Palais du Roi Dragon", m: 6.5, tgt: "allies", d: "Plus gros dégât d'Eau + bouclier d'équipe 12 % PV.", fx: [{ k: "shield", p: 0.12 }] },
+  m6: { j: "九鼓の審判", n: "Neuf tambours du Jugement", m: 5, tgt: "boss", d: "Série d'éclairs + ATK du boss −30 % (paralysie, 2 tours).", hits: 3, fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }] },
+  s1: { j: "鈴の桜", n: "Cerisier de la clochette", m: 2.5, tgt: "allies", d: "Soin de 50 % PV à l'équipe + régénération 3 tours.", fx: [{ k: "healPct", p: 0.5 }, { k: "regen", p: 0.06, d: 3 }] },
+  s2: { j: "川の歌", n: "Chant de la rivière", m: 2.5, tgt: "allies", d: "Soin 25 %, retire les malus, ranime les alliés tombés (25 %).", fx: [{ k: "healPct", p: 0.25 }, { k: "cleanse" }, { k: "revive", p: 0.25 }] },
+  s3: { j: "永遠の花見", n: "Hanami éternel", m: 3, tgt: "allies", d: "Résurrection (40 %), soin 20 %, ATK d'équipe +15 % (2 tours).", fx: [{ k: "revive", p: 0.4 }, { k: "healPct", p: 0.2 }, { k: "buff", p: 0.15, d: 2 }] },
+  s4: { j: "万年の茶", n: "Le thé de dix mille ans", m: 2.5, tgt: "allies", d: "Soin 30 % et recharges des alliés −2.", fx: [{ k: "healPct", p: 0.3 }, { k: "cdr", n: 2 }] },
+  s5: { j: "満月の蓮", n: "Lotus de la pleine lune", m: 3.5, tgt: "allies", d: "Résurrection (60 %), soin 30 %, −25 % dégâts subis (2 tours).", fx: [{ k: "revive", p: 0.6 }, { k: "healPct", p: 0.3 }, { k: "dr", p: 0.25, d: 2 }] },
+  s6: { j: "鳳凰の再生", n: "Renaissance du Phénix", m: 4.5, tgt: "allies", d: "Résurrection (50 %), ATK d'équipe +25 % (2 tours), dégâts de Feu au boss.", fx: [{ k: "revive", p: 0.5 }, { k: "buff", p: 0.25, d: 2 }] }
+};
+const CELV = new Set(["p1", "p2", "p3", "p4", "p5"]); // cinématiques vidéo disponibles
+const celSk = (h) => { const x = CELX[h.id]; if (!x) return { n: "Celestial", d: `Invocation à ${Math.round(CEL_M * 100)} % ATK. Vide la jauge.`, cd: 0, tgt: "boss", cel: true, fx: [{ k: "dmg", m: CEL_M, post: 90 }] }; return { n: x.n, d: x.d, cd: 0, tgt: x.tgt, cel: true, fx: [...(x.pre || []), { k: "dmg", m: x.m, post: 90, ...(x.hits ? { hits: x.hits, m: x.m / x.hits } : {}) }, ...x.fx] }; };
+const getSk = (h, si) => (si === "atk" ? BASIC : si === "grd" ? guardSk(h) : si === "cel" ? celSk(h) : h.c.skills[si]);
+const skName = (h, si) => (typeof si === "number" ? getSk(h, si).n : si === "grd" ? "Garde" : si === "cel" ? "Celestial" : "Attaque");
+const celReady = () => F && F.gauge >= 9 && !F.plan.some((p) => p && p.si === "cel");
 let stopPart = null;
 // ===================== ENVIRONNEMENT DE COMBAT (filtre « cinéma », pixel snap, ombres) =====================
 window.SNAP = window.SNAP || {};
@@ -4189,8 +4292,8 @@ function skBanner(kind, who, name, glyph, col) {
 setTimeout(snapBgs, 400);
 function renderFightShell() {
   const b = F.boss, T = BG[b.id] || BG.oni;
-  app.innerHTML = `<div class="fight">
-    <div class="ftop"><div class="order" id="forder"></div></div><button class="btn ghost abf" data-act="abandon" id="abBtn">Abandonner</button><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" id="muteBtn" aria-label="Son">♪</button>
+  app.innerHTML = `<div class="fight${S.band ? "" : " ug"}">
+    <div class="ftop"><div class="order" id="forder"></div></div><button class="btn ghost abf" data-act="abandon" id="abBtn">Abandonner</button><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" id="muteBtn" aria-label="Son">♪</button><button class="uibtn" data-act="uimode" aria-label="Interface" title="Changer d'interface de combat">▤</button>
     <div class="scene" id="scene" style="--glow:${T.glow};--fog:${T.fog}">
       <div class="cam" id="cam">
         ${ART["bg:" + b.id] ? `<img class="bgimg" src="${(window.SNAP && SNAP[b.id]) || ART["bg:" + b.id]}" alt=""><div class="bloom"></div><div class="fogb"></div>` : `<canvas class="bgl far" id="bgfar"></canvas><div class="bloom"></div><canvas class="bgl mid" id="bgmid"></canvas><div class="fogb"></div><canvas class="bgl floor" id="bgfloor"></canvas>`}
@@ -4266,7 +4369,7 @@ function update() {
       vr.classList.toggle("active", act); vr.classList.toggle("dead", h.dead); vr.classList.toggle("aim", !F.over && !h.dead && aims.includes(h));
       const show = F.phase === "player" && plv && !h.acted && !h.dead, vp = vr.querySelector(".vplan");
       vr.classList.toggle("vplanned", !!show);
-      if (show) { const k = planOrder().indexOf(i); vp.innerHTML = `${k >= 0 ? `<b>${k + 1}</b>` : ""}${typeof plv.si === "number" ? getSk(h, plv.si).n : plv.si === "grd" ? "Garde" : "Attaque"}${plv.ti != null ? " → " + F.heroes[plv.ti].c.name : ""}`; vp.style.display = "block"; } else vp.style.display = "none";
+      if (show) { const k = planOrder().indexOf(i); vp.innerHTML = `${k >= 0 ? `<b>${k + 1}</b>` : ""}${skName(h, plv.si)}${plv.ti != null ? " → " + F.heroes[plv.ti].c.name : ""}`; vp.style.display = "block"; } else vp.style.display = "none";
     } }
     [el, pc].forEach((x) => {
       x.classList.toggle("dead", h.dead);
@@ -4277,9 +4380,9 @@ function update() {
     pc.classList.toggle("guard", h.st.some((s) => s.k === "dr" && s.p >= 0.5));
     $("pw" + i).classList.toggle("aimed", !F.over && !h.dead && aims.includes(h));
     const pl = F.plan && F.plan[i], tgEl = el.querySelector(".plantag");
-    if (tgEl) { const ordr = F.phase === "player" && pl && !h.acted ? planOrder() : []; const k = ordr.indexOf(i); tgEl.textContent = pl && !h.acted && F.phase === "player" ? `${k >= 0 ? k + 1 + " · " : ""}${typeof pl.si === "number" ? getSk(h, pl.si).n : pl.si === "grd" ? "Garde" : "Attaque"}${pl.ti != null ? " → " + F.heroes[pl.ti].c.name : ""}` : ""; tgEl.style.display = tgEl.textContent ? "block" : "none"; }
+    if (tgEl) { const ordr = F.phase === "player" && pl && !h.acted ? planOrder() : []; const k = ordr.indexOf(i); tgEl.textContent = pl && !h.acted && F.phase === "player" ? `${k >= 0 ? k + 1 + " · " : ""}${skName(h, pl.si)}${pl.ti != null ? " → " + F.heroes[pl.ti].c.name : ""}` : ""; tgEl.style.display = tgEl.textContent ? "block" : "none"; }
   });
-  renderSkills();
+  renderSkills(); layoutFront();
   { const pl = F.plan && F.plan[F.active], bx = document.getElementById("fsk"); if (pl && bx && F.phase === "player" && !F.pending) { const b = bx.querySelector(`[data-act="skill"][data-i="${pl.si}"]`); if (b) b.classList.add("planned"); } }
 }
 // valeur réelle d'un coup du héros actif contre le boss actuel (défense, marques ; ni critique ni faiblesse inconnue)
@@ -4305,11 +4408,76 @@ function renderSkills() {
   const h = F.heroes[F.active];
   if (!h || h.dead || h.acted) { box.innerHTML = ""; return; }
   const dis = F.busy ? "disabled" : "";
+  if (!S.band) { box.innerHTML = gridHtml(h); return; }
   box.innerHTML = launchHtml() + `<div class="vrow">
     <button class="bbtn" data-act="skill" data-i="atk" ${dis} aria-label="Attaque" title="Attaque : 100 % ATK · ${ELEM[h.el].n} · ${h.dt === "p" ? "physique" : "magique"}"><div class="ic">${eli(h.el)}</div><div class="lb">Attaque</div><div class="vl">${fmt(skDmgVal(h, 100, -1))}</div></button>
-    <button class="bbtn grd" data-act="skill" data-i="grd" ${dis} aria-label="Garde" title="Garde : −50 % dégâts${h.c.role === "tank" ? ", provoque" : ""}, recharges −1"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Garde</div><div class="vl">−50 %</div></button>
+    <button class="bbtn grd" data-act="skill" data-i="grd" ${dis} aria-label="Garde" title="Garde : −50 % de dégâts subis"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Garde</div><div class="vl">−50 %</div></button>
     ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 2 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${awTag(h.id, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
   </div>`;
+}
+
+// ---- menu en grille (bas droite) ----
+const icEl = (e) => `<span class="ic" style="--c:${ELEM[e].c}" title="${ELEM[e].n}">${ELEM[e].k}</span>`;
+const SHIELD_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>';
+function gridHtml(h) {
+  const hi = F.heroes.indexOf(h), dis = F.busy ? "disabled" : "", key = (k) => (F.sel === hi + ":" + k ? " sel" : "");
+  const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${off || F.busy ? "disabled" : ""}>${inner}</button>`;
+  const sk = h.c.skills.map((s, i) => {
+    const dmg = s.fx.some((f) => f.k === "dmg" || f.k === "dot"), cd = h.cd[i];
+    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : ""}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${awTag(h.id, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
+  });
+  const ready = celReady(), g = F.gauge;
+  const cel = cell("cel", `<div class="t">${icEl(h.el)}<b>Celestial</b></div>${ready ? `<div class="ds rd">${skDesc(h, celSk(h), -1)}</div>` : `<div class="pips">${Array.from({ length: 9 }, (_, q) => `<i class="${q < g ? "on" : ""}"></i>`).join("")}</div>`}`, "cel" + (ready ? " ready" : ""), !ready);
+  return `<div class="gridm">
+    ${cell("atk", `<div class="t">${icEl(h.el)}<b>Attaque</b><span class="v">${fmt(skDmgVal(h, 100, -1))}</span></div>`, "small")}
+    ${cell("grd", `<div class="t"><span class="ic grdi" style="--c:#9fc0ff">${SHIELD_SVG}</span><b>Garde</b><span class="v">−50 %</span></div>`, "small grd")}
+    ${sk.join("")}${cel}</div>`;
+}
+// héros actif avancé au centre, les autres estompés
+function layoutFront() {
+  const fg = document.querySelector(".fight.ug"), sc = document.getElementById("scene"); if (!sc || !F) return;
+  if (!fg) { document.querySelectorAll(".pcw").forEach((w) => { w.classList.remove("dim"); w.style.translate = ""; w.dataset.tx = 0; }); const bh = document.querySelector(".bhud"); if (bh) { bh.style.removeProperty("left"); bh.style.removeProperty("top"); } return; }
+  const front = F.over ? -1 : F.phase === "player" && !F.busy ? F.active : F.acting == null ? -1 : F.acting;
+  const sr = sc.getBoundingClientRect();
+  F.heroes.forEach((h, i) => {
+    const w = document.getElementById("pw" + i); if (!w) return;
+    w.classList.toggle("dim", front >= 0 && i !== front);
+    if (i !== front || h.dead) { w.style.translate = ""; return; }
+    const r = w.getBoundingClientRect(), k = r.width / w.offsetWidth || 1, cur = parseFloat(w.dataset.tx || "0");
+    const nat = r.left + r.width / 2 - cur * k, tx = (sr.left + sr.width * 0.46 - nat) / k;
+    w.dataset.tx = tx; w.style.translate = tx + "px 0";
+  });
+  [...document.querySelectorAll(".pcw")].forEach((w) => { if (!w.classList.contains("dim") && front < 0) w.dataset.tx = 0; });
+  F.heroes.forEach((h, i) => { const w = document.getElementById("pw" + i); if (w && (i !== front || h.dead)) w.dataset.tx = 0; });
+  const bi = document.querySelector("#bstage .bimg"), bh = document.querySelector(".bhud");
+  if (bi && bh) { const r = bi.getBoundingClientRect(), k = sr.width / sc.offsetWidth || 1; if (r.width) { bh.style.setProperty("left", (r.left + r.width * 0.5 - sr.left) / k - 150 + "px", "important"); bh.style.setProperty("top", Math.max(40, (r.top - sr.top) / k + r.height * 0.12 - 38) + "px", "important"); } }
+}
+// ---- cinématique du Celestial ----
+function celCine(h) {
+  return new Promise((res) => {
+    const fight = document.querySelector(".fight"); if (!fight) return res();
+    const leg = h.c.rar === "L", E = ELEM[h.el], X = CELX[h.id] || {}, ov = document.createElement("div");
+    ov.className = "celcine" + (leg ? " leg" : ""); ov.style.setProperty("--c", E.c);
+    let done = false, vid = null, tm = 0;
+    const end = () => { if (done) return; done = true; clearTimeout(tm); if (vid) { try { vid.pause(); } catch (e) {} } ov.classList.remove("on"); setTimeout(() => { ov.remove(); res(); }, 250); };
+    window.__ccskip = end;
+    const generic = () => {
+      if (done) return; if (vid) { vid.remove(); vid = null; }
+      ov.classList.add("gen"); ov.insertAdjacentHTML("afterbegin", `<div class="cc-rays"></div><div class="cc-k">${E.k}</div><div class="cc-hero">${heroArt(h.c)}</div><div class="cc-t"><small>${X.j ? X.j + " · " : ""}CELESTIAL</small><b>${X.n || h.c.name}</b></div><div class="cc-bar"></div>`);
+      if (typeof sfxDiscover === "function") sfxDiscover();
+      clearTimeout(tm); tm = setTimeout(end, leg ? 4000 : 3200);
+    };
+    ov.insertAdjacentHTML("beforeend", `<button class="cc-skip" data-act="ccskip">Passer ›</button>`);
+    fight.appendChild(ov);
+    requestAnimationFrame(() => ov.classList.add("on"));
+    if (CELV.has(h.id)) {
+      vid = document.createElement("video"); vid.className = "cc-vid"; vid.src = `celestial/${h.id}.mp4`; vid.playsInline = true; vid.preload = "auto";
+      vid.onended = end; vid.onerror = generic;
+      ov.prepend(vid);
+      const p = vid.play(); if (p && p.catch) p.catch(generic);
+      tm = setTimeout(() => { if (vid && vid.readyState < 2) generic(); }, 2500);
+    } else generic();
+  });
 }
 // ===================== PLANIFICATION DU TOUR =====================
 function actPrio(h, si) {
@@ -4346,6 +4514,7 @@ async function launchPlan() {
     const h = F.heroes[i], p = F.plan[i]; if (!h || h.dead || h.acted) continue;
     let si = p.si, ti = p.ti;
     if (typeof si === "number" && h.cd[si] > 0) si = "atk";
+    if (si === "cel" && F.gauge < 9) si = "atk";
     const sk = getSk(h, si);
     if (sk.tgt === "ally" && (ti == null || F.heroes[ti].dead)) { const al = F.heroes.findIndex((t) => !t.dead); ti = al; }
     const f = F; await useSkill(i, si, ti);
@@ -4433,7 +4602,8 @@ function healHero(h, amt, quiet) {
 async function useSkill(hi, si, ti) {
   const h = F.heroes[hi], sk = getSk(h, si), b = F.boss, num = typeof si === "number";
   if (h.dead || h.acted || (num && h.cd[si] > 0)) return;
-  F.busy = true; F.pending = null;
+  F.busy = true; F.pending = null; F.sel = null; F.acting = hi;
+  if (si === "cel") { update(); await celCine(h); F.gauge = 0; }
   const hm = S.run.heroMods[h.id] || {};
   let pw = num ? (1 + 0.3 * ((hm.sp || [])[si] || 0)) * awMul(h.id, si) : 1;
  
@@ -4452,7 +4622,7 @@ async function useSkill(hi, si, ti) {
     const tg = (fx.on === "self" ? [h] : allyT).filter((t) => t && !t.dead);
     switch (fx.k) {
       case "dmg":
-        for (let i = 0; i < (fx.hits || 1); i++) { if (b.hp <= 0 || h.dead) break; const big = num && si === 2; sfxHit(skEl(h, sk), melee, big, i); await hitFx(h, i, big, skEl(h, sk)); dmgBoss(h, fx.m * pw, { ...fx, ...CM, el: skEl(h, sk) }); update(); await sleep(fx.hits > 1 ? 190 : 330); }
+        for (let i = 0; i < (fx.hits || 1); i++) { if (b.hp <= 0 || h.dead) break; const big = (num && si === 2) || si === "cel"; sfxHit(skEl(h, sk), melee, big, i); await hitFx(h, i, big, skEl(h, sk)); dmgBoss(h, fx.m * pw, { ...fx, ...CM, el: skEl(h, sk) }); update(); await sleep(fx.hits > 1 ? 190 : 330); }
         break;
       case "dot": { dotFx(h, skEl(h, sk)); const weak = weakTo(b.el) === skEl(h, sk); addSt(b, { k: fx.s, dmg: Math.round(hAtk(h) * fx.m * pw * (weak ? 1.5 : 1)), d: fx.d }); break; }
       case "debuff": bossDebuffFx("#b46cff"); addSt(b, { k: fx.s + "down", p: fx.p, d: fx.d }); break;
@@ -4473,8 +4643,9 @@ async function useSkill(hi, si, ti) {
     }
   }
   if (cb) applyCombo(cb, h);
+  if (num && sk.fx.some((f) => f.k === "dmg" || f.k === "dot")) F.gauge = Math.min(9, F.gauge + 1);
   if (num) h.cd[si] = sk.cd ? Math.max(1, sk.cd - ((hm.cd || [])[si] || 0) - awCd(h.id, si)) : 0;
-  h.acted = true;
+  h.acted = true; F.acting = null;
   update();
   await sleep(250);
   if (b.hp <= 0 && await bossDown()) return;
@@ -4719,21 +4890,25 @@ document.addEventListener("click", (e) => {
     case "cancelT": if (F) { F.pending = null; update(); } break;
     case "skill": {
       if (!F || F.busy || F.phase !== "player") return;
-      const raw = t.dataset.i, si = raw === "atk" || raw === "grd" ? raw : +raw, h = F.heroes[F.active];
+      const raw = t.dataset.i, si = raw === "atk" || raw === "grd" || raw === "cel" ? raw : +raw, h = F.heroes[F.active];
       if (!h) return; const sk = getSk(h, si);
       if (!sk || (typeof si === "number" && h.cd[si] > 0)) return;
+      if (si === "cel" && !celReady()) return;
+      if (!S.band && si !== "atk" && si !== "grd") { const k = F.active + ":" + si; if (F.sel !== k) { F.sel = k; update(); return; } F.sel = null; }
       if (sk.tgt === "ally") { F.pending = { hi: F.active, si }; update(); }
       else setPlan(F.active, si);
       break;
     }
     case "launch": launchPlan(); break;
+    case "ccskip": if (window.__ccskip) window.__ccskip(); break;
+    case "uimode": { S.band = !S.band; save(); const fg = document.querySelector(".fight"); if (fg) fg.classList.toggle("ug", !S.band); F.sel = null; update(); break; }
     case "noop": {
     }
     case "hsel": {
       if (!F || F.busy || F.phase !== "player") return;
       const i = +t.dataset.i, h = F.heroes[i];
       if (F.pending) { if (!h.dead) setPlan(F.pending.hi, F.pending.si, i); return; }
-      if (!h.dead && !h.acted) { F.active = i; update(); }
+      if (!h.dead && !h.acted) { F.active = i; F.sel = null; update(); }
       break;
     }
   }
