@@ -4016,21 +4016,11 @@ function actPrio(h, si) {
   if (has(["heal", "healPct", "regen", "revive"])) return -1;
   return 0;
 }
-// ordre d'exécution automatique : renforts et amorces d'abord, finisseurs ensuite, puis engendrement
+// ordre d'exécution : de gauche à droite selon la position réelle des héros à l'écran
 function planOrder() {
   const idx = F.heroes.map((h, i) => i).filter((i) => !F.heroes[i].dead && !F.heroes[i].acted && F.plan[i]);
-  if (idx.length < 2) return idx;
-  const pr = {}; idx.forEach((i) => { pr[i] = actPrio(F.heroes[i], F.plan[i].si); });
-  const perms = (a) => a.length < 2 ? [a] : a.flatMap((x, k) => perms(a.filter((_, j) => j !== k)).map((p) => [x, ...p]));
-  let best = null, bs = -1e9;
-  perms(idx).forEach((p) => {
-    let sc = 0;
-    for (let a = 0; a < p.length; a++) for (let b = a + 1; b < p.length; b++) if (pr[p[a]] > pr[p[b]]) sc -= 100;
-    for (let a = 1; a < p.length; a++) if (GEN[F.heroes[p[a - 1]].el] === F.heroes[p[a]].el) sc += 10;
-    sc -= p.reduce((s, x, k) => s + Math.abs(x - idx[k]), 0) * 0.1;
-    if (sc > bs) { bs = sc; best = p; }
-  });
-  return best;
+  const x = (i) => { const el = document.getElementById("pw" + i); return el ? el.getBoundingClientRect().left : null; };
+  return idx.slice().sort((a, b) => { const xa = x(a), xb = x(b); return xa == null || xb == null || xa === xb ? a - b : xa - xb; });
 }
 function setPlan(hi, si, ti) {
   F.plan[hi] = { si, ti }; F.pending = null;
