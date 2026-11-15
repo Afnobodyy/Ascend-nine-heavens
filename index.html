@@ -1936,7 +1936,8 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 /* v53 : plus de vignette sombre (teintes, ombres et grain « cinéma » conservés) */
 .fight .vign{display:none}
 /* calage du décor par boss : zoom (--bsc) depuis le haut pour que les pieds touchent le sol */
-.fight .bgimg{transform:scale(var(--bsc,1));transform-origin:50% 0}
+.fight .bgimg{transform:translateY(var(--bdy,0)) scale(var(--bsc,1));transform-origin:50% 0}
+.fight[data-b=aluna]{--bdy:-8%}
 /* sprite d'Oni redessiné (pieds complets, toile 700 px) : agrandi pour garder la même taille */
 #app .fight[data-b=oni] .bossbox{height:65.5%}
 #app .fight[data-b=jiangshi] .bossbox{height:66.3%}
