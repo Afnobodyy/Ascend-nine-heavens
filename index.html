@@ -1563,6 +1563,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .vro.aim{border-color:#ff4a3a}
 .vro.aim b::after{content:" ⚔";color:#ff6a5a;font-size:10px}
 .vro.vplanned{box-shadow:inset 3px 0 0 #ffd25a}
+.vroster.n4 #vro2{order:1}.vroster.n4 #vro1{order:2}.vroster.n4 #vro3{order:3}
 .vro.dead{opacity:.45;filter:grayscale(1)}
 .vro .vplan{display:none;position:absolute;right:calc(100% + 6px);top:50%;transform:translateY(-50%);white-space:nowrap;font-size:10.5px;font-weight:700;color:#ffd25a;background:rgba(10,6,8,.88);border:1px solid #ffd25a;border-radius:6px;padding:1px 6px;pointer-events:none}
 .vro .vplan b{display:inline-grid;place-items:center;width:14px;height:14px;border-radius:50%;background:#ffd25a;color:#1a0f08;font-size:9px;margin-right:4px}
@@ -4355,7 +4356,7 @@ function renderFightShell() {
       <div class="bhud"><div class="bn"><b>${b.name}</b><span class="phase" id="bphase" hidden>PHASE 2</span><div class="wk" id="bwk"></div></div>
         <div class="bar hp"><i id="bhp"></i><i class="sh" id="bsh"></i><span id="bhpt"></span></div></div>
       <div class="intent" id="bint"></div>
-      <div class="vroster" id="vroster">${F.heroes.map((h, i) => `<div class="vro" id="vro${i}"><span class="face">${heroArt(h.c)}</span><span class="vn"><b>${h.c.name}</b><span class="vsl" style="display:contents"></span></span><span class="hpn"></span><span class="bar"><i class="hpi"></i><i class="sh"></i></span><span class="vplan"></span></div>`).join("")}</div>
+      <div class="vroster n${F.heroes.length}" id="vroster">${F.heroes.map((h, i) => `<div class="vro" id="vro${i}"><span class="face">${heroArt(h.c)}</span><span class="vn"><b>${h.c.name}</b><span class="vsl" style="display:contents"></span></span><span class="hpn"></span><span class="bar"><i class="hpi"></i><i class="sh"></i></span><span class="vplan"></span></div>`).join("")}</div>
       <div class="binfo"><div class="stl" id="bst"></div></div>
     </div>
     <div class="log" id="flog"></div>
