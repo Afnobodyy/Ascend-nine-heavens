@@ -1997,7 +1997,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 47; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 48; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4628,11 +4628,12 @@ function actPrio(h, si) {
   if (has(["heal", "healPct", "regen", "revive"])) return -1;
   return 0;
 }
-// ordre d'exécution : de gauche à droite selon la position réelle des héros à l'écran
+// ordre d'exécution : soins, puis buffs, puis affaiblissements/poisons, puis dégâts, ultime en dernier ; à priorité égale, de gauche à droite à l'écran
 function planOrder() {
   const idx = F.heroes.map((h, i) => i).filter((i) => !F.heroes[i].dead && !F.heroes[i].acted && F.plan[i]);
   const x = (i) => { const el = document.getElementById("pw" + i); return el ? el.getBoundingClientRect().left : null; };
-  return idx.slice().sort((a, b) => { const xa = x(a), xb = x(b); return xa == null || xb == null || xa === xb ? a - b : xa - xb; });
+  const pr = (i) => { const si = F.plan[i].si; return si === "cel" ? 3 : actPrio(F.heroes[i], si); };
+  return idx.slice().sort((a, b) => { if (pr(a) !== pr(b)) return pr(a) - pr(b); const xa = x(a), xb = x(b); return xa == null || xb == null || xa === xb ? a - b : xa - xb; });
 }
 function setPlan(hi, si, ti) {
   F.plan[hi] = { si, ti }; F.pending = null;
