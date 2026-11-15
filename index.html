@@ -1492,6 +1492,8 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .fight .bhud .bn b{font-size:15px}
 .fight .bhud .bn .wk{margin-left:auto;padding:0;background:none;border:0;gap:3px}
 .fight .bhud .bn .wk .lbl{display:none}
+.fight .bhud .bn .wk{flex-wrap:wrap;justify-content:flex-end;max-width:70%}
+.fight .bhud .bn .wk .st{font-size:9.5px;line-height:15px}
 .fight .bhud .bn .wk .wi{width:17px;height:17px;font-size:10px}
 .fight .bhud .bar.hp{height:13px!important;max-width:none!important;border-radius:3px 3px 0 0;border-bottom:0}
 .fight .bhud .bar.pstr{height:5px!important;border-radius:0 0 3px 3px;border-top:1px solid #000;border-color:#000!important;margin-top:0}
@@ -1930,7 +1932,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .cc-bar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:linear-gradient(90deg,#ffd25a,#fff);transform-origin:left;animation:ccbar 3.2s linear forwards}
 .celcine.leg .cc-bar{animation-duration:4s}
 @keyframes ccbar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.cc-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.cc-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;transform:scale(1.15)} /* les mp4 ont des bandes noires incrustées en haut et en bas */
 .celcine:has(.cc-vid){background:#000}
 .cc-skip{position:absolute;right:12px;top:10px;z-index:2;background:rgba(8,4,6,.6);color:#f2e7d3;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:6px 12px;font-size:12px}
 /* v53 : plus de vignette sombre (teintes, ombres et grain « cinéma » conservés) */
@@ -1953,6 +1955,17 @@ body:has(.fight) #fbgx{display:block}
 #app .fight .gearbtn{width:calc(28*var(--u));height:calc(28*var(--u));top:calc(8*var(--u));left:calc(10*var(--u));border-radius:calc(7*var(--u))}
 #app .fight .gearbtn svg{width:calc(17*var(--u));height:calc(17*var(--u))}
 #app .fight .uibtn{left:calc(46*var(--u))}
+
+/* retours de test 15/11 */
+.vro .vplan,.plantag{display:none!important}.vro.vplanned{box-shadow:none!important}
+.vban{top:36px;scale:.7;transform-origin:50% 0}
+.cg:disabled:not(.cel){opacity:.28;filter:grayscale(1) brightness(.7);background:rgba(8,5,7,.8)}
+.cg:disabled:not(.cel) .ds.lk{color:#7b7166}
+.fight.ug .pcw{scale:1.2;transform-origin:50% 100%}
+.fight.ug .pcw .ohb{scale:.8333;transform-origin:50% 100%}
+/* ombres des boss accentuées ; Gashadokuro : ombre épaisse devant le pied coupé */
+#app .fight .bshadow{left:-4%;right:-8%;bottom:-3%;height:24%;background:radial-gradient(ellipse closest-side,rgba(0,0,0,1) 0 58%,rgba(0,0,0,.75) 78%,transparent 100%);filter:blur(1.5px)}
+.fight[data-b=gasha] .bossbox::after{content:"";position:absolute;left:0;width:56%;bottom:-3%;height:15%;z-index:3;pointer-events:none;background:radial-gradient(ellipse closest-side,rgba(0,0,0,1) 0 55%,rgba(0,0,0,.85) 78%,transparent 100%)}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
@@ -3184,7 +3197,7 @@ function fxBurst(P, cols, n, big = 1, up = 0) {
     ctx.globalAlpha = 1 - p;
     for (const s of ps) { const d = s.v * ease(p) * P.s; ctx.fillStyle = s.c; ctx.fillRect(P.x + Math.cos(s.a) * d, P.y + Math.sin(s.a) * d - up * p * 60 * P.s, s.sz * P.s * (1 - p * .5), s.sz * P.s * (1 - p * .5)); }
   });
-  fxAdd(240, (ctx, p) => { ctx.globalAlpha = (1 - p) * .9; const g = ctx.createRadialGradient(P.x, P.y, 0, P.x, P.y, 90 * P.s * big); g.addColorStop(0, "#fff"); g.addColorStop(.3, cols[0]); g.addColorStop(1, "rgba(0,0,0,0)"); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(P.x, P.y, 90 * P.s * big, 0, 7); ctx.fill(); });
+  fxAdd(240, (ctx, p) => { ctx.globalAlpha = (1 - p) * .9; const g = ctx.createRadialGradient(P.x, P.y, 0, P.x, P.y, 90 * P.s * big); g.addColorStop(0, "#fff"); g.addColorStop(.3, cols[0]); g.addColorStop(1, fxC0(cols[0])); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(P.x, P.y, 90 * P.s * big, 0, 7); ctx.fill(); });
 }
 function fxBolt(A, B, col, core, dur = 260) { // projectile A -> B
   return new Promise((res) => {
@@ -3264,10 +3277,11 @@ function fxRune(P, col) {
     for (let i = 0; i < 12; i++) { const a = i / 12 * 6.28; ctx.fillStyle = col; ctx.fillRect(Math.cos(a) * r * .87 - 3 * P.s, Math.sin(a) * r * .87 - 3 * P.s, 6 * P.s, 6 * P.s); }
   });
 }
+const fxC0 = (c) => { const m = /^#([0-9a-f]{6})$/i.exec(c || ""); return m ? `rgba(${parseInt(m[1].slice(0, 2), 16)},${parseInt(m[1].slice(2, 4), 16)},${parseInt(m[1].slice(4), 16)},0)` : "rgba(255,255,255,0)"; }; // dégradés canvas : fondre vers la même couleur transparente (pas vers du noir)
 function fxPillar(P, col) {
   fxAdd(900, (ctx, p) => {
     ctx.globalAlpha = Math.sin(p * Math.PI); const w = 60 * P.s; const g = ctx.createLinearGradient(P.x - w, 0, P.x + w, 0);
-    g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(.5, col); g.addColorStop(1, "rgba(0,0,0,0)"); ctx.fillStyle = g; ctx.fillRect(P.x - w, 0, w * 2, P.y + 40 * P.s);
+    g.addColorStop(0, fxC0(col)); g.addColorStop(.5, col); g.addColorStop(1, fxC0(col)); ctx.fillStyle = g; ctx.fillRect(P.x - w, 0, w * 2, P.y + 40 * P.s);
   });
   fxPlus(P, "#fff7c0");
 }
@@ -4380,7 +4394,6 @@ function renderFightShell() {
         <div class="bar hp"><i id="bhp"></i><i class="sh" id="bsh"></i><span id="bhpt"></span></div></div>
       <div class="intent" id="bint"></div>
       <div class="vroster n${F.heroes.length}" id="vroster">${F.heroes.map((h, i) => `<div class="vro" id="vro${i}"><span class="face">${heroArt(h.c)}</span><span class="vn"><b>${h.c.name}</b><span class="vsl" style="display:contents"></span></span><span class="hpn"></span><span class="bar"><i class="hpi"></i><i class="sh"></i></span><span class="vplan"></span></div>`).join("")}</div>
-      <div class="binfo"><div class="stl" id="bst"></div></div>
     </div>
     <div class="log" id="flog"></div>
     <section class="cmd" id="fsk"></section>
@@ -4404,10 +4417,9 @@ function update() {
   $("bhpt").textContent = `${fmt(b.hp)} / ${fmt(b.maxHp)}${b.shield > 0 ? " · bouclier " + fmt(b.shield) : ""}`;
   $("bphase").hidden = b.phase < 2; $("bphase").textContent = "PHASE " + b.phase;
   if (b.forms) { const k = "b:" + b.forms[Math.min(b.phase, b.forms.length) - 1], im = document.querySelector("#bstage .bimg"); if (im && im.dataset.px !== k && ART[k]) { im.dataset.px = k; im.src = ART[k]; } }
-  $("bst").innerHTML = stChips(b.st);
   { const dk = disc(b.id), dmgT = b.pdef > b.mdef * 1.15 ? "m" : b.mdef > b.pdef * 1.15 ? "p" : "";
     const we = weakTo(b.el);
-    $("bwk").innerHTML = `<span class="lbl">Faible</span>${dk.w ? `<span class="wi" style="--c:${ELEM[we].c}" title="${ELEM[we].n}">${ELEM[we].k}</span>` : `<span class="wi unk" title="Faiblesse inconnue">?</span>`}${dmgT ? `<span class="wi" style="--c:#e8dcc0">${dmgT === "m" ? "術" : "剣"}</span>` : ""}`; }
+    $("bwk").innerHTML = `<span class="lbl">Faible</span>${dk.w ? `<span class="wi" style="--c:${ELEM[we].c}" title="${ELEM[we].n}">${ELEM[we].k}</span>` : `<span class="wi unk" title="Faiblesse inconnue">?</span>`}${dmgT ? `<span class="wi" style="--c:#e8dcc0">${dmgT === "m" ? "術" : "剣"}</span>` : ""}${stChips(b.st)}`; }
   $("bstage").classList.toggle("reflect", b.st.some((s) => s.k === "reflect"));
   const it = $("bint");
   if (b.stun) { it.className = "intent stun"; it.innerHTML = `<i>暈</i><b>Étourdi</b><span class="idsc">Perd son prochain tour, subit +50 % de dégâts.</span>`; }
@@ -4514,7 +4526,7 @@ function layoutFront() {
     const w = document.getElementById("pw" + i); if (!w) return;
     w.classList.toggle("dim", front >= 0 && i !== front);
     if (i !== front || h.dead) { w.style.translate = ""; return; }
-    const r = w.getBoundingClientRect(), k = r.width / w.offsetWidth || 1, cur = parseFloat(w.dataset.tx || "0");
+    const r = w.getBoundingClientRect(), k = r.width / w.offsetWidth / 1.2 || 1, cur = parseFloat(w.dataset.tx || "0");
     const nat = r.left + r.width / 2 - cur * k, tx = (sr.left + sr.width * 0.5 - nat) / k;
     w.dataset.tx = tx; w.style.translate = tx + "px 0";
   });
