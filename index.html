@@ -1966,6 +1966,14 @@ body:has(.fight) #fbgx{display:block}
 /* ombres des boss accentuées ; Gashadokuro : ombre épaisse devant le pied coupé */
 #app .fight .bshadow{left:-4%;right:-8%;bottom:-3%;height:24%;background:radial-gradient(ellipse closest-side,rgba(0,0,0,1) 0 58%,rgba(0,0,0,.75) 78%,transparent 100%);filter:blur(1.5px)}
 .fight[data-b=gasha] .bossbox::after{content:"";position:absolute;left:0;width:56%;bottom:-3%;height:15%;z-index:3;pointer-events:none;background:radial-gradient(ellipse closest-side,rgba(0,0,0,1) 0 55%,rgba(0,0,0,.85) 78%,transparent 100%)}
+/* héros immobiles : plus d'avancée (attaque, choix de capacité) */
+#app .fight .pc.active{transform:none}
+#app .fight .pcw.p0 .pc.active,#app .fight .pcw.p1 .pc.active{transform:scale(.92)}
+#app .fight .pc.dash,#app .fight .pc.cast,#app .fight .pc.act,#app .fight .pc.guardfx{animation:none!important}
+#app .fight .pcw{translate:none!important}
+/* Ryujin : sa queue traîne au bas du sprite, on garde l'ombre d'origine */
+#app .fight[data-b=ryujin] .bshadow{left:2%;right:-4%;bottom:-1%;height:15%;background:radial-gradient(ellipse closest-side,rgba(0,0,0,.95) 0 48%,rgba(0,0,0,.55) 72%,transparent 100%);filter:none}
+.cg .ds .num.aw,.sbtn .num.aw,.num.aw{color:#ffd25a!important}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
@@ -4472,10 +4480,11 @@ function skPw(h, i) { return i < 0 ? 1 : (1 + 0.3 * (((S.run.heroMods[h.id] || {
 function skDmgVal(h, pct, i) { const b = F.boss; return hAtk(h) * (pct / 100) * skPw(h, i) * (100 / (100 + bDef(h.dt))) * (1 + sum(b.st, "mark")); }
 function skHealVal(h, pct, i) { return hAtk(h) * (pct / 100) * skPw(h, i) * (1 + (md().heal || 0)); }
 function skDesc(h, sk, i) {
+  const aw = awMul(h.id, i) > 1 ? " aw" : "";
   let t = sk.d; const heal = sk.fx.some((f) => f.k === "heal");
-  t = t.replace(/(\d+(?:,\d+)?) % ATK/g, (m, n) => { const v = parseFloat(n.replace(",", ".")); return `<span class="num">${fmt(heal ? skHealVal(h, v, i) : skDmgVal(h, v, i))}</span>${heal ? " PV" : " dégâts"}`; });
-  t = t.replace(/(?<![\dà] ?)(?<!à )(\d+) % (?:de ses )?PV(?: max)?/g, (m, n) => `<span class="num">${fmt(h.maxHp * n / 100)}</span> PV`);
-  t = t.replace(/(\d+) %\/tour/g, (m, n) => `<span class="num">${fmt(h.maxHp * n / 100)}</span> PV/tour`);
+  t = t.replace(/(\d+(?:,\d+)?) % ATK/g, (m, n) => { const v = parseFloat(n.replace(",", ".")); return `<span class="num${aw}">${fmt(heal ? skHealVal(h, v, i) : skDmgVal(h, v, i))}</span>${heal ? " PV" : " dégâts"}`; });
+  t = t.replace(/(?<![\dà] ?)(?<!à )(\d+) % (?:de ses )?PV(?: max)?/g, (m, n) => `<span class="num${aw}">${fmt(h.maxHp * n / 100)}</span> PV`);
+  t = t.replace(/(\d+) %\/tour/g, (m, n) => `<span class="num${aw}">${fmt(h.maxHp * n / 100)}</span> PV/tour`);
   return t.replace(/ à <span/g, " : <span");
 }
 function renderSkills() {
@@ -4494,7 +4503,7 @@ function renderSkills() {
   box.innerHTML = launchHtml() + `<div class="vrow">
     <button class="bbtn" data-act="skill" data-i="atk" ${dis} aria-label="Attaque" title="Attaque : 100 % ATK · ${ELEM[h.el].n} · ${h.dt === "p" ? "physique" : "magique"}"><div class="ic">${eli(h.el)}</div><div class="lb">Attaque</div><div class="vl">${fmt(skDmgVal(h, 100, -1))}</div></button>
     <button class="bbtn grd" data-act="skill" data-i="grd" ${dis} aria-label="Garde" title="Garde : −50 % de dégâts subis"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Garde</div><div class="vl">−50 %</div></button>
-    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 2 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${awTag(h.id, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
+    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 2 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
   </div>`;
 }
 
@@ -4507,7 +4516,7 @@ function gridHtml(h) {
   const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${off || F.busy ? "disabled" : ""}>${inner}</button>`;
   const sk = h.c.skills.map((s, i) => {
     const dmg = s.fx.some((f) => f.k === "dmg" || f.k === "dot"), cd = h.cd[i];
-    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>'}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${awTag(h.id, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
+    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>'}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
   });
   const ready = celReady(), g = F.gauge;
   const cel = cell("cel", `<div class="t">${icEl(h.el)}<b>Celestial</b></div>${ready ? `<div class="ds rd">${skDesc(h, celSk(h), -1)}</div>` : `<div class="pips">${Array.from({ length: 9 }, (_, q) => `<i class="${q < g ? "on" : ""}"></i>`).join("")}</div>`}`, "cel" + (ready ? " ready" : ""), !ready);
@@ -4528,7 +4537,7 @@ function layoutFront() {
     if (i !== front || h.dead) { w.style.translate = ""; return; }
     const r = w.getBoundingClientRect(), k = r.width / w.offsetWidth / 1.2 || 1, cur = parseFloat(w.dataset.tx || "0");
     const nat = r.left + r.width / 2 - cur * k, tx = (sr.left + sr.width * 0.5 - nat) / k;
-    w.dataset.tx = tx; w.style.translate = tx + "px 0";
+    w.dataset.tx = 0; w.style.translate = "";
   });
   [...document.querySelectorAll(".pcw")].forEach((w) => { if (!w.classList.contains("dim") && front < 0) w.dataset.tx = 0; });
   F.heroes.forEach((h, i) => { const w = document.getElementById("pw" + i); if (w && (i !== front || h.dead)) w.dataset.tx = 0; });
