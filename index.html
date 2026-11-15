@@ -1977,11 +1977,27 @@ body:has(.fight) #fbgx{display:block}
 #app .cam.zoom,#app .cam.shake-s,#app .cam.shake-b{animation:none!important}
 .fight .flash{mix-blend-mode:normal}
 .h-ver{position:absolute;right:calc(8px + env(safe-area-inset-right,0px));bottom:calc(2px + env(safe-area-inset-bottom,0px));z-index:5;font:600 10px/1 var(--display,sans-serif);letter-spacing:.06em;color:rgba(255,255,255,.55);text-shadow:0 1px 3px #000;pointer-events:none}
+/* v47 anti-scintillement : le rectangle noir de la vidéo = calque .vfeet (mode de fusion) qui n'est plus composité par le GPU mobile.
+   En combat : plus aucun mode de fusion, plus de flou animé, plus de backdrop-filter (alpha simple, teinte équivalente). */
+.fight .bloom{mix-blend-mode:normal;filter:none;animation:none;opacity:.4}
+.fight .fogb{filter:none;animation:none;opacity:.5}
+.fight .shafts{mix-blend-mode:normal;filter:none;animation:none;opacity:.22}
+.fight .fogl{mix-blend-mode:normal;opacity:.5}
+.fight .vfeet{mix-blend-mode:normal;opacity:.4}
+.fight .vfl .a{mix-blend-mode:normal;opacity:.12}
+.fight .vfl .b{mix-blend-mode:normal;opacity:.3}
+.fight .vwash{mix-blend-mode:normal;opacity:.1}
+.fight .vlight{mix-blend-mode:normal;opacity:.22}
+.fight .grade{mix-blend-mode:normal;opacity:.5}
+.fight .vgrain{mix-blend-mode:normal;opacity:.07}
+.fight .flash{mix-blend-mode:normal}
+.fight .hr,.fight .cmd,.fight .ohb,.fight .intent{backdrop-filter:none;-webkit-backdrop-filter:none}
+.fight .ohb,.fight .hr{background-color:rgba(14,8,11,.85)}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 46; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 47; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
