@@ -4030,8 +4030,7 @@ function bossTargets() {
 }
 const BASIC = { n: "Attaque", d: "Frappe à 100 % ATK.", cd: 0, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 6 }] };
 function guardSk(h) {
-  return { n: "Garde", d: h.c.role === "tank" ? "−50 % de dégâts subis, provoque le boss et réduit tes recharges d'1 tour." : "−50 % de dégâts subis jusqu'à ton prochain tour et réduit tes recharges d'1 tour.", cd: 0, tgt: "self",
-    fx: [{ k: "dr", p: 0.5, d: 1 }, { k: "cdself", n: 1 }].concat(h.c.role === "tank" ? [{ k: "taunt", d: 1 }] : []) };
+  return { n: "Garde", d: "−50 % de dégâts subis jusqu'à ton prochain tour.", cd: 0, tgt: "self", fx: [{ k: "dr", p: 0.5, d: 1 }] };
 }
 const AWK = [
   null,
@@ -4307,7 +4306,7 @@ function renderSkills() {
   const dis = F.busy ? "disabled" : "";
   box.innerHTML = launchHtml() + `<div class="vrow">
     <button class="bbtn" data-act="skill" data-i="atk" ${dis} aria-label="Attaque" title="Attaque : 100 % ATK · ${ELEM[h.el].n} · ${h.dt === "p" ? "physique" : "magique"}"><div class="ic">${eli(h.el)}</div><div class="lb">Attaque</div><div class="vl">${fmt(skDmgVal(h, 100, -1))}</div></button>
-    <button class="bbtn grd" data-act="skill" data-i="grd" ${dis} aria-label="Garde" title="Garde : −50 % dégâts${h.c.role === "tank" ? ", provoque" : ""}, recharges −1"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Garde</div><div class="vl">−50 %</div></button>
+    <button class="bbtn grd" data-act="skill" data-i="grd" ${dis} aria-label="Garde" title="Garde : −50 % de dégâts subis"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Garde</div><div class="vl">−50 %</div></button>
     ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 2 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${awTag(h.id, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
   </div>`;
 }
