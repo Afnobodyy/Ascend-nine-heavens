@@ -1869,6 +1869,45 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 @keyframes celglow{50%{box-shadow:inset 0 0 0 calc(1*var(--u)) rgba(0,0,0,.6),inset 0 0 calc(22*var(--u)) rgba(255,200,80,.5),0 0 0 calc(1*var(--u)) #000,0 0 calc(22*var(--u)) rgba(255,215,110,1),0 0 calc(40*var(--u)) rgba(255,180,50,.7)}}
 @keyframes celsweep{0%{background-position:150% 0}100%{background-position:-50% 0}}
 .fight.ug #fsk .waitmsg,.fight.ug #fsk .pend{background:rgba(14,8,11,.8);border:calc(1*var(--u)) solid rgba(255,255,255,.12);border-radius:calc(6*var(--u));padding:calc(6*var(--u)) calc(10*var(--u))}
+/* ===== v52 : bandeau vitré (grille en rangée), roue crantée + réglages ===== */
+.gearbtn{position:absolute;z-index:45;left:calc(10*var(--u));top:calc(8*var(--u));width:calc(36*var(--u));height:calc(36*var(--u));border-radius:calc(8*var(--u));border:calc(1*var(--u)) solid rgba(255,255,255,.18);background:rgba(10,6,8,.7);color:#e2b250;display:grid;place-items:center;padding:0;cursor:pointer}
+.gearbtn svg{width:calc(22*var(--u));height:calc(22*var(--u))}
+#app .fight .uibtn{left:calc(54*var(--u));top:calc(8*var(--u))}
+#app .fight.ug .bgimg{transform:translateY(calc(-62*var(--u))) scale(1.22);transform-origin:50% 0}
+#app .fight.ug .bossbox{translate:0 calc(-30*var(--u));height:58%}
+#app .fight.ug .bhud{width:calc(360*var(--u))!important}
+#app .fight.ug .bhud .bn{flex-wrap:nowrap;white-space:nowrap}
+#app .fight.ug .pcw{margin-bottom:calc(96*var(--u))}
+#app .fight.ug #fsk{left:0!important;right:0!important;bottom:0!important;width:auto!important;padding:calc(8*var(--u))!important;background:linear-gradient(180deg,rgba(18,10,13,.82),rgba(8,4,6,.92))!important;border-top:calc(2*var(--u)) solid #a87a24!important;box-shadow:0 calc(-10*var(--u)) calc(24*var(--u)) rgba(0,0,0,.5)}
+#app .fight.ug .gridm{grid-template-columns:.62fr .62fr 1.25fr 1.25fr 1.25fr 1fr;gap:calc(6*var(--u))}
+#app .fight.ug .cg{display:flex;flex-direction:column;justify-content:flex-start;min-height:calc(74*var(--u));padding:calc(7*var(--u)) calc(8*var(--u))}
+#app .fight.ug .cg.cel{min-height:calc(74*var(--u));padding:calc(6*var(--u)) calc(7*var(--u));border-width:calc(2*var(--u))}
+#app .fight.ug .cg .t{height:calc(24*var(--u));min-height:calc(24*var(--u));flex:none}
+#app .fight.ug .cg .ic.ph{display:none}
+#app .fight.ug .cg.small{align-items:stretch;text-align:left}
+#app .fight.ug .cg .t .ic{order:2;margin-left:auto}
+#app .fight.ug .cg .ds{margin-top:calc(4*var(--u));-webkit-line-clamp:3}
+#app .fight.ug .cg .ds.vv{font-size:calc(15*var(--u));font-weight:700;color:#fff;display:block}
+#app .fight.ug .cg.cel .pips{margin-top:calc(4*var(--u));height:auto}
+#app .fight.ug .cg:disabled{opacity:1}
+#app .fight.ug .cg:disabled:not(.cel) .t b{color:#8f8576}
+#app .fight.ug .cg:disabled:not(.cel) .ic{opacity:.5}
+#app .fight.ug .cg .ds.lk{color:#fff;font-weight:600}
+#app .fight.ug .pcw.dim{opacity:1}
+#app .fight .pcw.aimed .pring{border-width:5px;border-color:#ff2a1a;box-shadow:0 0 6px #ff2a1a,0 0 18px #ff2a1a,0 0 30px rgba(255,42,26,.7),inset 0 0 12px #ff2a1a;animation:none;opacity:1}
+#app .fight.ug .pc.dash{animation:pdashug .6s cubic-bezier(.25,.8,.3,1)}
+@keyframes pdashug{0%{transform:none}28%,78%{transform:translateX(-6%) scale(1.06)}100%{transform:none}}
+.setov{--u:calc(1px / var(--k,.72));position:absolute;inset:0;z-index:90;display:grid;place-items:center;background:rgba(0,0,0,.55)}
+.setp{width:calc(340*var(--u));box-sizing:border-box;padding:calc(18*var(--u)) calc(20*var(--u)) calc(20*var(--u));border-radius:calc(12*var(--u));background:linear-gradient(180deg,rgba(36,20,26,.97),rgba(14,8,11,.97));border:calc(2*var(--u)) solid #a87a24;box-shadow:0 0 0 calc(1*var(--u)) #000,0 calc(20*var(--u)) calc(60*var(--u)) #000,inset 0 calc(1*var(--u)) 0 rgba(255,226,150,.3);color:#f2e7d3;font-family:var(--body)}
+.setp h3{margin:0 0 calc(14*var(--u));font:600 calc(20*var(--u)) var(--display);letter-spacing:.06em;text-align:center;color:#e2b250}
+.setp .srow{display:flex;align-items:center;gap:calc(12*var(--u));margin-bottom:calc(16*var(--u))}.setp .srow label{font-size:calc(15*var(--u));min-width:calc(70*var(--u))}
+.setp input[type=range]{flex:1;min-width:0;height:calc(24*var(--u));margin:0;background:none;accent-color:#e2b250;cursor:pointer}
+.setp .pct{font-size:calc(13*var(--u));color:#c9bfae;min-width:calc(40*var(--u));text-align:right}
+.setp .give{width:100%;padding:calc(11*var(--u));border-radius:calc(7*var(--u));border:calc(1*var(--u)) solid #8a1e17;background:linear-gradient(180deg,#b3261e,#7a1510);color:#fff;font:600 calc(15*var(--u)) var(--body);cursor:pointer}
+.setp .sclose{width:100%;margin-top:calc(10*var(--u));padding:calc(9*var(--u));border-radius:calc(7*var(--u));border:calc(1*var(--u)) solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#e9ddc8;font:inherit;font-size:calc(14*var(--u));cursor:pointer}
+.setp p{margin:0 0 calc(16*var(--u));text-align:center;font-size:calc(15*var(--u));line-height:1.4}
+.setp .two{display:flex;gap:calc(10*var(--u))}.setp .two button{flex:1;padding:calc(11*var(--u));border-radius:calc(7*var(--u));font:600 calc(15*var(--u)) var(--body);cursor:pointer}
+.setp .no{border:calc(1*var(--u)) solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#f2e7d3}.setp .yes{border:calc(1*var(--u)) solid #8a1e17;background:linear-gradient(180deg,#b3261e,#7a1510);color:#fff}
 /* cinématique Celestial */
 .celcine{position:absolute;inset:0;z-index:90;overflow:hidden;opacity:0;transition:opacity .25s;background:radial-gradient(circle at 50% 55%,color-mix(in srgb,var(--c) 40%,#1a0f2a),#07040d 75%);display:grid;place-items:center}
 .celcine.on{opacity:1}
@@ -3270,6 +3309,12 @@ function bossHitFx(t, mv, el) {
 }
 // ===================== AUDIO (synthèse Web Audio, aucun fichier externe) =====================
 const AU = { ctx: null };
+const musVolume = () => (typeof S.vol === "number" ? Math.min(1, Math.max(0, S.vol)) : 1);
+function setMusVolume(v) {
+  S.vol = Math.min(1, Math.max(0, v)); save();
+  if (AU.ctx) { AU.mus.gain.setTargetAtTime(0.32 * S.vol, AU.ctx.currentTime, 0.05); AU.fm.gain.setTargetAtTime(S.vol, AU.ctx.currentTime, 0.05); }
+  [typeof MUS !== "undefined" && MUS.file, typeof MEN !== "undefined" && MEN.file].forEach((f) => { if (f && f.a && !f.node) f.a.volume = S.vol * 0.42; });
+}
 function auInit() {
   if (AU.ctx) { if (AU.ctx.state === "suspended") AU.ctx.resume(); return AU.ctx; }
   const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
@@ -3277,7 +3322,8 @@ function auInit() {
   AU.master = ctx.createGain(); AU.master.gain.value = S.mute ? 0 : 0.9; AU.master.connect(ctx.destination);
   const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 4; comp.connect(AU.master);
   AU.sfx = ctx.createGain(); AU.sfx.gain.value = 0.7; AU.sfx.connect(comp);
-  AU.mus = ctx.createGain(); AU.mus.gain.value = 0.32; AU.mus.connect(comp);
+  AU.mus = ctx.createGain(); AU.mus.gain.value = 0.32 * musVolume(); AU.mus.connect(comp);
+  AU.fm = ctx.createGain(); AU.fm.gain.value = musVolume(); AU.fm.connect(AU.master);
   // réverbe courte (temple) pour la musique
   const len = ctx.sampleRate * 1.8, ir = ctx.createBuffer(2, len, ctx.sampleRate);
   for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
@@ -3548,7 +3594,7 @@ function fileMusStart(ctx, M) {
   const a = new Audio(src); a.loop = true; a.preload = "auto";
   let node = null; try { node = ctx.createMediaElementSource(a); } catch (e) { }
   const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, ctx.currentTime); g.gain.exponentialRampToValueAtTime(M.vol, ctx.currentTime + 1.2);
-  if (node) { node.connect(g); g.connect(AU.master); } else a.volume = M.vol;
+  if (node) { node.connect(g); g.connect(AU.fm || AU.master); } else a.volume = M.vol * musVolume();
   a.play().catch(() => { });
   MUS.file = { a, g, node };
   MUS.timer = setInterval(() => { }, 1000); // garde MUS.timer non nul (menu coupé pendant le combat)
@@ -3603,7 +3649,7 @@ function menuStart() {
   a.addEventListener("ended", () => { if (MEN.file && MEN.file.a === a) { a.src = menuPick(); a.play().catch(() => { }); } });
   let node = null; try { node = ctx.createMediaElementSource(a); } catch (e) { }
   const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, ctx.currentTime); g.gain.exponentialRampToValueAtTime(MENU_VOL, ctx.currentTime + 1.5);
-  if (node) { node.connect(g); g.connect(AU.master); } else a.volume = MENU_VOL;
+  if (node) { node.connect(g); g.connect(AU.fm || AU.master); } else a.volume = MENU_VOL * musVolume();
   a.play().catch(() => { });
   MEN.file = { a, g, node }; MEN.timer = true;
 }
@@ -4293,7 +4339,7 @@ setTimeout(snapBgs, 400);
 function renderFightShell() {
   const b = F.boss, T = BG[b.id] || BG.oni;
   app.innerHTML = `<div class="fight${S.band ? "" : " ug"}">
-    <div class="ftop"><div class="order" id="forder"></div></div><button class="btn ghost abf" data-act="abandon" id="abBtn">Abandonner</button><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" id="muteBtn" aria-label="Son">♪</button><button class="uibtn" data-act="uimode" aria-label="Interface" title="Changer d'interface de combat">▤</button>
+    <div class="ftop"><div class="order" id="forder"></div></div><button class="gearbtn" data-act="settings" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.4 13a7.9 7.9 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.4 7.4 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.6 11a7.9 7.9 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7 1l.4 2.6c0 .2.3.4.5.4h4c.2 0 .5-.2.5-.4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.5 1c.2.1.5 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg></button>
     <div class="scene" id="scene" style="--glow:${T.glow};--fog:${T.fog}">
       <div class="cam" id="cam">
         ${ART["bg:" + b.id] ? `<img class="bgimg" src="${(window.SNAP && SNAP[b.id]) || ART["bg:" + b.id]}" alt=""><div class="bloom"></div><div class="fogb"></div>` : `<canvas class="bgl far" id="bgfar"></canvas><div class="bloom"></div><canvas class="bgl mid" id="bgmid"></canvas><div class="fogb"></div><canvas class="bgl floor" id="bgfloor"></canvas>`}
@@ -4418,19 +4464,20 @@ function renderSkills() {
 
 // ---- menu en grille (bas droite) ----
 const icEl = (e) => `<span class="ic" style="--c:${ELEM[e].c}" title="${ELEM[e].n}">${ELEM[e].k}</span>`;
+const SWORD_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5l-.4 5.6-8.6 8.6-3.2-3.2 8.6-8.6z"/><path d="M6.4 13.3l4.3 4.3-1.4 1.4 1.5 1.5-1.5 1.5-1.5-1.5-2.4 2.4-1.5-1.5 2.4-2.4-1.5-1.5 1.5-1.5z"/></svg>';
 const SHIELD_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>';
 function gridHtml(h) {
   const hi = F.heroes.indexOf(h), dis = F.busy ? "disabled" : "", key = (k) => (F.sel === hi + ":" + k ? " sel" : "");
   const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${off || F.busy ? "disabled" : ""}>${inner}</button>`;
   const sk = h.c.skills.map((s, i) => {
     const dmg = s.fx.some((f) => f.k === "dmg" || f.k === "dot"), cd = h.cd[i];
-    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : ""}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${awTag(h.id, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
+    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>'}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${awTag(h.id, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
   });
   const ready = celReady(), g = F.gauge;
   const cel = cell("cel", `<div class="t">${icEl(h.el)}<b>Celestial</b></div>${ready ? `<div class="ds rd">${skDesc(h, celSk(h), -1)}</div>` : `<div class="pips">${Array.from({ length: 9 }, (_, q) => `<i class="${q < g ? "on" : ""}"></i>`).join("")}</div>`}`, "cel" + (ready ? " ready" : ""), !ready);
   return `<div class="gridm">
-    ${cell("atk", `<div class="t">${icEl(h.el)}<b>Attaque</b><span class="v">${fmt(skDmgVal(h, 100, -1))}</span></div>`, "small")}
-    ${cell("grd", `<div class="t"><span class="ic grdi" style="--c:#9fc0ff">${SHIELD_SVG}</span><b>Garde</b><span class="v">−50 %</span></div>`, "small grd")}
+    ${cell("atk", `<div class="t"><span class="ic grdi" style="--c:#ffd9a0">${SWORD_SVG}</span><b>Attaque</b></div><div class="ds vv">${fmt(skDmgVal(h, 100, -1))}</div>`, "small")}
+    ${cell("grd", `<div class="t"><span class="ic grdi" style="--c:#9fc0ff">${SHIELD_SVG}</span><b>Garde</b></div><div class="ds vv">−50 %</div>`, "small grd")}
     ${sk.join("")}${cel}</div>`;
 }
 // héros actif avancé au centre, les autres estompés
@@ -4444,14 +4491,42 @@ function layoutFront() {
     w.classList.toggle("dim", front >= 0 && i !== front);
     if (i !== front || h.dead) { w.style.translate = ""; return; }
     const r = w.getBoundingClientRect(), k = r.width / w.offsetWidth || 1, cur = parseFloat(w.dataset.tx || "0");
-    const nat = r.left + r.width / 2 - cur * k, tx = (sr.left + sr.width * 0.46 - nat) / k;
+    const nat = r.left + r.width / 2 - cur * k, tx = (sr.left + sr.width * 0.5 - nat) / k;
     w.dataset.tx = tx; w.style.translate = tx + "px 0";
   });
   [...document.querySelectorAll(".pcw")].forEach((w) => { if (!w.classList.contains("dim") && front < 0) w.dataset.tx = 0; });
   F.heroes.forEach((h, i) => { const w = document.getElementById("pw" + i); if (w && (i !== front || h.dead)) w.dataset.tx = 0; });
-  const bi = document.querySelector("#bstage .bimg"), bh = document.querySelector(".bhud");
-  if (bi && bh) { const r = bi.getBoundingClientRect(), k = sr.width / sc.offsetWidth || 1; if (r.width) { bh.style.setProperty("left", (r.left + r.width * 0.5 - sr.left) / k - 150 + "px", "important"); bh.style.setProperty("top", Math.max(40, (r.top - sr.top) / k + r.height * 0.12 - 38) + "px", "important"); } }
+  placeBossName();
 }
+
+// nom du boss : toujours centré juste au-dessus de sa tête (1er pixel opaque du sprite)
+const HEADC = {};
+function bossHead(img) {
+  const k = img.currentSrc || img.src; if (!k || !img.naturalWidth) return null;
+  if (HEADC[k]) return HEADC[k];
+  try {
+    const w = img.naturalWidth, h = img.naturalHeight, c = document.createElement("canvas"); c.width = w; c.height = h;
+    const x = c.getContext("2d"); x.drawImage(img, 0, 0); const d = x.getImageData(0, 0, w, h).data;
+    let top = -1; for (let y = 0; y < h && top < 0; y++) for (let i = 0; i < w; i++) if (d[(y * w + i) * 4 + 3] > 40) { top = y; break; }
+    if (top < 0) return null;
+    const band = top + Math.max(4, Math.round(h * 0.12)); let sx = 0, n = 0;
+    for (let y = top; y < Math.min(h, band); y++) for (let i = 0; i < w; i++) if (d[(y * w + i) * 4 + 3] > 40) { sx += i; n++; }
+    return (HEADC[k] = { ty: top / h, cx: n ? sx / n / w : 0.5 });
+  } catch (e) { return null; }
+}
+function placeBossName() {
+  const sc = document.getElementById("scene"), bi = document.querySelector("#bstage .bimg"), bh = document.querySelector(".bhud"); if (!sc || !bi || !bh) return;
+  if (!bi.complete || !bi.naturalWidth) { bi.addEventListener("load", placeBossName, { once: true }); return; }
+  const fg = document.querySelector(".fight.ug"); if (!fg) { bh.style.removeProperty("left"); bh.style.removeProperty("top"); return; }
+  const r = bi.getBoundingClientRect(), k = sc.getBoundingClientRect().width / sc.offsetWidth || 1, sr = sc.getBoundingClientRect(), hd = bossHead(bi) || { ty: 0.12, cx: 0.5 };
+  if (!r.width) return;
+  const cx = (r.left + r.width * hd.cx - sr.left) / k, headY = (r.top + r.height * hd.ty - sr.top) / k;
+  const half = (bh.offsetWidth || 360) / 2; let top = headY - 32, left = cx - half;
+  if (top < 50) left = Math.max(left, 58);
+  top = Math.max(6, top); left = Math.min(Math.max(4, left), 780 - half * 2);
+  bh.style.setProperty("left", left + "px", "important"); bh.style.setProperty("top", top + "px", "important");
+}
+window.addEventListener("resize", () => { if (typeof F !== "undefined" && F) setTimeout(placeBossName, 60); });
 // ---- cinématique du Celestial ----
 function celCine(h) {
   return new Promise((res) => {
@@ -4853,15 +4928,20 @@ function renderDefeat() {
     <button class="btn ghost wide" data-act="go" data-to="home">Retour au portail</button>
   </section></main>`;
 }
-let abandonArmed = 0;
-function abandon(btn) {
-  if (F && F.busy) return toast("Attends la fin du tour pour abandonner.");
-  if (Date.now() - abandonArmed > 2500) { abandonArmed = Date.now(); if (btn) btn.textContent = "Confirmer ?"; return; }
-  abandonArmed = 0;
+function abandon() {
   const r = S.run; if (!r) return;
   S.lastRun = { floor: r.floor, jade: r.jadeRun || 0, boss: "" };
   S.run = null; F = null; save(); go("defeat");
 }
+function settingsClose() { document.querySelectorAll(".setov").forEach((e) => e.remove()); }
+function settingsOpen(confirm) {
+  const fg = document.querySelector(".fight"); if (!fg) return; settingsClose();
+  const v = Math.round(musVolume() * 100);
+  fg.insertAdjacentHTML("beforeend", confirm
+    ? `<div class="setov" data-act="setbg"><div class="setp"><h3>Abandonner ?</h3><p>Ton ascension s'arrête ici et la progression du combat sera perdue.</p><div class="two"><button class="no" data-act="setclose">Rester</button><button class="yes" data-act="abandonok">Abandonner</button></div></div></div>`
+    : `<div class="setov" data-act="setbg"><div class="setp"><h3>Réglages</h3><div class="srow"><label for="musvol">Musique</label><input type="range" id="musvol" min="0" max="100" step="1" value="${v}"><span class="pct" id="musvolv">${v} %</span></div><button class="give" data-act="abandonask">Abandonner</button><button class="sclose" data-act="setclose">Reprendre le combat</button></div></div>`);
+}
+document.addEventListener("input", (e) => { if (e.target && e.target.id === "musvol") { setMusVolume(e.target.value / 100); const l = document.getElementById("musvolv"); if (l) l.textContent = e.target.value + " %"; } });
 
 // ===================== ÉVÉNEMENTS =====================
 document.addEventListener("click", (e) => {
@@ -4884,7 +4964,11 @@ document.addEventListener("click", (e) => {
     case "start": startRun(); break;
     case "prep": go("prep"); break;
     case "fight": startFight(); break;
-    case "abandon": abandon(t); break;
+    case "settings": settingsOpen(); break;
+    case "setclose": settingsClose(); break;
+    case "setbg": if (e.target === t) settingsClose(); break;
+    case "abandonask": settingsOpen(true); break;
+    case "abandonok": if (F && F.busy) { settingsClose(); toast("Attends la fin du tour pour abandonner."); break; } settingsClose(); abandon(); break;
     case "mute": S.mute = !S.mute; save(); auMute(); t.classList.toggle("off", S.mute); if (!S.mute && F) musStart(); else if (!S.mute) menuStart(); break;
     case "card": applyCard(+t.dataset.i); break;
     case "cancelT": if (F) { F.pending = null; update(); } break;
