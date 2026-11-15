@@ -1549,9 +1549,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 
 /* HUD équipe (haut droite) : fiches de vie, statuts, capacités planifiées */
 .fight .ohb{display:none!important}
-.tgtf{display:none;position:absolute;left:50%;bottom:calc(128% + 6px);transform:translateX(-50%);z-index:8;pointer-events:none;white-space:nowrap;font-size:10px;font-weight:800;letter-spacing:.14em;color:#ffe9e4;background:rgba(40,6,4,.78);border:2px solid #ff3a2a;border-radius:4px;padding:2px 8px 2px 6px;box-shadow:0 0 10px rgba(255,42,26,.7);animation:tgtbob 1s ease-in-out infinite}
-.tgtf i{display:inline-block;width:8px;height:8px;margin-right:5px;border:2px solid #ff3a2a;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(40,6,4,.78),inset 0 0 0 4px #ff3a2a;vertical-align:-1px}
-.tgtf::after{content:"";position:absolute;left:50%;top:100%;margin-left:-5px;border:5px solid transparent;border-top-color:#ff3a2a}
+.tgtf{display:none;position:absolute;left:50%;bottom:calc(128% + 6px);transform:translateX(-50%);z-index:8;pointer-events:none;white-space:nowrap;font-size:12px;font-weight:800;letter-spacing:.06em;color:#ff3a2a;background:rgba(20,4,3,.55);border:2px solid #ff3a2a;border-radius:10px;padding:1px 10px 2px;box-shadow:0 0 8px rgba(255,42,26,.55);animation:tgtbob 1s ease-in-out infinite}
 .pcw.aimed .tgtf{display:block}
 @keyframes tgtbob{50%{transform:translate(-50%,-3px)}}
 
@@ -4356,7 +4354,7 @@ function renderFightShell() {
           <button class="ohb" id="hc${i}" data-act="hsel" data-i="${i}"><span class="aimtag">⚔ CIBLÉ</span><span class="plantag"></span>
             <span class="ohn"><b>${h.c.name}</b>${eli(h.el)}<span class="hpt"></span></span>
             <span class="bar"><i class="hpi"></i><i class="sh"></i></span><span class="stl hst"></span></button>
-          <span class="tgtf" aria-hidden="true"><i></i>CIBLE</span><button class="pc" id="pc${i}" data-act="hsel" data-i="${i}" aria-label="${h.c.name}"><span class="pring"></span><span class="pshadow"></span><span class="bob">${heroArt(h.c, "pimg")}</span></button></div>`).join("")}</div>
+          <span class="tgtf" aria-hidden="true">cible</span><button class="pc" id="pc${i}" data-act="hsel" data-i="${i}" aria-label="${h.c.name}"><span class="pring"></span><span class="pshadow"></span><span class="bob">${heroArt(h.c, "pimg")}</span></button></div>`).join("")}</div>
         <div class="fogl"></div><div class="vfeet"></div><div class="vfl"><i class="a"></i><i class="b"></i><i class="c"></i></div><div class="vwash"></div><div class="vlight"></div><div class="vgrain"></div><div class="flash" id="lflash"></div><canvas class="vfx" id="vfx"></canvas><canvas class="ptc" id="ptc"></canvas><canvas class="bgl fg" id="bgfg"></canvas>
       </div><div class="grade"></div><div class="vign"></div><div class="vdock"></div>
       <div class="bhud"><div class="bn"><b>${b.name}</b><span class="phase" id="bphase" hidden>PHASE 2</span><div class="wk" id="bwk"></div></div>
