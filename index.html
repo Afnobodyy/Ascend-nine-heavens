@@ -1467,7 +1467,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 
 /* ===== v41 : combat — bandeau laqué, filtre « cinéma », ombres ===== */
 /* décor recadré, net, sol sous les pieds */
-.fight .bgimg{inset:auto;left:-9%;top:-12%;width:119%;height:auto;max-width:none;object-fit:initial;animation:none;image-rendering:pixelated;filter:contrast(1.12) saturate(1.12)}
+.fight .bgimg{inset:0;left:0;top:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:50% 50%;animation:none;image-rendering:pixelated;filter:contrast(1.12) saturate(1.12)}
 .fight .shafts{opacity:.45}
 .fight .fogl{height:30%;background:linear-gradient(0deg,rgba(150,210,200,.18),transparent)}
 /* positions : boss à gauche, héros à droite au-dessus du bandeau */
@@ -1934,7 +1934,11 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .celcine:has(.cc-vid){background:#000}
 .cc-skip{position:absolute;right:12px;top:10px;z-index:2;background:rgba(8,4,6,.6);color:#f2e7d3;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:6px 12px;font-size:12px}
 /* v53 : plus de vignette sombre (teintes, ombres et grain « cinéma » conservés) */
-.fight .vign{background:linear-gradient(180deg,rgba(0,0,0,.6),transparent 9%)}
+.fight .vign{display:none}
+#fbgx{display:none;position:fixed;inset:0;z-index:0;background:#0b0608 center/cover no-repeat;pointer-events:none}
+#fbgx::after{content:"";position:absolute;inset:0;background:rgba(6,3,5,.4)}
+body:has(.fight) #fbgx{display:block}
+#fbgx i{position:absolute;inset:-6%;background:inherit;filter:blur(14px)}
 .fight .tgtf{display:none!important}
 #app .fight .pcw .ohb{bottom:calc(122% + 16px)}
 #app .fight .gearbtn{width:calc(28*var(--u));height:calc(28*var(--u));top:calc(8*var(--u));left:calc(10*var(--u));border-radius:calc(7*var(--u))}
@@ -4320,6 +4324,8 @@ function envInit() {
 }
 function fightEnv() {
   envInit();
+  { let fx = document.getElementById("fbgx"); if (!fx) { fx = document.createElement("div"); fx.id = "fbgx"; fx.innerHTML = "<i></i>"; document.body.prepend(fx); }
+    const bi = document.querySelector(".fight .bgimg"); if (bi) fx.style.backgroundImage = `url(${bi.currentSrc || bi.src})`; }
   const img = document.querySelector(".fight .bgimg"), sc = document.getElementById("scene"); if (!img || !sc) return;
   const go = () => {
     try {
