@@ -1354,6 +1354,17 @@ body{overflow:hidden}
 .pc.cast{animation:pcast .6s ease-out}
 @keyframes pcast{25%,75%{transform:translateX(-45%) translateY(-5%)}}
 .pc.cast .pimg{filter:drop-shadow(0 0 8px #fff) brightness(1.15)}
+/* animation d'attaque du sprite (mêlée au sabre) : poses figées, ~7 images, sans lissage */
+.pc.dash.atk-slash .pimg{animation:atkslash var(--ad,600ms) steps(1,end)}
+@keyframes atkslash{
+0%{rotate:0deg;scale:1 1;translate:0 0}
+8%{rotate:5deg;scale:1.03 .95;translate:3% 3%}
+18%{rotate:-9deg;scale:1.1 .95;translate:-2% 1%}
+27%{rotate:-17deg;scale:1.16 .92;translate:-6% 0;filter:drop-shadow(16px 0 0 rgba(255,255,255,.32)) drop-shadow(30px 0 0 rgba(255,255,255,.14)) brightness(1.25)}
+36%{rotate:-8deg;scale:1.08 .97;translate:-3% 0;filter:drop-shadow(0 0 6px #fff)}
+52%{rotate:-4deg;scale:1.03 1;translate:-1% 0}
+78%{rotate:0deg;scale:1 1;translate:0 0}
+}
 
 /* ---- portrait : inviter à tourner ---- */
 #rot{display:none}
@@ -3321,7 +3332,9 @@ const bossP = () => fxPos(bossEl(), .5, .52);
 function heroMove(h, kind, dur) {
   const el = heroEl(h); if (!el) return;
   el.style.animationDuration = dur ? dur + "ms" : "";
-  ["dash", "cast", "act", "guardfx"].forEach((c) => el.classList.remove(c));
+  el.style.setProperty("--ad", dur ? dur + "ms" : "600ms");
+  ["dash", "cast", "act", "guardfx", "atk-slash"].forEach((c) => el.classList.remove(c));
+  if (kind === "dash" && ["katana", "nodachi", "twin"].includes(h.c.look.wpn)) el.classList.add("atk-slash");
   flashCls(el, kind === "guard" ? "guardfx" : kind);
 }
 function dotFx(h, el) { el = el || h.el; if (!fxOn()) return; const P = bossP(); if (P) fxBurst({ ...P, y: P.y + 30 * P.s }, [ELEM[el].c, "#fff"], 14, .7, 1); }
