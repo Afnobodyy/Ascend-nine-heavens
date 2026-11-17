@@ -1462,6 +1462,16 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .scr.prep .tm .note{font-size:10.5px}
 .scr.prep .blessings{gap:4px}
 .scr.prep .bless{font-size:11px;padding:0 7px}
+.bsl{display:flex;flex-direction:column;gap:8px}
+.bs{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px}
+.bs.lk{opacity:.55}
+.bs .bart{width:64px;height:64px;overflow:hidden;display:grid;place-items:center}
+.bs .bart img,.bs .bart svg{max-width:100%;max-height:100%;object-fit:contain}
+.bs .bi{display:flex;flex-direction:column;gap:2px;min-width:0}.bs .bi b{font-size:15px}
+.bm{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.bmb{border:1px solid var(--gold2);background:linear-gradient(180deg,#3a2716,#22150e);color:var(--paper);border-radius:8px;padding:7px 10px;font-size:12.5px}
+.bmb.done{border-color:#5cc26b}
+.bmb:disabled{opacity:.4;border-color:var(--line2)}
 
 
 
@@ -1998,7 +2008,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 51; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 52; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2464,15 +2474,6 @@ const BOSSES = [
     p3: ["choeur", "tisseuse", "jugement", "choeur", "cocon3", "jugement"] },
 ];
 
-const CARD_POOL = [
-  { id: "atk", n: "Encens de guerre", g: "攻", d: "ATK de l'équipe +12 %." },
-  { id: "hp", n: "Souffle vital", g: "命", d: "PV max de l'équipe +15 %." },
-  { id: "def", n: "Armure laquée", g: "甲", d: "DEF de l'équipe +20 %." },
-  { id: "shield", n: "Sceau protecteur", g: "護", d: "Chaque combat commence avec un bouclier de 15 % des PV." },
-  { id: "spring", n: "Source thermale", g: "泉", d: "Soigne l'équipe à 100 % et ressuscite les tombés." },
-  { id: "soul", n: "Lanterne d'âme", g: "魂", d: "1 résurrection automatique à 30 % PV par combat." },
-  { id: "heal", n: "Rosée céleste", g: "露", d: "Soins reçus +25 %." },
-];
 // ===================== SPRITES (SVG originaux) =====================
 let _uid = 0;
 const uid = (p) => p + (++_uid);
@@ -3887,10 +3888,11 @@ addEventListener("pointerdown", () => { if (MEN.armed) return; MEN.armed = true;
 
 // ===================== ÉTAT & SAUVEGARDE =====================
 const SAVE_KEY = "neufcieux_v1";
-function newSave() { return { jade: 300, owned: { t1: { st: 1 }, p1: { st: 1 }, m1: { st: 1 }, s1: { st: 1 } }, pity: 0, team: ["t1", "p1", "m1", "s1"], best: 0, run: null, pulls: 0, last: [], band: false }; }
+function newSave() { return { jade: 300, owned: { t1: { st: 1 }, p1: { st: 1 }, m1: { st: 1 }, s1: { st: 1 } }, pity: 0, team: ["t1", "p1", "m1", "s1"], best: 0, run: null, pulls: 0, last: [], band: false, prog: {} }; }
 function load() { try { const t = localStorage.getItem(SAVE_KEY); return t ? Object.assign(newSave(), JSON.parse(t), { band: false }) : null; } catch (e) { return null; } }
 function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { } }
 let S = load() || newSave();
+S.run = null; S.prog = S.prog || {}; // plus de run : l'état d'un combat n'existe que pendant le combat
 const ROLE_ORD = { tank: 0, phys: 1, mag: 2, sup: 3 };
 const sortRoles = (ids) => ids.map((id, i) => [id, i]).sort((a, b) => (ROLE_ORD[CH[a[0]].role] - ROLE_ORD[CH[b[0]].role]) || a[1] - b[1]).map((x) => x[0]);
 S.team = sortRoles((S.team || []).filter((id) => CH[id]));
@@ -3938,6 +3940,13 @@ function heroStats(id, run) {
   const md = (run && run.mods) || {};
   return { hp: Math.round(r.hp * m * (1 + (md.hp || 0))), atk: Math.round(r.atk * m * (1 + (md.atk || 0))), def: Math.round(r.def * m * (1 + (md.def || 0))) };
 }
+const MODES = { n: { n: "Normal", hp: 1, dmg: 0.75, jade: 1 }, h: { n: "Héroïque", hp: 1.5, dmg: 1.1, jade: 1.5 }, m: { n: "Mythique", hp: 2.2, dmg: 1.6, jade: 2.2 } };
+const MODE_ORD = ["n", "h", "m"];
+let SEL = { boss: "kappa", mode: "n" };
+const cleared = (bid, m) => !!(S.prog && S.prog[bid] && S.prog[bid][m]);
+const bossOpen = (bid) => { const i = BOSSES.findIndex((b) => b.id === bid); return i <= 0 || cleared(BOSSES[i - 1].id, "n"); };
+const modeOpen = (bid, m) => { const k = MODE_ORD.indexOf(m); return bossOpen(bid) && (k === 0 || cleared(bid, MODE_ORD[k - 1])); };
+const nextBoss = () => BOSSES.find((b) => !cleared(b.id, "n")) || BOSSES[0];
 function bossAt(floor) { const i = floor % BOSSES.length, loop = Math.floor(floor / BOSSES.length); return { b: BOSSES[i], i, loop }; }
 
 // ===================== RENDU COMMUN =====================
@@ -3945,7 +3954,7 @@ const elChip = (e, pre = "") => `<span class="el" style="--c:${ELEM[e].c}">${pre
 const jadeIcon = `<i class="jg"></i>`;
 function topbar() { return `<div class="topbar"><span class="brand">九天<em>Ascend: Nine Heavens</em></span><span class="tbr"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="jade">${jadeIcon}${fmt(S.jade)}</span></span></div>`; }
 function nav() {
-  return `<nav class="nav">${[["home", "Portail", "門"], ["team", "Équipe", "隊"], ["summon", "Invocation", "召"], ["coll", "Collection", "録"]]
+  return `<nav class="nav">${[["home", "Portail", "門"], ["team", "Équipe", "隊"], ["summon", "Invocation", "召"], ["boss", "Boss", "鬼"], ["coll", "Collection", "録"]]
     .map(([k, n, g]) => `<button data-act="go" data-to="${k}" class="${screen === k ? "on" : ""}"><i>${g}</i>${n}${k === "coll" && Object.values(S.owned).some((o) => o.nw) ? '<span class="newdot" aria-label="Nouveau"></span>' : ""}</button>`).join("")}</nav>`;
 }
 function tile(id, act = "detail", sel = false) {
@@ -3959,39 +3968,38 @@ function render() {
   musStop();
   menuStart();
   document.querySelectorAll(".sheet").forEach((s) => s.remove());
-  ({ home: renderHome, team: renderTeam, summon: renderSummon, coll: renderColl, prep: renderPrep, cards: renderCards, defeat: renderDefeat }[screen] || renderHome)();
+  ({ home: renderHome, team: renderTeam, summon: renderSummon, coll: renderColl, prep: renderPrep, boss: renderBoss, victory: renderVictory, defeat: renderDefeat }[screen] || renderHome)();
 }
 function go(to) { screen = to; render(); }
 
 // ===================== PORTAIL =====================
 function renderHome() {
   const lead = S.team.filter((id) => CH[id]).map((id) => CH[id]);
-  const r = S.run;
+  const nCl = BOSSES.filter((b) => cleared(b.id, "n")).length;
   const order = [lead[1], lead[0], lead[3], lead[2]].filter(Boolean);
-  const nb = r ? bossAt(r.floor).b : BOSSES[0];
+  const nb = nextBoss();
   app.innerHTML = `<div class="h-home"><div class="h-bg" style="background-image:url(${ART["bg:kitsune"]})"></div><div class="h-vig"></div><div class="h-band"></div>
     <div class="h-jade"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="jade">${jadeIcon}${fmt(S.jade)}</span></div>
-    <div class="h-rec"><div><span>${r ? "ASCENSION EN COURS" : "RECORD"}</span><b>${r ? "Ciel " + (r.floor + 1) : S.best ? "Ciel " + S.best + " franchi" : "Aucun ciel franchi"}</b></div>${r ? `<button class="btn ghost sm h-ab" data-act="abandon" id="abBtn">Abandonner</button>` : ""}</div>
+    <div class="h-rec"><div><span>PROGRESSION</span><b>${nCl} / ${BOSSES.length} boss vaincus</b></div></div>
     <div class="h-logo"><div class="k">九天</div><div class="a">Ascend</div><div class="n">Nine Heavens</div></div>
     <div class="h-team">${order.map((c) => `<div class="h-hs"><i></i>${heroArt(c)}</div>`).join("")}</div>
     <div class="h-menu">
       <button class="btn h-bt" data-act="go" data-to="summon"><i>召</i><b>Invocation</b><span>${Math.floor(S.jade / SUMMON_COST)} tirage(s)</span></button>
       <button class="btn h-bt" data-act="go" data-to="team"><i>隊</i><b>Équipe</b><span>${lead.length === TEAM_N ? lead.map((c) => c.name).slice(0, 2).join(" · ") + "…" : "incomplète"}</span></button>
-      ${r ? `<button class="btn h-cta" data-act="prep"><b>Continuer l'ascension</b><small>CIEL ${r.floor + 1} · ${nb.name.toUpperCase()}</small></button>`
-          : `<button class="btn h-cta" data-act="start"><b>Commencer l'ascension</b><small>CIEL 1 · ${nb.name.toUpperCase()}</small></button>`}
+      <button class="btn h-cta" data-act="go" data-to="boss"><b>Affronter un boss</b><small>${nb.name.toUpperCase()}</small></button>
       <button class="btn h-bt" data-act="go" data-to="coll"><i>録</i><b>Collection</b><span>${Object.keys(S.owned).length} / ${CHARS.length}</span></button>
       <button class="btn h-bt" data-act="rules"><i>問</i><b>Règles</b><span>comment jouer</span></button>
     </div><div class="h-ver">v.${GAME_VERSION}</div></div>`;
 }
 function showRules() {
   const sh = document.createElement("div"); sh.className = "sheet";
-  sh.innerHTML = `<div class="sheet-in rules-sheet" role="dialog" aria-label="Règles de l'ascension"><h3>Règles de l'ascension</h3><ul>
-      <li>Ton équipe de 4 affronte une suite de boss, de plus en plus forts. Après le 8e ciel, le cycle recommence plus dur.</li>
+  sh.innerHTML = `<div class="sheet-in rules-sheet" role="dialog" aria-label="Règles"><h3>Règles</h3><ul>
+      <li>Choisis une équipe de 4 héros, modifiable entre deux combats. Les PV sont pleins à chaque combat.</li>
+      <li>Chaque boss existe en <b>Normal</b>, <b>Héroïque</b> et <b>Mythique</b>. Bats-le en Normal pour débloquer le mode suivant et le boss d'après.</li>
       <li>L'<b>intention</b> du boss est toujours affichée : prépare provocations, boucliers et soins.</li>
+      <li>Chaque héros a 3 compétences et 1 ultime (disponible au tour 3). La <b>Concentration</b> réduit les recharges et les dégâts subis.</li>
       <li>Frapper sa <b>faiblesse</b> élémentaire inflige ×1,5 de dégâts.</li>
-      <li>Après chaque victoire, choisis 1 bénédiction parmi 3. Elles durent jusqu'à la fin de l'ascension.</li>
-      <li>Au-delà de ${FURY_ROUND} tours, le boss entre en <b>Fureur céleste</b> : +20 % d'ATK à chaque tour.</li>
-      <li>En cas de défaite, l'ascension repart du Ciel 1. Tu gardes tes héros et ton jade.</li></ul>
+      <li>Au-delà de ${FURY_ROUND} tours, le boss entre en <b>Fureur céleste</b> : +20 % d'ATK à chaque tour.</li></ul>
     <div class="cycle">Domine :&nbsp;${["eau", "feu", "metal", "bois", "terre", "eau"].map((e) => elChip(e)).join(" › ")}</div>
     <button class="btn wide" style="margin-top:14px" data-act="closesheet">Fermer</button></div>`;
   document.body.appendChild(sh);
@@ -4014,7 +4022,7 @@ function renderTeam() {
   const ids = CHARS.map((x) => x.id).filter((x) => teamFilter === "all" || CH[x].role === teamFilter).sort((a, b) => (stars(a) ? 0 : 1) - (stars(b) ? 0 : 1) || byRar(a, b));
   const roles = new Set(S.team.map((x) => CH[x].role));
   const slots = [0, 1, 2, 3].map((i) => S.team[i] ? mkPt(S.team[i], S.team[i] === id ? "cur" : "", "tfocus") : `<span class="em">+</span>`).join("");
-  const btn = !own ? `<button class="btn" disabled>Non obtenu</button>` : locked ? `<button class="btn" disabled>Ascension en cours</button>` : `<button class="btn" data-act="togd" data-id="${id}">${inTeam ? "Retirer de l'équipe" : "Ajouter à l'équipe"}</button>`;
+  const btn = !own ? `<button class="btn" disabled>Non obtenu</button>` : locked ? `<button class="btn" disabled>Combat en cours</button>` : `<button class="btn" data-act="togd" data-id="${id}">${inTeam ? "Retirer de l'équipe" : "Ajouter à l'équipe"}</button>`;
   app.innerHTML = `<div class="mk tc"><div class="bgp" style="background-image:url(${ART["bg:jiangshi"]})"></div><div class="vg"></div><div class="shade"></div>${mkTop("Équipe", "隊")}
   <div class="med">${slots}</div>
   <div class="list"><div class="tabs2">${[["all", "全"], ...Object.keys(ROLE).map((k) => [k, ROLE[k].k])].map(([k, g]) => `<span data-act="tfilter" data-f="${k}" class="${teamFilter === k ? "on" : ""}">${g}</span>`).join("")}</div>
@@ -4029,7 +4037,7 @@ function renderTeam() {
   hydratePx(app);
 }
 function toggleTeam(id) {
-  if (S.run) return toast("Termine ou abandonne l'ascension pour changer d'équipe.");
+  if (S.run) return toast("Termine ou abandonne le combat pour changer d'équipe.");
   if (!stars(id)) return;
   const i = S.team.indexOf(id);
   if (i >= 0) S.team.splice(i, 1);
@@ -4247,18 +4255,18 @@ const SUMFX = (() => {
 function playSummon(res) { return SUMFX.play(res); }
 
 // ===================== ASCENSION =====================
-function startRun() {
-  if (S.team.length !== TEAM_N) { toast(`Choisis ${TEAM_N} héros avant de partir.`); return go("team"); }
-  S.run = { floor: 0, mods: {}, heroMods: {}, heroes: S.team.map((id) => ({ id, hpPct: 1 })), picked: [], jadeRun: 0, cards: null };
-  save(); go("prep");
-}
 const disc = (id) => { S.disc = S.disc || {}; return S.disc[id] || {}; };
 const unkChip = `<span class="el" style="--c:#8a7a72">? Inconnue</span>`;
 function moveLine(mv) { return `<div class="mv ${mv.big ? "big" : ""}"><b>${mv.big ? "⚠ " : ""}${mv.n}</b><span>${mv.d}</span></div>`; }
+function renderBoss() {
+  const nCl = BOSSES.filter((b) => cleared(b.id, "n")).length;
+  app.innerHTML = topbar() + `<main class="scr"><div class="sec-h"><h2>Boss</h2><span class="note">${nCl} / ${BOSSES.length} vaincus en Normal</span></div>
+    <div class="bsl">${BOSSES.map((b, i) => { const open = bossOpen(b.id); return `<div class="bs ${open ? "" : "lk"}"><div class="bart">${open ? bossArt(b.id) : ""}</div><div class="bi"><span class="floor">${i + 1}</span><b>${open ? b.name : "???"}</b><span class="note">${open ? b.ep : "Bats le boss précédent en Normal"}</span></div><div class="bm">${MODE_ORD.map((m) => { const ok = modeOpen(b.id, m); return `<button class="bmb ${cleared(b.id, m) ? "done" : ""}" ${ok ? `data-act="bossmode" data-b="${b.id}" data-m="${m}"` : "disabled"}>${MODES[m].n}${cleared(b.id, m) ? " ✓" : ""}</button>`; }).join("")}</div></div>`; }).join("")}</div>
+  </main>` + nav();
+}
 function renderPrep() {
-  const r = S.run; if (!r) return go("home");
-  if (r.cards) return go("cards");
-  const { b, loop } = bossAt(r.floor);
+  const b = BOSSES.find((x) => x.id === SEL.boss) || BOSSES[0], M = MODES[SEL.mode] || MODES.n, loop = 0;
+  const r = { heroes: S.team.map((id) => ({ id, hpPct: 1 })), picked: [], mods: {}, heroMods: {} };
   const uniq = (arr) => [...new Set(arr)];
   const p1 = uniq(b.p1), p2 = uniq(b.p2).filter((k) => !p1.includes(k));
   const prof = b.pdef > b.mdef * 1.3 ? "Armure lourde : la magie passe mieux" : b.mdef > b.pdef * 1.3 ? "Garde mystique : les armes passent mieux" : "Défenses équilibrées";
@@ -4266,7 +4274,7 @@ function renderPrep() {
   app.innerHTML = topbar() + `<main class="scr two prep">
     <section class="prep-boss L">
       <div class="pb-top"><div class="bart">${bossArt(b.id)}</div>
-        <div class="pb-info"><span class="floor">CIEL ${r.floor + 1}${loop ? " · CYCLE " + (loop + 1) : ""}</span>
+        <div class="pb-info"><span class="floor">${BOSSES.indexOf(b) + 1} / ${BOSSES.length} · ${M.n.toUpperCase()}</span>
           <h2>${b.name}</h2><span class="ep">${b.ep}</span>
           <div class="intel">
             <div><span>Faiblesse ×1,5</span>${dk.w ? elChip(weakTo(b.el)) : unkChip}</div>
@@ -4274,7 +4282,7 @@ function renderPrep() {
           </div></div></div>
       ${dk.w ? "" : `<p class="disc">Touche le boss avec la bonne nature d'attaque pour révéler sa faiblesse.</p>`}
       <div class="hint">${b.hint}</div>
-      <div class="pb-acts"><button class="btn" data-act="fight">Affronter ${b.name.split(",")[0]}</button><button class="btn ghost" data-act="go" data-to="home">Portail</button></div>
+      <div class="pb-acts"><button class="btn" data-act="fight">Affronter ${b.name.split(",")[0]}</button><button class="btn ghost" data-act="go" data-to="boss">Retour</button><button class="btn ghost" data-act="go" data-to="team">Équipe</button></div>
     </section>
     <div class="pr-r">
     <section class="panel"><span class="lbl">Ton équipe</span>
@@ -4332,9 +4340,10 @@ function cam(kind) { const c = document.getElementById("cam"); if (c) flashCls(c
 function log(msg) { F.log.push(msg); if (F.log.length > 2) F.log.shift(); const l = document.getElementById("flog"); if (l) l.innerHTML = F.log.map((m) => `<div>${m}</div>`).join(""); }
 
 function startFight() {
-  const r = S.run, { b, i: bi, loop } = bossAt(r.floor), k = Math.pow(1.3, loop);
-  const boss = { ...b, maxHp: Math.round(b.hp * k * HPMUL * (1 + 0.06 * bi)), atk: Math.round(b.atk * k * ATKMUL * (1 + 0.1 * bi)), pdef: Math.round(b.pdef * (1 + 0.08 * loop)), mdef: Math.round(b.mdef * (1 + 0.08 * loop)),
-    shield: 0, st: [], broken: false, stun: false, phase: 1, step: 0, intent: null, reborn: false, enr: 0 };
+  const b = BOSSES.find((x) => x.id === SEL.boss) || BOSSES[0], bi = BOSSES.indexOf(b), loop = 0, k = 1, M = MODES[SEL.mode] || MODES.n;
+  const r = S.run = { mods: {}, heroMods: {}, heroes: S.team.map((id) => ({ id, hpPct: 1 })) };
+  const boss = { ...b, maxHp: Math.round(b.hp * k * M.hp * HPMUL * (1 + 0.06 * bi)), atk: Math.round(b.atk * k * M.dmg * ATKMUL * (1 + 0.1 * bi)), pdef: Math.round(b.pdef * (1 + 0.08 * loop)), mdef: Math.round(b.mdef * (1 + 0.08 * loop)),
+    mode: SEL.mode, shield: 0, st: [], broken: false, stun: false, phase: 1, step: 0, intent: null, reborn: false, enr: 0 };
   boss.hp = boss.maxHp;
   const m = r.mods || {};
   const heroes = sortRoles(r.heroes.map((x) => x.id)).map((id) => r.heroes.find((x) => x.id === id)).map((rh) => {
@@ -5108,88 +5117,41 @@ function showSkillUnlock(drop) {
 
 // ---- fin de combat ----
 function winFight() {
-  const r = S.run, { i, loop } = bossAt(r.floor);
-  const jade = Math.round((50 + 25 * i) * (1 + 0.6 * loop));
-  S.jade += jade; r.jadeRun = (r.jadeRun || 0) + jade;
-  r.floor++; S.best = Math.max(S.best, r.floor);
-  r.heroes = F.heroes.map((h) => ({ id: h.id, hpPct: h.dead ? 0.3 : Math.min(1, h.hp / h.maxHp + 0.35) }));
-  r.cards = drawCards(); r.lastJade = jade;
-  const drop = rollDrop();
-  F = null; save(); go("cards");
-  if (drop) setTimeout(() => showSkillUnlock(drop), 600);
+  const b = F.boss, i = BOSSES.findIndex((x) => x.id === b.id), mode = b.mode || "n", M = MODES[mode];
+  const first = !cleared(b.id, mode), jade = Math.round((50 + 25 * i) * M.jade);
+  S.jade += jade; S.prog = S.prog || {}; (S.prog[b.id] = S.prog[b.id] || {})[mode] = 1;
+  S.best = BOSSES.filter((x) => cleared(x.id, "n")).length;
+  S.lastWin = { boss: b.id, mode, jade, first };
+  S.run = null; F = null; save(); go("victory");
 }
 function defeat() {
   if (!F || F.over) return;
   F.over = true;
-  const r = S.run;
-  S.lastRun = { floor: r.floor, jade: r.jadeRun || 0, boss: bossAt(r.floor).b.name };
+  S.lastRun = { boss: F.boss.name, mode: F.boss.mode || "n" };
   S.run = null; F = null; save();
   pop("DÉFAITE", "#d8452f"); musStop();
   setTimeout(() => go("defeat"), 900);
 }
-function drawCards() {
-  const r = S.run;
-  let pool = CARD_POOL.slice();
-  if (r.heroes.every((h) => h.hpPct >= 0.99)) pool = pool.filter((c) => c.id !== "spring");
-  r.heroes.forEach((rh) => {
-    const c = kitOf(CH[rh.id]), hm = r.heroMods[rh.id] || {};
-    [2].forEach((si) => pool.push({ id: `sp:${c.id}:${si}`, hero: c.id, g: "鋭", n: "Maîtrise", d: `« ${c.skills[si].n} » +30 % de puissance.` }));
-    const ult = c.skills[2];
-    if (ult.cd - ((hm.cd || [])[2] || 0) > 2) pool.push({ id: `cd:${c.id}:2`, hero: c.id, g: "禅", n: "Méditation", d: `Recharge de « ${ult.n} » −1 tour.` });
-    pool.push({ id: `aw:${c.id}`, hero: c.id, g: "覚", n: "Éveil fugace", d: "PV, ATK et DEF +20 % pour cette ascension." });
-  });
-  shuffle(pool);
-  const out = [], heroCount = {};
-  for (const c of pool) {
-    if (out.length >= 3) break;
-    if (c.hero && (heroCount[c.hero] || 0) >= 1) continue;
-    if (c.hero) heroCount[c.hero] = 1;
-    out.push(c);
-  }
-  return out;
-}
-const MODV = { atk: 0.12, hp: 0.15, def: 0.2, crit: 0.1, weak: 0.25, shield: 1, soul: 1, ls: 0.1, heal: 0.25 };
-function applyCard(idx) {
-  const r = S.run, c = r.cards && r.cards[idx]; if (!c) return;
-  const [t, hid, si] = c.id.split(":");
-  if (t === "sp" || t === "cd" || t === "aw") {
-    const hm = r.heroMods[hid] = r.heroMods[hid] || {};
-    if (t === "aw") hm.aw = (hm.aw || 0) + 1;
-    else { hm[t] = hm[t] || [0, 0, 0]; hm[t][+si]++; }
-    r.picked.push(`${CH[hid].name} · ${c.n}`);
-  } else {
-    if (t === "spring") r.heroes.forEach((h) => { h.hpPct = 1; });
-    else r.mods[t] = (r.mods[t] || 0) + MODV[t];
-    r.picked.push(c.n);
-  }
-  r.cards = null; save(); go("prep");
-}
-function renderCards() {
-  const r = S.run; if (!r || !r.cards) return go("prep");
-  const { b } = bossAt(r.floor - 1);
-  app.innerHTML = topbar() + `<main class="scr">
-    <section class="vic"><span class="floor">CIEL ${r.floor} FRANCHI</span><h1>Victoire</h1><p class="note">${b.name} est vaincu.</p>
-      <div class="reward">${jadeIcon}+${fmt(r.lastJade || 0)} jade</div>
-      <p class="note">L'équipe récupère 35 % de ses PV. Les héros tombés reviennent à 30 %.</p></section>
-    <div class="sec-h"><h2 style="font-size:20px">Choisis une bénédiction</h2></div>
-    <div class="cards">${r.cards.map((c, i) => `<button class="card ${c.hero ? "hero" : ""}" data-act="card" data-i="${i}"><span class="g">${c.g}</span>${c.hero ? `<span class="who">${CH[c.hero].name}</span>` : `<span class="who">Équipe</span>`}<b>${c.n}</b><p>${c.d}</p></button>`).join("")}</div>
-  </main>`;
+function renderVictory() {
+  const w = S.lastWin || { boss: BOSSES[0].id, mode: "n", jade: 0 }, b = BOSSES.find((x) => x.id === w.boss), k = MODE_ORD.indexOf(w.mode);
+  const unlock = k < 2 ? `Mode ${MODES[MODE_ORD[k + 1]].n} débloqué pour ce boss.` : "";
+  const nx = w.mode === "n" && w.first && BOSSES[BOSSES.indexOf(b) + 1] ? `${BOSSES[BOSSES.indexOf(b) + 1].name} est maintenant accessible.` : "";
+  app.innerHTML = topbar() + `<main class="scr"><section class="vic"><span class="floor">${MODES[w.mode].n.toUpperCase()}</span><h1>Victoire</h1><p class="note">${b.name} est vaincu.</p>
+    <div class="reward">${jadeIcon}+${fmt(w.jade)} jade</div>${w.first ? `<p class="note">${[unlock, nx].filter(Boolean).join(" ")}</p>` : ""}
+    <button class="btn wide" data-act="go" data-to="boss">Retour aux boss</button></section></main>` + nav();
 }
 function renderDefeat() {
-  const l = S.lastRun || { floor: 0, jade: 0, boss: "" };
+  const l = S.lastRun || { boss: "", mode: "n" };
   app.innerHTML = topbar() + `<main class="scr"><section class="def">
-    <span class="floor">L'ASCENSION S'ARRÊTE</span><h1>Défaite</h1>
-    <p class="note">${l.boss ? `Ton équipe est tombée face à ${l.boss}, au Ciel ${l.floor + 1}.` : "Ascension abandonnée."}</p>
-    <div class="reward vic" style="padding:0"><div class="reward">${jadeIcon}${fmt(l.jade)} jade gagné pendant l'ascension</div></div>
-    <p class="note">Record : ${S.best ? "Ciel " + S.best : "aucun ciel franchi"}. Ton jade et tes héros sont conservés.</p>
-    <button class="btn wide" data-act="go" data-to="summon">Invoquer de nouveaux héros</button>
-    <button class="btn ghost wide" data-act="go" data-to="home">Retour au portail</button>
-  </section></main>`;
+    <span class="floor">COMBAT PERDU</span><h1>Défaite</h1>
+    <p class="note">${l.boss ? `Ton équipe est tombée face à ${l.boss} (${MODES[l.mode].n}).` : "Combat abandonné."}</p>
+    <p class="note">Tes héros et ton jade sont conservés. Change d'équipe ou retente le combat.</p>
+    <button class="btn wide" data-act="go" data-to="boss">Retour aux boss</button>
+    <button class="btn ghost wide" data-act="go" data-to="team">Modifier l'équipe</button>
+  </section></main>` + nav();
 }
 function abandon() {
-  const r = S.run; if (!r) return;
-  S.lastRun = { floor: r.floor, jade: r.jadeRun || 0, boss: "" };
-  S.run = null; F = null; save(); go("defeat");
+  S.run = null; F = null; save(); go("boss");
 }
 function settingsClose() { document.querySelectorAll(".setov").forEach((e) => e.remove()); }
 function settingsOpen(confirm) {
@@ -5198,7 +5160,7 @@ function settingsOpen(confirm) {
   settingsClose();
   const v = Math.round(musVolume() * 100);
   fg.insertAdjacentHTML("beforeend", confirm
-    ? `<div class="setov" data-act="setbg"${home ? ' style="position:fixed;--k:1"' : ""}><div class="setp"><h3>Abandonner ?</h3><p>Ton ascension s'arrête ici et la progression du combat sera perdue.</p><div class="two"><button class="no" data-act="setclose">Rester</button><button class="yes" data-act="abandonok">Abandonner</button></div></div></div>`
+    ? `<div class="setov" data-act="setbg"${home ? ' style="position:fixed;--k:1"' : ""}><div class="setp"><h3>Abandonner ?</h3><p>Le combat s'arrête ici, sans pénalité.</p><div class="two"><button class="no" data-act="setclose">Rester</button><button class="yes" data-act="abandonok">Abandonner</button></div></div></div>`
     : `<div class="setov" data-act="setbg"><div class="setp"><h3>Réglages</h3><div class="srow"><label for="musvol">Musique</label><input type="range" id="musvol" min="0" max="100" step="1" value="${v}"><span class="pct" id="musvolv">${v} %</span></div><button class="give" data-act="abandonask">Abandonner</button><button class="sclose" data-act="setclose">Reprendre le combat</button></div></div>`);
 }
 document.addEventListener("input", (e) => { if (e.target && e.target.id === "musvol") { setMusVolume(e.target.value / 100); const l = document.getElementById("musvolv"); if (l) l.textContent = e.target.value + " %"; } });
@@ -5221,7 +5183,8 @@ document.addEventListener("click", (e) => {
     case "sum": doSummon(+t.dataset.n); break;
     case "rules": showRules(); break;
     case "rules": showRules(); break;
-    case "start": startRun(); break;
+    case "start": go("boss"); break;
+    case "bossmode": if (S.team.length !== TEAM_N) { toast(`Choisis ${TEAM_N} héros avant de combattre.`); go("team"); break; } SEL = { boss: t.dataset.b, mode: t.dataset.m }; go("prep"); break;
     case "prep": go("prep"); break;
     case "fight": startFight(); break;
     case "settings": settingsOpen(); break;
@@ -5231,7 +5194,6 @@ document.addEventListener("click", (e) => {
     case "abandon": settingsOpen(true); break;
     case "abandonok": if (F && F.busy) { settingsClose(); toast("Attends la fin du tour pour abandonner."); break; } settingsClose(); abandon(); break;
     case "mute": S.mute = !S.mute; save(); auMute(); t.classList.toggle("off", S.mute); if (!S.mute && F) musStart(); else if (!S.mute) menuStart(); break;
-    case "card": applyCard(+t.dataset.i); break;
     case "cancelT": if (F) { F.pending = null; update(); } break;
     case "skill": {
       if (!F || F.busy || F.phase !== "player") return;
