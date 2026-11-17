@@ -2030,7 +2030,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 52; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 53; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2230,7 +2230,7 @@ const CHARS = [
     skills: [
       { n: "Plume ardente", d: "Soigne un allié (150 % ATK) et ATK +15 % (2 tours).", cd: 0, tgt: "ally", fx: [{ k: "heal", m: 1.5 }, { k: "buff", p: 0.15, d: 2 }] },
       { n: "Hymne du soleil", d: "Équipe : ATK +35 % (2 tours).", cd: 3, tgt: "allies", fx: [{ k: "buff", p: 0.35, d: 2 }] },
-      { n: "Renaissance", d: "Ressuscite les alliés tombés à 40 % PV, soigne les autres de 30 % PV max.", cd: 5, tgt: "allies", fx: [{ k: "revive", p: 0.4 }, { k: "healPct", p: 0.3 }] },
+      { n: "Cendres vivifiantes", d: "Soigne toute l'équipe de 30 % PV max.", cd: 5, tgt: "allies", fx: [{ k: "healPct", p: 0.3 }] },
     ] },
 ];
 CHARS.forEach((c) => { if (!c.skills[0].cd) c.skills[0].cd = 2; c.skills.forEach((s) => { if (!s.el) s.el = c.el; }); });
