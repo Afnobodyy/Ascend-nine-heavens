@@ -1918,6 +1918,14 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 #app .fight.ug .cg .ds{margin-top:calc(4*var(--u));-webkit-line-clamp:3}
 #app .fight.ug .cg .ds.vv{font-size:calc(15*var(--u));font-weight:700;color:#fff;display:block}
 #app .fight.ug .cg.cel .pips{margin-top:calc(4*var(--u));height:auto}
+#app .fight.ug #fsk{left:auto!important;right:calc(10*var(--u))!important;bottom:calc(10*var(--u))!important;width:auto!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important}
+#app .fight.ug .gridm{display:flex;flex-direction:row;gap:calc(8*var(--u));justify-content:flex-end}
+#app .fight.ug .cg.ico{min-height:0;padding:0;background:none;border:0;border-radius:calc(8*var(--u));overflow:visible;width:auto}
+#app .fight.ug .cg.ico.sel .spi{box-shadow:0 0 0 2px #000a,0 0 0 calc(4*var(--u)) #ffe08a,0 0 calc(14*var(--u)) #ffe08a}
+#app .fight.ug .cg.ico .spi{--s:calc(56*var(--u))!important}
+.spi.fb{background:radial-gradient(circle at 50% 40%,var(--c1),var(--c2))}
+.spi.fb .fbg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 calc(var(--s)*.5)/1 var(--display,sans-serif);font-style:normal;color:var(--g)}
+.spi.fb .fbg svg{width:55%;height:55%;fill:currentColor}
 #app .fight.ug .cg:disabled{opacity:1}
 #app .fight.ug .cg:disabled:not(.cel) .t b{color:#8f8576}
 #app .fight.ug .cg:disabled:not(.cel) .ic{opacity:.5}
@@ -2022,7 +2030,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 51; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 52; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4579,21 +4587,23 @@ function renderSkills() {
 const icEl = (e) => `<span class="ic" style="--c:${ELEM[e].c}" title="${ELEM[e].n}">${ELEM[e].k}</span>`;
 const SWORD_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5l-.4 5.6-8.6 8.6-3.2-3.2 8.6-8.6z"/><path d="M6.4 13.3l4.3 4.3-1.4 1.4 1.5 1.5-1.5 1.5-1.5-1.5-2.4 2.4-1.5-1.5 2.4-2.4-1.5-1.5 1.5-1.5z"/></svg>';
 const SHIELD_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>';
+// repli sans dessin : pastille de la couleur de l'élément avec son symbole
+const fbIcon = (el, u, cd) => { const c = SPC[el] || SPC.terre; return `<span class="spi fb${u ? " u" : ""}${cd ? " cd" : ""}" style="--c1:${c[0]};--c2:${c[1]};--g:${c[2]}"><i class="fbg">${ELEM[el].k}</i>${cd > 0 ? `<i class="spn">${cd}</i>` : ""}</span>`; };
 function gridHtml(h) {
   const hi = F.heroes.indexOf(h), dis = F.busy ? "disabled" : "", key = (k) => (F.sel === hi + ":" + k ? " sel" : "");
   const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${(off || F.busy) && !cls.includes("ico") ? "disabled" : ""}>${inner}</button>`;
   const sk = h.c.skills.map((s, i) => {
     const dmg = s.fx.some((f) => f.k === "dmg" || f.k === "dot"), cd = h.cd[i];
     const spi = heroSp(h.c.id, i, skEl(h, s), { u: i === 2, cd, v: varTag(h, i) });
-    if (spi) return cell(i, spi, "ico" + (i === 2 ? " ult" : ""), cd > 0);
+    return cell(i, spi || fbIcon(skEl(h, s), i === 2, cd), "ico" + (i === 2 ? " ult" : ""), cd > 0);
     return cell(i, `<div class="t">${spi || (dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>')}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
   });
   const ready = celReady(), g = F.gauge;
-  const celSpi = heroSp(h.c.id, "cel", h.el, { u: ready, cd: ready ? 0 : -1 });
+  const celSpi = heroSp(h.c.id, "cel", h.el, { u: ready, cd: ready ? 0 : -1 }) || fbIcon(h.el, ready, ready ? 0 : -1);
+  const stuck = !ready && h.cd.every((c) => c > 0);
   const cel = cell("cel", `${celSpi ? celSpi : `<div class="t">${icEl(h.el)}<b>Celestial</b></div>${ready ? `<div class="ds rd">${skDesc(h, celSk(h), -1)}</div>` : ""}`}${ready ? "" : `<div class="pips">${Array.from({ length: 9 }, (_, q) => `<i class="${q < g ? "on" : ""}"></i>`).join("")}</div>`}`, "cel" + (celSpi ? " ico" : "") + (ready ? " ready" : ""), !ready);
   return `<div class="gridm">
-    ${cell("atk", `<div class="t"><span class="ic grdi" style="--c:#ffd9a0">${SWORD_SVG}</span><b>Attaque</b></div><div class="ds vv">${fmt(skDmgVal(h, 100, -1))}</div>`, "small")}
-    ${cell("grd", `<div class="t"><span class="ic grdi" style="--c:#9fc0ff">${SHIELD_SVG}</span><b>Garde</b></div><div class="ds vv">−50 %</div>`, "small grd")}
+    ${stuck ? cell("atk", `<span class="spi fb" style="--c1:#5a4a2a;--c2:#1c140a;--g:#ffd9a0"><i class="fbg">${SWORD_SVG}</i></span>`, "ico") : ""}
     ${sk.join("")}${cel}</div>`;
 }
 // héros actif avancé au centre, les autres estompés
@@ -5073,8 +5083,8 @@ document.addEventListener("pointerdown", (e) => {
     const tip = document.createElement("div"); tip.className = "lptip";
     tip.innerHTML = `<b>${sk.n}</b>${typeof si === "number" && h.cd[si] > 0 ? `<em>Recharge : ${h.cd[si]} tour${h.cd[si] > 1 ? "s" : ""}</em>` : ""}<p>${skDesc(h, sk, si === "cel" ? -1 : si)}${comboTag(h, sk)}</p>`;
     document.body.appendChild(tip); LP.tip = tip;
-    const r = b.getBoundingClientRect(), w = tip.offsetWidth;
-    tip.style.left = Math.max(6, Math.min(innerWidth - w - 6, r.left + r.width / 2 - w / 2)) + "px"; tip.style.bottom = innerHeight - r.top + 8 + "px";
+    const r = b.getBoundingClientRect(), w = tip.offsetWidth, hh = tip.offsetHeight;
+    tip.style.left = Math.max(6, r.left - w - 10) + "px"; tip.style.top = Math.max(6, Math.min(innerHeight - hh - 6, r.top + r.height / 2 - hh / 2)) + "px";
   }, 380);
 });
 ["pointerup", "pointercancel", "pointerleave", "scroll"].forEach((ev) => document.addEventListener(ev, lpHide, true));
