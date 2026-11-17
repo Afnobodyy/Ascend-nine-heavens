@@ -1998,7 +1998,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 50; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 51; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2356,10 +2356,10 @@ const KITS = {
     { n: "Retour de l'âme", d: "Ressuscite les alliés tombés à 50 % PV et soigne les autres de 25 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.5 }, { k: "healPct", p: 0.25 }] },
   ],
   s6: [
-    { n: "Plume ardente", d: "Un allié : soigne 150 % ATK et ATK +15 % (2 tours).", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.5 }, { k: "buff", p: 0.15, d: 2 }] },
-    { n: "Cendres du phénix", d: "Un allié : le prochain coup fatal le laisse à 1 PV (une seule fois).", cd: 3, tgt: "ally", fx: [{ k: "ash", d: 4 }] },
-    { n: "Flamme purificatrice", d: "Frappe à 150 % ATK puis Brûlure (30 % ATK/tour, 3 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 1.5, post: 20 }, { k: "dot", s: "burn", m: 0.3, d: 3 }] },
-    { n: "Renaissance", d: "Ressuscite les alliés tombés à 40 % PV et soigne l'équipe de 30 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.4 }, { k: "healPct", p: 0.3 }] },
+    { n: "Plume ardente", d: "Un allié : soigne 150 % ATK et ATK +15 % (2 tours). +1 braise (max 3).", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.5 }, { k: "buff", p: 0.15, d: 2 }, { k: "charge", n: 1, max: 3 }] },
+    { n: "Hymne du soleil", d: "Équipe : ATK +35 % (2 tours). +1 braise (max 3).", cd: 3, tgt: "allies", fx: [{ k: "buff", p: 0.35, d: 2 }, { k: "charge", n: 1, max: 3 }] },
+    { n: "Flamme purificatrice", d: "Consomme les braises : frappe à 150 % ATK + 40 % ATK par braise, puis Brûlure (30 % ATK/tour, 3 tours + 1 par braise).", cd: 4, tgt: "boss", discharge: 1, fx: [{ k: "dmg", m: 1.5, perCharge: 0.4, post: 20 }, { k: "dot", s: "burn", m: 0.3, d: 3, dPer: 1 }] },
+    { n: "Renaissance", d: "Ressuscite les alliés tombés à 40 % PV (+10 % par braise, consommées) et soigne l'équipe de 30 % PV.", cd: 6, tgt: "allies", ult: 1, discharge: 1, fx: [{ k: "revive", p: 0.4, pPer: 0.1 }, { k: "healPct", p: 0.3 }] },
   ],
 };
 CHARS.forEach((c) => { if (KITS[c.id]) { c.skills = KITS[c.id]; c.skills.forEach((s) => { if (!s.el) s.el = c.el; }); } });
@@ -4938,7 +4938,7 @@ async function useSkill(hi, si, ti) {
       case "dmg":
         for (let i = 0; i < (fx.hits || 1); i++) { if (b.hp <= 0 || h.dead) break; const big = !!sk.ult; sfxHit(skEl(h, sk), melee, big, i); await hitFx(h, i, big, skEl(h, sk)); dmgBoss(h, (fx.m + (fx.perCharge || 0) * (h.charge || 0)) * pw, { ...fx, ...CM, pen: Math.max(fx.pen || 0, penX), el: skEl(h, sk) }); update(); await sleep(fx.hits > 1 ? 190 : 330); }
         break;
-      case "dot": { dotFx(h, skEl(h, sk)); const weak = weakTo(b.el) === skEl(h, sk); addSt(b, { k: fx.s, dmg: Math.round(hAtk(h) * fx.m * pw * (weak ? 1.5 : 1)), d: fx.d }); break; }
+      case "dot": { dotFx(h, skEl(h, sk)); const weak = weakTo(b.el) === skEl(h, sk); addSt(b, { k: fx.s, dmg: Math.round(hAtk(h) * fx.m * pw * (weak ? 1.5 : 1)), d: fx.d + (fx.dPer || 0) * (h.charge || 0) }); break; }
       case "debuff": bossDebuffFx("#b46cff"); addSt(b, { k: fx.s + "down", p: fx.p, d: fx.d }); break;
       case "mark": bossDebuffFx("#ff6a9a"); addSt(b, { k: "mark", p: fx.p, d: fx.d }); break;
       case "heal": supportFx("heal", tg); tg.forEach((t) => healHero(t, hAtk(h) * fx.m * pw)); break;
@@ -4960,10 +4960,10 @@ async function useSkill(hi, si, ti) {
       case "soak": supportFx("taunt", [h]); F.soak = { hi: F.heroes.indexOf(h) }; addSt(h, { k: "dr", p: fx.p, d: 1 }); break;
       case "mirror": supportFx("guard", F.heroes.filter((t) => !t.dead)); F.mirrorOn = true; F.mirror = 0; break;
       case "nxt": addSt(h, { k: "nxt", p: fx.p, d: 3 }); break;
-      case "charge": h.charge = Math.min(5, (h.charge || 0) + fx.n); floatAt(heroEl(h), `Charges ${h.charge}/5`, "info"); break;
+      case "charge": h.charge = Math.min(fx.max || 5, (h.charge || 0) + fx.n); floatAt(heroEl(h), h.id === "s6" ? `Braises ${h.charge}/3` : `Charges ${h.charge}/5`, "info"); break;
       case "sheathe": if (h.id === "p1") { h.sheath = true; h.draw = 0; floatAt(heroEl(h), "Rengainé", "info"); } break;
       case "ash": supportFx("heal", tg); tg.forEach((t) => addSt(t, { k: "ash", d: fx.d || 4 })); break;
-      case "revive": F.heroes.forEach((t) => { if (t.dead) { t.dead = false; setTimeout(() => supportFx("revive", [t]), 30); t.hp = Math.round(t.maxHp * fx.p); t.acted = true; floatAt(heroEl(t), "Ranimé", "heal"); log(`${t.c.name} revient au combat !`); } }); break;
+      case "revive": F.heroes.forEach((t) => { if (t.dead) { t.dead = false; setTimeout(() => supportFx("revive", [t]), 30); t.hp = Math.round(t.maxHp * (fx.p + (fx.pPer || 0) * (h.charge || 0))); t.acted = true; floatAt(heroEl(t), "Ranimé", "heal"); log(`${t.c.name} revient au combat !`); } }); break;
     }
   }
   if (cb) applyCombo(cb, h);
