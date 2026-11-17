@@ -1437,6 +1437,12 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .spi.cd{filter:brightness(.55) saturate(.4)}
 .spi .spn{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;font:900 calc(var(--s)*.6)/1 var(--display,sans-serif);font-style:normal;color:#fff;text-shadow:-1px 0 #000,1px 0 #000,0 1px #000,0 -1px #000;filter:none}
 .spi .spb{position:absolute;right:-1px;bottom:-1px;z-index:2;min-width:calc(var(--s)*.4);height:calc(var(--s)*.4);padding:0 2px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:900 calc(var(--s)*.3)/1 var(--display,sans-serif);font-style:normal;color:#1b0f08;background:#ffd25a;border:1px solid #000;border-radius:3px}
+.cg.ico{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:calc(5*var(--u));-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
+.cg.ico .spi{--s:calc(50*var(--u))!important;order:0!important;margin:0!important}
+.cg.ico .pips{margin-top:0!important}
+.cg.ico.ult:not(.cel){border-color:#e2b250}
+.lptip{position:fixed;z-index:999;width:max-content;max-width:min(300px,86vw);padding:8px 11px;border:1px solid #a87a24;border-radius:8px;background:rgba(14,8,11,.97);color:#f2e7d3;box-shadow:0 6px 18px rgba(0,0,0,.6);pointer-events:none;font-size:13px;line-height:1.35}
+.lptip b{display:block;font-family:var(--display);font-size:15px;color:#f2d28a}.lptip em{display:block;font-style:normal;color:#ff9a8a;font-size:12px}.lptip p{margin:3px 0 0}
 .cg .t .spi{--s:calc(30*var(--u));order:2;margin-left:auto}
 #app .fight.ug .cg.cel .t .spi{--s:calc(18*var(--u));margin-left:calc(1*var(--u))}
 #app .fight.ug .cg.cel .t b{font-size:calc(10*var(--u))}
@@ -2016,7 +2022,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 50; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 51; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4575,14 +4581,16 @@ const SWORD_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="tru
 const SHIELD_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>';
 function gridHtml(h) {
   const hi = F.heroes.indexOf(h), dis = F.busy ? "disabled" : "", key = (k) => (F.sel === hi + ":" + k ? " sel" : "");
-  const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${off || F.busy ? "disabled" : ""}>${inner}</button>`;
+  const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${(off || F.busy) && !cls.includes("ico") ? "disabled" : ""}>${inner}</button>`;
   const sk = h.c.skills.map((s, i) => {
     const dmg = s.fx.some((f) => f.k === "dmg" || f.k === "dot"), cd = h.cd[i];
     const spi = heroSp(h.c.id, i, skEl(h, s), { u: i === 2, cd, v: varTag(h, i) });
+    if (spi) return cell(i, spi, "ico" + (i === 2 ? " ult" : ""), cd > 0);
     return cell(i, `<div class="t">${spi || (dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>')}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
   });
   const ready = celReady(), g = F.gauge;
-  const cel = cell("cel", `<div class="t">${heroSp(h.c.id, "cel", h.el, { u: ready, cd: ready ? 0 : -1 }) || icEl(h.el)}<b>Celestial</b></div>${ready ? `<div class="ds rd">${skDesc(h, celSk(h), -1)}</div>` : `<div class="pips">${Array.from({ length: 9 }, (_, q) => `<i class="${q < g ? "on" : ""}"></i>`).join("")}</div>`}`, "cel" + (ready ? " ready" : ""), !ready);
+  const celSpi = heroSp(h.c.id, "cel", h.el, { u: ready, cd: ready ? 0 : -1 });
+  const cel = cell("cel", `${celSpi ? celSpi : `<div class="t">${icEl(h.el)}<b>Celestial</b></div>${ready ? `<div class="ds rd">${skDesc(h, celSk(h), -1)}</div>` : ""}`}${ready ? "" : `<div class="pips">${Array.from({ length: 9 }, (_, q) => `<i class="${q < g ? "on" : ""}"></i>`).join("")}</div>`}`, "cel" + (celSpi ? " ico" : "") + (ready ? " ready" : ""), !ready);
   return `<div class="gridm">
     ${cell("atk", `<div class="t"><span class="ic grdi" style="--c:#ffd9a0">${SWORD_SVG}</span><b>Attaque</b></div><div class="ds vv">${fmt(skDmgVal(h, 100, -1))}</div>`, "small")}
     ${cell("grd", `<div class="t"><span class="ic grdi" style="--c:#9fc0ff">${SHIELD_SVG}</span><b>Garde</b></div><div class="ds vv">−50 %</div>`, "small grd")}
@@ -5054,7 +5062,25 @@ function settingsOpen(confirm) {
 document.addEventListener("input", (e) => { if (e.target && e.target.id === "musvol") { setMusVolume(e.target.value / 100); const l = document.getElementById("musvolv"); if (l) l.textContent = e.target.value + " %"; } });
 
 // ===================== ÉVÉNEMENTS =====================
+// appui long sur une icône de sort : affiche son nom et sa description (le clic qui suit est ignoré)
+let LP = { t: 0, at: 0, tip: null };
+function lpHide() { clearTimeout(LP.t); if (LP.tip) { LP.tip.remove(); LP.tip = null; LP.at = Date.now(); } }
+document.addEventListener("pointerdown", (e) => {
+  const b = e.target.closest && e.target.closest(".cg.ico"); lpHide(); if (!b || !F) return;
+  LP.t = setTimeout(() => {
+    const h = F.heroes[F.active], raw = b.dataset.i, si = raw === "cel" ? raw : +raw; if (!h) return;
+    const sk = getSk(h, si); if (!sk) return;
+    const tip = document.createElement("div"); tip.className = "lptip";
+    tip.innerHTML = `<b>${sk.n}</b>${typeof si === "number" && h.cd[si] > 0 ? `<em>Recharge : ${h.cd[si]} tour${h.cd[si] > 1 ? "s" : ""}</em>` : ""}<p>${skDesc(h, sk, si === "cel" ? -1 : si)}${comboTag(h, sk)}</p>`;
+    document.body.appendChild(tip); LP.tip = tip;
+    const r = b.getBoundingClientRect(), w = tip.offsetWidth;
+    tip.style.left = Math.max(6, Math.min(innerWidth - w - 6, r.left + r.width / 2 - w / 2)) + "px"; tip.style.bottom = innerHeight - r.top + 8 + "px";
+  }, 380);
+});
+["pointerup", "pointercancel", "pointerleave", "scroll"].forEach((ev) => document.addEventListener(ev, lpHide, true));
+document.addEventListener("contextmenu", (e) => { if (e.target.closest && e.target.closest(".cg.ico")) e.preventDefault(); });
 document.addEventListener("click", (e) => {
+  if (Date.now() - LP.at < 700 && e.target.closest(".cg.ico")) { e.stopImmediatePropagation(); return; }
   const t = e.target.closest("[data-act]"); if (!t) return;
   const a = t.dataset.act;
   if (a === "closesheet") { if (e.target === t || t.tagName === "BUTTON") t.closest(".sheet")?.remove(); return; }
