@@ -1462,6 +1462,8 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .scr.prep .tm .note{font-size:10.5px}
 .scr.prep .blessings{gap:4px}
 .scr.prep .bless{font-size:11px;padding:0 7px}
+.intent.alert{border-color:#ff3b30!important;box-shadow:0 0 14px rgba(255,59,48,.7)}
+.inext{display:block;font-style:normal;font-size:10.5px;color:var(--muted);margin-top:2px}
 .bsl{display:flex;flex-direction:column;gap:8px}
 .bs{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px}
 .bs.lk{opacity:.55}
@@ -2008,7 +2010,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 52; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 53; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4306,6 +4308,7 @@ const NEG = ["burn", "poison", "bleed", "atkdown", "healblock"];
 const DOTS = ["burn", "poison", "bleed"];
 const STL = { buff: ["ATK↑", 1], atkdown: ["ATK↓", 0], dr: ["Garde", 1], taunt: ["Provoc.", 1], counter: ["Riposte", 1], regen: ["Régén.", 1], evade: ["Esquive", 1],
   execimm: ["Anti-exéc.", 1], vanish: ["Intouchable", 1], decoy: ["Leurre", 1], nxt: ["Prochain+", 1], ash: ["Cendres", 1],
+  exposed: ["Exposé", 0],
   burn: ["Brûlure", 0], poison: ["Poison", 0], bleed: ["Saign.", 0], healblock: ["Anti-soin", 0], defdown: ["DEF↓", 0], mark: ["Marque", 0], selfatk: ["ATK↑", 1], reflect: ["Renvoi", 1] };
 const sum = (st, k) => st.filter((s) => s.k === k).reduce((a, s) => a + (s.p || 0), 0);
 const md = () => (S.run && S.run.mods) || {};
@@ -4358,14 +4361,27 @@ function startFight() {
   newRound(true);
   log(`${boss.name} vous barre la route.`);
 }
-function pickIntent() {
-  const b = F.boss, pat = b.phase === 3 && b.p3 ? b.p3 : b.phase >= 2 ? b.p2 : b.p1;
+// règles de mode : Normal soigne l'équipe entre les phases (30 %, à régler), pas Héroïque ni Mythique
+function phaseHeal(b) {
+  if ((b.mode || "n") !== "n" || !F) return;
+  F.heroes.forEach((h) => { if (!h.dead) healHero(h, h.maxHp * 0.3, true); });
+  log("L'équipe reprend son souffle (+30 % PV).");
+}
+function nextMove(b) {
+  const pat = b.phase === 3 && b.p3 ? b.p3 : b.phase >= 2 ? b.p2 : b.p1;
   b.mcd = b.mcd || {};
   for (const k in b.mcd) if (b.mcd[k] > 0) b.mcd[k]--;
   let pick = null;
   for (let t = 0; t < pat.length && !pick; t++) { const k = pat[(b.step + t) % pat.length]; if (!(b.moves[k].cd && b.mcd[k] > 0)) { pick = k; b.step += t; } }
-  b.intent = pick || pat[b.step % pat.length]; b.step++;
-  if (b.moves[b.intent].cd) b.mcd[b.intent] = b.moves[b.intent].cd;
+  const key = pick || pat[b.step % pat.length]; b.step++;
+  if (b.moves[key].cd) b.mcd[key] = b.moves[key].cd;
+  return key;
+}
+// annonce 2 tours à l'avance : b.intent (prochain tour du boss) + b.queue[0] (celui d'après)
+function pickIntent() {
+  const b = F.boss; b.queue = b.queue || [];
+  if (!b.queue.length) b.queue.push(nextMove(b));
+  b.intent = b.queue.shift(); b.queue.push(nextMove(b));
   const al = alive(); b.aim = al.length ? F.heroes.indexOf(rnd(al)) : -1;
 }
 // Héros visés par la prochaine technique du boss (même logique que bossAct)
@@ -4623,7 +4639,9 @@ function update() {
     it.className = "intent" + (mv.big ? " big" : "");
     const tg = bossTargets();
     const tl = mv.t === "self" ? "" : mv.t === "aoe" ? "Toute l'équipe" : mv.t === "multi" ? `${mv.hits} coups au hasard` : tg[0] ? tg[0].c.name : "";
-    it.title = mv.d; it.innerHTML = `<i>${g}</i><b>${mv.n}</b>${tl ? `<em class="itg">🎯 ${tl}</em>` : ""}<span class="idsc">${mv.d}</span>`;
+    const nx = b.queue && b.queue[0] ? b.moves[b.queue[0]] : null, alert = mv.fatal && b.mode === "m";
+    if (alert) it.className += " alert";
+    it.title = mv.d; it.innerHTML = `<i>${g}</i><b>${alert ? "⚠ ACTION FATALE · " : ""}${mv.n}</b>${tl ? `<em class="itg">🎯 ${tl}</em>` : ""}<span class="idsc">${mv.d}</span>${nx ? `<em class="inext">Ensuite : ${nx.n}</em>` : ""}`;
   }
   const aims = bossTargets();
   const order = F.heroes.map((h, i) => ({ h, i })).filter((o) => !o.h.dead);
@@ -4854,7 +4872,7 @@ function dmgBoss(h, m, o = {}) {
   const weak = weakTo(b.el) === el;
   discover(b, el, type);
   if (weak) d *= 1.5 * (1 + (mods.weak || 0));
-  d *= 1 + sum(b.st, "mark");
+  d *= 1 + sum(b.st, "mark") + sum(b.st, "exposed");
   if (o.exec && b.hp / b.maxHp < 0.35) d *= o.exec;
   d *= 1 - Math.min(0.6, sum(b.st, "dr"));
   const crit = o.crit || Math.random() < 0.08 + (mods.crit || 0); if (crit) d *= 1.6;
@@ -4870,7 +4888,7 @@ function dmgBoss(h, m, o = {}) {
   const rf = b.st.find((s) => s.k === "reflect" && s.type === type);
   if (rf && d > 0) hurtHero(h, d * rf.p, { raw: true, noCounter: true });
   if (b.phase === 1 && b.hp > 0 && b.hp / b.maxHp < 0.5) {
-    b.phase = 2; b.step = 0; log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
+    b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
     if (!b.stun) pickIntent();
   }
   return toHp;
@@ -4884,6 +4902,7 @@ function hurtHero(h, raw, o = {}) {
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
   if (F.mirrorOn && !o.dot) F.mirror = (F.mirror || 0) + d;
   if (h.shield > 0) { const a = Math.min(h.shield, d); h.shield -= a; d -= a; if (a) floatAt(el, "−" + fmt(a), "shield"); }
+  if (o.floorPct != null && o.type) { d = Math.min(d, Math.max(0, h.hp - Math.ceil(h.maxHp * o.floorPct))); }
   if (d > 0) { h.hp -= d; floatAt(el, "−" + fmt(d), o.dot ? "dot" : "hurt"); flashCls(el, "hit"); }
   if (h.hp <= 0 && h.st.some((s) => s.k === "ash")) { h.st = h.st.filter((s) => s.k !== "ash"); h.hp = 1; floatAt(el, "Cendres du phénix", "heal"); log(`${h.c.name} renaît de ses cendres (1 PV).`); }
   if (h.hp <= 0) {
@@ -4972,11 +4991,12 @@ async function useSkill(hi, si, ti) {
       case "charge": h.charge = Math.min(fx.max || 5, (h.charge || 0) + fx.n); floatAt(heroEl(h), h.id === "s6" ? `Braises ${h.charge}/3` : `Charges ${h.charge}/5`, "info"); break;
       case "sheathe": if (h.id === "p1") { h.sheath = true; h.draw = 0; floatAt(heroEl(h), "Rengainé", "info"); } break;
       case "ash": supportFx("heal", tg); tg.forEach((t) => addSt(t, { k: "ash", d: fx.d || 4 })); break;
-      case "revive": F.heroes.forEach((t) => { if (t.dead) { t.dead = false; setTimeout(() => supportFx("revive", [t]), 30); t.hp = Math.round(t.maxHp * (fx.p + (fx.pPer || 0) * (h.charge || 0))); t.acted = true; floatAt(heroEl(t), "Ranimé", "heal"); log(`${t.c.name} revient au combat !`); } }); break;
+      case "revive": if (b.mode === "m") { floatAt(heroEl(h), "Résurrection impossible", "info"); log("En Mythique, un héros tombé reste tombé."); break; } F.heroes.forEach((t) => { if (t.dead) { t.dead = false; setTimeout(() => supportFx("revive", [t]), 30); t.hp = Math.round(t.maxHp * (fx.p + (fx.pPer || 0) * (h.charge || 0))); t.acted = true; floatAt(heroEl(t), "Ranimé", "heal"); log(`${t.c.name} revient au combat !`); } }); break;
     }
   }
   if (cb) applyCombo(cb, h);
   if (sk.discharge) h.charge = 0;
+  if (b.mode === "h" && sk.fx.some((f) => f.k === "revive")) h.cd[si] += 1;
   if (num) h.cd[si] = sk.cd ? Math.max(1, sk.cd - ((hm.cd || [])[si] || 0) - awCd(h.id, si)) : 0;
   h.acted = true; F.acting = null;
   update();
@@ -4993,7 +5013,7 @@ async function rebirthCine(b) {
   musStop(); sfxBreak && sfxBreak();
   requestAnimationFrame(() => ov.classList.add("on"));
   await sleep(1100);
-  b.hp = Math.round(b.maxHp * b.rebirth); b.st = []; b.shield = 0; b.phase = 3; b.step = 0; b.stun = false; b.enr = 0;
+  b.hp = Math.round(b.maxHp * b.rebirth); b.st = []; b.shield = 0; b.phase = 3; b.step = 0; b.queue = []; b.stun = false; b.enr = 0; phaseHeal(b);
   F.heroes.forEach((h) => { h.st = h.st.filter((s) => !(s.k === "poison" || s.k === "atkdown")); });
   pickIntent(); update(); log(b.name + " revient sous sa forme véritable !");
   await sleep(1500);
@@ -5004,7 +5024,7 @@ async function bossDown() {
   const b = F.boss;
   if (b.rebirth && !b.reborn && b.forms) { b.reborn = true; await rebirthCine(b); return false; }
   if (b.rebirth && !b.reborn) {
-    b.reborn = true; b.hp = Math.round(b.maxHp * b.rebirth); b.st = b.st.filter((s) => !DOTS.includes(s.k)); b.phase = 2;
+    b.reborn = true; b.hp = Math.round(b.maxHp * b.rebirth); b.st = b.st.filter((s) => !DOTS.includes(s.k)); b.phase = 2; b.queue = []; phaseHeal(b);
     log(`${b.name} renaît de ses cendres !`); pop("RENAISSANCE", "#ff8a1f"); update(); await sleep(900);
     return false;
   }
@@ -5060,9 +5080,11 @@ async function bossAct(mv) {
   await sleep(320);
   if (mv.t !== "self") { lightAt("party", mv.type === "m" ? ELEM[b.el].c : "#ff5a3a", mv.big); cam(mv.big ? "shake-b" : "shake-s"); }
   const taunter = () => alive().find((h) => h.st.some((s) => s.k === "taunt"));
+  const hitLog = []; let parried = false;
   const hitOne = (h, m) => {
+    hitLog.push({ sh: h.shield > 0, dr: hDr(h), taunt: h.st.some((s) => s.k === "taunt") });
     bossHitFx(h, mv, b.el); sfxBossHit(mv, b.el);
-    const d = hurtHero(h, bAtk() * m, { type: mv.type });
+    const d = hurtHero(h, bAtk() * m, { type: mv.type, floorPct: mv.t === "exec" ? { n: 0.4, h: 0.1, m: 0 }[b.mode || "n"] : 0 });
     if (fx.drain && d > 0) { const v = Math.round(d * fx.drain); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bossEl(), "+" + fmt(v), "heal"); }
   };
   const neg = (h) => {
@@ -5076,14 +5098,18 @@ async function bossAct(mv) {
     const t = bossTargets()[0];
     if (t) {
       const dc = t.st.find((s) => s.k === "decoy");
-      if (dc) { t.st = t.st.filter((s) => s !== dc); floatAt(heroEl(t), "Leurre", "info"); log(`Le leurre de ${t.c.name} absorbe l'attaque.`); bossHitFx(t, mv, b.el); }
-      else if (mv.t === "exec" && t.st.some((s) => s.k === "execimm")) { floatAt(heroEl(t), "Immunisé", "info"); log(`${t.c.name} est immunisé à l'exécution.`); }
+      if (dc) { parried = true; t.st = t.st.filter((s) => s !== dc); floatAt(heroEl(t), "Leurre", "info"); log(`Le leurre de ${t.c.name} absorbe l'attaque.`); bossHitFx(t, mv, b.el); }
+      else if (mv.t === "exec" && t.st.some((s) => s.k === "execimm")) { parried = true; floatAt(heroEl(t), "Immunisé", "info"); log(`${t.c.name} est immunisé à l'exécution.`); }
       else { hitOne(t, mv.m); neg(t); }
     }
   } else if (mv.t === "multi") {
     for (let i = 0; i < mv.hits; i++) { const al = alive(); if (!al.length) break; const sk0 = F.soak && F.heroes[F.soak.hi] && !F.heroes[F.soak.hi].dead ? F.heroes[F.soak.hi] : null, vis = al.filter((h) => !h.st.some((s) => s.k === "vanish")), t = sk0 || taunter() || rnd(vis.length ? vis : al); hitOne(t, mv.m); update(); await sleep(200); }
   } else if (mv.t === "aoe") {
     (F.soak && F.heroes[F.soak.hi] && !F.heroes[F.soak.hi].dead ? [F.heroes[F.soak.hi]] : alive()).forEach((h) => { hitOne(h, mv.m); neg(h); });
+  }
+  if (mv.expose && b.hp > 0) {
+    const ok = mv.expose === "shield" ? hitLog.length > 0 && hitLog.every((e) => e.sh || e.dr >= 0.4) : mv.expose === "taunt" ? hitLog.some((e) => e.taunt) : mv.expose === "parry" ? parried || hitLog.some((e) => e.taunt) : false;
+    if (ok) { const mult = (b.mode || "n") === "n" ? 2 : 1.5; addSt(b, { k: "exposed", p: mult - 1, d: 1 }); pop("EXPOSÉ ×" + String(mult).replace(".", ","), "#ffd25a"); log(`${b.name} est exposé : dégâts ×${String(mult).replace(".", ",")} au prochain tour.`); sfxDiscover(); }
   }
   if (fxOn()) { const P = bossP(); if (P) { if (fx.selfheal) fxPlus(P, "#7dffb0"); if (fx.shield || fx.reflect || fx.evade || fx.dr) fxRing(P, "#8fd0ff", 1.2); if (fx.selfatk || fx.enrage) fxRise(P, "#ff5a3a"); } }
   if (fx.selfheal) { const v = Math.round(b.maxHp * fx.selfheal); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bossEl(), "+" + fmt(v), "heal"); }
