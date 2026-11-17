@@ -1503,7 +1503,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .fight .binfo{left:14px!important;bottom:90px!important;max-width:300px;z-index:20}
 /* commandes */
 .fight .cmd{left:318px!important;right:0!important;bottom:0!important;top:auto!important;width:auto!important;height:82px;z-index:20;background:none!important;border:0!important;padding:8px 12px!important;backdrop-filter:none!important;border-radius:0!important;display:flex;align-items:center;box-sizing:border-box}
-.fight .cmd .vrow{display:grid;grid-template-columns:62px 62px repeat(3,minmax(0,1fr));gap:6px;width:100%}
+.fight .cmd .vrow{display:grid;grid-template-columns:96px repeat(4,minmax(0,1fr));gap:6px;width:100%}
 .fight .cmd .waitmsg{width:100%;min-height:0;height:62px;border:1px dashed var(--line2);border-radius:8px;display:grid;place-items:center;color:var(--muted);font-size:13px}
 .fight .cmd .pend{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
 .fight .cmd .pend b{display:block;font-family:var(--display);font-size:15px}.fight .cmd .pend span{font-size:12px;color:var(--muted)}
@@ -1846,6 +1846,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .fight.ug .bhud{width:300px!important;right:auto!important;bottom:auto!important;pointer-events:none;align-items:center;transition:none}
 .fight.ug .bhud .bn{justify-content:center;gap:6px}
 .fight.ug .bhud .bn b{font-size:19px;font-family:var(--display);letter-spacing:.04em;text-shadow:0 2px 4px #000,0 0 10px rgba(0,0,0,.8);color:#f2e7d3}
+.cg.foc{grid-column:1/-1}
 .gridm{display:grid;grid-template-columns:1fr 1fr;gap:calc(5*var(--u))}
 .cg{position:relative;display:block;text-align:left;box-sizing:border-box;min-height:calc(46*var(--u));padding:calc(4*var(--u)) calc(7*var(--u));background:linear-gradient(90deg,rgba(14,8,11,.6),rgba(14,8,11,.88));color:#f2e7d3;border:calc(1*var(--u)) solid rgba(255,255,255,.12);border-radius:calc(6*var(--u));font:inherit;cursor:pointer}
 .cg::before{content:"";position:absolute;inset:calc(-3*var(--u))}
@@ -1997,7 +1998,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 49; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 50; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2204,6 +2205,164 @@ CHARS.forEach((c) => { if (!c.skills[0].cd) c.skills[0].cd = 2; c.skills.forEach
 const skEl = (h, sk) => (sk && sk.el) || h.el;
 const eli = (e) => `<i class="eli" style="--c:${ELEM[e].c}" title="${ELEM[e].n}">${ELEM[e].k}</i>`;
 const CH = Object.fromEntries(CHARS.map((c) => [c.id, c]));
+
+// ===================== KITS DES 24 HÉROS (redesign puzzle-combat) =====================
+// 3 compétences + 1 ultime (index 3) ; l'action commune Concentration remplace Attaque et Garde.
+// Recharges de départ (à tester) : compétence 1 : 1-2 · compétence 2 : 3 · compétence 3 : 4 · ultime : 6 (disponible dès le tour 3).
+// fx : dmg{m,hits,pen,exec,perCharge} dot{s,m,d} debuff{s,p,d} mark{p,d} heal{m} healPct{p} shield{p} taunt{d} dr{p,d} buff{p,d} counter{p,d}
+//      regen{p,d} evade{p,d} cleanse cdr{n} revive{p} | nouveaux : execimm{d} vanish{d} decoy delay soak{p} mirror nxt{p} charge{n} sheathe ash{d}
+//      on:"self"|"allies" force la cible de l'effet.
+const KITS = {
+  // ---------- GARDIENS ----------
+  t1: [
+    { n: "Bâton lourd", d: "Frappe à 110 % ATK.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.1, post: 14 }] },
+    { n: "Vœu de la montagne", d: "Provoque 2 tours et réduit ses dégâts subis de 50 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.5, d: 2 }] },
+    { n: "Mur de prière", d: "Équipe : bouclier de 15 % PV et −20 % de dégâts subis (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "dr", p: 0.2, d: 2 }] },
+    { n: "Mille prières, une montagne", d: "Tous les coups du boss ce tour visent Bao, qui subit 70 % de dégâts en moins.", cd: 6, tgt: "self", ult: 1, fx: [{ k: "soak", p: 0.7 }] },
+  ],
+  t2: [
+    { n: "Estoc de lance", d: "Frappe à 120 % ATK et provoque 1 tour.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "taunt", d: 1, on: "self" }] },
+    { n: "Défi du pont", d: "Provoque 2 tours, −35 % de dégâts subis et riposte à 90 % ATK quand elle est frappée.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.35, d: 2 }, { k: "counter", p: 0.9, d: 2 }] },
+    { n: "Barrage", d: "Équipe : bouclier de 12 % PV.", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.12 }] },
+    { n: "Le pont ne tombera pas", d: "Équipe immunisée aux exécutions pendant 2 tours. Hana riposte à 150 % ATK.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "execimm", d: 2 }, { k: "counter", p: 1.5, d: 2, on: "self" }] },
+  ],
+  t3: [
+    { n: "Marteau de pierre", d: "Frappe à 120 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2, post: 18 }] },
+    { n: "Racines profondes", d: "Provoque 2 tours et bouclier de 25 % PV.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "shield", p: 0.25 }] },
+    { n: "Grand séisme", d: "Frappe à 200 % ATK et réduit l'ATK du boss de 30 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 2.0, post: 45 }, { k: "debuff", s: "atk", p: 0.3, d: 2 }] },
+    { n: "Le Rocher s'éveille", d: "Frappe à 400 % ATK et repousse la prochaine action du boss d'un tour.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.0, post: 70 }, { k: "delay" }] },
+  ],
+  t4: [
+    { n: "Coup d'éventail", d: "Frappe à 90 % ATK et réduit la DEF du boss de 10 % (2 tours).", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 0.9 }, { k: "debuff", s: "def", p: 0.1, d: 2 }] },
+    { n: "Reflet-leurre", d: "Un allié reçoit un leurre : il absorbe la prochaine attaque à cible unique ou exécution qui le vise.", cd: 3, tgt: "ally", fx: [{ k: "decoy" }] },
+    { n: "Rempart d'acier", d: "Équipe : bouclier de 14 % PV et −15 % de dégâts subis (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.14 }, { k: "dr", p: 0.15, d: 2 }] },
+    { n: "Cent éventails, un seul miroir", d: "Renvoie au boss 100 % des dégâts subis par l'équipe ce tour.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "mirror" }] },
+  ],
+  t5: [
+    { n: "Choc de carapace", d: "Frappe à 90 % ATK et bouclier perso de 6 % PV.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 0.9 }, { k: "shield", p: 0.06, on: "self" }] },
+    { n: "Carapace abyssale", d: "Provoque 2 tours et réduit ses dégâts subis de 50 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.5, d: 2 }] },
+    { n: "Marée protectrice", d: "Équipe : retire les malus et régénère 6 % PV par tour (3 tours).", cd: 4, tgt: "allies", fx: [{ k: "cleanse" }, { k: "regen", p: 0.06, d: 3 }] },
+    { n: "Le Nord s'abat", d: "Équipe : −60 % de dégâts subis (2 tours) et le boss est retardé d'un tour.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "dr", p: 0.6, d: 2 }, { k: "delay" }] },
+  ],
+  t6: [
+    { n: "Kesagiri", d: "Frappe à 120 % ATK et bouclier perso de 8 % PV.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "shield", p: 0.08, on: "self" }] },
+    { n: "Posture du dragon", d: "Provoque 2 tours, −30 % de dégâts subis et riposte à 100 % ATK.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.3, d: 2 }, { k: "counter", p: 1.0, d: 2 }] },
+    { n: "Écailles de jade", d: "Équipe : bouclier de 15 % PV et ATK +20 % (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "buff", p: 0.2, d: 2 }] },
+    { n: "Dragon Azur, tranche le ciel", d: "Frappe à 450 % ATK. ATK de l'équipe +30 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.5, post: 80 }, { k: "buff", p: 0.3, d: 2, on: "allies" }] },
+  ],
+  // ---------- LAMES ----------
+  p1: [
+    { n: "Iaijutsu", d: "Frappe à 130 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.3, post: 20 }] },
+    { n: "Posture d'iaï", d: "Esquive 80 % des attaques (1 tour), rengaine et la prochaine attaque inflige +60 % de dégâts.", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.8, d: 1 }, { k: "nxt", p: 0.6 }, { k: "sheathe" }] },
+    { n: "Double entaille", d: "Deux coups à 85 % ATK. Le boss subit +20 % de dégâts (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.85, hits: 2 }, { k: "mark", p: 0.2, d: 2 }] },
+    { n: "Dernier iaï", d: "Coup unique à 500 % ATK qui ignore la défense.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 5.0, pen: 1, post: 90 }] },
+  ],
+  p2: [
+    { n: "Pointe de bambou", d: "Frappe à 100 % ATK puis Saignement (35 % ATK/tour, 2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0 }, { k: "dot", s: "bleed", m: 0.35, d: 2 }] },
+    { n: "Disparition", d: "Ne peut pas être visée par une attaque à cible unique ce tour.", cd: 3, tgt: "self", fx: [{ k: "vanish", d: 1 }] },
+    { n: "Pluie de lances", d: "Quatre coups à 60 % ATK puis Poison (30 % ATK/tour, 3 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 4 }, { k: "dot", s: "poison", m: 0.3, d: 3 }] },
+    { n: "Forêt de lances", d: "Huit coups à 50 % ATK puis Poison fort (50 % ATK/tour, 4 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.5, hits: 8, post: 5 }, { k: "dot", s: "poison", m: 0.5, d: 4 }] },
+  ],
+  p3: [
+    { n: "Pas de flamme", d: "Deux coups à 70 % ATK. Esquive 40 % des attaques (1 tour).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.7, hits: 2 }, { k: "evade", p: 0.4, d: 1 }] },
+    { n: "Danse embrasée", d: "Équipe : ATK +30 % (2 tours).", cd: 3, tgt: "allies", fx: [{ k: "buff", p: 0.3, d: 2 }] },
+    { n: "Lotus de feu", d: "Cinq coups à 75 % ATK puis Brûlure (40 % ATK/tour, 3 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.75, hits: 5 }, { k: "dot", s: "burn", m: 0.4, d: 3 }] },
+    { n: "Danse des mille braises", d: "Huit coups à 50 % ATK, Brûlure forte (50 % ATK/tour, 3 tours) et ATK d'équipe +20 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.5, hits: 8, post: 5 }, { k: "dot", s: "burn", m: 0.5, d: 3 }, { k: "buff", p: 0.2, d: 2, on: "allies" }] },
+  ],
+  p4: [
+    { n: "Griffe du tigre", d: "Frappe à 100 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 15 }] },
+    { n: "Peau de tigre", d: "−50 % de dégâts subis (2 tours) et riposte à 40 % ATK.", cd: 3, tgt: "self", fx: [{ k: "dr", p: 0.5, d: 2 }, { k: "counter", p: 0.4, d: 2 }] },
+    { n: "Rugissement", d: "Frappe à 50 % ATK et réduit la DEF du boss de 30 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, post: 30 }, { k: "debuff", s: "def", p: 0.3, d: 2 }] },
+    { n: "Tigre des cent montagnes", d: "Huit coups à 40 % ATK qui ignorent l'armure.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.4, hits: 8, pen: 1, post: 5 }] },
+  ],
+  p5: [
+    { n: "Bâton tournoyant", d: "Deux coups à 60 % ATK et ATK +15 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 2, post: 8 }, { k: "buff", p: 0.15, d: 2, on: "self" }] },
+    { n: "Clones de poil", d: "Esquive 60 % des attaques et ATK +30 % pendant 2 tours.", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.6, d: 2 }, { k: "buff", p: 0.3, d: 2 }] },
+    { n: "Bâton des mille lieues", el: "terre", d: "Coup colossal à 320 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 3.2, post: 60 }] },
+    { n: "Le Roi Singe renverse le ciel", d: "Frappe à 600 % ATK. Esquive d'équipe 40 % (1 tour).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 6.0, post: 90 }, { k: "evade", p: 0.4, d: 1, on: "allies" }] },
+  ],
+  p6: [
+    { n: "Croissant", d: "Frappe à 120 % ATK, le boss subit +10 % de dégâts (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.1, d: 2 }] },
+    { n: "Marque lunaire", d: "Le boss subit +30 % de dégâts (2 tours). Aucune attaque.", cd: 3, tgt: "boss", fx: [{ k: "mark", p: 0.3, d: 2 }] },
+    { n: "Éclipse", d: "Frappe à 300 % ATK, ×1,6 si le boss a moins de 35 % PV.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 3.0, exec: 1.6 }] },
+    { n: "Éclipse totale", d: "Frappe à 700 % ATK, ×2 si le boss a moins de 35 % PV.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 7.0, exec: 2.0, post: 100 }] },
+  ],
+  // ---------- ARCANISTES ----------
+  m1: [
+    { n: "Ofuda de givre", d: "Sort à 100 % ATK, ATK du boss −10 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0 }, { k: "debuff", s: "atk", p: 0.1, d: 2 }] },
+    { n: "Sceau purificateur", d: "Un allié : retire les malus et bouclier de 8 % PV.", cd: 3, tgt: "ally", fx: [{ k: "cleanse" }, { k: "shield", p: 0.08 }] },
+    { n: "Shikigami de neige", d: "Trois esprits frappent à 75 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.75, hits: 3 }] },
+    { n: "Tempête de neige", d: "Sort à 250 % ATK, ATK du boss −40 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 2.5, post: 70 }, { k: "debuff", s: "atk", p: 0.4, d: 2 }] },
+  ],
+  m2: [
+    { n: "Pilule explosive", d: "Sort à 100 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 28 }] },
+    { n: "Fumée protectrice", d: "Bouclier perso puissant de 20 % PV.", cd: 3, tgt: "self", fx: [{ k: "shield", p: 0.2 }] },
+    { n: "Grand fourneau", d: "Explosion à 220 % ATK puis Brûlure (30 % ATK/tour, 3 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 2.2, post: 15 }, { k: "dot", s: "burn", m: 0.3, d: 3 }] },
+    { n: "Philtre ardent", d: "Sort à 300 % ATK puis Brûlure massive (60 % ATK/tour, 4 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.0, post: 70 }, { k: "dot", s: "burn", m: 0.6, d: 4 }] },
+  ],
+  m3: [
+    { n: "Kitsunebi", d: "Deux feux follets à 55 % ATK puis Brûlure (25 % ATK/tour, 2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.55, hits: 2 }, { k: "dot", s: "burn", m: 0.25, d: 2 }] },
+    { n: "Illusion", d: "ATK du boss −30 % et DEF −15 % (2 tours).", cd: 3, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
+    { n: "Six flammes", d: "Six coups à 50 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 6 }] },
+    { n: "Danse des cent feux", d: "Neuf flammes à 45 % ATK, Brûlure (40 % ATK/tour, 3 tours) et ATK du boss −20 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.45, hits: 9, post: 5 }, { k: "dot", s: "burn", m: 0.4, d: 3 }, { k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+  ],
+  m4: [
+    { n: "Trait de pinceau", d: "Sort à 120 % ATK, DEF du boss −15 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2, post: 25 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
+    { n: "Calligraphie protectrice", d: "Équipe : bouclier de 10 % PV. Un allié : retire un malus.", cd: 3, tgt: "ally", fx: [{ k: "shield", p: 0.1, on: "allies" }, { k: "cleanse" }] },
+    { n: "Encre empoisonnée", d: "Poison (30 % ATK/tour, 3 tours) et ATK du boss −20 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dot", s: "poison", m: 0.3, d: 3 }, { k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+    { n: "Poème de la tempête", d: "Sort à 320 % ATK. Le boss subit +25 % de dégâts (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.2, post: 70 }, { k: "mark", p: 0.25, d: 2 }] },
+  ],
+  m5: [
+    { n: "Perle d'eau", d: "Sort à 120 % ATK et bouclier perso de 8 % PV.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "shield", p: 0.08, on: "self" }] },
+    { n: "Carapace de perle", d: "Bouclier perso de 30 % PV.", cd: 3, tgt: "self", fx: [{ k: "shield", p: 0.3 }] },
+    { n: "Torrent céleste", d: "Sort à 160 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 1.6, post: 30 }] },
+    { n: "Courroux du Dragon", d: "Sort colossal à 400 % ATK.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.0, post: 90 }] },
+  ],
+  m6: [
+    { n: "Étincelle", d: "Deux éclairs à 60 % ATK. +1 charge (max 5).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 2 }, { k: "charge", n: 1 }] },
+    { n: "Charge statique", d: "Bouclier perso de 20 % PV. +2 charges (max 5).", cd: 3, tgt: "self", fx: [{ k: "shield", p: 0.2 }, { k: "charge", n: 2 }] },
+    { n: "Tambour du tonnerre", d: "Consomme toutes les charges : 100 % ATK + 60 % ATK par charge, DEF du boss −30 % (2 tours).", cd: 4, tgt: "boss", discharge: 1, fx: [{ k: "dmg", m: 1.0, perCharge: 0.6, post: 40 }, { k: "debuff", s: "def", p: 0.3, d: 2 }] },
+    { n: "Jugement céleste", d: "Cinq éclairs à 80 % ATK.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.8, hits: 5, post: 20 }] },
+  ],
+  // ---------- SOUTIENS ----------
+  s1: [
+    { n: "Clochette", d: "Un allié : soigne 200 % ATK.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 2.0 }] },
+    { n: "Bourgeons", d: "Équipe : régénère 10 % PV par tour (3 tours) et −25 % de dégâts subis (2 tours).", cd: 3, tgt: "allies", fx: [{ k: "regen", p: 0.1, d: 3 }, { k: "dr", p: 0.25, d: 2 }] },
+    { n: "Racines de vie", d: "Un allié : retire les malus et soigne 50 % PV.", cd: 4, tgt: "ally", fx: [{ k: "cleanse" }, { k: "healPct", p: 0.5 }] },
+    { n: "Floraison", d: "Ressuscite les alliés tombés à 35 % PV et soigne l'équipe de 25 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.35 }, { k: "healPct", p: 0.25 }] },
+  ],
+  s2: [
+    { n: "Air apaisant", d: "Un allié : soigne 170 % ATK et retire les malus.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.7 }, { k: "cleanse" }] },
+    { n: "Brume des eaux", d: "Équipe : bouclier de 15 % PV.", cd: 3, tgt: "allies", fx: [{ k: "shield", p: 0.15 }] },
+    { n: "Mélodie hypnotique", d: "ATK du boss −20 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+    { n: "Requiem des eaux", d: "Ressuscite les alliés tombés à 30 % PV, soigne l'équipe de 20 % PV et −30 % de dégâts subis (2 tours).", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.3 }, { k: "healPct", p: 0.2 }, { k: "dr", p: 0.3, d: 2 }] },
+  ],
+  s3: [
+    { n: "Pétale soignant", d: "Un allié : soigne 220 % ATK.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 2.2 }] },
+    { n: "Pluie de pétales", d: "Équipe : soigne 20 % PV.", cd: 3, tgt: "allies", fx: [{ k: "healPct", p: 0.2 }] },
+    { n: "Bénédiction de cerisier", d: "Un allié : bouclier puissant de 35 % PV et retire les malus.", cd: 4, tgt: "ally", fx: [{ k: "shield", p: 0.35 }, { k: "cleanse" }] },
+    { n: "Hanami", d: "Ressuscite les alliés tombés à 35 % PV, soigne l'équipe de 20 % PV et ATK +30 % (2 tours).", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.35 }, { k: "healPct", p: 0.2 }, { k: "buff", p: 0.3, d: 2 }] },
+  ],
+  s4: [
+    { n: "Thé vert", d: "Un allié : soigne 160 % ATK et bouclier de 8 % PV.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.6 }, { k: "shield", p: 0.08 }] },
+    { n: "Cérémonie du thé", d: "Les recharges des alliés sont réduites de 1.", cd: 3, tgt: "allies", fx: [{ k: "cdr", n: 1 }] },
+    { n: "Infusion millénaire", d: "Un allié : soigne 25 % PV et régénère 5 % PV par tour (3 tours).", cd: 4, tgt: "ally", fx: [{ k: "healPct", p: 0.25 }, { k: "regen", p: 0.05, d: 3 }] },
+    { n: "Pause du maître", d: "Les recharges des alliés sont réduites de 2 et l'équipe est soignée de 20 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "cdr", n: 2 }, { k: "healPct", p: 0.2 }] },
+  ],
+  s5: [
+    { n: "Rayon de lune", d: "Un allié : soigne 200 % ATK.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 2.0 }] },
+    { n: "Voile lunaire", d: "Équipe : bouclier de 12 % PV et retire les malus.", cd: 3, tgt: "allies", fx: [{ k: "shield", p: 0.12 }, { k: "cleanse" }] },
+    { n: "Lune d'argent", d: "Un allié : bouclier puissant de 35 % PV et immunité aux exécutions (1 tour).", cd: 4, tgt: "ally", fx: [{ k: "shield", p: 0.35 }, { k: "execimm", d: 1 }] },
+    { n: "Retour de l'âme", d: "Ressuscite les alliés tombés à 50 % PV et soigne les autres de 25 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.5 }, { k: "healPct", p: 0.25 }] },
+  ],
+  s6: [
+    { n: "Plume ardente", d: "Un allié : soigne 150 % ATK et ATK +15 % (2 tours).", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.5 }, { k: "buff", p: 0.15, d: 2 }] },
+    { n: "Cendres du phénix", d: "Un allié : le prochain coup fatal le laisse à 1 PV (une seule fois).", cd: 3, tgt: "ally", fx: [{ k: "ash", d: 4 }] },
+    { n: "Flamme purificatrice", d: "Frappe à 150 % ATK puis Brûlure (30 % ATK/tour, 3 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 1.5, post: 20 }, { k: "dot", s: "burn", m: 0.3, d: 3 }] },
+    { n: "Renaissance", d: "Ressuscite les alliés tombés à 40 % PV et soigne l'équipe de 30 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.4 }, { k: "healPct", p: 0.3 }] },
+  ],
+};
+CHARS.forEach((c) => { if (KITS[c.id]) { c.skills = KITS[c.id]; c.skills.forEach((s) => { if (!s.el) s.el = c.el; }); } });
 
 // ---------- BOSS ----------
 // t: single | aoe | multi | exec | self | charm   fx: burn poison atkdown healblock selfheal shield selfatk reflect evade drain enrage dr
@@ -3909,7 +4068,7 @@ function showDetail(id) {
         <div class="statrow"><div class="stat"><span>PV</span><b>${own ? fmt(st.hp) : "???"}</b></div><div class="stat"><span>ATK</span><b>${own ? fmt(st.atk) : "???"}</b></div><div class="stat"><span>DEF</span><b>${own ? fmt(st.def) : "???"}</b></div></div>
       </div></div>
     <p class="note" style="margin-top:10px" ${own ? "" : "hidden"}>Chaque doublon invoqué ajoute une étoile (+10 % de stats et une amélioration de sort, max 5★). Au-delà, il est converti en jade. Dégâts ${ROLE[c.role].dt === "p" ? "physiques" : "magiques"}.</p>
-    ${own ? "" : `<div class="sk-list"><p class="note">Héros non débloqué : invoque-le pour découvrir ses capacités.</p>${[1, 2, 3].map(() => `<div class="sk"><div class="sk-h"><b>???</b><span>???</span></div><p>???</p></div>`).join("")}</div>`}<div class="sk-list" ${own ? "" : "hidden"}><div class="sk"><div class="sk-h"><b>Attaque · Garde</b><span>Sans recharge</span></div><p>Attaque : 100 % ATK ${ROLE[c.role].dt === "p" ? "physique" : "magique"} de son élément. Garde : −50 % de dégâts subis jusqu'au prochain tour et recharges −1${c.role === "tank" ? ", et provoque le boss" : ""}.</p></div>${c.skills.map((s, i) => `<div class="sk"><div class="sk-h"><b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(s.el) : ""}${s.n}</b><span>Recharge ${s.cd} tours</span></div><p>${s.d}${awTag(id, i)}</p></div>`).join("")}${awList(id)}${kitList(id)}</div>
+    ${own ? "" : `<div class="sk-list"><p class="note">Héros non débloqué : invoque-le pour découvrir ses capacités.</p>${[1, 2, 3, 4].map(() => `<div class="sk"><div class="sk-h"><b>???</b><span>???</span></div><p>???</p></div>`).join("")}</div>`}<div class="sk-list" ${own ? "" : "hidden"}><div class="sk"><div class="sk-h"><b>Attaque · Garde</b><span>Sans recharge</span></div><p>Attaque : 100 % ATK ${ROLE[c.role].dt === "p" ? "physique" : "magique"} de son élément. Garde : −50 % de dégâts subis jusqu'au prochain tour et recharges −1${c.role === "tank" ? ", et provoque le boss" : ""}.</p></div>${c.skills.map((s, i) => `<div class="sk"><div class="sk-h"><b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(s.el) : ""}${s.n}</b><span>Recharge ${s.cd} tours</span></div><p>${s.d}${awTag(id, i)}</p></div>`).join("")}${awList(id)}${kitList(id)}</div>
     <div class="d-acts">${own && !S.run ? `<button class="btn ${inTeam ? "ghost" : ""}" data-act="togd" data-id="${id}">${inTeam ? "Retirer de l'équipe" : "Ajouter à l'équipe"}</button>` : ""}<button class="btn ghost" data-act="closesheet">Fermer</button></div>
   </div>`;
   document.body.appendChild(sh);
@@ -4138,6 +4297,7 @@ const FURY_ROUND = 12;
 const NEG = ["burn", "poison", "bleed", "atkdown", "healblock"];
 const DOTS = ["burn", "poison", "bleed"];
 const STL = { buff: ["ATK↑", 1], atkdown: ["ATK↓", 0], dr: ["Garde", 1], taunt: ["Provoc.", 1], counter: ["Riposte", 1], regen: ["Régén.", 1], evade: ["Esquive", 1],
+  execimm: ["Anti-exéc.", 1], vanish: ["Intouchable", 1], decoy: ["Leurre", 1], nxt: ["Prochain+", 1], ash: ["Cendres", 1],
   burn: ["Brûlure", 0], poison: ["Poison", 0], bleed: ["Saign.", 0], healblock: ["Anti-soin", 0], defdown: ["DEF↓", 0], mark: ["Marque", 0], selfatk: ["ATK↑", 1], reflect: ["Renvoi", 1] };
 const sum = (st, k) => st.filter((s) => s.k === k).reduce((a, s) => a + (s.p || 0), 0);
 const md = () => (S.run && S.run.mods) || {};
@@ -4179,9 +4339,9 @@ function startFight() {
   const m = r.mods || {};
   const heroes = sortRoles(r.heroes.map((x) => x.id)).map((id) => r.heroes.find((x) => x.id === id)).map((rh) => {
     const s = heroStats(rh.id, r), c = kitOf(CH[rh.id]), hp = Math.round(s.hp * rh.hpPct);
-    return { id: rh.id, c, maxHp: s.hp, hp, atk: s.atk, def: s.def, el: c.el, dt: ROLE[c.role].dt, cd: [0, 0, 3], st: [], shield: hp > 0 && m.shield ? Math.round(s.hp * 0.15 * m.shield) : 0, acted: false, dead: hp <= 0 };
+    return { id: rh.id, c, maxHp: s.hp, hp, atk: s.atk, def: s.def, el: c.el, dt: ROLE[c.role].dt, cd: [0, 0, 0, 2], charge: 0, sheath: c.id === "p1", draw: 0, st: [], shield: hp > 0 && m.shield ? Math.round(s.hp * 0.15 * m.shield) : 0, acted: false, dead: hp <= 0 };
   });
-  F = { boss, heroes, round: 1, phase: "player", active: 0, pending: null, busy: false, souls: m.soul || 0, log: [], over: false, gauge: 0, sel: null, acting: null };
+  F = { boss, heroes, round: 1, phase: "player", active: 0, pending: null, busy: false, souls: m.soul || 0, log: [], over: false, gauge: 0, sel: null, acting: null, soak: null, mirrorOn: false, mirror: 0 };
   screen = "fight";
   musStart();
   pickIntent();
@@ -4204,17 +4364,16 @@ function bossTargets() {
   const b = F.boss; if (!b || b.stun || F.over) return [];
   const mv = b.moves[b.intent], al = alive();
   if (!mv || !al.length || mv.t === "self") return [];
+  if (F.soak && F.heroes[F.soak.hi] && !F.heroes[F.soak.hi].dead) return [F.heroes[F.soak.hi]];
   if (mv.t === "aoe" || mv.t === "multi") return al;
+  const vis = al.filter((h) => !h.st.some((s) => s.k === "vanish")), pool = vis.length ? vis : al;
   const tt = al.find((h) => h.st.some((s) => s.k === "taunt")); if (tt) return [tt];
-  if (mv.t === "charm") return [al.slice().sort((x, y) => hAtk(y) - hAtk(x))[0]];
-  if (mv.t === "exec") return [al.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp)[0]];
-  let h = F.heroes[b.aim]; if (!h || h.dead) { h = rnd(al); b.aim = F.heroes.indexOf(h); }
+  if (mv.t === "charm") return [pool.slice().sort((x, y) => hAtk(y) - hAtk(x))[0]];
+  if (mv.t === "exec") return [pool.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp)[0]];
+  let h = F.heroes[b.aim]; if (!h || h.dead || !pool.includes(h)) { h = rnd(pool); b.aim = F.heroes.indexOf(h); }
   return [h];
 }
-const BASIC = { n: "Attaque", d: "Frappe à 100 % ATK.", cd: 0, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 6 }] };
-function guardSk(h) {
-  return { n: "Garde", d: "−50 % de dégâts subis jusqu'à ton prochain tour.", cd: 0, tgt: "self", fx: [{ k: "dr", p: 0.5, d: 1 }] };
-}
+const FOC = { n: "Concentration", d: "Aucune attaque : les recharges de tes compétences baissent de 1 et tu subis 25 % de dégâts en moins ce tour.", cd: 0, tgt: "self", foc: true, fx: [{ k: "dr", p: 0.25, d: 1 }] };
 const AWK = [
   null,
   { si: 0, t: "★2 · Attaque +10 % de puissance" },
@@ -4222,10 +4381,10 @@ const AWK = [
   { si: 2, t: "★4 · Ultime : recharge −1 tour" },
   { si: 2, t: "★5 · Ultime : +50 % de puissance" },
 ];
-const awMul = (id, si) => { const st = stars(id); return si === 0 && st >= 2 ? 1.1 : si === 2 && st >= 5 ? 1.5 : 1; };
-const awCd = (id, si) => (si === 2 && stars(id) >= 4) || (si === 1 && stars(id) >= 3) ? 1 : 0;
+const awMul = () => 1; // redesign : plus de renforcement de statistiques
+const awCd = () => 0;
 const awTag = (id, si) => { const m = awMul(id, si), c = awCd(id, si); return (m > 1 || c) ? ` <em class="awk">★ ${m > 1 ? "+" + Math.round((m - 1) * 100) + " %" : ""}${m > 1 && c ? " · " : ""}${c ? "recharge −1" : ""}</em>` : ""; };
-const awList = (id) => `<div class="sk awk-list"><div class="sk-h"><b>Éveil</b><span>${stars(id) || 0} / 5 ★</span></div>${AWK.map((a, k) => a ? `<p class="${stars(id) >= k + 1 ? "on" : "off"}">${a.t}</p>` : "").join("")}</div>`;
+const awList = () => "";
 // ===================== VOIES ALTERNATIVES ET COMBOS =====================
 const ALT = {
   t1: [{ n: "Posture du moine", d: "Provoque 3 tours et réduit ses dégâts subis de 20 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 3 }, { k: "dr", p: 0.2, d: 3 }] },
@@ -4281,6 +4440,7 @@ Object.keys(ALT).forEach((id) => ALT[id].forEach((s) => { if (!s.el) s.el = CH[i
 const altGot = (id, si) => !!(S.owned[id] && S.owned[id].alt && S.owned[id].alt[si - 1]);
 const altEq = (id, si) => altGot(id, si) && !!(S.owned[id].eq && S.owned[id].eq[si - 1]);
 function kitOf(c) {
+  return c; // redesign : remplacé par les variantes A/B
   if (!ALT[c.id] || !S.owned[c.id]) return c;
   const sk = c.skills.slice();
   [1, 2].forEach((si) => { if (altEq(c.id, si)) sk[si] = ALT[c.id][si - 1]; });
@@ -4288,6 +4448,7 @@ function kitOf(c) {
 }
 function setAlt(id, si, v) { const o = S.owned[id]; if (!o) return; o.eq = o.eq || [0, 0]; o.eq[si - 1] = v && altGot(id, si) ? 1 : 0; save(); }
 function rollDrop() {
+  return null; // redesign : remplacé par les variantes A/B
   const r = S.run; if (!r || Math.random() > 0.15) return null;
   const pool = [];
   r.heroes.forEach((rh) => { if (ALT[rh.id]) [1, 2].forEach((si) => { if (!altGot(rh.id, si)) pool.push([rh.id, si]); }); });
@@ -4296,12 +4457,7 @@ function rollDrop() {
   o.alt = o.alt || [0, 0]; o.alt[si - 1] = 1; o.nw = 1; save();
   return { id, si, n: ALT[id][si - 1].n };
 }
-const kitList = (id) => { const o = S.owned[id]; if (!o || !ALT[id]) return "";
-  return `<div class="sk kitlist"><div class="sk-h"><b>Voies alternatives</b><span>${[1, 2].filter((si) => altGot(id, si)).length} / 2 obtenues</span></div>` + [1, 2].map((si) => {
-    const base = CH[id].skills[si], alt = ALT[id][si - 1], got = altGot(id, si), eq = altEq(id, si);
-    return `<div class="kitrow"><div class="kopt ${eq ? "" : "on"}" data-act="eqalt" data-id="${id}" data-si="${si}" data-v="0"><i>${si === 2 ? "Ultime" : "Sort"} · d'origine</i><b>${base.n}</b><p>${base.d}</p></div>`
-      + `<div class="kopt ${eq ? "on" : ""} ${got ? "" : "lock"}" ${got ? `data-act="eqalt" data-id="${id}" data-si="${si}" data-v="1"` : ""}><i>${si === 2 ? "Ultime" : "Sort"} · voie alternative</i><b>${got ? alt.n : "🔒 Technique inconnue"}</b><p>${got ? alt.d : "S'obtient par drop aléatoire après une victoire, une seule fois."}</p></div></div>`;
-  }).join("") + `</div>`; };
+const kitList = () => "";
 
 // ---- combos amorce / finisseur ----
 const COMBO = {
@@ -4349,11 +4505,12 @@ const CELX = {
   s5: { j: "満月の蓮", n: "Lotus de la pleine lune", m: 3.5, tgt: "allies", d: "Résurrection (60 %), soin 30 %, −25 % dégâts subis (2 tours).", fx: [{ k: "revive", p: 0.6 }, { k: "healPct", p: 0.3 }, { k: "dr", p: 0.25, d: 2 }] },
   s6: { j: "鳳凰の再生", n: "Renaissance du Phénix", m: 4.5, tgt: "allies", d: "Résurrection (50 %), ATK d'équipe +25 % (2 tours), dégâts de Feu au boss.", fx: [{ k: "revive", p: 0.5 }, { k: "buff", p: 0.25, d: 2 }] }
 };
+CHARS.forEach((c) => { if (CELX[c.id]) CELX[c.id].n = c.skills[3].n; });
 const CELV = new Set(["p1", "p2", "p3", "p4", "p5"]); // cinématiques vidéo disponibles
-const celSk = (h) => { const x = CELX[h.id]; if (!x) return { n: "Celestial", d: `Invocation à ${Math.round(CEL_M * 100)} % ATK. Vide la jauge.`, cd: 0, tgt: "boss", cel: true, fx: [{ k: "dmg", m: CEL_M, post: 90 }] }; return { n: x.n, d: x.d, cd: 0, tgt: x.tgt, cel: true, fx: [...(x.pre || []), { k: "dmg", m: x.m, post: 90, ...(x.hits ? { hits: x.hits, m: x.m / x.hits } : {}) }, ...x.fx] }; };
-const getSk = (h, si) => (si === "atk" ? BASIC : si === "grd" ? guardSk(h) : si === "cel" ? celSk(h) : h.c.skills[si]);
-const skName = (h, si) => (typeof si === "number" ? getSk(h, si).n : si === "grd" ? "Garde" : si === "cel" ? "Celestial" : "Attaque");
-const celReady = () => F && F.gauge >= 9 && !F.plan.some((p) => p && p.si === "cel");
+// Ultime : cinématique (celCine) puis effets de la compétence 4
+const getSk = (h, si) => (si === "foc" ? FOC : h.c.skills[si]);
+const skName = (h, si) => (si === "foc" ? "Concentration" : getSk(h, si).n);
+const ultReady = (h) => h.cd[3] <= 0;
 let stopPart = null;
 // ===================== ENVIRONNEMENT DE COMBAT (filtre « cinéma », pixel snap, ombres) =====================
 window.SNAP = window.SNAP || {};
@@ -4521,9 +4678,9 @@ function renderSkills() {
   const dis = F.busy ? "disabled" : "";
   if (!S.band) { box.innerHTML = gridHtml(h); return; }
   box.innerHTML = launchHtml() + `<div class="vrow">
-    <button class="bbtn" data-act="skill" data-i="atk" ${dis} aria-label="Attaque" title="Attaque : 100 % ATK · ${ELEM[h.el].n} · ${h.dt === "p" ? "physique" : "magique"}"><div class="ic">${eli(h.el)}</div><div class="lb">Attaque</div><div class="vl">${fmt(skDmgVal(h, 100, -1))}</div></button>
-    <button class="bbtn grd" data-act="skill" data-i="grd" ${dis} aria-label="Garde" title="Garde : −50 % de dégâts subis"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Garde</div><div class="vl">−50 %</div></button>
-    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 2 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
+
+    <button class="bbtn grd" data-act="skill" data-i="foc" ${dis} aria-label="Concentration" title="Concentration : aucune attaque, recharges −1, −25 % de dégâts subis"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Concentration</div><div class="vl">−25 %</div></button>
+    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 3 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
   </div>`;
 }
 
@@ -4536,14 +4693,14 @@ function gridHtml(h) {
   const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${off || F.busy ? "disabled" : ""}>${inner}</button>`;
   const sk = h.c.skills.map((s, i) => {
     const dmg = s.fx.some((f) => f.k === "dmg" || f.k === "dot"), cd = h.cd[i];
-    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>'}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
+    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>'}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${comboTag(h, s)}</div>`}`, i === 3 ? "ult" : "", cd > 0);
   });
-  const ready = celReady(), g = F.gauge;
-  const cel = cell("cel", `<div class="t">${icEl(h.el)}<b>Celestial</b></div>${ready ? `<div class="ds rd">${skDesc(h, celSk(h), -1)}</div>` : `<div class="pips">${Array.from({ length: 9 }, (_, q) => `<i class="${q < g ? "on" : ""}"></i>`).join("")}</div>`}`, "cel" + (ready ? " ready" : ""), !ready);
+
+
   return `<div class="gridm">
-    ${cell("atk", `<div class="t"><span class="ic grdi" style="--c:#ffd9a0">${SWORD_SVG}</span><b>Attaque</b></div><div class="ds vv">${fmt(skDmgVal(h, 100, -1))}</div>`, "small")}
-    ${cell("grd", `<div class="t"><span class="ic grdi" style="--c:#9fc0ff">${SHIELD_SVG}</span><b>Garde</b></div><div class="ds vv">−50 %</div>`, "small grd")}
-    ${sk.join("")}${cel}</div>`;
+
+    ${cell("foc", `<div class="t"><span class="ic grdi" style="--c:#9fc0ff">${SHIELD_SVG}</span><b>Concentration</b></div><div class="ds vv">Recharges −1 · −25 % de dégâts subis</div>`, "small grd foc")}
+    ${sk.join("")}</div>`;
 }
 // héros actif avancé au centre, les autres estompés
 function layoutFront() {
@@ -4622,7 +4779,7 @@ function celCine(h) {
 // ===================== PLANIFICATION DU TOUR =====================
 function actPrio(h, si) {
   const sk = getSk(h, si), ks = sk.fx.map((f) => f.k), has = (a) => ks.some((k) => a.includes(k));
-  if (has(["dmg"])) return has(["debuff", "dot", "mark"]) ? 1 : sk.fin || si === 2 || si === "cel" ? 3 : 2; // l'ultime ne passe en dernier que s'il n'applique ni soin, buff, affaiblissement ni poison
+  if (has(["dmg"])) return has(["debuff", "dot", "mark"]) ? 1 : sk.fin || si === 3 ? 3 : 2; // l'ultime ne passe en dernier que s'il n'applique ni soin, buff, affaiblissement ni poison
   if (has(["debuff", "dot", "mark"])) return 1;
   if (has(["heal", "healPct", "regen", "revive"])) return -1;
   return 0;
@@ -4653,8 +4810,8 @@ async function launchPlan() {
     if (F.boss.hp <= 0 && await bossDown()) return;
     const h = F.heroes[i], p = F.plan[i]; if (!h || h.dead || h.acted) continue;
     let si = p.si, ti = p.ti;
-    if (typeof si === "number" && h.cd[si] > 0) si = "atk";
-    if (si === "cel" && F.gauge < 9) si = "atk";
+    if (typeof si === "number" && h.cd[si] > 0) si = "foc";
+
     const sk = getSk(h, si);
     if (sk.tgt === "ally" && (ti == null || F.heroes[ti].dead)) { const al = F.heroes.findIndex((t) => !t.dead); ti = al; }
     const f = F; await useSkill(i, si, ti);
@@ -4670,6 +4827,7 @@ function nextActive() {
 function newRound(first) {
   if (!first) F.heroes.forEach((h) => { h.cd = h.cd.map((c) => Math.max(0, c - 1)); });
   F.heroes.forEach((h) => { h.acted = h.dead; });
+  F.soak = null; F.mirrorOn = false; F.mirror = 0;
   F.phase = "player"; F.pending = null; F.busy = false; F.plan = [];
   nextActive(); update();
 }
@@ -4715,8 +4873,10 @@ function hurtHero(h, raw, o = {}) {
   let d = o.raw ? raw : raw * 100 / (100 + h.def * (o.type === "m" ? 0.75 : 1));
   d *= 1 - hDr(h);
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
+  if (F.mirrorOn && !o.dot) F.mirror = (F.mirror || 0) + d;
   if (h.shield > 0) { const a = Math.min(h.shield, d); h.shield -= a; d -= a; if (a) floatAt(el, "−" + fmt(a), "shield"); }
   if (d > 0) { h.hp -= d; floatAt(el, "−" + fmt(d), o.dot ? "dot" : "hurt"); flashCls(el, "hit"); }
+  if (h.hp <= 0 && h.st.some((s) => s.k === "ash")) { h.st = h.st.filter((s) => s.k !== "ash"); h.hp = 1; floatAt(el, "Cendres du phénix", "heal"); log(`${h.c.name} renaît de ses cendres (1 PV).`); }
   if (h.hp <= 0) {
     h.hp = 0;
     if (F.souls > 0) { F.souls--; h.hp = Math.round(h.maxHp * 0.3); log(`La Lanterne d'âme ramène ${h.c.name} !`); floatAt(el, "Ranimé", "heal"); }
@@ -4743,26 +4903,40 @@ async function useSkill(hi, si, ti) {
   const h = F.heroes[hi], sk = getSk(h, si), b = F.boss, num = typeof si === "number";
   if (h.dead || h.acted || (num && h.cd[si] > 0)) return;
   F.busy = true; F.pending = null; F.sel = null; F.acting = hi;
-  if (si === "cel") { update(); await celCine(h); F.gauge = 0; }
+  if (sk.ult) { update(); await celCine(h); }
   const hm = S.run.heroMods[h.id] || {};
   let pw = num ? (1 + 0.3 * ((hm.sp || [])[si] || 0)) * awMul(h.id, si) : 1;
  
+  // effets spéciaux : prochaine attaque boostée (nxt), Fourreau de Kenta
+  let penX = 0;
+  if (sk.fx.some((f) => f.k === "dmg")) {
+    const nx = h.st.find((s) => s.k === "nxt"); if (nx) { pw *= 1 + nx.p; h.st = h.st.filter((s) => s !== nx); }
+    if (h.id === "p1") {
+      if (h.sheath) { pw *= 1.8; penX = 0.5; h.sheath = false; h.draw = 0; pop("IAÏ", "#ffd25a"); }
+      else { h.draw = (h.draw || 0) + 1; pw *= Math.max(0.4, 1 - 0.2 * h.draw); }
+    }
+  }
+  if (sk.foc) {
+    h.cd = h.cd.map((c) => Math.max(0, c - 1));
+    if (h.id === "m6") { h.charge = Math.min(5, (h.charge || 0) + 2); floatAt(heroEl(h), `Charges ${h.charge}/5`, "info"); }
+    if (h.id === "p1" && !h.sheath) { h.sheath = true; h.draw = 0; floatAt(heroEl(h), "Rengainé", "info"); }
+  }
   const cb = comboFor(h, sk);
   if (cb) { pw *= cb.mul || 1; pop("COMBO : " + cb.n.toUpperCase(), "#ffd25a"); log(`Combo ${cb.n} !`); sfxDiscover(); }
   const CM = cb ? { ...(cb.crit ? { crit: true } : {}), ...(cb.pen ? { pen: cb.pen } : {}) } : {};
   log(`${h.c.name} : ${sk.n}`);
-  skBanner("hero", h.c.name, sk.n, si === "grd" ? "守" : ELEM[skEl(h, sk)].k, si === "grd" ? "#9fc0ff" : ELEM[skEl(h, sk)].c);
+  skBanner("hero", h.c.name, sk.n, si === "foc" ? "集" : ELEM[skEl(h, sk)].k, si === "foc" ? "#9fc0ff" : ELEM[skEl(h, sk)].c);
   const dmgFx = sk.fx.find((f) => f.k === "dmg"), melee = MELEE.includes(h.c.look.wpn);
-  heroMove(h, si === "grd" ? "guard" : dmgFx ? (melee ? "dash" : "cast") : "act", dmgFx ? 420 + (dmgFx.hits || 1) * 170 : 0);
-  if (si === "grd") supportFx("guard", [h]);
+  heroMove(h, si === "foc" ? "guard" : dmgFx ? (melee ? "dash" : "cast") : "act", dmgFx ? 420 + (dmgFx.hits || 1) * 170 : 0);
+  if (si === "foc") supportFx("guard", [h]);
   update();
   await sleep(dmgFx && melee ? 190 : 220);
   const allyT = sk.tgt === "ally" ? [F.heroes[ti]] : sk.tgt === "allies" ? F.heroes : [h];
   for (const fx of sk.fx) {
-    const tg = (fx.on === "self" ? [h] : allyT).filter((t) => t && !t.dead);
+    const tg = (fx.on === "self" ? [h] : fx.on === "allies" ? F.heroes : allyT).filter((t) => t && !t.dead);
     switch (fx.k) {
       case "dmg":
-        for (let i = 0; i < (fx.hits || 1); i++) { if (b.hp <= 0 || h.dead) break; const big = (num && si === 2) || si === "cel"; sfxHit(skEl(h, sk), melee, big, i); await hitFx(h, i, big, skEl(h, sk)); dmgBoss(h, fx.m * pw, { ...fx, ...CM, el: skEl(h, sk) }); update(); await sleep(fx.hits > 1 ? 190 : 330); }
+        for (let i = 0; i < (fx.hits || 1); i++) { if (b.hp <= 0 || h.dead) break; const big = !!sk.ult; sfxHit(skEl(h, sk), melee, big, i); await hitFx(h, i, big, skEl(h, sk)); dmgBoss(h, (fx.m + (fx.perCharge || 0) * (h.charge || 0)) * pw, { ...fx, ...CM, pen: Math.max(fx.pen || 0, penX), el: skEl(h, sk) }); update(); await sleep(fx.hits > 1 ? 190 : 330); }
         break;
       case "dot": { dotFx(h, skEl(h, sk)); const weak = weakTo(b.el) === skEl(h, sk); addSt(b, { k: fx.s, dmg: Math.round(hAtk(h) * fx.m * pw * (weak ? 1.5 : 1)), d: fx.d }); break; }
       case "debuff": bossDebuffFx("#b46cff"); addSt(b, { k: fx.s + "down", p: fx.p, d: fx.d }); break;
@@ -4771,19 +4945,29 @@ async function useSkill(hi, si, ti) {
       case "healPct": supportFx("heal", tg); tg.forEach((t) => healHero(t, t.maxHp * fx.p * pw)); break;
       case "shield": supportFx("shield", tg); tg.forEach((t) => { const v = Math.round(h.maxHp * fx.p * pw); t.shield += v; floatAt(heroEl(t), "Bouclier " + fmt(v), "shield"); }); break;
       case "taunt": supportFx("taunt", [h]); addSt(h, { k: "taunt", d: fx.d }); break;
-      case "dr": if (si !== "grd") supportFx("guard", tg); tg.forEach((t) => addSt(t, { k: "dr", p: fx.p, d: fx.d })); break;
+      case "dr": if (si !== "foc") supportFx("guard", tg); tg.forEach((t) => addSt(t, { k: "dr", p: fx.p, d: fx.d })); break;
       case "buff": supportFx("buff", tg); tg.forEach((t) => addSt(t, { k: "buff", p: fx.p, d: fx.d })); break;
       case "counter": addSt(h, { k: "counter", p: fx.p * pw, d: fx.d }); break;
       case "regen": supportFx("heal", tg); tg.forEach((t) => addSt(t, { k: "regen", p: fx.p * pw, d: fx.d })); break;
-      case "evade": addSt(h, { k: "evade", p: fx.p, d: fx.d }); break;
+      case "evade": tg.forEach((t) => addSt(t, { k: "evade", p: fx.p, d: fx.d })); break;
       case "cleanse": supportFx("cleanse", tg); tg.forEach((t) => { t.st = t.st.filter((s) => !NEG.includes(s.k)); }); break;
       case "cdself": h.cd = h.cd.map((c) => Math.max(0, c - fx.n)); break;
       case "cdr": supportFx("buff", F.heroes.filter((t) => t !== h && !t.dead)); F.heroes.forEach((t) => { if (t !== h) t.cd = t.cd.map((c) => Math.max(0, c - fx.n)); }); break;
+      case "execimm": supportFx("guard", tg); tg.forEach((t) => addSt(t, { k: "execimm", d: fx.d })); break;
+      case "vanish": supportFx("guard", [h]); addSt(h, { k: "vanish", d: fx.d }); break;
+      case "decoy": supportFx("shield", tg); tg.forEach((t) => addSt(t, { k: "decoy", d: 3 })); break;
+      case "delay": bossDebuffFx("#b46cff"); b.delay = (b.delay || 0) + 1; floatAt(bossEl(), "Retardé", "info"); break;
+      case "soak": supportFx("taunt", [h]); F.soak = { hi: F.heroes.indexOf(h) }; addSt(h, { k: "dr", p: fx.p, d: 1 }); break;
+      case "mirror": supportFx("guard", F.heroes.filter((t) => !t.dead)); F.mirrorOn = true; F.mirror = 0; break;
+      case "nxt": addSt(h, { k: "nxt", p: fx.p, d: 3 }); break;
+      case "charge": h.charge = Math.min(5, (h.charge || 0) + fx.n); floatAt(heroEl(h), `Charges ${h.charge}/5`, "info"); break;
+      case "sheathe": if (h.id === "p1") { h.sheath = true; h.draw = 0; floatAt(heroEl(h), "Rengainé", "info"); } break;
+      case "ash": supportFx("heal", tg); tg.forEach((t) => addSt(t, { k: "ash", d: fx.d || 4 })); break;
       case "revive": F.heroes.forEach((t) => { if (t.dead) { t.dead = false; setTimeout(() => supportFx("revive", [t]), 30); t.hp = Math.round(t.maxHp * fx.p); t.acted = true; floatAt(heroEl(t), "Ranimé", "heal"); log(`${t.c.name} revient au combat !`); } }); break;
     }
   }
   if (cb) applyCombo(cb, h);
-  if (num && sk.fx.some((f) => f.k === "dmg" || f.k === "dot")) F.gauge = Math.min(9, F.gauge + 1);
+  if (sk.discharge) h.charge = 0;
   if (num) h.cd[si] = sk.cd ? Math.max(1, sk.cd - ((hm.cd || [])[si] || 0) - awCd(h.id, si)) : 0;
   h.acted = true; F.acting = null;
   update();
@@ -4830,11 +5014,15 @@ async function bossTurn() {
     b.hp = Math.max(0, b.hp - s.dmg); floatAt(bossEl(), fmt(s.dmg), "dot"); update(); await sleep(260);
   }
   if (b.hp <= 0 && await bossDown()) return;
+  let delayed = false;
   if (b.stun) {
     b.stun = false; log(`${b.name} est étourdi et perd son tour.`); floatAt(bossEl(), "Étourdi", "info"); await sleep(700);
+  } else if (b.delay > 0) {
+    b.delay--; delayed = true; log(`${b.name} est retardé : son action est repoussée d'un tour.`); floatAt(bossEl(), "Retardé", "info"); await sleep(700);
   } else {
     await bossAct(b.moves[b.intent]);
   }
+  if (F.mirrorOn && F.mirror > 0 && b.hp > 0) { const v = Math.round(F.mirror); b.hp = Math.max(0, b.hp - v); floatAt(bossEl(), "Miroir " + fmt(v), "crit"); lightAt("boss", "#d6dde6", true); update(); await sleep(600); }
   if (b.hp <= 0 && await bossDown()) return;
   if (!alive().length) return defeat();
   // effets sur la durée des héros
@@ -4848,7 +5036,7 @@ async function bossTurn() {
   if (!alive().length) { await sleep(400); return defeat(); }
   const tick = (u) => { u.st = u.st.filter((s) => { if (s.fresh) { s.fresh = false; return true; } s.d--; return s.d > 0; }); };
   tick(b); F.heroes.forEach(tick);
-  if (!b.stun) pickIntent();
+  if (!b.stun && !delayed) pickIntent();
   F.round++;
   if (b.phase === 3 && b.fury3) { b.enr += b.fury3; floatAt(bossEl(), "Fureur +10 %", "info"); }
   if (F.round > FURY_ROUND) { b.enr += 0.2; log(`Fureur céleste : ${b.name} gagne +20 % d'ATK.`); if (F.round === FURY_ROUND + 1) pop("FUREUR CÉLESTE", "#ff5a4a"); }
@@ -4877,11 +5065,16 @@ async function bossAct(mv) {
   };
   if (mv.t === "single" || mv.t === "charm" || mv.t === "exec") {
     const t = bossTargets()[0];
-    if (t) { hitOne(t, mv.m); neg(t); }
+    if (t) {
+      const dc = t.st.find((s) => s.k === "decoy");
+      if (dc) { t.st = t.st.filter((s) => s !== dc); floatAt(heroEl(t), "Leurre", "info"); log(`Le leurre de ${t.c.name} absorbe l'attaque.`); bossHitFx(t, mv, b.el); }
+      else if (mv.t === "exec" && t.st.some((s) => s.k === "execimm")) { floatAt(heroEl(t), "Immunisé", "info"); log(`${t.c.name} est immunisé à l'exécution.`); }
+      else { hitOne(t, mv.m); neg(t); }
+    }
   } else if (mv.t === "multi") {
-    for (let i = 0; i < mv.hits; i++) { const al = alive(); if (!al.length) break; const t = taunter() || rnd(al); hitOne(t, mv.m); update(); await sleep(200); }
+    for (let i = 0; i < mv.hits; i++) { const al = alive(); if (!al.length) break; const sk0 = F.soak && F.heroes[F.soak.hi] && !F.heroes[F.soak.hi].dead ? F.heroes[F.soak.hi] : null, vis = al.filter((h) => !h.st.some((s) => s.k === "vanish")), t = sk0 || taunter() || rnd(vis.length ? vis : al); hitOne(t, mv.m); update(); await sleep(200); }
   } else if (mv.t === "aoe") {
-    alive().forEach((h) => { hitOne(h, mv.m); neg(h); });
+    (F.soak && F.heroes[F.soak.hi] && !F.heroes[F.soak.hi].dead ? [F.heroes[F.soak.hi]] : alive()).forEach((h) => { hitOne(h, mv.m); neg(h); });
   }
   if (fxOn()) { const P = bossP(); if (P) { if (fx.selfheal) fxPlus(P, "#7dffb0"); if (fx.shield || fx.reflect || fx.evade || fx.dr) fxRing(P, "#8fd0ff", 1.2); if (fx.selfatk || fx.enrage) fxRise(P, "#ff5a3a"); } }
   if (fx.selfheal) { const v = Math.round(b.maxHp * fx.selfheal); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bossEl(), "+" + fmt(v), "heal"); }
@@ -5042,10 +5235,10 @@ document.addEventListener("click", (e) => {
     case "cancelT": if (F) { F.pending = null; update(); } break;
     case "skill": {
       if (!F || F.busy || F.phase !== "player") return;
-      const raw = t.dataset.i, si = raw === "atk" || raw === "grd" || raw === "cel" ? raw : +raw, h = F.heroes[F.active];
+      const raw = t.dataset.i, si = raw === "foc" ? raw : +raw, h = F.heroes[F.active];
       if (!h) return; const sk = getSk(h, si);
       if (!sk || (typeof si === "number" && h.cd[si] > 0)) return;
-      if (si === "cel" && !celReady()) return;
+
       if (sk.tgt === "ally") { F.pending = { hi: F.active, si }; update(); }
       else setPlan(F.active, si);
       break;
