@@ -1431,6 +1431,31 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .intent .itg{display:inline!important;margin:0!important;flex:none;font-size:11px!important}
 .intent .idsc{flex:0 1 auto;min-width:0;overflow:hidden;text-ellipsis:ellipsis;text-overflow:ellipsis;font-size:11px}.pcw .pc .pimg.art{position:absolute;left:50%;bottom:0;top:auto;width:auto;height:128%;max-width:none;margin:0;transform:translateX(-50%)}.kitrow{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.kopt{border:1px solid var(--line2);border-radius:8px;padding:6px 8px;cursor:pointer;background:var(--ink2);font-size:12px}.kopt i{display:block;font-style:normal;font-size:10px;color:var(--muted)}.kopt p{margin:2px 0 0;font-size:11.5px;color:var(--muted)}.kopt.on{border-color:#ffd25a;box-shadow:0 0 0 1px #ffd25a inset}.kopt.lock{opacity:.5;cursor:default}.cbo{font-style:normal;font-weight:700;color:#9aa}.cbo.on{color:#ffd25a;animation:warn 1.2s ease-in-out infinite}.genb{color:#ffd25a;font-weight:700}.awk{font-style:normal;color:#ffd25a;font-weight:700;font-size:.92em}.awk-list p{margin:3px 0;font-size:12px}.awk-list p.on{color:#ffd25a}.awk-list p.off{color:var(--muted);opacity:.6}
 .sk-h b .eli{margin-right:5px;vertical-align:-1px}
+.spi{--s:32px;flex:none;position:relative;display:inline-block;vertical-align:middle;box-sizing:border-box;width:var(--s);height:var(--s);border-radius:22%;background:url(icones-sorts.png) calc(var(--x)*100%/11) calc(var(--y)*100%/11)/1200% 1200% no-repeat,radial-gradient(circle at 50% 40%,var(--c1),var(--c2));image-rendering:pixelated;box-shadow:0 0 0 1px #000a,0 0 0 calc(var(--s)*.05) var(--g)}
+.spi::after{content:"";position:absolute;inset:0;border-radius:22%;box-shadow:inset 0 0 0 calc(var(--s)*.03) #000a,inset 0 0 calc(var(--s)*.1) #0009;pointer-events:none}
+.spi.u{box-shadow:0 0 0 1px #000a,0 0 0 calc(var(--s)*.05) var(--g),0 0 calc(var(--s)*.4) calc(var(--s)*.06) var(--g)}
+.spi.cd{filter:brightness(.55) saturate(.4)}
+.spi .spn{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;font:900 calc(var(--s)*.6)/1 var(--display,sans-serif);font-style:normal;color:#fff;text-shadow:-1px 0 #000,1px 0 #000,0 1px #000,0 -1px #000;filter:none}
+.spi .spb{position:absolute;right:-1px;bottom:-1px;z-index:2;min-width:calc(var(--s)*.4);height:calc(var(--s)*.4);padding:0 2px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:900 calc(var(--s)*.3)/1 var(--display,sans-serif);font-style:normal;color:#1b0f08;background:#ffd25a;border:1px solid #000;border-radius:3px}
+.cg.ico{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:calc(5*var(--u));-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
+.cg.ico .spi{--s:calc(50*var(--u))!important;order:0!important;margin:0!important}
+.cg.ico .pips{margin-top:0!important}
+.cg.ico.ult:not(.cel){border-color:#e2b250}
+.lptip{position:fixed;z-index:999;width:max-content;max-width:min(300px,86vw);padding:8px 11px;border:1px solid #a87a24;border-radius:8px;background:rgba(14,8,11,.97);color:#f2e7d3;box-shadow:0 6px 18px rgba(0,0,0,.6);pointer-events:none;font-size:13px;line-height:1.35}
+.lptip b{display:block;font-family:var(--display);font-size:15px;color:#f2d28a}.lptip em{display:block;font-style:normal;color:#ff9a8a;font-size:12px}.lptip p{margin:3px 0 0}
+.cg .t .spi{--s:calc(30*var(--u));order:2;margin-left:auto}
+#app .fight.ug .cg.cel .t .spi{--s:calc(18*var(--u));margin-left:calc(1*var(--u))}
+#app .fight.ug .cg.cel .t b{font-size:calc(10*var(--u))}
+#app .fight.ug .cg.cel{padding-left:calc(5*var(--u));padding-right:calc(5*var(--u))}
+.cg .t{gap:calc(4*var(--u))}
+#app .fight.ug .cg .t:has(.spi){height:calc(30*var(--u));min-height:calc(30*var(--u))}
+.sk-h b .spi,.mv b .spi,.kopt b .spi{--s:24px;margin-right:6px;vertical-align:-7px}
+.mv{align-items:center}
+.sbtn .nr .spi{--s:22px;order:-1;margin-right:4px}
+.intent .spi{--s:26px}
+.vban .vg.sp{width:auto;height:auto;border:0;background:none;display:block}
+.vban .vg .spi{--s:36px}
+
 .fight .abf{right:52px}
 .mutebtn{position:absolute;z-index:20;right:12px;top:8px;width:32px;height:26px;border-radius:6px;border:1px solid var(--line2);background:rgba(8,4,6,.6);color:var(--gold);font-size:14px;display:grid;place-items:center}
 .mutebtn.off{color:var(--dim);text-decoration:line-through}
@@ -1566,7 +1591,6 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .pcw.aimed .tgtf{display:block}
 @keyframes tgtbob{50%{transform:translate(-50%,-3px)}}
 
-.fight #bint{display:none!important}
 .vroster{position:absolute;right:10px;top:44px;width:226px;z-index:30;display:flex;flex-direction:column;gap:4px}
 .vro{position:relative;display:grid;grid-template-columns:26px 1fr auto;column-gap:7px;align-items:center;background:linear-gradient(90deg,rgba(14,8,11,.6),rgba(14,8,11,.88));border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:3px 8px 4px 4px;transition:transform .2s}
 .vro .face{grid-row:1/3;width:26px;height:26px;border-radius:4px;background:#2b1a21;overflow:hidden;align-self:start;margin-top:1px}
@@ -1906,6 +1930,14 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 #app .fight.ug .cg .ds{margin-top:calc(4*var(--u));-webkit-line-clamp:3}
 #app .fight.ug .cg .ds.vv{font-size:calc(15*var(--u));font-weight:700;color:#fff;display:block}
 #app .fight.ug .cg.cel .pips{margin-top:calc(4*var(--u));height:auto}
+#app .fight.ug #fsk{left:auto!important;right:calc(10*var(--u))!important;bottom:calc(10*var(--u))!important;width:auto!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important}
+#app .fight.ug .gridm{display:flex;flex-direction:row;gap:calc(8*var(--u));justify-content:flex-end}
+#app .fight.ug .cg.ico{min-height:0;padding:0;background:none;border:0;border-radius:calc(8*var(--u));overflow:visible;width:auto}
+#app .fight.ug .cg.ico.sel .spi{box-shadow:0 0 0 2px #000a,0 0 0 calc(4*var(--u)) #ffe08a,0 0 calc(14*var(--u)) #ffe08a}
+#app .fight.ug .cg.ico .spi{--s:calc(56*var(--u))!important}
+.spi.fb{background:radial-gradient(circle at 50% 40%,var(--c1),var(--c2))}
+.spi.fb .fbg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 calc(var(--s)*.5)/1 var(--display,sans-serif);font-style:normal;color:var(--g)}
+.spi.fb .fbg svg{width:55%;height:55%;fill:currentColor}
 #app .fight.ug .cg:disabled{opacity:1}
 #app .fight.ug .cg:disabled:not(.cel) .t b{color:#8f8576}
 #app .fight.ug .cg:disabled:not(.cel) .ic{opacity:.5}
@@ -2010,7 +2042,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 54; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 55; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2210,12 +2242,31 @@ const CHARS = [
     skills: [
       { n: "Plume ardente", d: "Soigne un allié (150 % ATK) et ATK +15 % (2 tours).", cd: 0, tgt: "ally", fx: [{ k: "heal", m: 1.5 }, { k: "buff", p: 0.15, d: 2 }] },
       { n: "Hymne du soleil", d: "Équipe : ATK +35 % (2 tours).", cd: 3, tgt: "allies", fx: [{ k: "buff", p: 0.35, d: 2 }] },
-      { n: "Renaissance", d: "Ressuscite les alliés tombés à 40 % PV, soigne les autres de 30 % PV max.", cd: 5, tgt: "allies", fx: [{ k: "revive", p: 0.4 }, { k: "healPct", p: 0.3 }] },
+      { n: "Cendres vivifiantes", d: "Soigne toute l'équipe de 30 % PV max.", cd: 5, tgt: "allies", fx: [{ k: "healPct", p: 0.3 }] },
     ] },
 ];
 CHARS.forEach((c) => { if (!c.skills[0].cd) c.skills[0].cd = 2; c.skills.forEach((s) => { if (!s.el) s.el = c.el; }); });
 const skEl = (h, sk) => (sk && sk.el) || h.el;
 const eli = (e) => `<i class="eli" style="--c:${ELEM[e].c}" title="${ELEM[e].n}">${ELEM[e].k}</i>`;
+// ---------- ICÔNES DE SORTS (atlas icones-sorts.png, 64 px par icône ; cadre et couleur d'élément en CSS) ----------
+const varTag = () => ""; // variantes A/B : étape 6
+const SPI = {"akane_s1":[0,0],"akane_s2":[1,0],"akane_s3":[2,0],"akane_ult":[3,0],"bao_s1":[4,0],"bao_s2":[5,0],"bao_s3":[6,0],"bao_ult":[7,0],"yuki_s1":[8,0],"yuki_s2":[9,0],"yuki_s3":[10,0],"yuki_ult":[11,0],"hana_s1":[0,1],"hana_s2":[1,1],"hana_s3":[2,1],"hana_ult":[3,1],"goro_s1":[4,1],"goro_s2":[5,1],"goro_s3":[6,1],"goro_ult":[7,1],"meilin_s1":[8,1],"meilin_s2":[9,1],"meilin_s3":[10,1],"meilin_ult":[11,1],"xuantie_s1":[0,2],"xuantie_s2":[1,2],"xuantie_s3":[2,2],"xuantie_ult":[3,2],"ryuga_s1":[4,2],"ryuga_s2":[5,2],"ryuga_s3":[6,2],"ryuga_ult":[7,2],"kenta_s1":[8,2],"kenta_s2":[9,2],"kenta_s3":[10,2],"kenta_ult":[11,2],"feng_s1":[0,3],"feng_s2":[1,3],"feng_s3":[2,3],"feng_ult":[3,3],"rei_s1":[4,3],"rei_s2":[5,3],"rei_s3":[6,3],"rei_ult":[7,3],"shiranui_s1":[8,3],"shiranui_s2":[9,3],"shiranui_s3":[10,3],"shiranui_ult":[11,3],"kaminari_s1":[0,4],"kaminari_s2":[1,4],"kaminari_s3":[2,4],"kaminari_ult":[3,4],"longxia_s1":[4,4],"longxia_s2":[5,4],"longxia_s3":[6,4],"longxia_ult":[7,4],"muqing_s1":[8,4],"muqing_s2":[9,4],"muqing_s3":[10,4],"muqing_ult":[11,4],"laoshou_s1":[0,5],"laoshou_s2":[1,5],"laoshou_s3":[2,5],"laoshou_ult":[3,5],"yuehua_s1":[4,5],"yuehua_s2":[5,5],"yuehua_s3":[6,5],"yuehua_ult":[7,5],"hoo_s1":[8,5],"hoo_s2":[9,5],"hoo_s3":[10,5],"hoo_ult":[11,5],"momo_s1":[0,6],"momo_s2":[1,6],"momo_s3":[2,6],"momo_ult":[3,6],"jun_s1":[4,6],"jun_s2":[5,6],"jun_s3":[6,6],"jun_ult":[7,6],"sakura_s1":[8,6],"sakura_s2":[9,6],"sakura_s3":[10,6],"sakura_ult":[11,6],"lan_s1":[0,7],"lan_s2":[1,7],"lan_s3":[2,7],"lan_ult":[3,7],"tora_s1":[4,7],"tora_s2":[5,7],"tora_s3":[6,7],"tora_ult":[7,7],"houzi_s1":[8,7],"houzi_s2":[9,7],"houzi_s3":[10,7],"houzi_ult":[11,7],"b_kappa_griffe":[0,8],"b_kappa_jet":[1,8],"b_kappa_plonge":[2,8],"b_kappa_deluge":[3,8],"b_kitsune_follet":[4,8],"b_kitsune_charme":[5,8],"b_kitsune_mirage":[6,8],"b_kitsune_queues":[7,8],"b_oni_massue":[8,8],"b_oni_cri":[9,8],"b_oni_seisme":[10,8],"b_oni_kanabo":[11,8],"b_jiangshi_morsure":[0,9],"b_jiangshi_souffle":[1,9],"b_jiangshi_talisman":[2,9],"b_jiangshi_sceau":[3,9],"b_tengu_eventail":[4,9],"b_tengu_plumes":[5,9],"b_tengu_garde":[6,9],"b_tengu_tornade":[7,9],"b_gasha_poing":[8,9],"b_gasha_armure":[9,9],"b_gasha_cri":[10,9],"b_gasha_etreinte":[11,9],"b_ryujin_raz":[0,10],"b_ryujin_perle":[1,10],"b_ryujin_morsure":[2,10],"b_ryujin_colere":[3,10],"b_ryujin_tsunami":[4,10],"b_phenix_cendre":[5,10],"b_phenix_regard":[6,10],"b_phenix_ailes":[7,10],"b_phenix_nova":[8,10],"b_aluna_morsure":[9,10],"b_aluna_toile":[10,10],"b_aluna_danse":[11,10],"b_aluna_cocon":[0,11],"b_aluna_chev":[1,11],"b_aluna_venin":[2,11],"b_aluna_nuee":[3,11],"b_aluna_piege":[4,11],"b_aluna_festin":[5,11],"b_aluna_etreinte":[6,11],"b_aluna_choeur":[7,11],"b_aluna_tisseuse":[8,11],"b_aluna_jugement":[9,11],"b_aluna_cocon3":[10,11]};
+const SPC = { feu: ["#7a0f0f", "#2a0505", "#ff2a2a"], eau: ["#16467a", "#081a30", "#3da5ff"], terre: ["#6b4a1c", "#2a1d0a", "#c99a4a"], metal: ["#4a5566", "#171c26", "#cfd6e0"], bois: ["#1d5a28", "#0a2410", "#4fd35a"] };
+const HSP = { t1: "bao", t2: "hana", t3: "goro", t4: "meilin", t5: "xuantie", t6: "ryuga", p1: "kenta", p2: "lan", p3: "akane", p4: "tora", p5: "houzi", p6: "shiranui", m1: "yuki", m2: "feng", m3: "rei", m4: "muqing", m5: "longxia", m6: "kaminari", s1: "momo", s2: "jun", s3: "sakura", s4: "laoshou", s5: "yuehua", s6: "hoo" };
+// icône par emplacement (0-2) ; "x" = pas d'icône pour cette technique (le sort du jeu diffère du kit dessiné)
+// opts : cd = recharge restante (assombrit + nombre), v = badge "A"/"B" (voie alternative)
+function spIcon(id, el, opts = {}) {
+  const p = SPI[id]; if (!p) return "";
+  const c = SPC[el] || SPC.terre, ult = opts.u ? " u" : "", cd = opts.cd ? " cd" : "";
+  return `<span class="spi${ult}${cd}" style="--c1:${c[0]};--c2:${c[1]};--g:${c[2]};--x:${p[0]};--y:${p[1]}">${opts.cd > 0 ? `<i class="spn">${opts.cd}</i>` : ""}${opts.v ? `<i class="spb">${opts.v}</i>` : ""}</span>`;
+}
+// héros : si = 0..2 (techniques) ou "cel" (Celestial)
+function heroSpId(hid, si) {
+  const k = HSP[hid]; if (!k) return null;
+  return si === 3 ? k + "_ult" : typeof si === "number" ? k + "_s" + (si + 1) : null;
+}
+const heroSp = (hid, si, el, opts) => { const id = heroSpId(hid, si); return id ? spIcon(id, el, opts) : ""; };
+const bossSp = (bid, key, el, big, opts = {}) => spIcon("b_" + (bid === "aluna" ? "aluna_" : bid + "_") + key, el, { ...opts, u: big });
 const CH = Object.fromEntries(CHARS.map((c) => [c.id, c]));
 
 // ===================== KITS DES 24 HÉROS (redesign puzzle-combat) =====================
@@ -4259,7 +4310,7 @@ function playSummon(res) { return SUMFX.play(res); }
 // ===================== ASCENSION =====================
 const disc = (id) => { S.disc = S.disc || {}; return S.disc[id] || {}; };
 const unkChip = `<span class="el" style="--c:#8a7a72">? Inconnue</span>`;
-function moveLine(mv) { return `<div class="mv ${mv.big ? "big" : ""}"><b>${mv.big ? "⚠ " : ""}${mv.n}</b><span>${mv.d}</span></div>`; }
+function moveLine(mv, bid, key, el) { return `<div class="mv ${mv.big ? "big" : ""}"><b>${bid ? bossSp(bid, key, el, mv.big) : ""}${mv.big ? "⚠ " : ""}${mv.n}</b><span>${mv.d}</span></div>`; }
 function renderBoss() {
   const nCl = BOSSES.filter((b) => cleared(b.id, "n")).length;
   app.innerHTML = topbar() + `<main class="scr"><div class="sec-h"><h2>Boss</h2><span class="note">${nCl} / ${BOSSES.length} vaincus en Normal</span></div>
@@ -4294,8 +4345,8 @@ function renderPrep() {
       ${r.picked.length ? `<div class="lbl" style="margin-top:8px">Bénédictions</div><div class="blessings" style="margin-top:4px">${r.picked.map((p) => `<span class="bless">${p}</span>`).join("")}</div>` : ""}
     </section>
     <section class="panel"><span class="lbl">Techniques connues</span>
-      <div class="moves" style="margin-top:4px">${p1.map((k) => moveLine(b.moves[k])).join("")}
-      ${p2.length ? `<div class="ph">Sous 50 % de PV</div>${p2.map((k) => moveLine(b.moves[k])).join("")}` : ""}
+      <div class="moves" style="margin-top:4px">${p1.map((k) => moveLine(b.moves[k], b.id, k, b.el)).join("")}
+      ${p2.length ? `<div class="ph">Sous 50 % de PV</div>${p2.map((k) => moveLine(b.moves[k], b.id, k, b.el)).join("")}` : ""}
       <div class="ph">Après ${FURY_ROUND} tours</div><div class="mv big"><b>Fureur céleste</b><span>+20 % d'ATK à chaque tour.</span></div>
       ${b.births.length ? `<div class="ph">Passif</div><div class="mv big"><b>Renaissance</b><span>Revient ${b.births.length > 1 ? "deux fois" : "une fois"} à ${b.births.map((x) => Math.round(x * 100)).join(" % puis ")} % PV.</span></div>` : ""}</div>
     </section>
@@ -4714,7 +4765,7 @@ function skBanner(kind, who, name, glyph, col) {
   const sc = document.getElementById("scene"); if (!sc) return;
   sc.querySelectorAll(".vban").forEach((e) => e.remove());
   const d = document.createElement("div"); d.className = "vban " + kind; if (col) d.style.setProperty("--c", col);
-  d.innerHTML = `<span class="vg">${glyph}</span><span class="vt"><span class="vw">${who}</span><span class="vn">${name}</span></span>`;
+  d.innerHTML = `<span class="vg${glyph.startsWith('<span class="spi') ? " sp" : ""}">${glyph}</span><span class="vt"><span class="vw">${who}</span><span class="vn">${name}</span></span>`;
   sc.appendChild(d); setTimeout(() => d.remove(), 1700);
 }
 setTimeout(snapBgs, 400);
@@ -4775,7 +4826,8 @@ function update() {
     const tl = mv.t === "self" ? "" : mv.t === "aoe" ? "Toute l'équipe" : mv.t === "multi" ? `${mv.hits} coups au hasard` : tg[0] ? tg[0].c.name : "";
     const nxl = (b.queue || []).slice(0, (b.look || 2) - 1).map((k) => b.moves[k].n), alert = mv.fatal && b.mode === "m";
     if (alert) it.className += " alert";
-    it.title = mv.d; it.innerHTML = `<i>${g}</i><b>${alert ? "⚠ ACTION FATALE · " : ""}${mv.n}</b>${tl ? `<em class="itg">🎯 ${tl}</em>` : ""}<span class="idsc">${mv.d}</span>${nxl.length ? `<em class="inext">Ensuite : ${nxl.join(" › ")}</em>` : ""}`;
+    const bsp = bossSp(b.id, b.intent, b.el, mv.big);
+    it.title = mv.d; it.innerHTML = `${bsp || `<i>${g}</i>`}<b>${alert ? "⚠ ACTION FATALE · " : ""}${mv.n}</b>${tl ? `<em class="itg">🎯 ${tl}</em>` : ""}<span class="idsc">${mv.d}</span>${nxl.length ? `<em class="inext">Ensuite : ${nxl.join(" › ")}</em>` : ""}`;
   }
   const aims = bossTargets();
   const order = F.heroes.map((h, i) => ({ h, i })).filter((o) => !o.h.dead);
@@ -4841,7 +4893,7 @@ function renderSkills() {
   box.innerHTML = launchHtml() + `<div class="vrow">
 
     <button class="bbtn grd" data-act="skill" data-i="foc" ${dis} aria-label="Concentration" title="Concentration : aucune attaque, recharges −1, −25 % de dégâts subis"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Concentration</div><div class="vl">−25 %</div></button>
-    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 3 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
+    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 3 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${heroSp(h.c.id, i, skEl(h, s), { u: i === 3, v: varTag(h, i) }) || (s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : "")}</div><p>${skDesc(h, s, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
   </div>`;
 }
 
@@ -4849,18 +4901,18 @@ function renderSkills() {
 const icEl = (e) => `<span class="ic" style="--c:${ELEM[e].c}" title="${ELEM[e].n}">${ELEM[e].k}</span>`;
 const SWORD_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5l-.4 5.6-8.6 8.6-3.2-3.2 8.6-8.6z"/><path d="M6.4 13.3l4.3 4.3-1.4 1.4 1.5 1.5-1.5 1.5-1.5-1.5-2.4 2.4-1.5-1.5 2.4-2.4-1.5-1.5 1.5-1.5z"/></svg>';
 const SHIELD_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>';
+// repli sans dessin : pastille de la couleur de l'élément avec son symbole
+const fbIcon = (el, u, cd) => { const c = SPC[el] || SPC.terre; return `<span class="spi fb${u ? " u" : ""}${cd ? " cd" : ""}" style="--c1:${c[0]};--c2:${c[1]};--g:${c[2]}"><i class="fbg">${ELEM[el].k}</i>${cd > 0 ? `<i class="spn">${cd}</i>` : ""}</span>`; };
 function gridHtml(h) {
   const hi = F.heroes.indexOf(h), dis = F.busy ? "disabled" : "", key = (k) => (F.sel === hi + ":" + k ? " sel" : "");
-  const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${off || F.busy ? "disabled" : ""}>${inner}</button>`;
+  const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${(off || F.busy) && !cls.includes("ico") ? "disabled" : ""}>${inner}</button>`;
   const sk = h.c.skills.map((s, i) => {
     const dmg = s.fx.some((f) => f.k === "dmg" || f.k === "dot"), cd = h.cd[i];
-    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>'}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${comboTag(h, s)}</div>`}`, i === 3 ? "ult" : "", cd > 0);
+    const spi = heroSp(h.c.id, i, skEl(h, s), { u: i === 3, cd, v: varTag(h, i) });
+    return cell(i, spi || fbIcon(skEl(h, s), i === 3, cd), "ico" + (i === 3 ? " ult" : ""), cd > 0);
   });
-
-
   return `<div class="gridm">
-
-    ${cell("foc", `<div class="t"><span class="ic grdi" style="--c:#9fc0ff">${SHIELD_SVG}</span><b>Concentration</b></div><div class="ds vv">Recharges −1 · −25 % de dégâts subis</div>`, "small grd foc")}
+    ${cell("foc", `<span class="spi fb" style="--c1:#2a3a5a;--c2:#0c1424;--g:#9fc0ff"><i class="fbg">${SHIELD_SVG}</i></span>`, "ico grd foc")}
     ${sk.join("")}</div>`;
 }
 // héros actif avancé au centre, les autres estompés
@@ -5096,7 +5148,7 @@ async function useSkill(hi, si, ti) {
   if (cb) { pw *= cb.mul || 1; pop("COMBO : " + cb.n.toUpperCase(), "#ffd25a"); log(`Combo ${cb.n} !`); sfxDiscover(); }
   const CM = cb ? { ...(cb.crit ? { crit: true } : {}), ...(cb.pen ? { pen: cb.pen } : {}) } : {};
   log(`${h.c.name} : ${sk.n}`);
-  skBanner("hero", h.c.name, sk.n, si === "foc" ? "集" : ELEM[skEl(h, sk)].k, si === "foc" ? "#9fc0ff" : ELEM[skEl(h, sk)].c);
+  skBanner("hero", h.c.name, sk.n, si === "foc" ? "集" : heroSp(h.c.id, si, skEl(h, sk), { u: !!sk.ult }) || ELEM[skEl(h, sk)].k, si === "foc" ? "#9fc0ff" : ELEM[skEl(h, sk)].c);
   const dmgFx = sk.fx.find((f) => f.k === "dmg"), melee = MELEE.includes(h.c.look.wpn);
   heroMove(h, si === "foc" ? "guard" : dmgFx ? (melee ? "dash" : "cast") : "act", dmgFx ? 420 + (dmgFx.hits || 1) * 170 : 0);
   if (si === "foc") supportFx("guard", [h]);
@@ -5248,7 +5300,7 @@ async function bossTurn() {
 async function bossAct(mv) {
   const b = F.boss, fx = mv.fx || {}, M = b.mode || "n", pk = mv.prot || "any";
   log(`${b.name} : ${mv.n}`);
-  skBanner("boss", b.name, mv.n, mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単");
+  skBanner("boss", b.name, mv.n, bossSp(b.id, b.intent, b.el, mv.big) || (mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単"));
   flashCls(document.getElementById("bstage"), "lunge");
   await sleep(320);
   if (mv.t !== "self") { lightAt("party", mv.type === "m" ? ELEM[b.el].c : "#ff5a3a", mv.big); cam(mv.big ? "shake-b" : "shake-s"); }
@@ -5411,7 +5463,31 @@ function settingsOpen(confirm) {
 document.addEventListener("input", (e) => { if (e.target && e.target.id === "musvol") { setMusVolume(e.target.value / 100); const l = document.getElementById("musvolv"); if (l) l.textContent = e.target.value + " %"; } });
 
 // ===================== ÉVÉNEMENTS =====================
+// appui long sur une icône de sort : affiche son nom et sa description (le clic qui suit est ignoré)
+let LP = { t: 0, at: 0, tip: null };
+function lpHide() { clearTimeout(LP.t); if (LP.tip) { LP.tip.remove(); LP.tip = null; LP.at = Date.now(); } }
+document.addEventListener("pointerdown", (e) => {
+  const b = e.target.closest && e.target.closest(".cg.ico, #bint"); lpHide(); if (!b || !F) return;
+  LP.t = setTimeout(() => {
+    const tip = document.createElement("div"); tip.className = "lptip";
+    if (b.id === "bint") {
+      const mv = F.boss.moves[F.boss.intent]; if (!mv || F.boss.stun) return;
+      tip.innerHTML = `<b>${mv.n}</b><em>Annoncé pour le prochain tour du boss</em><p>${mv.d}</p>`;
+    } else {
+      const h = F.heroes[F.active], raw = b.dataset.i, si = raw === "foc" ? raw : +raw; if (!h) return;
+      const sk = getSk(h, si); if (!sk) return;
+      tip.innerHTML = `<b>${sk.n}</b>${typeof si === "number" && h.cd[si] > 0 ? `<em>Recharge : ${h.cd[si]} tour${h.cd[si] > 1 ? "s" : ""}</em>` : ""}<p>${si === "foc" ? "Aucune attaque. Recharges −1 pour tous tes sorts, −25 % de dégâts subis ce tour." : skDesc(h, sk, si)}${si === "foc" ? "" : comboTag(h, sk)}</p>`;
+    }
+    document.body.appendChild(tip); LP.tip = tip;
+    const r = b.getBoundingClientRect(), w = tip.offsetWidth, hh = tip.offsetHeight;
+    if (b.id === "bint") { tip.style.left = Math.max(6, r.left) + "px"; tip.style.top = Math.max(6, r.top - hh - 8) + "px"; }
+    else { tip.style.left = Math.max(6, r.left - w - 10) + "px"; tip.style.top = Math.max(6, Math.min(innerHeight - hh - 6, r.top + r.height / 2 - hh / 2)) + "px"; }
+  }, 380);
+});
+["pointerup", "pointercancel", "pointerleave", "scroll"].forEach((ev) => document.addEventListener(ev, lpHide, true));
+document.addEventListener("contextmenu", (e) => { if (e.target.closest && e.target.closest(".cg.ico, #bint")) e.preventDefault(); });
 document.addEventListener("click", (e) => {
+  if (Date.now() - LP.at < 700 && e.target.closest(".cg.ico, #bint")) { e.stopImmediatePropagation(); return; }
   const t = e.target.closest("[data-act]"); if (!t) return;
   const a = t.dataset.act;
   if (a === "closesheet") { if (e.target === t || t.tagName === "BUTTON") t.closest(".sheet")?.remove(); return; }
