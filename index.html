@@ -1442,7 +1442,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .cg.ico .pips{margin-top:0!important}
 .cg.ico.ult:not(.cel){border-color:#e2b250}
 .lptip{position:fixed;z-index:999;width:max-content;max-width:min(300px,86vw);padding:8px 11px;border:1px solid #a87a24;border-radius:8px;background:rgba(14,8,11,.97);color:#f2e7d3;box-shadow:0 6px 18px rgba(0,0,0,.6);pointer-events:none;font-size:13px;line-height:1.35}
-.lptip b{display:block;font-family:var(--display);font-size:15px;color:#f2d28a}.lptip em{display:block;font-style:normal;color:#ff9a8a;font-size:12px}.lptip p{margin:3px 0 0}.lptip .lpfx{font-weight:700}.lptip .fx-burn{color:#d9600c;font-weight:700}.lptip .fx-poison{color:#4fd35a;font-weight:700}.lptip .fx-bleed{color:#ff3b3b;font-weight:700}.lptip .fx-heal{color:#4fd35a;font-weight:700}.lptip .fx-buff{color:#4aa8ff;font-weight:700}.lptip .fx-debuff{color:#ff3b3b;font-weight:700}.lptip .fx-charm{color:#ff8ec8;font-weight:700}.lptip .fx-rez{color:#ffd24a;font-weight:700}
+.lptip b{display:block;font-family:var(--display);font-size:15px;color:#f2d28a}.lptip em{display:block;font-style:normal;color:#ff9a8a;font-size:12px}.lptip p{margin:3px 0 0}.lptip .lpfx{font-weight:700}.lptip em.fx-buff{color:#4aa8ff;font-weight:700}.lptip .fx-burn{color:#d9600c;font-weight:700}.lptip .fx-poison{color:#4fd35a;font-weight:700}.lptip .fx-bleed{color:#ff3b3b;font-weight:700}.lptip .fx-heal{color:#4fd35a;font-weight:700}.lptip .fx-buff{color:#4aa8ff;font-weight:700}.lptip .fx-debuff{color:#ff3b3b;font-weight:700}.lptip .fx-charm{color:#ff8ec8;font-weight:700}.lptip .fx-charge{color:#c9a4ff;font-weight:700}.lptip .fx-rez{color:#ffd24a;font-weight:700}
 .cg .t .spi{--s:calc(30*var(--u));order:2;margin-left:auto}
 #app .fight.ug .cg.cel .t .spi{--s:calc(18*var(--u));margin-left:calc(1*var(--u))}
 #app .fight.ug .cg.cel .t b{font-size:calc(10*var(--u))}
@@ -2050,7 +2050,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 68; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 69; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5606,7 +5606,8 @@ const FXC = [
   [/Ressuscite|ressuscite|[Rr]éanime|Résurrection/g, "fx-rez"],
   [/soigne|soignée|retire les malus|retire un malus|régénère|Régén\w*/g, "fx-heal"],
   [/Charmé|Charme/g, "fx-charm"],
-  [/[Bb]ouclier|subit \d+ % de dégâts en moins|y font [−-]\d+ %|immunité aux exécutions|inflige \+\d+ % de dégâts|recharges des alliés sont réduites de \d|Provoque|provoque|riposte|Esquive|esquive|leurre|immunisée?|[−-]\d+ % de dégâts subis|dégâts subis de \d+ %|ATK (?:d'équipe |de l'équipe )?\+\d+ %|renvoie|Renvoie|Garde/g, "fx-buff"],
+  [/\+\d+ charges?|toutes les charges|par charge/g, "fx-charge"], [/\+\d+ braises?|Consomme les braises|par braise|\(\+\d+ % par braise, consommées\)/g, "fx-burn"],
+  [/ignore la défense|ignorent l'armure|×\d+(?:,\d+)? si le boss a moins de \d+ % PV|Recharge : \d+ tours?|[Bb]ouclier|subit \d+ % de dégâts en moins|y font [−-]\d+ %|immunité aux exécutions|inflige \+\d+ % de dégâts|recharges des alliés sont réduites de \d|Provoque|provoque|riposte|Esquive|esquive|leurre|immunisée?|[−-]\d+ % de dégâts subis|dégâts subis de \d+ %|ATK (?:d'équipe |de l'équipe )?\+\d+ %|renvoie|Renvoie|Garde/g, "fx-buff"],
   [/[Rr]éduit (?:l'ATK|la DEF|son ATK) (?:du boss )?de \d+ %|ATK (?:du boss )?[−-]\d+ %|DEF (?:du boss )?[−-]\d+ %|subit \+\d+ % de dégâts|retardé|repousse la prochaine action du boss d'un tour|Bloque les soins|Marque|Exposé/g, "fx-debuff"],
 ];
 function fxColor(html) {
@@ -5641,7 +5642,7 @@ document.addEventListener("pointerdown", (e) => {
     } else {
       const h = F.heroes[F.active], raw = b.dataset.i, si = raw === "foc" ? raw : +raw; if (!h) return;
       const sk = getSk(h, si); if (!sk) return;
-      tip.innerHTML = `<b>${sk.n}</b>${typeof si === "number" && h.cd[si] > 0 ? `<em>Recharge : ${h.cd[si]} tour${h.cd[si] > 1 ? "s" : ""}</em>` : ""}<p>${si === "foc" ? fxColor("Aucune attaque. Recharges −1 pour tous tes sorts, −25 % de dégâts subis ce tour") : fxColor(noEndDot(skDesc(h, sk, si)))}${si === "foc" ? "" : comboTag(h, sk)}</p>`;
+      tip.innerHTML = `<b>${sk.n}</b>${typeof si === "number" && h.cd[si] > 0 ? `<em class="fx-buff">Recharge : ${h.cd[si]} tour${h.cd[si] > 1 ? "s" : ""}</em>` : ""}<p>${si === "foc" ? fxColor("Aucune attaque. Recharges −1 pour tous tes sorts, −25 % de dégâts subis ce tour") : fxColor(noEndDot(skDesc(h, sk, si)))}${si === "foc" ? "" : comboTag(h, sk)}</p>`;
     }
     document.body.appendChild(tip); LP.tip = tip;
     const r = b.getBoundingClientRect(), w = tip.offsetWidth, hh = tip.offsetHeight;
