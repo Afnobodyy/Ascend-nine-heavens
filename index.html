@@ -2039,7 +2039,7 @@ body:has(.fight) #fbgx{display:block}
 .fight .hr,.fight .cmd,.fight .ohb,.fight .intent{backdrop-filter:none;-webkit-backdrop-filter:none}
 .fight .ohb,.fight .hr{background-color:rgba(14,8,11,.85)}
 /* v.59 annonce du boss : 2 icônes (Tour 1 / Tour 2), description en appui long */
-#app .fight #bint{display:flex!important;align-items:flex-end;gap:calc(14*var(--u));width:auto!important;background:none!important;border:0!important;padding:0!important;left:calc(14*var(--u))!important;bottom:calc(8*var(--u))!important}
+#app .fight #bint{overflow:visible!important;display:flex!important;align-items:flex-end;gap:calc(14*var(--u));width:auto!important;background:none!important;border:0!important;padding:0!important;left:calc(14*var(--u))!important;bottom:calc(8*var(--u))!important}
 #bint .bslot{display:flex;flex-direction:column;align-items:center;gap:calc(4*var(--u));-webkit-touch-callout:none;user-select:none;-webkit-user-select:none;cursor:help}
 #bint .btour{font-family:var(--display);font-weight:800;font-size:calc(15*var(--u));line-height:1;color:#fff;letter-spacing:.04em;text-shadow:0 0 calc(4*var(--u)) #000,0 calc(1*var(--u)) calc(2*var(--u)) #000,0 0 calc(10*var(--u)) rgba(0,0,0,.9);padding:calc(2*var(--u)) calc(7*var(--u));background:rgba(8,4,6,.72);border:calc(1*var(--u)) solid rgba(255,255,255,.25);border-radius:calc(5*var(--u))}
 #bint .bslot .spi{--s:calc(56*var(--u))!important;margin:0!important}
@@ -2050,7 +2050,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 62; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 63; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
