@@ -2042,7 +2042,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 57; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 58; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5040,7 +5040,31 @@ function bossHead(img) {
     return (HEADC[k] = { ty: top / h, cx: n ? sx / n / w : 0.5 });
   } catch (e) { return null; }
 }
+// pieds du boss : toujours sur la même ligne que les pieds du héros le plus bas (dernier pixel opaque des sprites)
+const FOOTC = {};
+function footY(img) {
+  const k = img.currentSrc || img.src; if (!k || !img.naturalWidth) return null;
+  if (FOOTC[k] != null) return FOOTC[k];
+  try {
+    const w = img.naturalWidth, h = img.naturalHeight, c = document.createElement("canvas"); c.width = w; c.height = h;
+    const x = c.getContext("2d"); x.drawImage(img, 0, 0); const d = x.getImageData(0, 0, w, h).data;
+    for (let y = h - 1; y >= 0; y--) for (let i = 0; i < w; i++) if (d[(y * w + i) * 4 + 3] > 40) return (FOOTC[k] = (y + 1) / h);
+  } catch (e) {}
+  return null;
+}
+function alignBossFeet() {
+  const bx = document.getElementById("bstage"), bi = document.querySelector("#bstage .bimg"), sc = document.getElementById("scene");
+  if (!bx || !bi || !sc || !document.querySelector(".fight.ug")) return;
+  if (!bi.complete || !bi.naturalWidth) { bi.addEventListener("load", () => { alignBossFeet(); placeBossName(); }, { once: true }); return; }
+  const k = sc.getBoundingClientRect().width / sc.offsetWidth || 1;
+  bx.style.setProperty("translate", "0 0", "important");
+  let hf = -1;
+  document.querySelectorAll(".pcw .pimg").forEach((im) => { if (!im.complete || !im.naturalWidth) return; const r = im.getBoundingClientRect(), f = footY(im); hf = Math.max(hf, r.top + r.height * (f == null ? 1 : f)); });
+  const bf = footY(bi), br = bi.getBoundingClientRect(); if (hf < 0 || bf == null || !br.height) return;
+  bx.style.setProperty("translate", "0 " + ((hf - (br.top + br.height * bf)) / k) + "px", "important");
+}
 function placeBossName() {
+  alignBossFeet();
   const sc = document.getElementById("scene"), bi = document.querySelector("#bstage .bimg"), bh = document.querySelector(".bhud"); if (!sc || !bi || !bh) return;
   if (!bi.complete || !bi.naturalWidth) { bi.addEventListener("load", placeBossName, { once: true }); return; }
   const fg = document.querySelector(".fight.ug"); if (!fg) { bh.style.removeProperty("left"); bh.style.removeProperty("top"); return; }
