@@ -884,6 +884,7 @@ h1,h2,h3{font-family:var(--display);font-weight:800;margin:0;text-wrap:balance}
 .note{color:var(--muted);font-size:13px;margin:0}
 
 /* équipe */
+.pc.fxdim{opacity:.35}
 .slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .slot.empty{border:1.5px dashed var(--line2);border-radius:9px;display:grid;place-items:center;aspect-ratio:3/4.2;color:var(--dim);font-size:13px;text-align:center;padding:6px}
 .roles{display:flex;flex-wrap:wrap;gap:6px}
@@ -2055,7 +2056,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 78; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 79; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -3676,9 +3677,17 @@ async function hitFx(h, i, big, el) {
   if (el === "eau") { if (!pxPlay("splash", { ...j, y: P.y + 130 * P.s }, { k: 2.4, dur: 1200 })) fxSplash(j, B); } else fxBurst(j, [col, "#ffd27a", "#fff"], 26, B, 1);
 }
 const sleepFx = (ms) => new Promise((r) => setTimeout(r, ms));
+// Baisse l'opacité des héros non concernés par un effet : 1 touché -> les autres baissent ; 2-3 touchés -> seuls les non touchés baissent ; équipe entière touchée -> rien.
+let dimTok = 0;
+function dimOthers(touched, ms = 900) {
+  const hs = F.heroes || [], set = new Set(touched), tok = ++dimTok;
+  hs.forEach((h) => { const e = heroEl(h); if (e) e.classList.toggle("fxdim", !set.has(h) && !h.dead && set.size < hs.filter((x) => !x.dead).length); });
+  setTimeout(() => { if (tok === dimTok) hs.forEach((h) => { const e = heroEl(h); if (e) e.classList.remove("fxdim"); }); }, ms * FXT);
+}
 function supportFx(kind, targets, h) {
   sfxSupport(kind);
   if (!fxOn()) return;
+  dimOthers(targets);
   for (const t of targets) {
     const P = heroP(t, .55); if (!P) continue;
     if (kind === "heal") { if (!pxPlay("heal", heroP(t, .93), { k: 2.3, actor: 1 })) fxPlus(P, "#7dffb0"); }
@@ -3694,6 +3703,7 @@ function bossDebuffFx(col) { if (!fxOn()) return; const P = bossP(); if (P) fxRu
 // Coup du boss sur un héros
 function bossHitFx(t, mv, el) {
   if (!fxOn()) return;
+  if (mv.t !== "aoe") dimOthers([t], 650);
   const P = heroP(t, .5); if (!P) return;
   if (mv.type === "p") { if (mv.t === "aoe") fxImpact(P, "#ff6a4a", .8); else fxClaw(P, "#ff4a3a", mv.big ? 1.3 : 1); }
   else fxBurst(P, [ELEM[el].c, "#fff"], 20, mv.big ? 1.2 : .9);
