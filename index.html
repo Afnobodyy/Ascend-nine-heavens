@@ -1442,7 +1442,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .cg.ico .pips{margin-top:0!important}
 .cg.ico.ult:not(.cel){border-color:#e2b250}
 .lptip{position:fixed;z-index:999;width:max-content;max-width:min(300px,86vw);padding:8px 11px;border:1px solid #a87a24;border-radius:8px;background:rgba(14,8,11,.97);color:#f2e7d3;box-shadow:0 6px 18px rgba(0,0,0,.6);pointer-events:none;font-size:13px;line-height:1.35}
-.lptip b{display:block;font-family:var(--display);font-size:15px;color:#f2d28a}.lptip em{display:block;font-style:normal;color:#ff9a8a;font-size:12px}.lptip p{margin:3px 0 0}
+.lptip b{display:block;font-family:var(--display);font-size:15px;color:#f2d28a}.lptip em{display:block;font-style:normal;color:#ff9a8a;font-size:12px}.lptip p{margin:3px 0 0}.lptip .lpfx{font-weight:700}.lptip em.fx-buff{color:#4aa8ff;font-weight:700}.lptip .fx-burn{color:#d9600c;font-weight:700}.lptip .fx-poison{color:#4fd35a;font-weight:700}.lptip .fx-bleed{color:#ff3b3b;font-weight:700}.lptip .fx-heal{color:#4fd35a;font-weight:700}.lptip .fx-buff{color:#4aa8ff;font-weight:700}.lptip .fx-debuff{color:#ff3b3b;font-weight:700}.lptip .fx-charm{color:#ff8ec8;font-weight:700}.lptip .fx-charge{color:#c9a4ff;font-weight:700}.lptip .fx-rez{color:#ffd24a;font-weight:700}
 .cg .t .spi{--s:calc(30*var(--u));order:2;margin-left:auto}
 #app .fight.ug .cg.cel .t .spi{--s:calc(18*var(--u));margin-left:calc(1*var(--u))}
 #app .fight.ug .cg.cel .t b{font-size:calc(10*var(--u))}
@@ -2038,11 +2038,19 @@ body:has(.fight) #fbgx{display:block}
 .fight .flash{mix-blend-mode:normal}
 .fight .hr,.fight .cmd,.fight .ohb,.fight .intent{backdrop-filter:none;-webkit-backdrop-filter:none}
 .fight .ohb,.fight .hr{background-color:rgba(14,8,11,.85)}
+/* v.59 annonce du boss : 2 icônes (Tour 1 / Tour 2), description en appui long */
+#app .fight #bint{overflow:visible!important;display:flex!important;align-items:flex-end;gap:calc(14*var(--u));width:auto!important;background:none!important;border:0!important;padding:0!important;left:calc(14*var(--u))!important;bottom:calc(8*var(--u))!important}
+#bint .bslot{display:flex;flex-direction:column;align-items:center;gap:calc(4*var(--u));-webkit-touch-callout:none;user-select:none;-webkit-user-select:none;cursor:help}
+#bint .btour{font-family:var(--display);font-weight:800;box-sizing:border-box;width:calc(56*var(--u));text-align:center;white-space:nowrap;font-size:calc(12.5*var(--u));line-height:1;color:#fff;letter-spacing:.02em;text-shadow:0 0 calc(4*var(--u)) #000,0 calc(1*var(--u)) calc(2*var(--u)) #000,0 0 calc(10*var(--u)) rgba(0,0,0,.9);padding:calc(3*var(--u)) 0;background:rgba(8,4,6,.72);border:calc(1*var(--u)) solid rgba(255,255,255,.25);border-radius:calc(5*var(--u))}
+#bint .bslot .spi{--s:calc(56*var(--u))!important;margin:0!important}
+#bint .bslot.big .spi{box-shadow:0 0 calc(12*var(--u)) rgba(255,80,60,.9)}
+#bint .bslot.alert .spi{box-shadow:0 0 0 calc(2*var(--u)) #ff3b2f,0 0 calc(14*var(--u)) rgba(255,59,47,.95)}
+#bint .bgl{display:flex;align-items:center;justify-content:center;width:calc(56*var(--u));height:calc(56*var(--u));border-radius:22%;background:#2a1210;border:calc(2*var(--u)) solid #d8452f;color:#ffd9cf;font-style:normal;font-size:calc(28*var(--u))}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 57; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 70; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2549,7 +2557,7 @@ const BOSSES = [
     hint: "L'Armure d'ossements absorbe surtout les coups physiques : la magie la brise.",
     moves: {
       poing: { n: "Poing d'os", t: "single", m: 1.5, type: "p", d: "Frappe lourde sur une cible." },
-      armure: { n: "Armure d'ossements", t: "self", d: "Bouclier de 10 % PV. Les coups physiques y font −65 %. Recharge : 6 tours.", cd: 6, fx: { shield: 0.10 } },
+      armure: { n: "Armure d'ossements", t: "self", d: "Bouclier de 10 % PV. Les coups physiques sont réduits de 65 % tant que le bouclier est actif.", cd: 6, fx: { shield: 0.10 } },
       cri: { n: "Cri des morts", t: "aoe", m: 0.6, type: "m", d: "Touche l'équipe, ATK −20 %.", fx: { atkdown: { p: 0.2, d: 2 } } },
       etreinte: { n: "Étreinte funeste", t: "exec", m: 2.3, type: "p", big: 1, d: "Broie l'allié le plus affaibli (sauf provocation)." },
     },
@@ -2558,7 +2566,7 @@ const BOSSES = [
     hint: "Se soigne avec sa Perle : garde du burst pour après. Enrage en phase 2 puis lance Tsunami.",
     moves: {
       raz: { n: "Raz-de-marée", t: "aoe", m: 0.85, type: "m", d: "Touche toute l'équipe." },
-      perle: { n: "Perle du dragon", t: "self", d: "Se soigne de 8 % et gagne un bouclier de 8 %. Recharge : 8 tours.", cd: 8, fx: { selfheal: 0.08, shield: 0.08 } },
+      perle: { n: "Perle du dragon", t: "self", d: "Se soigne de 8 % et gagne un bouclier de 8 %.", cd: 8, fx: { selfheal: 0.08, shield: 0.08 } },
       morsure: { n: "Morsure abyssale", t: "single", m: 1.6, type: "p", d: "Frappe lourde sur une cible." },
       colere: { n: "Colère des mers", t: "self", d: "ATK +30 % pour le reste du combat.", fx: { enrage: 0.3 } },
       tsunami: { n: "Tsunami", t: "aoe", m: 1.55, type: "m", big: 1, d: "Vague colossale sur toute l'équipe." },
@@ -4562,7 +4570,7 @@ function bossSetup(b) {
       break;
     case "ryujin":
       set("tsunami", { prot: "sum60", expose: "prot", err: err({ team: 0.4 }, { team: 0.75 }, { lose: 1 }), fatal: X });
-      if (H) { b.tideOn = true; b.splashOn = true; b.gauge = { n: "Marée", v: 0, max: 0 }; set("perle", { d: "Se soigne de 8 % et gagne un bouclier de 8 %. Non brisé le tour même, il renvoie 20 %. Recharge : 8 tours." }); }
+      if (H) { b.tideOn = true; b.splashOn = true; b.gauge = { n: "Marée", v: 0, max: 0 }; set("perle", { d: "Se soigne de 8 % et gagne un bouclier de 8 %. Non brisé le tour même, il renvoie 20 %." }); }
       if (X) { b.look = 3; set("colere", { d: "ATK +15 % cumulatif à chaque tour.", fx: { enrage: 0.15 }, wrath: true }); }
       break;
     case "phenix":
@@ -4908,17 +4916,13 @@ function update() {
     $("bwk").innerHTML = `<span class="lbl">Faible</span>${dk.w ? `<span class="wi" style="--c:${ELEM[we].c}" title="${ELEM[we].n}">${ELEM[we].k}</span>` : `<span class="wi unk" title="Faiblesse inconnue">?</span>`}${dmgT ? `<span class="wi" style="--c:#e8dcc0">${dmgT === "m" ? "術" : "剣"}</span>` : ""}${stChips(b.st)}${b.gauge ? `<span class="st bad">${b.gauge.n} ${b.gauge.max ? b.gauge.v + "/" + b.gauge.max : "+" + b.gauge.v + " %"}</span>` : ""}`; }
   $("bstage").classList.toggle("reflect", b.st.some((s) => s.k === "reflect"));
   const it = $("bint");
-  if (b.stun) { it.className = "intent stun"; it.innerHTML = `<i>暈</i><b>Étourdi</b><span class="idsc">Perd son prochain tour, subit +50 % de dégâts.</span>`; }
+  const slot = (k, i, extra) => { const mv = b.moves[k], g = mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単"; return `<div class="bslot${mv.big ? " big" : ""}${extra || ""}" data-s="${i}"><span class="btour">Tour ${i + 1}</span>${bossSp(b.id, k, b.el, mv.big) || `<i class="bgl">${g}</i>`}</div>`; };
+  if (b.stun) { it.className = "intent stun"; it.innerHTML = `<div class="bslot stunned" data-s="stun"><span class="btour">Tour 1</span><i class="bgl">暈</i></div>`; }
   else {
-    const mv = b.moves[b.intent];
-    const g = mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単";
+    const mv = b.moves[b.intent], alert = mv.fatal && b.mode === "m";
     it.className = "intent" + (mv.big ? " big" : "");
-    const tg = bossTargets();
-    const tl = mv.t === "self" ? "" : mv.t === "aoe" ? "Toute l'équipe" : mv.t === "multi" ? `${mv.hits} coups au hasard` : tg[0] ? tg[0].c.name : "";
-    const nxl = (b.queue || []).slice(0, (b.look || 2) - 1).map((k) => b.moves[k].n), alert = mv.fatal && b.mode === "m";
-    if (alert) it.className += " alert";
-    const bsp = bossSp(b.id, b.intent, b.el, mv.big);
-    it.title = mv.d; it.innerHTML = `${bsp || `<i>${g}</i>`}<b>${alert ? "⚠ ACTION FATALE · " : ""}${mv.n}</b>${tl ? `<em class="itg">🎯 ${tl}</em>` : ""}<span class="idsc">${mv.d}</span>${nxl.length ? `<em class="inext">Ensuite : ${nxl.join(" › ")}</em>` : ""}`;
+    const nx = (b.queue || []).slice(0, (b.look || 2) - 1);
+    it.innerHTML = slot(b.intent, 0, alert ? " alert" : "") + nx.map((k, j) => slot(k, j + 1)).join("");
   }
   const aims = bossTargets();
   const order = F.heroes.map((h, i) => ({ h, i })).filter((o) => !o.h.dead);
@@ -5040,7 +5044,31 @@ function bossHead(img) {
     return (HEADC[k] = { ty: top / h, cx: n ? sx / n / w : 0.5 });
   } catch (e) { return null; }
 }
+// pieds du boss : toujours sur la même ligne que les pieds du héros le plus bas (dernier pixel opaque des sprites)
+const FOOTC = {};
+function footY(img) {
+  const k = img.currentSrc || img.src; if (!k || !img.naturalWidth) return null;
+  if (FOOTC[k] != null) return FOOTC[k];
+  try {
+    const w = img.naturalWidth, h = img.naturalHeight, c = document.createElement("canvas"); c.width = w; c.height = h;
+    const x = c.getContext("2d"); x.drawImage(img, 0, 0); const d = x.getImageData(0, 0, w, h).data;
+    for (let y = h - 1; y >= 0; y--) for (let i = 0; i < w; i++) if (d[(y * w + i) * 4 + 3] > 40) return (FOOTC[k] = (y + 1) / h);
+  } catch (e) {}
+  return null;
+}
+function alignBossFeet() {
+  const bx = document.getElementById("bstage"), bi = document.querySelector("#bstage .bimg"), sc = document.getElementById("scene");
+  if (!bx || !bi || !sc || !document.querySelector(".fight.ug")) return;
+  if (!bi.complete || !bi.naturalWidth) { bi.addEventListener("load", () => { alignBossFeet(); placeBossName(); }, { once: true }); return; }
+  const k = sc.getBoundingClientRect().width / sc.offsetWidth || 1;
+  bx.style.setProperty("translate", "0 0", "important");
+  let hf = -1;
+  document.querySelectorAll(".pcw .pimg").forEach((im) => { if (!im.complete || !im.naturalWidth) return; const r = im.getBoundingClientRect(), f = footY(im); hf = Math.max(hf, r.top + r.height * (f == null ? 1 : f)); });
+  const bf = footY(bi), br = bi.getBoundingClientRect(); if (hf < 0 || bf == null || !br.height) return;
+  bx.style.setProperty("translate", "0 " + ((hf - (br.top + br.height * bf)) / k) + "px", "important");
+}
 function placeBossName() {
+  alignBossFeet();
   const sc = document.getElementById("scene"), bi = document.querySelector("#bstage .bimg"), bh = document.querySelector(".bhud"); if (!sc || !bi || !bh) return;
   if (!bi.complete || !bi.naturalWidth) { bi.addEventListener("load", placeBossName, { once: true }); return; }
   const fg = document.querySelector(".fight.ug"); if (!fg) { bh.style.removeProperty("left"); bh.style.removeProperty("top"); return; }
@@ -5572,32 +5600,60 @@ function settingsOpen(confirm) {
 }
 document.addEventListener("input", (e) => { if (e.target && e.target.id === "musvol") { setMusVolume(e.target.value / 100); const l = document.getElementById("musvolv"); if (l) l.textContent = e.target.value + " %"; } });
 
+// couleurs des effets dans les infobulles (brûlure rouge, poison vert, buff bleu, malus violet, soin rose)
+const FXC = [
+  [/Br[ûu]lure(?: forte)?/g, "fx-burn"], [/Poison(?: fort| puissant)?/g, "fx-poison"], [/Saignement/g, "fx-bleed"],
+  [/Ressuscite|ressuscite|[Rr]éanime|Résurrection/g, "fx-rez"],
+  [/soigne|soignée|retire les malus|retire un malus|régénère|Régén\w*/g, "fx-heal"],
+  [/Charmé|Charme/g, "fx-charm"],
+  [/\+\d+ charges?|toutes les charges|par charge/g, "fx-charge"], [/\+\d+ braises?|Consomme les braises|par braise|\(\+\d+ % par braise, consommées\)/g, "fx-burn"],
+  [/ignore la défense|ignorent l'armure|×\d+(?:,\d+)? si le boss a moins de \d+ % PV|[Bb]ouclier|subit \d+ % de dégâts en moins|sont réduits de \d+ % tant que le bouclier est actif|immunité aux exécutions|inflige \+\d+ % de dégâts|recharges des alliés sont réduites de \d|Provoque|provoque|riposte|Esquive|esquive|leurre|immunisée?|[−-]\d+ % de dégâts subis|dégâts subis de \d+ %|ATK (?:d'équipe |de l'équipe )?\+\d+ %|renvoie|Renvoie|Garde/g, "fx-buff"],
+  [/[Rr]éduit (?:l'ATK|la DEF|son ATK) (?:du boss )?de \d+ %|ATK (?:du boss )?[−-]\d+ %|DEF (?:du boss )?[−-]\d+ %|subit \+\d+ % de dégâts|retardé|repousse la prochaine action du boss d'un tour|Bloque les soins|Marque|Exposé/g, "fx-debuff"],
+];
+function fxColor(html) {
+  return html.split(/(<[^>]+>)/).map((part, i) => { if (i % 2) return part; FXC.forEach(([re, c]) => { part = part.replace(re, (m) => `\u0001${c}\u0002${m}\u0003`); }); return part; }).join("").replace(/\u0001([a-z-]+)\u0002/g, '<span class="$1">').replace(/\u0003/g, "</span>");
+}
+const noEndDot = (t) => t.replace(/\.(\s*)$/, "$1");
+// description d'une technique de boss : effet seul + dernière ligne = cible
+function bossEffectDesc(mv) {
+  let d = mv.d || "";
+  [[/^Touche (toute )?l'équipe\.?$/, ""], [/^Touche l'équipe( et |, )/, ""], [/^Dévaste l'équipe et /, "Dévaste et "], [/^Frappe l'allié le plus fort et /, "Frappe et "],
+   [/^(\S+) l'allié le plus \S+( \(sauf provocation\))?\.$/, ""], [/^(Trois|Six|Huit) coups sur des cibles au hasard\.$/, ""], [/^Frappe une cible et /, "Frappe et "], [/ sur (toute )?l'équipe/, ""], [/ sur une cible/, ""], [/^Frappe une cible\.?$/, ""]].forEach(([r, x]) => { d = d.replace(r, x); });
+  return d ? d.charAt(0).toUpperCase() + d.slice(1) : "";
+}
+function bossTargetLine(mv, tg) {
+  return mv.t === "self" ? "Cible : lui-même" : mv.t === "aoe" ? "Touche toute l'équipe" : mv.t === "multi" ? `Touche ${mv.hits} héros au hasard` : mv.t === "exec" ? "Touche l'allié le plus affaibli (sauf provocation)" : mv.t === "charm" ? "Touche l'allié le plus fort" : tg && tg[0] ? `Touche ${tg[0].c.name}` : "Touche un héros";
+}
 // ===================== ÉVÉNEMENTS =====================
 // appui long sur une icône de sort : affiche son nom et sa description (le clic qui suit est ignoré)
 let LP = { t: 0, at: 0, tip: null };
 function lpHide() { clearTimeout(LP.t); if (LP.tip) { LP.tip.remove(); LP.tip = null; LP.at = Date.now(); } }
 document.addEventListener("pointerdown", (e) => {
-  const b = e.target.closest && e.target.closest(".cg.ico, #bint"); lpHide(); if (!b || !F) return;
+  const b = e.target.closest && e.target.closest(".cg.ico, .bslot"); lpHide(); if (!b || !F) return;
   LP.t = setTimeout(() => {
     const tip = document.createElement("div"); tip.className = "lptip";
-    if (b.id === "bint") {
-      const mv = F.boss.moves[F.boss.intent]; if (!mv || F.boss.stun) return;
-      tip.innerHTML = `<b>${mv.n}</b><em>Annoncé pour le prochain tour du boss</em><p>${mv.d}</p>`;
+    if (b.classList.contains("bslot")) {
+      if (b.dataset.s === "stun") { tip.innerHTML = `<b>Étourdi</b><p>Perd son prochain tour, subit +50 % de dégâts.</p>`; }
+      else {
+        const si = +b.dataset.s, k = si === 0 ? F.boss.intent : (F.boss.queue || [])[si - 1], mv = k && F.boss.moves[k]; if (!mv) return;
+        const tg = si === 0 ? bossTargets() : [], tl = bossTargetLine(mv, tg), ds = bossEffectDesc(mv);
+        tip.innerHTML = `<b>${F.boss.mode === "m" && si === 0 && mv.fatal ? "⚠ ACTION FATALE · " : ""}${mv.n}</b><p>${ds ? `<span class="lpfx">${fxColor(noEndDot(ds))}</span><br>` : ""}${tl}</p>`;
+      }
     } else {
       const h = F.heroes[F.active], raw = b.dataset.i, si = raw === "foc" ? raw : +raw; if (!h) return;
       const sk = getSk(h, si); if (!sk) return;
-      tip.innerHTML = `<b>${sk.n}</b>${typeof si === "number" && h.cd[si] > 0 ? `<em>Recharge : ${h.cd[si]} tour${h.cd[si] > 1 ? "s" : ""}</em>` : ""}<p>${si === "foc" ? "Aucune attaque. Recharges −1 pour tous tes sorts, −25 % de dégâts subis ce tour." : skDesc(h, sk, si)}${si === "foc" ? "" : comboTag(h, sk)}</p>`;
+      tip.innerHTML = `<b>${sk.n}</b>${typeof si === "number" && h.cd[si] > 0 ? `<em class="fx-buff">Recharge : ${h.cd[si]} tour${h.cd[si] > 1 ? "s" : ""}</em>` : ""}<p>${si === "foc" ? fxColor("Aucune attaque. Recharges −1 pour tous tes sorts, −25 % de dégâts subis ce tour") : fxColor(noEndDot(skDesc(h, sk, si)))}${si === "foc" ? "" : comboTag(h, sk)}</p>`;
     }
     document.body.appendChild(tip); LP.tip = tip;
     const r = b.getBoundingClientRect(), w = tip.offsetWidth, hh = tip.offsetHeight;
-    if (b.id === "bint") { tip.style.left = Math.max(6, r.left) + "px"; tip.style.top = Math.max(6, r.top - hh - 8) + "px"; }
+    if (b.classList.contains("bslot")) { tip.style.left = Math.max(6, r.left) + "px"; tip.style.top = Math.max(6, r.top - hh - 8) + "px"; }
     else { tip.style.left = Math.max(6, r.left - w - 10) + "px"; tip.style.top = Math.max(6, Math.min(innerHeight - hh - 6, r.top + r.height / 2 - hh / 2)) + "px"; }
   }, 380);
 });
 ["pointerup", "pointercancel", "pointerleave", "scroll"].forEach((ev) => document.addEventListener(ev, lpHide, true));
-document.addEventListener("contextmenu", (e) => { if (e.target.closest && e.target.closest(".cg.ico, #bint")) e.preventDefault(); });
+document.addEventListener("contextmenu", (e) => { if (e.target.closest && e.target.closest(".cg.ico, .bslot")) e.preventDefault(); });
 document.addEventListener("click", (e) => {
-  if (Date.now() - LP.at < 700 && e.target.closest(".cg.ico, #bint")) { e.stopImmediatePropagation(); return; }
+  if (Date.now() - LP.at < 700 && e.target.closest(".cg.ico, .bslot")) { e.stopImmediatePropagation(); return; }
   const t = e.target.closest("[data-act]"); if (!t) return;
   const a = t.dataset.act;
   if (a === "closesheet") { if (e.target === t || t.tagName === "BUTTON") t.closest(".sheet")?.remove(); return; }
