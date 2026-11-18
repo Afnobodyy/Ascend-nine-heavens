@@ -1794,6 +1794,16 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .mk .chip2.no{color:#ff8a7a;border-color:rgba(255,120,100,.5)}
 
 /* ============ ÉQUIPE C : fiche héros ============ */
+.bz{background:radial-gradient(ellipse at 30% 110%,#3a1614,#120a0e 65%)}
+.bz .bsub{position:absolute;right:16px;top:60px;font-size:12px;color:#b4a28e}
+.bz .bgrid{position:absolute;left:14px;right:14px;top:80px;bottom:14px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:10px}
+.bz .bsc{position:relative;display:grid;grid-template-columns:92px 1fr;grid-template-rows:1fr auto;gap:4px 10px;padding:10px;border-radius:12px;background:rgba(20,12,16,.88);border:1px solid #6a4048;min-height:0;overflow:hidden}
+.bz .bsc.lk{opacity:.5}.bz .bsc .bart{grid-row:1;width:92px;height:92px;overflow:hidden;display:grid;place-items:center;align-self:center}.bz .bsc .bart>*{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.bz .bsc .bi{display:flex;flex-direction:column;gap:2px;min-width:0;justify-content:center}.bz .bsc .bi b{font-family:var(--display);font-size:17px}.bz .bsc .bi .note{font-size:11px;color:#b4a28e}.bz .bsc .floor{font-size:11px;color:#e2b250;font-weight:800}
+.bz .bsc .bm{grid-column:1/3;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.bz .bmb{padding:6px 2px;font-size:12px;font-weight:700;border-radius:7px;border:1px solid #6a4048;background:rgba(255,255,255,.06);color:#f2e7d3}.bz .bmb.h{border-color:#a75cff88;color:#d9b8ff}.bz .bmb.m{border-color:#ff5a3c88;color:#ffb4a4}.bz .bmb.done{border-color:#5cc26b;color:#9fe3aa}.bz .bmb:disabled{opacity:.35}
+.tg .rrow{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-bottom:6px;font-size:10px;color:#b4a28e}.tg .rbtn{cursor:pointer;background:transparent;color:#d8cdb8}.tg .rbtn.on{color:#e2b250;border-color:#e2b250;background:rgba(226,178,80,.12)}
+.tg .rp .go{flex:none;padding:10px;font-size:15px}.tg .rt .roles2{display:none!important}.tg .fa{width:62px!important;height:74px!important}.tg .fi h2{font-size:21px!important}.tg .fi .chs{margin:3px 0 2px!important}.tg .stt{margin:5px 0!important}.tg .stt b{font-size:13px!important}.tg .rt{padding:6px 10px!important}.tg .rt h3{margin-bottom:4px!important}.tg .sl .pt,.tg .sl .em{--s:44px;width:44px;height:44px}
 .tg{background:radial-gradient(ellipse at 30% 110%,#3a1614,#120a0e 65%)}
 .tg .gl{position:absolute;left:14px;top:58px;bottom:14px;width:548px;border-radius:12px;background:rgba(20,12,16,.85);border:1px solid #6a4048;padding:10px 12px;display:flex;flex-direction:column}
 .tg .tabs2{display:flex;gap:6px;margin-bottom:10px}.tg .tabs2 span{padding:4px 14px;border-radius:99px;font-size:12px;color:#b4a28e;border:1px solid #6a4048;cursor:pointer}.tg .tabs2 span.on{color:#e2b250;border-color:#e2b250;background:rgba(226,178,80,.12);font-weight:700}
@@ -2091,7 +2101,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 90; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 91; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4308,7 +4318,7 @@ const elChip = (e, pre = "") => `<span class="el" style="--c:${ELEM[e].c}">${pre
 const jadeIcon = `<i class="jg"></i>`;
 function topbar() { return `<div class="topbar"><span class="brand">九天<em>Ascend: Nine Heavens</em></span><span class="tbr"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="jade">${jadeIcon}${fmt(S.jade)}</span></span></div>`; }
 function nav() {
-  return `<nav class="nav">${[["home", "Portail", "門"], ["team", "Équipe", "隊"], ["summon", "Invocation", "召"], ["boss", "Boss", "鬼"], ["coll", "Collection", "録"]]
+  return `<nav class="nav">${[["home", "Portail", "門"], ["summon", "Invocation", "召"], ["boss", "Boss", "鬼"], ["coll", "Collection", "録"]]
     .map(([k, n, g]) => `<button data-act="go" data-to="${k}" class="${screen === k ? "on" : ""}"><i>${g}</i>${n}${k === "coll" && Object.values(S.owned).some((o) => o.nw) ? '<span class="newdot" aria-label="Nouveau"></span>' : ""}</button>`).join("")}</nav>`;
 }
 function tile(id, act = "detail", sel = false) {
@@ -4339,10 +4349,8 @@ function renderHome() {
     <div class="h-team">${order.map((c) => `<div class="h-hs"><i></i>${heroArt(c)}</div>`).join("")}</div>
     <div class="h-menu">
       <button class="btn h-bt" data-act="go" data-to="summon"><i>召</i><b>Invocation</b><span>${Math.floor(S.jade / SUMMON_COST)} tirage(s)</span></button>
-      <button class="btn h-bt" data-act="go" data-to="team"><i>隊</i><b>Équipe</b><span>${lead.length === TEAM_N ? lead.map((c) => c.name).slice(0, 2).join(" · ") + "…" : "incomplète"}</span></button>
       <button class="btn h-cta" data-act="go" data-to="boss"><b>Affronter un boss</b><small>${nb.name.toUpperCase()}</small></button>
       <button class="btn h-bt" data-act="go" data-to="coll"><i>録</i><b>Collection</b><span>${Object.keys(S.owned).length} / ${CHARS.length}</span></button>
-      <button class="btn h-bt" data-act="rules"><i>問</i><b>Règles</b><span>comment jouer</span></button>
     </div><div class="h-ver">v.${GAME_VERSION}</div></div>`;
 }
 function showRules() {
@@ -4366,7 +4374,7 @@ const mkEs = (e) => `<span class="es" style="--c:${ELEM[e].c}">${ELEM[e].k}</spa
 const mkStar = (n) => "★".repeat(n) + `<u>${"★".repeat(5 - n)}</u>`;
 const mkPt = (id, x = "", act = "") => { const c = CH[id], o = stars(id); return `<button class="pt r-${c.rar} ${c.rar} ${o ? "" : "lk"} ${x}" ${act ? `data-act="${act}" data-id="${id}"` : ""} aria-label="${o ? c.name : "???"}">${heroArt(c)}</button>`; };
 const mkChips = (c) => `<span class="chip2" style="color:${RAR[c.rar].c};border-color:${RAR[c.rar].c}88">${RAR[c.rar].n}</span><span class="chip2">${ROLE[c.role].k} ${ROLE[c.role].n}</span><span class="chip2" style="color:${ELEM[c.el].c}">${ELEM[c.el].k} ${ELEM[c.el].n}</span>`;
-const mkTop = (t, k) => `<div class="mk-top"><div class="l"><button class="btn sm back" data-act="go" data-to="home">‹ Portail</button><h2><i>${k}</i>${t}</h2></div><div class="r"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="pill"><i></i>${fmt(S.jade)}</span></div></div>`;
+const mkTop = (t, k, to = "home", bl = "Portail") => `<div class="mk-top"><div class="l"><button class="btn sm back" data-act="go" data-to="${to}">‹ ${bl}</button><h2><i>${k}</i>${t}</h2></div><div class="r"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="pill"><i></i>${fmt(S.jade)}</span></div></div>`;
 
 // ===================== ÉQUIPE =====================
 function renderTeam() {
@@ -4377,15 +4385,18 @@ function renderTeam() {
   const roles = new Set(S.team.map((x) => CH[x].role));
   const slots = [0, 1, 2, 3].map((i) => S.team[i] ? mkPt(S.team[i], S.team[i] === id ? "cur" : "", "tfocus") : `<span class="em">+</span>`).join("");
   const btn = !own ? `<button class="btn" disabled>Non obtenu</button>` : locked ? `<button class="btn" disabled>Combat en cours</button>` : `<button class="btn" data-act="togd" data-id="${id}">${inTeam ? "Retirer de l'équipe" : "Ajouter à l'équipe"}</button>`;
+  const relicKeys = Object.keys(RELICS).filter((k) => S.relics && S.relics[k]);
+  const relicRow = relicKeys.length ? `<div class="rrow"><span>Relique</span>${relicKeys.map((k) => `<button class="chip2 rbtn ${S.relicSel === k ? "on" : ""}" data-act="relic" data-r="${k}" title="${RELICS[k].d}">${RELICS[k].k} ${RELICS[k].n}</button>`).join("")}</div>` : "";
+  const full = S.team.length === TEAM_N;
   const tabs = [["all", "Tous"], ...Object.keys(ROLE).map((k) => [k, ROLE[k].k])].map(([k, g]) => `<span data-act="tfilter" data-f="${k}" class="${teamFilter === k ? "on" : ""}">${g}</span>`).join("");
   const tile = (x) => `<div class="tgc ${x === id ? "cur" : ""}">${mkPt(x, (x === id ? "cur " : "") + (S.team.includes(x) ? "in" : ""), "tfocus")}<span>${stars(x) ? CH[x].name : "???"}</span></div>`;
-  app.innerHTML = `<div class="mk tg"><div class="vg"></div>${mkTop("Équipe", "隊")}
+  app.innerHTML = `<div class="mk tg"><div class="vg"></div>${mkTop("Composition d'équipe", "隊", "boss", "Boss")}
   <div class="gl"><div class="tabs2">${tabs}</div><div class="grid">${ids.map(tile).join("")}</div></div>
-  <div class="rp"><div class="rt"><h3>Équipe<small>${S.team.length} / ${TEAM_N}</small></h3><div class="sl">${slots}</div><div class="roles2">${Object.keys(ROLE).map((k) => `<span class="chip2 ${roles.has(k) ? "ok" : ""}">${ROLE[k].k} ${ROLE[k].n}</span>`).join("")}</div></div>
+  <div class="rp"><div class="rt"><h3>${BOSSES.find((x) => x.id === SEL.boss).name.split(",")[0]} · ${MODES[SEL.mode].n}<small>${S.team.length} / ${TEAM_N}</small></h3><div class="sl">${slots}</div>${relicRow}<div class="roles2">${Object.keys(ROLE).map((k) => `<span class="chip2 ${roles.has(k) ? "ok" : ""}">${ROLE[k].k} ${ROLE[k].n}</span>`).join("")}</div></div>
    <div class="fc"><div class="fh"><div class="fa r-${c.rar} ${own ? "" : "lk"}">${heroArt(c)}</div><div class="fi"><h2>${own ? c.name : "???"}</h2><div class="ti">${own ? c.title : "Héros non obtenu"}</div><div class="chs">${own ? mkChips(c) : ""}</div><span class="stars">${own ? mkStar(own) : ""}</span></div></div>
     <div class="stt"><div>PV<b>${own ? fmt(st.hp) : "???"}</b></div><div>ATK<b>${own ? fmt(st.atk) : "???"}</b></div><div>DEF<b>${own ? fmt(st.def) : "???"}</b></div></div>
     <div class="sks">${own ? c.skills.map((sk, i) => `<div class="sk"><b>${sk.n}<span>Recharge ${sk.cd} tours</span></b><p>${sk.d}${awTag(id, i)}</p></div>`).join("") : `<p class="note">Invoque ce héros pour découvrir ses capacités.</p>`}</div>
-    <div class="act">${btn}</div></div></div></div>`;
+    <div class="act">${btn}</div></div><button class="btn red go" data-act="fight" ${full && !S.run ? "" : "disabled"}>${full ? `Affronter ${BOSSES.find((x) => x.id === SEL.boss).name.split(",")[0]}` : `Choisis ${TEAM_N} héros`}</button></div></div>`;
   hydratePx(app);
 }
 function toggleTeam(id) {
@@ -4622,9 +4633,10 @@ const unkChip = `<span class="el" style="--c:#8a7a72">? Inconnue</span>`;
 function moveLine(mv, bid, key, el) { return `<div class="mv ${mv.big ? "big" : ""}"><b>${bid ? bossSp(bid, key, el, mv.big) : ""}${mv.big ? "⚠ " : ""}${mv.n}</b><span>${mv.d}</span></div>`; }
 function renderBoss() {
   const nCl = BOSSES.filter((b) => cleared(b.id, "n")).length;
-  app.innerHTML = topbar() + `<main class="scr"><div class="sec-h"><h2>Boss</h2><span class="note">${nCl} / ${BOSSES.length} vaincus en Normal</span></div>
-    <div class="bsl">${BOSSES.map((b, i) => { const open = bossOpen(b.id); return `<div class="bs ${open ? "" : "lk"}"><div class="bart">${open ? bossArt(b.id) : ""}</div><div class="bi"><span class="floor">${i + 1}</span><b>${open ? b.name : "???"}</b><span class="note">${open ? b.ep : "Bats le boss précédent en Normal"}</span></div><div class="bm">${MODE_ORD.map((m) => { const ok = modeOpen(b.id, m); return `<button class="bmb ${cleared(b.id, m) ? "done" : ""}" ${ok ? `data-act="bossmode" data-b="${b.id}" data-m="${m}"` : "disabled"}>${MODES[m].n}${cleared(b.id, m) ? " ✓" : ""}</button>`; }).join("")}</div></div>`; }).join("")}</div>
-  </main>` + nav();
+  app.innerHTML = `<div class="mk bz"><div class="vg"></div>${mkTop("Affronter un boss", "鬼")}
+  <div class="bsub">${nCl} / ${BOSSES.length} vaincus en Normal</div>
+  <div class="bgrid">${BOSSES.map((b, i) => { const open = bossOpen(b.id); return `<div class="bsc ${open ? "" : "lk"}"><div class="bart">${open ? bossArt(b.id) : ""}</div><div class="bi"><span class="floor">${i + 1}</span><b>${open ? b.name.split(",")[0] : "???"}</b><span class="note">${open ? b.ep : "Bats le boss précédent"}</span></div><div class="bm">${MODE_ORD.map((m) => { const ok = modeOpen(b.id, m); return `<button class="bmb ${m} ${cleared(b.id, m) ? "done" : ""}" ${ok ? `data-act="bossmode" data-b="${b.id}" data-m="${m}"` : "disabled"}>${MODES[m].n}${cleared(b.id, m) ? " ✓" : ""}</button>`; }).join("")}</div></div>`; }).join("")}</div></div>` ;
+  hydratePx(app);
 }
 function renderPrep() {
   const b0 = BOSSES.find((x) => x.id === SEL.boss) || BOSSES[0], b = cloneBoss(b0, SEL.mode), M = MODES[SEL.mode] || MODES.n, loop = 0;
@@ -5892,11 +5904,11 @@ document.addEventListener("click", (e) => {
     case "filter": collFilter = t.dataset.f; render(); break;
     case "sum": doSummon(+t.dataset.n); break;
     case "tix": doTicket(t.dataset.m); break;
-    case "relic": S.relicSel = S.relicSel === t.dataset.r ? null : t.dataset.r; save(); renderPrep(); break;
+    case "relic": S.relicSel = S.relicSel === t.dataset.r ? null : t.dataset.r; save(); screen === "team" ? renderTeam() : renderPrep(); break;
     case "rules": showRules(); break;
     case "rules": showRules(); break;
     case "start": go("boss"); break;
-    case "bossmode": if (S.team.length !== TEAM_N) { toast(`Choisis ${TEAM_N} héros avant de combattre.`); go("team"); break; } SEL = { boss: t.dataset.b, mode: t.dataset.m }; go("prep"); break;
+    case "bossmode": SEL = { boss: t.dataset.b, mode: t.dataset.m }; go("team"); break;
     case "prep": go("prep"); break;
     case "fight": startFight(); break;
     case "settings": settingsOpen(); break;
