@@ -2038,11 +2038,19 @@ body:has(.fight) #fbgx{display:block}
 .fight .flash{mix-blend-mode:normal}
 .fight .hr,.fight .cmd,.fight .ohb,.fight .intent{backdrop-filter:none;-webkit-backdrop-filter:none}
 .fight .ohb,.fight .hr{background-color:rgba(14,8,11,.85)}
+/* v.59 annonce du boss : 2 icônes (Tour 1 / Tour 2), description en appui long */
+#app .fight #bint{display:flex!important;align-items:flex-end;gap:calc(14*var(--u));width:auto!important;background:none!important;border:0!important;padding:0!important;left:calc(14*var(--u))!important;bottom:calc(8*var(--u))!important}
+#bint .bslot{display:flex;flex-direction:column;align-items:center;gap:calc(4*var(--u));-webkit-touch-callout:none;user-select:none;-webkit-user-select:none;cursor:help}
+#bint .btour{font-family:var(--display);font-weight:800;font-size:calc(15*var(--u));line-height:1;color:#fff;letter-spacing:.04em;text-shadow:0 0 calc(4*var(--u)) #000,0 calc(1*var(--u)) calc(2*var(--u)) #000,0 0 calc(10*var(--u)) rgba(0,0,0,.9);padding:calc(2*var(--u)) calc(7*var(--u));background:rgba(8,4,6,.72);border:calc(1*var(--u)) solid rgba(255,255,255,.25);border-radius:calc(5*var(--u))}
+#bint .bslot .spi{--s:calc(56*var(--u))!important;margin:0!important}
+#bint .bslot.big .spi{box-shadow:0 0 calc(12*var(--u)) rgba(255,80,60,.9)}
+#bint .bslot.alert .spi{box-shadow:0 0 0 calc(2*var(--u)) #ff3b2f,0 0 calc(14*var(--u)) rgba(255,59,47,.95)}
+#bint .bgl{display:flex;align-items:center;justify-content:center;width:calc(56*var(--u));height:calc(56*var(--u));border-radius:22%;background:#2a1210;border:calc(2*var(--u)) solid #d8452f;color:#ffd9cf;font-style:normal;font-size:calc(28*var(--u))}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 58; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 59; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4908,17 +4916,13 @@ function update() {
     $("bwk").innerHTML = `<span class="lbl">Faible</span>${dk.w ? `<span class="wi" style="--c:${ELEM[we].c}" title="${ELEM[we].n}">${ELEM[we].k}</span>` : `<span class="wi unk" title="Faiblesse inconnue">?</span>`}${dmgT ? `<span class="wi" style="--c:#e8dcc0">${dmgT === "m" ? "術" : "剣"}</span>` : ""}${stChips(b.st)}${b.gauge ? `<span class="st bad">${b.gauge.n} ${b.gauge.max ? b.gauge.v + "/" + b.gauge.max : "+" + b.gauge.v + " %"}</span>` : ""}`; }
   $("bstage").classList.toggle("reflect", b.st.some((s) => s.k === "reflect"));
   const it = $("bint");
-  if (b.stun) { it.className = "intent stun"; it.innerHTML = `<i>暈</i><b>Étourdi</b><span class="idsc">Perd son prochain tour, subit +50 % de dégâts.</span>`; }
+  const slot = (k, i, extra) => { const mv = b.moves[k], g = mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単"; return `<div class="bslot${mv.big ? " big" : ""}${extra || ""}" data-s="${i}"><span class="btour">Tour ${i + 1}</span>${bossSp(b.id, k, b.el, mv.big) || `<i class="bgl">${g}</i>`}</div>`; };
+  if (b.stun) { it.className = "intent stun"; it.innerHTML = `<div class="bslot stunned" data-s="stun"><span class="btour">Tour 1</span><i class="bgl">暈</i></div>`; }
   else {
-    const mv = b.moves[b.intent];
-    const g = mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単";
+    const mv = b.moves[b.intent], alert = mv.fatal && b.mode === "m";
     it.className = "intent" + (mv.big ? " big" : "");
-    const tg = bossTargets();
-    const tl = mv.t === "self" ? "" : mv.t === "aoe" ? "Toute l'équipe" : mv.t === "multi" ? `${mv.hits} coups au hasard` : tg[0] ? tg[0].c.name : "";
-    const nxl = (b.queue || []).slice(0, (b.look || 2) - 1).map((k) => b.moves[k].n), alert = mv.fatal && b.mode === "m";
-    if (alert) it.className += " alert";
-    const bsp = bossSp(b.id, b.intent, b.el, mv.big);
-    it.title = mv.d; it.innerHTML = `${bsp || `<i>${g}</i>`}<b>${alert ? "⚠ ACTION FATALE · " : ""}${mv.n}</b>${tl ? `<em class="itg">🎯 ${tl}</em>` : ""}<span class="idsc">${mv.d}</span>${nxl.length ? `<em class="inext">Ensuite : ${nxl.join(" › ")}</em>` : ""}`;
+    const nx = (b.queue || []).slice(0, (b.look || 2) - 1);
+    it.innerHTML = slot(b.intent, 0, alert ? " alert" : "") + nx.map((k, j) => slot(k, j + 1)).join("");
   }
   const aims = bossTargets();
   const order = F.heroes.map((h, i) => ({ h, i })).filter((o) => !o.h.dead);
@@ -5601,12 +5605,16 @@ document.addEventListener("input", (e) => { if (e.target && e.target.id === "mus
 let LP = { t: 0, at: 0, tip: null };
 function lpHide() { clearTimeout(LP.t); if (LP.tip) { LP.tip.remove(); LP.tip = null; LP.at = Date.now(); } }
 document.addEventListener("pointerdown", (e) => {
-  const b = e.target.closest && e.target.closest(".cg.ico, #bint"); lpHide(); if (!b || !F) return;
+  const b = e.target.closest && e.target.closest(".cg.ico, .bslot"); lpHide(); if (!b || !F) return;
   LP.t = setTimeout(() => {
     const tip = document.createElement("div"); tip.className = "lptip";
-    if (b.id === "bint") {
-      const mv = F.boss.moves[F.boss.intent]; if (!mv || F.boss.stun) return;
-      tip.innerHTML = `<b>${mv.n}</b><em>Annoncé pour le prochain tour du boss</em><p>${mv.d}</p>`;
+    if (b.classList.contains("bslot")) {
+      if (b.dataset.s === "stun") { tip.innerHTML = `<b>Étourdi</b><p>Perd son prochain tour, subit +50 % de dégâts.</p>`; }
+      else {
+        const si = +b.dataset.s, k = si === 0 ? F.boss.intent : (F.boss.queue || [])[si - 1], mv = k && F.boss.moves[k]; if (!mv) return;
+        const tg = si === 0 ? bossTargets() : [], tl = mv.t === "self" ? "" : mv.t === "aoe" ? "Toute l'équipe" : mv.t === "multi" ? `${mv.hits} coups au hasard` : tg[0] ? tg[0].c.name : "";
+        tip.innerHTML = `<b>${F.boss.mode === "m" && si === 0 && mv.fatal ? "⚠ ACTION FATALE · " : ""}${mv.n}</b><em>Tour ${si + 1} du boss${tl ? " · 🎯 " + tl : ""}</em><p>${mv.d}</p>`;
+      }
     } else {
       const h = F.heroes[F.active], raw = b.dataset.i, si = raw === "foc" ? raw : +raw; if (!h) return;
       const sk = getSk(h, si); if (!sk) return;
@@ -5614,14 +5622,14 @@ document.addEventListener("pointerdown", (e) => {
     }
     document.body.appendChild(tip); LP.tip = tip;
     const r = b.getBoundingClientRect(), w = tip.offsetWidth, hh = tip.offsetHeight;
-    if (b.id === "bint") { tip.style.left = Math.max(6, r.left) + "px"; tip.style.top = Math.max(6, r.top - hh - 8) + "px"; }
+    if (b.classList.contains("bslot")) { tip.style.left = Math.max(6, r.left) + "px"; tip.style.top = Math.max(6, r.top - hh - 8) + "px"; }
     else { tip.style.left = Math.max(6, r.left - w - 10) + "px"; tip.style.top = Math.max(6, Math.min(innerHeight - hh - 6, r.top + r.height / 2 - hh / 2)) + "px"; }
   }, 380);
 });
 ["pointerup", "pointercancel", "pointerleave", "scroll"].forEach((ev) => document.addEventListener(ev, lpHide, true));
-document.addEventListener("contextmenu", (e) => { if (e.target.closest && e.target.closest(".cg.ico, #bint")) e.preventDefault(); });
+document.addEventListener("contextmenu", (e) => { if (e.target.closest && e.target.closest(".cg.ico, .bslot")) e.preventDefault(); });
 document.addEventListener("click", (e) => {
-  if (Date.now() - LP.at < 700 && e.target.closest(".cg.ico, #bint")) { e.stopImmediatePropagation(); return; }
+  if (Date.now() - LP.at < 700 && e.target.closest(".cg.ico, .bslot")) { e.stopImmediatePropagation(); return; }
   const t = e.target.closest("[data-act]"); if (!t) return;
   const a = t.dataset.act;
   if (a === "closesheet") { if (e.target === t || t.tagName === "BUTTON") t.closest(".sheet")?.remove(); return; }
