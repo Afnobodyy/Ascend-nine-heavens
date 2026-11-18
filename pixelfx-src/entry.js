@@ -6,6 +6,9 @@ import * as waterjet from "/tmp/work/pixelfx/src/fx/water/water-jet.js";
 import * as arcanemissiles from "/tmp/work/pixelfx/src/fx/arcane/arcane-missiles.js";
 import * as starfall from "/tmp/work/pixelfx/src/fx/arcane/star-fall.js";
 import * as charmed from "/tmp/work/pixelfx/src/fx/status/charmed.js";
+import * as groundslam from "/tmp/work/pixelfx/src/fx/impacts/ground-slam.js";
+import * as quake from "/tmp/work/pixelfx/src/fx/nature/quake.js";
+import * as dirtexplosion from "/tmp/work/pixelfx/src/fx/explosions/dirt-explosion.js";
 import * as splash from "/tmp/work/pixelfx/src/fx/water/splash.js";
 import * as thunder from "/tmp/work/pixelfx/src/fx/lightning/thunderclap.js";
 import * as heal from "/tmp/work/pixelfx/src/fx/holy/heal.js";
@@ -45,4 +48,4 @@ import * as bigexplosion from "/tmp/work/pixelfx/src/fx/explosions/big-explosion
 import * as burnaway from "/tmp/work/pixelfx/src/fx/transitions/burn-away.js";
 import * as meteor from "/tmp/work/pixelfx/src/fx/fire/meteor.js";
 const actor = () => { const a = stockActor(2); return { ...a, pixels: new Uint32Array(a.pixels.length) }; };
-window.PXFX = { actor, createFx, createFrame, composite, rgb, E: { arcanemissiles, starfall, charmed, wavecrash, waterjet, fireball, boom, splash, thunder, heal, resurrection, dashstrike, glitch, doubleslash, spinslash, slashwipe, spearsweep, smokebomb, vinewhip, thorns, firering, firetornado, manaburst, flamepillar, clawswipe, shieldblock, rage, haste, uppercut, swordslash, clouds, shootingstars, holypillar, magiccirclecast, hexsigil, eclipse, blackhole, snowflakeburst, runecircle, magicmissile, blizzard, grenade, bigexplosion, burnaway, meteor } };
+window.PXFX = { actor, createFx, createFrame, composite, rgb, E: { groundslam, quake, dirtexplosion, arcanemissiles, starfall, charmed, wavecrash, waterjet, fireball, boom, splash, thunder, heal, resurrection, dashstrike, glitch, doubleslash, spinslash, slashwipe, spearsweep, smokebomb, vinewhip, thorns, firering, firetornado, manaburst, flamepillar, clawswipe, shieldblock, rage, haste, uppercut, swordslash, clouds, shootingstars, holypillar, magiccirclecast, hexsigil, eclipse, blackhole, snowflakeburst, runecircle, magicmissile, blizzard, grenade, bigexplosion, burnaway, meteor } };
