@@ -2101,7 +2101,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 93; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 94; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5784,7 +5784,7 @@ function renderVictory() {
   const nx = w.mode === "n" && w.first && BOSSES[BOSSES.indexOf(b) + 1] ? `${BOSSES[BOSSES.indexOf(b) + 1].name} est maintenant accessible.` : "";
   app.innerHTML = topbar() + `<main class="scr"><section class="vic"><span class="floor">${MODES[w.mode].n.toUpperCase()}</span><h1>Victoire</h1><p class="note">${b.name} est vaincu.</p>
     <div class="reward">🎫 +1 ticket ${MODES[w.mode].n}</div>
-    <p class="note">+1 tirage ${MODES[w.mode].n}${w.first ? " (bonifié : Épique et Légendaire ×1,5)" : ""}${w.noKo ? " · ⭐ sans KO" : ""}</p>
+    <p class="note">${w.first ? "Ticket bonifié : Épique et Légendaire ×1,5" : ""}${w.noKo ? " · ⭐ sans KO" : ""}</p>
     ${w.relic ? `<p class="note">${w.newRelic ? "Relique obtenue : " : "Relique : "}${RELICS[w.relic].k} ${RELICS[w.relic].n}</p>` : ""}${w.first ? `<p class="note">${[unlock, nx].filter(Boolean).join(" ")}</p>` : ""}
     <button class="btn wide" data-act="go" data-to="boss">Retour aux boss</button></section></main>` + nav();
 }
