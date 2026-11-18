@@ -1349,6 +1349,8 @@ body{overflow:hidden}
 .vign{background:radial-gradient(ellipse 80% 75% at 45% 55%,transparent 55%,rgba(0,0,0,.7))}
 
 .vfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:8}
+.vfxbg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.fight.skyon .bgimg,.fight.skyon .bgl,.fight.skyon .bloom,.fight.skyon .fogb,.fight.skyon .shafts,.fight.skyon .fogl{opacity:0!important;transition:opacity .35s}
 .pc.dash{animation:pdash .6s cubic-bezier(.25,.8,.3,1);z-index:6}
 @keyframes pdash{0%{transform:none}28%{transform:translateX(-230%) translateY(-4%)}78%{transform:translateX(-230%) translateY(-4%)}100%{transform:none}}
 .pc.dash .pimg{filter:drop-shadow(10px 0 0 rgba(255,255,255,.18)) drop-shadow(20px 0 0 rgba(255,255,255,.08))}
@@ -2055,7 +2057,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 78; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 79; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2167,7 +2169,7 @@ const CHARS = [
   { id: "p6", name: "Shiranui", title: "Lame de la Lune Pâle", role: "phys", rar: "L", el: "eau",
     look: { skin: "#f6e2d2", hair: "#dfe6f2", hs: "long", eye: "#2a3a6a", robe: "#1c2541", robe2: "#0b1022", trim: "#9fb8ff", wpn: "nodachi", hg: "moon" },
     skills: [
-      { n: "Croissant", d: "Frappe à 120 % ATK, le boss subit +10 % de dégâts (2 tours).", cd: 0, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.1, d: 2 }] },
+      { n: "Rayon lunaire", d: "Frappe à 120 % ATK, le boss subit +10 % de dégâts (2 tours).", cd: 0, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.1, d: 2 }] },
       { n: "Marque lunaire", d: "Frappe à 60 % ATK, le boss subit +30 % de dégâts (2 tours).", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 0.6 }, { k: "mark", p: 0.3, d: 2 }] },
       { n: "Éclipse", d: "Frappe à 300 % ATK, ×1,6 si le boss a moins de 35 % PV.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 3.0, exec: 1.6 }] },
     ] },
@@ -2191,7 +2193,7 @@ const CHARS = [
     skills: [
       { n: "Kitsunebi", d: "Deux feux follets à 55 % ATK et Brûlure (20 % ATK/tour, 2 tours).", cd: 0, tgt: "boss", fx: [{ k: "dmg", m: 0.55, hits: 2 }, { k: "dot", s: "burn", m: 0.2, d: 2 }] },
       { n: "Illusion", d: "ATK du boss −30 % et DEF −15 % (2 tours).", cd: 3, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
-      { n: "Six flammes", d: "Six feux follets à 50 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 6 }] },
+      { n: "Tornade de flammes", d: "Six feux follets à 50 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 6 }] },
     ] },
   { id: "m4", name: "Mu Qing", title: "Poète des orages", role: "mag", rar: "E", el: "bois",
     look: { skin: "#ecc8a6", hair: "#14211c", hs: "bun", eye: "#14281f", robe: "#2f6e5a", robe2: "#163a2f", trim: "#e8e1cf", wpn: "brush", hg: "scholar" },
@@ -2358,10 +2360,10 @@ const KITS = {
     { n: "Le Roi Singe renverse le ciel", d: "Frappe à 600 % ATK. Esquive d'équipe 40 % (1 tour).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 6.0, post: 90 }, { k: "evade", p: 0.4, d: 1, on: "allies" }] },
   ],
   p6: [
-    { n: "Croissant", d: "Frappe à 120 % ATK, le boss subit +10 % de dégâts (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.1, d: 2 }] },
+    { n: "Rayon lunaire", d: "Frappe à 120 % ATK, le boss subit +10 % de dégâts (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.1, d: 2 }] },
     { n: "Marque lunaire", d: "Le boss subit +30 % de dégâts (2 tours). Aucune attaque.", cd: 3, tgt: "boss", fx: [{ k: "mark", p: 0.3, d: 2 }] },
     { n: "Éclipse", d: "Frappe à 300 % ATK, ×1,6 si le boss a moins de 35 % PV.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 3.0, exec: 1.6 }] },
-    { n: "Éclipse totale", d: "Frappe à 700 % ATK, ×2 si le boss a moins de 35 % PV.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 7.0, exec: 2.0, post: 100 }] },
+    { n: "Trou noir", d: "Frappe à 700 % ATK, ×2 si le boss a moins de 35 % PV.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 7.0, exec: 2.0, post: 100 }] },
   ],
   // ---------- ARCANISTES ----------
   m1: [
@@ -2379,7 +2381,7 @@ const KITS = {
   m3: [
     { n: "Kitsunebi", d: "Deux feux follets à 55 % ATK puis Brûlure (25 % ATK/tour, 2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.55, hits: 2 }, { k: "dot", s: "burn", m: 0.25, d: 2 }] },
     { n: "Illusion", d: "ATK du boss −30 % et DEF −15 % (2 tours).", cd: 3, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
-    { n: "Six flammes", d: "Six coups à 50 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 6 }] },
+    { n: "Tornade de flammes", d: "Six coups à 50 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 6 }] },
     { n: "Danse des cent feux", d: "Neuf flammes à 45 % ATK, Brûlure (40 % ATK/tour, 3 tours) et ATK du boss −20 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.45, hits: 9, post: 5 }, { k: "dot", s: "burn", m: 0.4, d: 3 }, { k: "debuff", s: "atk", p: 0.2, d: 2 }] },
   ],
   m4: [
@@ -2472,7 +2474,7 @@ const VARDEF = [
   { o: "Fumée protectrice", n: "Fumée commune", d: "Équipe : bouclier de 10 % PV, Feng inclus.", tgt: "allies", fx: [{ k: "shield", p: 0.1 }] },
   { o: "Grand fourneau", n: "Fourneau lent", d: "Explosion à 160 % ATK puis Brûlure forte (50 % ATK/tour, 3 tours).", tgt: "boss", fx: [{ k: "dmg", m: 1.6, post: 10 }, { k: "dot", s: "burn", m: 0.5, d: 3 }] },
   { o: "Illusion", n: "Illusion longue", d: "ATK du boss −30 % et DEF −15 % pendant 3 tours.", cd: 4, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 3 }, { k: "debuff", s: "def", p: 0.15, d: 3 }] },
-  { o: "Six flammes", n: "Flamme sacrifiée", d: "Quatre coups à 85 % ATK. Rei perd 10 % de ses PV.", tgt: "boss", fx: [{ k: "dmg", m: 0.85, hits: 4 }, { k: "selfhurt", p: 0.1 }] },
+  { o: "Tornade de flammes", n: "Flamme sacrifiée", d: "Quatre coups à 85 % ATK. Rei perd 10 % de ses PV.", tgt: "boss", fx: [{ k: "dmg", m: 0.85, hits: 4 }, { k: "selfhurt", p: 0.1 }] },
   { o: "Calligraphie protectrice", n: "Encre pure", d: "Équipe : retire les malus, sans bouclier.", tgt: "allies", fx: [{ k: "cleanse" }] },
   { o: "Encre empoisonnée", n: "Lavis", d: "Poison (30 % ATK/tour, 5 tours), sans réduction d'ATK.", tgt: "boss", fx: [{ k: "dot", s: "poison", m: 0.3, d: 5 }] },
   { o: "Carapace de perle", n: "Perle épaisse", d: "Bouclier perso de 45 % PV.", tgt: "self", fx: [{ k: "shield", p: 0.45 }] },
@@ -3620,30 +3622,181 @@ function heroMove(h, kind, dur) {
   ["dash", "cast", "act", "guardfx"].forEach((c) => el.classList.remove(c));
   flashCls(el, kind === "guard" ? "guardfx" : kind);
 }
-function dotFx(h, el) { el = el || h.el; if (!fxOn()) return; const P = bossP(); if (P) fxBurst({ ...P, y: P.y + 30 * P.s }, [ELEM[el].c, "#fff"], 14, .7, 1); }
+function dotFx(h, el) { el = el || h.el; if (!fxOn() || (F && F.scr)) return; const P = bossP(); if (P) fxBurst({ ...P, y: P.y + 30 * P.s }, [ELEM[el].c, "#fff"], 14, .7, 1); }
 // Effet d'un coup sur le boss, selon l'arme / l'élément du héros. Renvoie une promesse (temps de vol des sorts).
 // ---------- pixelfx (effets pixel art, paquet pixelfx.js) ----------
-// Joue un effet pixelfx dans le canvas de combat. P = {x,y,s} ; o.k = taille d'un pixel d'effet (en unités P.s), o.speed = accélération,
-// o.flip = effet miroir, o.to = {x,y} pour un effet qui voyage, o.dur = durée à l'écran (ms), o.sim = durée simulée (s, pour couper une traîne de fumée),
-// o.actor = silhouette du personnage visé (taille de héros), invisible : seuls les effets restent. Renvoie false si la librairie est absente (on garde l'effet d'origine).
+// Joue un effet pixelfx dans un canvas de combat (devant les sprites, ou derrière avec o.back). P = {x,y,s}.
+// o.k = taille d'un pixel d'effet (en unités P.s) ; o.m = "F" (origine de l'effet posée sur P, au sol) ou "C" (le point d'impact o.hit, par défaut le centre, posé sur P) ;
+// o.flip = miroir (les effets regardent à droite, les héros attaquent vers la gauche) ; o.speed = vitesse ; o.cover = plein écran ; o.fitH = hauteur en fraction du canvas ;
+// o.opts = options pixelfx (palette...) ; o.actor = silhouette (élément image du sprite, ou 1 = vide) ; o.cut = durée simulée utile (s) ; o.fade = fondu de sortie (ms) ;
+// o.to = {x,y} pour un effet qui voyage (ancien mode) ; o.dur = durée à l'écran (ms) ; o.sim = durée simulée (s). Renvoie false si la librairie est absente.
+function pxActor(el) {
+  const X = window.PXFX, img = el && el.querySelector && el.querySelector("img");
+  if (!X || !img || !(img.naturalWidth || img.width)) return { ...X.actor() };
+  try {
+    const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height, S = document.createElement("canvas"); S.width = iw; S.height = ih;
+    const sx = S.getContext("2d", { willReadFrequently: true }); sx.drawImage(img, 0, 0);
+    const d = sx.getImageData(0, 0, iw, ih).data; let x0 = iw, x1 = 0, y0 = ih, y1 = 0;
+    for (let y = 0; y < ih; y++) for (let x = 0; x < iw; x++) if (d[(y * iw + x) * 4 + 3] > 96) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    if (x1 <= x0 || y1 <= y0) return { ...X.actor() };
+    const W = 24, H = 38, bw = x1 - x0 + 1, bh = y1 - y0 + 1, s = Math.min(W / bw, H / bh), dw = Math.max(1, Math.round(bw * s)), dh = Math.max(1, Math.round(bh * s));
+    const C = document.createElement("canvas"); C.width = W; C.height = H; const cx = C.getContext("2d", { willReadFrequently: true });
+    cx.imageSmoothingEnabled = true; cx.drawImage(S, x0, y0, bw, bh, Math.floor((W - dw) / 2), H - dh, dw, dh);
+    const q = cx.getImageData(0, 0, W, H).data, data = new Uint8Array(W * H), pixels = new Uint32Array(W * H);
+    for (let i = 0; i < W * H; i++) if (q[i * 4 + 3] > 110) { data[i] = 1; pixels[i] = X.rgb(q[i * 4], q[i * 4 + 1], q[i * 4 + 2]); }
+    return { mask: { w: W, h: H, data }, pixels, x: -Math.floor(W / 2), y: -H, w: W, h: H, k: 2, head: [0, -H], chest: [0, -Math.round(H * 0.68)] };
+  } catch (e) { return { ...X.actor() }; }
+}
+function fxCvB() {
+  const cv = document.getElementById("vfxbg"); if (!cv) return null;
+  const r = cv.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1);
+  if (cv.width !== Math.round(r.width * d)) { cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d); }
+  return { cv, ctx: cv.getContext("2d"), r, d };
+}
+const FXSB = []; let fxRunB = false;
+function fxAddB(dur, draw) { FXSB.push({ t0: performance.now(), dur, draw }); if (!fxRunB) { fxRunB = true; requestAnimationFrame(fxLoopB); } }
+function fxLoopB() {
+  const c = fxCvB();
+  if (!c) { FXSB.length = 0; fxRunB = false; return; }
+  const { ctx, cv } = c, now = performance.now();
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  for (let i = FXSB.length - 1; i >= 0; i--) {
+    const f = FXSB[i], p = (now - f.t0) / f.dur;
+    if (p >= 1) { FXSB.splice(i, 1); continue; }
+    if (p < 0) continue;
+    ctx.save(); f.draw(ctx, p); ctx.restore();
+  }
+  if (FXSB.length) requestAnimationFrame(fxLoopB); else { ctx.clearRect(0, 0, cv.width, cv.height); fxRunB = false; }
+}
 function pxPlay(key, P, o = {}) {
-  const X = window.PXFX, mod = X && X.E[key]; if (!mod || !P) return false;
-  const m = mod.meta, D = m.duration, [w, h] = m.size, [ox, oy] = m.origin, k = (o.k || 1) * P.s;
-  const A = o.actor ? { ...X.actor(), } : null;
-  const frame = X.createFrame(w, h), fx = X.createFx(mod, { x: ox, y: oy, flip: !!o.flip, seed: Math.floor(Math.random() * 99), ...(A ? { actor: A } : {}) });
+  const X = window.PXFX, mod = X && X.E[key]; if (!mod) return false;
+  const cvs = o.back ? fxCvB() : fxCv(); if (!cvs) return false;
+  const m = mod.meta, D = m.duration, [w, h] = m.size || [320, 180], [ox, oy] = m.origin || [0, 0], speed = o.speed || 1;
+  P = P || { x: 0, y: 0, s: 1 };
+  const cover = !!o.cover, k = o.fitH ? o.fitH * cvs.cv.height / h : (o.k || 1) * P.s;
+  const hit = o.m === "C" ? (o.hit || [w / 2, h / 2]) : [ox, oy];
+  const A = o.actor ? (o.actor === 1 ? { ...X.actor() } : pxActor(o.actor)) : null;
+  const frame = X.createFrame(w, h), fx = X.createFx(mod, { x: ox, y: oy, flip: false, seed: o.seed != null ? o.seed : Math.floor(Math.random() * 99), ...(o.opts || {}), ...(A ? { actor: A } : {}) });
   const buf = document.createElement("canvas"); buf.width = w; buf.height = h;
   const bx = buf.getContext("2d"), img = new ImageData(w, h);
-  let last = 0;
-  const SIM = o.sim || D;
-  fxAdd(o.dur || D * 1000 / (o.speed || 1), (ctx, p) => {
+  let last = 0, acc = 0;
+  const SIM = o.sim || o.cut || D, real = o.dur || (o.cut || D) * 1000 / speed;
+  const add = o.back ? (d, f) => fxAddB(d, f) : (d, f) => fxAdd(d / FXT, f);
+  add(real, (ctx, p) => {
     const dt = Math.max(0, p - last) * SIM; last = p;
-    if (dt > 0) fx.update(dt);
+    acc += dt; while (acc >= 1 / 60) { fx.update(1 / 60); acc -= 1 / 60; }
     frame.color.fill(0); frame.light.fill(0); fx.draw(frame); X.composite(frame, img.data); bx.putImageData(img, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    if (o.fade) ctx.globalAlpha = Math.min(1, (1 - p) * real / o.fade);
+    if (cover) { ctx.drawImage(buf, 0, 0, cvs.cv.width, cvs.cv.height); return; }
     const q = o.to ? ease(p) : 0, x = P.x + (o.to ? (o.to.x - P.x) * q : 0), y = P.y + (o.to ? (o.to.y - P.y) * q - Math.sin(q * Math.PI) * 50 * P.s : 0);
-    ctx.imageSmoothingEnabled = false; ctx.drawImage(buf, x - (o.flip ? w - ox : ox) * k, y - oy * k, w * k, h * k);
+    if (o.flip) { ctx.translate(x, 0); ctx.scale(-1, 1); ctx.drawImage(buf, -hit[0] * k, y - hit[1] * k, w * k, h * k); }
+    else ctx.drawImage(buf, x - hit[0] * k, y - hit[1] * k, w * k, h * k);
   });
   return true;
 }
+// ---- sorts des héros : table (héros, emplacement) -> effets pixelfx, posés sur la cible du sort ----
+const PXC = {
+  fire8: ["#1f0b10", "#4a1118", "#8c1d1c", "#cc3a1a", "#f2701f", "#ffae35", "#ffe27a", "#fff8d6"],
+  fire7: ["#14080a", "#4a1712", "#e0301a", "#ff7a2a", "#ffc23d", "#fff3a6", "#ffffff"],
+  wood: ["#2a1608", "#5a3216", "#8a5424", "#b9803a", "#e0a850", "#f6d890", "#ffffff"],
+  cold: ["#0e1220", "#232c4a", "#44547c", "#7a8db4", "#aebfd8", "#d4e0f0", "#eef4fb", "#ffffff"],
+  coldP: ["#3a4a70", "#8fa4c8", "#d8e4f4", "#ffffff"],
+  ice: ["#151a3d", "#212f6b", "#2c58aa", "#3a8bd8", "#62c8f4", "#a6ecff", "#dcfbff", "#ffffff"],
+};
+const PXS = {
+  p1: [
+    { n: "Iaijutsu", block: 800, L: [{ e: "dashstrike", at: "boss", m: "C", hit: [242, 92], flip: 1, k: 1.5, actor: "self" }] },
+    { n: "Posture d'iaï", block: 1100, L: [{ e: "glitch", at: "self", m: "F", flip: 1, k: 2.2, actor: "self" }] },
+    { n: "Double entaille", block: 800, L: [{ e: "doubleslash", at: "boss", m: "C", flip: 1, k: 2.4 }] },
+    { n: "Dernier iaï", lead: 1700, block: 2300, L: [{ e: "slashwipe", at: "screen", cover: 1 }, { e: "spinslash", at: "boss", m: "C", flip: 1, k: 2.6, t0: 1500 }] },
+  ],
+  p2: [
+    { n: "Pointe de bambou", block: 900, L: [{ e: "spearsweep", at: "boss", m: "F", flip: 1, k: 2.2 }] },
+    { n: "Disparition", block: 1300, L: [{ e: "smokebomb", at: "self", m: "F", k: 2 }] },
+    { n: "Pluie de lances", block: 1100, L: [{ e: "vinewhip", at: "boss", m: "F", flip: 1, k: 2.2 }] },
+    { n: "Forêt de lances", block: 1800, L: [{ e: "thorns", at: "boss", m: "F", flip: 1, k: 2.4 }] },
+  ],
+  p3: [
+    { n: "Pas de flamme", block: 1800, L: [{ e: "firering", at: "boss", m: "F", k: 2 }] },
+    { n: "Danse embrasée", block: 1300, L: [{ e: "firetornado", at: "team", m: "F", k: 1.3, dur: 2000 }] },
+    { n: "Lotus de feu", block: 1200, L: [{ e: "manaburst", at: "boss", m: "C", k: 2.4, opts: { palette: PXC.fire8 } }] },
+    { n: "Danse des mille braises", block: 2400, L: [{ e: "flamepillar", at: "boss", m: "F", k: 2.4 }] },
+  ],
+  p4: [
+    { n: "Griffe du tigre", block: 700, L: [{ e: "clawswipe", at: "boss", m: "C", flip: 1, k: 2.2 }] },
+    { n: "Peau de tigre", block: 900, L: [{ e: "shieldblock", at: "self", m: "C", flip: 1, k: 2, actor: "self" }] },
+    { n: "Rugissement", block: 1100, L: [{ e: "rage", at: "boss", m: "F", k: 2.4, actor: "boss", dur: 1500 }] },
+    { n: "Tigre des cent montagnes", lead: 1500, block: 4300, L: [{ e: "slashwipe", at: "screen", cover: 1 }, { e: "clawswipe", at: "boss", m: "C", flip: 1, k: 2.2, t0: 1500, speed: 2, rep: 8, gap: 300, jit: [50, 40] }] },
+  ],
+  p5: [
+    { n: "Bâton tournoyant", block: 900, L: [{ e: "spinslash", at: "boss", m: "C", flip: 1, k: 2.4, opts: { palette: PXC.wood } }] },
+    { n: "Clones de poil", block: 1300, L: [{ e: "haste", at: "self", m: "F", flip: 1, k: 2.2, actor: "self", dur: 1400, opts: { palette: PXC.wood } }] },
+    { n: "Bâton des mille lieues", block: 1500, L: [{ e: "uppercut", at: "boss", m: "C", flip: 1, k: 2.4, opts: { palette: PXC.wood } }, { e: "swordslash", at: "boss", m: "C", flip: 1, k: 2.4, t0: 700, opts: { palette: PXC.wood } }] },
+    { n: "Le Roi Singe renverse le ciel", block: 3400, L: [{ sky: 1, dur: 4200 }, { e: "shootingstars", back: 1, cover: 1, dur: 4200, t0: 200 }, { e: "clouds", back: 1, cover: 1, dur: 4200, t0: 200 }, { e: "holypillar", at: "boss", m: "F", k: 2.4, t0: 300 }] },
+  ],
+  p6: [
+    { n: "Rayon lunaire", block: 1800, L: [{ e: "magiccirclecast", at: "boss", m: "F", k: 2.4, opts: { palette: PXC.cold } }] },
+    { n: "Marque lunaire", block: 2000, L: [{ e: "hexsigil", at: "boss", m: "C", k: 2.4, opts: { palette: PXC.cold } }] },
+    { n: "Éclipse", block: 2200, L: [{ e: "eclipse", at: "boss", m: "C", k: 2.4, opts: { palette: PXC.cold, pearl: PXC.coldP } }] },
+    { n: "Trou noir", block: 3500, L: [{ sky: 1, dur: 4200 }, { e: "shootingstars", back: 1, cover: 1, dur: 4200, t0: 200 }, { e: "blackhole", back: 1, at: "screen", m: "C", fitH: 0.95, dur: 4000, t0: 300 }] },
+  ],
+  m1: [
+    { n: "Ofuda de givre", block: 1200, L: [{ e: "snowflakeburst", at: "boss", m: "C", k: 2.6 }] },
+    { n: "Sceau purificateur", block: 1000, L: [{ e: "runecircle", at: "ally", m: "F", k: 2, dur: 2200, opts: { palette: PXC.ice } }] },
+    { n: "Shikigami de neige", block: 2200, L: [{ e: "magicmissile", at: "self", m: "F", flip: 1, k: 2.4, speed: 1.5, rep: 3, gap: 450, reachTo: "boss", opts: { palette: PXC.ice } }] },
+    { n: "Tempête de neige", block: 3000, L: [{ e: "blizzard", at: "screen", cover: 1, dur: 3500 }] },
+  ],
+  m2: [
+    { n: "Pilule explosive", block: 2800, L: [{ e: "grenade", at: "boss", m: "F", flip: 1, k: 2.2 }] },
+    { n: "Fumée protectrice", block: 1500, L: [{ e: "smokebomb", at: "self", m: "F", k: 2 }] },
+    { n: "Grand fourneau", block: 900, L: [{ e: "boom", at: "boss", m: "F", k: 2.6 }] },
+    { n: "Philtre ardent", block: 3300, L: [{ e: "bigexplosion", at: "boss", m: "F", k: 2.4 }, { e: "burnaway", at: "screen", cover: 1, t0: 2000, cut: 1.05, fade: 400 }] },
+  ],
+  m3: [
+    { n: "Kitsunebi", block: 1300, L: [{ e: "magicmissile", at: "self", m: "F", flip: 1, k: 2.4, speed: 2, rep: 2, gap: 300, reachTo: "boss", opts: { palette: PXC.fire8 } }] },
+    { n: "Illusion", block: 1500, L: [{ e: "glitch", at: "boss", m: "F", flip: 1, k: 2.4, actor: "boss", opts: { palette: PXC.fire7 } }] },
+    { n: "Tornade de flammes", block: 1800, L: [{ e: "firetornado", at: "boss", m: "F", k: 2.6, dur: 2400 }] },
+    { n: "Danse des cent feux", block: 3400, L: [{ e: "meteor", at: "boss", m: "F", k: 2, speed: 3, rep: 9, gap: 220, jit: [80, 30] }] },
+  ],
+};
+// pose / retire le ciel étoilé : cache le décor de base, dessiné derrière les sprites (canvas vfxbg)
+function pxSky(dur) {
+  const f = document.querySelector(".fight"); if (!f || !fxCvB()) return;
+  f.classList.add("skyon");
+  fxAddB(dur, (ctx, p) => {
+    const c = ctx.canvas, a = Math.min(1, p * dur / 350, (1 - p) * dur / 350), g = ctx.createLinearGradient(0, 0, 0, c.height);
+    g.addColorStop(0, "#080a1e"); g.addColorStop(1, "#161c3c"); ctx.globalAlpha = a; ctx.fillStyle = g; ctx.fillRect(0, 0, c.width, c.height);
+  });
+  setTimeout(() => { const ff = document.querySelector(".fight"); if (ff) ff.classList.remove("skyon"); }, dur);
+}
+// lance les effets pixelfx d'un sort ; renvoie le script (délais) ou null si le sort n'a pas d'effet pixelfx (ancien rendu conservé)
+function pxCast(h, si, ti) {
+  const scr = (PXS[h.id] || [])[si], sk = getSk(h, si);
+  if (!scr || !sk || sk.n !== scr.n || !window.PXFX || !fxOn()) return null;
+  const at = (a, m, t) => a === "boss" ? (m === "F" ? fxPos(bossEl(), .93) : bossP()) : a === "self" ? heroP(h, m === "F" ? .93 : .5) : heroP(t || F.heroes[ti] || h, m === "F" ? .93 : .5);
+  const actorEl = (a) => a === "self" ? heroEl(h) : a === "boss" ? bossEl() : a;
+  for (const L of scr.L) {
+    const reps = L.rep || 1;
+    for (let i = 0; i < reps; i++) setTimeout(() => {
+      if (!document.getElementById("vfx")) return;
+      if (L.sky) { pxSky(L.dur); return; }
+      const ptsList = L.at === "team" ? F.heroes.filter((t) => !t.dead) : [null];
+      for (const t of ptsList) {
+        let P = L.at === "screen" ? { x: 0, y: 0, s: 1 } : L.at === "team" ? heroP(t, .93) : at(L.at, L.m, null);
+        if (!P) continue;
+        if (L.at === "screen" && L.m === "C") { const c = fxCv(); P = { x: c.cv.width / 2, y: c.cv.height * (L.back ? .5 : .5), s: 1 }; }
+        if (L.jit) P = { ...P, x: P.x + (((i * 37 + 11) % 11) / 5 - 1) * L.jit[0] * P.s, y: P.y + (((i * 53 + 7) % 9) / 4 - 1) * L.jit[1] * P.s };
+        const o = { k: L.k, m: L.m, hit: L.hit, flip: !!L.flip, speed: L.speed, cover: !!L.cover, fitH: L.fitH, back: !!L.back, dur: L.dur, cut: L.cut, fade: L.fade, seed: i + 1, opts: { ...(L.opts || {}) } };
+        if (L.actor) o.actor = actorEl(L.actor);
+        if (L.reachTo) { const B = bossP(), d = Math.abs(P.x - B.x) / ((L.k || 1) * P.s); o.opts.reach = Math.max(60, Math.round(d)); o.opts.seed = 6 + i; }
+        pxPlay(L.e, P, o);
+      }
+    }, (L.t0 || 0) + i * (L.gap || 0));
+  }
+  return scr;
+}
+
 // Boule de feu qui vole de A à B puis explose (pixelfx : Fireball + Small explosion)
 async function pxFireball(A, B) {
   if (!window.PXFX) return false;
@@ -3653,7 +3806,7 @@ async function pxFireball(A, B) {
   return true;
 }
 async function hitFx(h, i, big, el) {
-  if (!fxOn()) return;
+  if (!fxOn() || (F && F.scr)) return;
   el = el || h.el;
   const P = bossP(), w = h.c.look.wpn, col = ELEM[el].c, B = big ? 1.5 : 1;
   if (!P) return;
@@ -3678,7 +3831,7 @@ async function hitFx(h, i, big, el) {
 const sleepFx = (ms) => new Promise((r) => setTimeout(r, ms));
 function supportFx(kind, targets, h) {
   sfxSupport(kind);
-  if (!fxOn()) return;
+  if (!fxOn() || (F && F.scr)) return;
   for (const t of targets) {
     const P = heroP(t, .55); if (!P) continue;
     if (kind === "heal") { if (!pxPlay("heal", heroP(t, .93), { k: 2.3, actor: 1 })) fxPlus(P, "#7dffb0"); }
@@ -3690,7 +3843,7 @@ function supportFx(kind, targets, h) {
     else if (kind === "revive") { if (!pxPlay("resurrection", heroP(t, .93), { k: 2.3, speed: 1.4, actor: 1 })) fxPillar(P, "#fff3c4"); }
   }
 }
-function bossDebuffFx(col) { if (!fxOn()) return; const P = bossP(); if (P) fxRune({ ...P, y: P.y + 120 * P.s }, col); }
+function bossDebuffFx(col) { if (!fxOn() || (F && F.scr)) return; const P = bossP(); if (P) fxRune({ ...P, y: P.y + 120 * P.s }, col); }
 // Coup du boss sur un héros
 function bossHitFx(t, mv, el) {
   if (!fxOn()) return;
@@ -4752,7 +4905,7 @@ const ALT = {
   p5: [{ n: "Nuée de poils", d: "Esquive 80 % des attaques (1 tour) et ATK +30 % (2 tours).", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.8, d: 1 }, { k: "buff", p: 0.3, d: 2 }] },
        { n: "Bond de nuage", d: "Frappe à 300 % ATK et recharge ses sorts. COMBO Thé et lance : ATK boostée → +60 % de puissance.", cd: 5, tgt: "boss", fin: "the", fx: [{ k: "dmg", m: 3.0, post: 40 }, { k: "cdself", n: 5 }] }],
   p6: [{ n: "Lune montante", d: "Frappe à 50 % ATK, le boss subit +20 % de dégâts (3 tours). Amorce du combo Chasse à la lune.", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 0.5 }, { k: "mark", p: 0.2, d: 3 }] },
-       { n: "Éclipse totale", d: "Frappe à 350 % ATK, ×2 si le boss a moins de 35 % PV.", cd: 5, tgt: "boss", fx: [{ k: "dmg", m: 3.5, exec: 2.0 }] }],
+       { n: "Trou noir", d: "Frappe à 350 % ATK, ×2 si le boss a moins de 35 % PV.", cd: 5, tgt: "boss", fx: [{ k: "dmg", m: 3.5, exec: 2.0 }] }],
   m1: [{ n: "Sceau de glace", d: "Sort à 60 % ATK, ATK du boss −30 % (2 tours). Amorce du combo Conduction.", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 0.6 }, { k: "debuff", s: "atk", p: 0.3, d: 2 }] },
        { n: "Blizzard de shikigami", d: "Cinq coups à 60 % ATK. COMBO Vapeur : boss brûlé → DEF du boss −30 % (2 tours).", cd: 5, tgt: "boss", fin: "vapeur", fx: [{ k: "dmg", m: 0.6, hits: 5 }] }],
   m2: [{ n: "Pilule fumigène", d: "Équipe : retire les malus et −25 % de dégâts subis (1 tour).", cd: 3, tgt: "allies", fx: [{ k: "cleanse" }, { k: "dr", p: 0.25, d: 1 }] },
@@ -4836,7 +4989,7 @@ const CELX = {
   p3: { j: "炎舞千燼", n: "Danse des mille braises", m: 5, tgt: "allies", d: "Coups de Feu, brûlure forte 3 tours, ATK d'équipe +20 % (2 tours).", fx: [{ k: "dot", s: "burn", m: 0.35, d: 3 }, { k: "buff", p: 0.2, d: 2 }] },
   p4: { j: "百山の虎", n: "Tigre des cent montagnes", m: 5.5, tgt: "boss", d: "Gros coup de Terre + DEF du boss −25 % (2 tours).", fx: [{ k: "debuff", s: "def", p: 0.25, d: 2 }] },
   p5: { j: "猴王翻天", n: "Le Roi Singe renverse le ciel", m: 6.5, tgt: "allies", d: "Coup colossal de Métal + esquive d'équipe (50 %, 1 tour).", fx: [{ k: "evade", p: 0.5, d: 1, on: "self" }] },
-  p6: { j: "皆既蝕", n: "Éclipse totale", m: 5.5, tgt: "boss", d: "Coup d'exécution : le boss subit +30 % de dégâts (2 tours).", fx: [{ k: "mark", p: 0.3, d: 2 }] },
+  p6: { j: "皆既蝕", n: "Trou noir", m: 5.5, tgt: "boss", d: "Coup d'exécution : le boss subit +30 % de dégâts (2 tours).", fx: [{ k: "mark", p: 0.3, d: 2 }] },
   m1: { j: "札の嵐", n: "Tempête de talismans", m: 4.5, tgt: "boss", d: "Dégâts d'Eau + ATK du boss −20 % (gel, 2 tours).", fx: [{ k: "debuff", s: "atk", p: 0.2, d: 2 }] },
   m2: { j: "失敗仙丹", n: "Pilule de l'immortalité ratée", m: 5, tgt: "boss", d: "Explosion de Feu + brûlure 3 tours.", fx: [{ k: "dot", s: "burn", m: 0.3, d: 3 }] },
   m3: { j: "九尾九幻", n: "Neuf queues, neuf mirages", m: 5, tgt: "boss", d: "Gros dégâts de Feu + ATK du boss −25 % (2 tours).", fx: [{ k: "debuff", s: "atk", p: 0.25, d: 2 }] },
@@ -4911,7 +5064,7 @@ function renderFightShell() {
     <div class="scene" id="scene" style="--glow:${T.glow};--fog:${T.fog}">
       <div class="cam" id="cam">
         ${ART["bg:" + b.id] ? `<img class="bgimg" src="${(window.SNAP && SNAP[b.id]) || ART["bg:" + b.id]}" alt=""><div class="bloom"></div><div class="fogb"></div>` : `<canvas class="bgl far" id="bgfar"></canvas><div class="bloom"></div><canvas class="bgl mid" id="bgmid"></canvas><div class="fogb"></div><canvas class="bgl floor" id="bgfloor"></canvas>`}
-        <div class="shafts"></div>
+        <canvas class="vfxbg" id="vfxbg"></canvas><div class="shafts"></div>
         <div class="bossbox" id="bstage"><div class="bshadow"></div><div class="breathe">${bossArt(b.id, "bimg")}</div></div>
         <div class="party n${F.heroes.length}">${F.heroes.map((h, i) => `<div class="pcw p${i}" id="pw${i}">
           <button class="ohb" id="hc${i}" data-act="hsel" data-i="${i}"><span class="aimtag">⚔ CIBLÉ</span><span class="plantag"></span>
@@ -5309,7 +5462,8 @@ async function useSkill(hi, si, ti) {
   heroMove(h, si === "foc" ? "guard" : dmgFx ? (melee ? "dash" : "cast") : "act", dmgFx ? 420 + (dmgFx.hits || 1) * 170 : 0);
   if (si === "foc") supportFx("guard", [h]);
   update();
-  await sleep(dmgFx && melee ? 190 : 220);
+  const T0 = performance.now(), scr = pxCast(h, si, ti); F.scr = scr;
+  await sleep(scr ? (scr.lead != null ? scr.lead : Math.min(500, scr.block * .4)) : (dmgFx && melee ? 190 : 220));
   const allyT = sk.tgt === "ally" ? [F.heroes[ti]] : sk.tgt === "allies" ? F.heroes : [h];
   for (const fx of sk.fx) {
     let tg = (fx.on === "self" ? [h] : fx.on === "allies" ? F.heroes : allyT).filter((t) => t && !t.dead);
@@ -5355,6 +5509,7 @@ async function useSkill(hi, si, ti) {
       case "revive": if (b.mode === "m") { floatAt(heroEl(h), "Résurrection impossible", "info"); log("En Mythique, un héros tombé reste tombé."); break; } F.heroes.forEach((t) => { if (t.dead) { t.dead = false; setTimeout(() => supportFx("revive", [t]), 30); t.hp = Math.round(t.maxHp * (fx.p + (fx.pPer || 0) * (h.charge || 0))); t.acted = true; floatAt(heroEl(t), "Ranimé", "heal"); log(`${t.c.name} revient au combat !`); } }); break;
     }
   }
+  if (scr) { const rest = scr.block - (performance.now() - T0); if (rest > 0) await sleep(rest); F.scr = null; }
   if (cb) applyCombo(cb, h);
   if (sk.discharge) h.charge = sk.capCh ? Math.max(0, (h.charge || 0) - sk.capCh) : 0;
   if (b.mode === "h" && sk.fx.some((f) => f.k === "revive")) h.cd[si] += 1;
