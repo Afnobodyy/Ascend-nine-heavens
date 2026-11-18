@@ -2101,7 +2101,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 95; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 96; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4304,7 +4304,7 @@ function heroStats(id, run) {
   return { hp: Math.round(r.hp * m * (1 + (md.hp || 0))), atk: Math.round(r.atk * m * (1 + (md.atk || 0))), def: Math.round(r.def * m * (1 + (md.def || 0))) };
 }
 const RELICS = { kappa: { n: "Écuelle d'eau", k: "碗", d: "La première purge du combat soigne aussi 10 % des PV du héros purgé." }, kitsune: { n: "Queue de renard", k: "尾", d: "La première attaque à cible unique du boss rate." }, oni: { n: "Masque d'oni", k: "面", d: "Les provocations durent 1 tour de plus." }, jiangshi: { n: "Talisman scellé", k: "符", d: "Un allié purgé est protégé contre les malus pendant 3 tours." }, tengu: { n: "Éventail de plume", k: "扇", d: "La recharge de la compétence 1 de chaque héros diminue de 1." }, gasha: { n: "Os de géant", k: "骨", d: "Le premier allié mis à terre revient à 20 % de ses PV, une fois par combat." }, ryujin: { n: "Perle du dragon", k: "珠", d: "Les ultimes sont disponibles dès le tour 2." }, phenix: { n: "Plume noire", k: "羽", d: "Les brûlures que l'équipe inflige durent 1 tour de plus." }, aluna: { n: "Fil d'Aluna", k: "糸", d: "Le bonus de l'état Exposé augmente de 0,25." } };
-const MODES = { n: { n: "Normal", hp: 1, dmg: 0.75 }, h: { n: "Héroïque", hp: 1.5, dmg: 1.1 }, m: { n: "Mythique", hp: 2.2, dmg: 1.6 } };
+const MODES = { n: { n: "Normal", hp: 1, dmg: 0.9375 }, h: { n: "Héroïque", hp: 1.5, dmg: 1.1 }, m: { n: "Mythique", hp: 2.2, dmg: 1.6 } };
 const MODE_ORD = ["n", "h", "m"];
 let SEL = { boss: "kappa", mode: "n" };
 const cleared = (bid, m) => !!(S.prog && S.prog[bid] && S.prog[bid][m]);
