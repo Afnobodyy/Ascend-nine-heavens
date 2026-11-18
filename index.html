@@ -1450,8 +1450,8 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .spi .spn{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;font:900 calc(var(--s)*.6)/1 var(--display,sans-serif);font-style:normal;color:#fff;text-shadow:-1px 0 #000,1px 0 #000,0 1px #000,0 -1px #000;filter:none}
 .spi .spb{position:absolute;right:-1px;bottom:-1px;z-index:2;min-width:calc(var(--s)*.4);height:calc(var(--s)*.4);padding:0 2px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:900 calc(var(--s)*.3)/1 var(--display,sans-serif);font-style:normal;color:#1b0f08;background:#ffd25a;border:1px solid #000;border-radius:3px}
 .cg.ico{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:calc(5*var(--u));-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
-.cg.ico .spi{--s:calc(50*var(--u))!important;order:0!important;margin:0!important;transition:transform .12s ease-out}
-.cg.ico:active .spi,#bint .bslot:active .spi{transform:scale(.82)}
+.cg.ico .spi{--s:calc(50*var(--u))!important;order:0!important;margin:0!important;transition:transform .14s ease-out}
+.cg.ico:active .spi,#bint .bslot:active .spi,.cg.ico.tap .spi,#bint .bslot.tap .spi{transform:scale(.82)}
 .cg.ico .pips{margin-top:0!important}
 .cg.ico.ult:not(.cel){border-color:#e2b250}
 .lptip{position:fixed;z-index:999;width:max-content;max-width:min(300px,86vw);padding:8px 11px;border:1px solid #a87a24;border-radius:8px;background:rgba(14,8,11,.97);color:#f2e7d3;box-shadow:0 6px 18px rgba(0,0,0,.6);pointer-events:none;font-size:13px;line-height:1.35}
@@ -2106,7 +2106,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 97; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 98; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5885,6 +5885,7 @@ let LP = { t: 0, skip: false, tip: null };
 function lpHide() { clearTimeout(LP.t); if (LP.tip) { LP.tip.remove(); LP.tip = null; } }
 document.addEventListener("pointerdown", (e) => {
   const b = e.target.closest && e.target.closest(".cg.ico, .bslot"); lpHide(); LP.skip = false; if (!b || !F) return;
+  LP.dn = performance.now(); b.classList.add("tap"); // le rétrécissement de l'icône doit toujours se voir, même sur un appui très bref
   LP.t = setTimeout(() => {
     const tip = document.createElement("div"); tip.className = "lptip";
     if (b.classList.contains("bslot")) {
@@ -5906,13 +5907,19 @@ document.addEventListener("pointerdown", (e) => {
   }, 380);
 });
 // relâcher après un appui long : la description reste affichée, le clic qui suit est ignoré ; le prochain appui valide
-["pointerup", "pointercancel"].forEach((ev) => document.addEventListener(ev, () => { if (LP.tip) LP.skip = true; else clearTimeout(LP.t); }, true));
+["pointerup", "pointercancel"].forEach((ev) => document.addEventListener(ev, () => { if (LP.tip) LP.skip = true; else clearTimeout(LP.t); setTimeout(() => document.querySelectorAll(".tap").forEach((x) => x.classList.remove("tap")), 170); }, true));
 document.addEventListener("scroll", lpHide, true);
 document.addEventListener("contextmenu", (e) => { if (e.target.closest && e.target.closest(".cg.ico, .bslot")) e.preventDefault(); });
 document.addEventListener("click", (e) => {
   if (LP.skip) { LP.skip = false; if (e.target.closest(".cg.ico, .bslot")) { e.stopImmediatePropagation(); return; } }
   const t = e.target.closest("[data-act]"); if (!t) return;
   const a = t.dataset.act;
+  // appui bref sur une icône de sort : on laisse l'animation de rétrécissement se jouer avant de valider
+  if (a === "skill" && t.classList.contains("ico") && !LP.rep && LP.dn && performance.now() - LP.dn < 150) {
+    const w = 150 - (performance.now() - LP.dn); LP.dn = 0; e.stopImmediatePropagation();
+    setTimeout(() => { LP.rep = true; try { if (t.isConnected) t.click(); } finally { LP.rep = false; } }, w); return;
+  }
+  LP.dn = 0;
   if (a === "closesheet") { if (e.target === t || t.tagName === "BUTTON") t.closest(".sheet")?.remove(); return; }
   if (t.closest(".sheet") && a !== "togd" && a !== "eqalt" && a !== "vareq") return;
   switch (a) {
