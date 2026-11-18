@@ -1996,8 +1996,9 @@ body:has(.fight) #fbgx{display:block}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
+<script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 49; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 50; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -3326,6 +3327,36 @@ function heroMove(h, kind, dur) {
 }
 function dotFx(h, el) { el = el || h.el; if (!fxOn()) return; const P = bossP(); if (P) fxBurst({ ...P, y: P.y + 30 * P.s }, [ELEM[el].c, "#fff"], 14, .7, 1); }
 // Effet d'un coup sur le boss, selon l'arme / l'élément du héros. Renvoie une promesse (temps de vol des sorts).
+// ---------- pixelfx (effets pixel art, paquet pixelfx.js) ----------
+// Joue un effet pixelfx dans le canvas de combat. P = {x,y,s} ; o.k = taille d'un pixel d'effet (en unités P.s), o.speed = accélération,
+// o.flip = effet miroir, o.to = {x,y} pour un effet qui voyage, o.dur = durée à l'écran (ms), o.sim = durée simulée (s, pour couper une traîne de fumée),
+// o.actor = silhouette du personnage visé (taille de héros), invisible : seuls les effets restent. Renvoie false si la librairie est absente (on garde l'effet d'origine).
+function pxPlay(key, P, o = {}) {
+  const X = window.PXFX, mod = X && X.E[key]; if (!mod || !P) return false;
+  const m = mod.meta, D = m.duration, [w, h] = m.size, [ox, oy] = m.origin, k = (o.k || 1) * P.s;
+  const A = o.actor ? { ...X.actor(), } : null;
+  const frame = X.createFrame(w, h), fx = X.createFx(mod, { x: ox, y: oy, flip: !!o.flip, seed: Math.floor(Math.random() * 99), ...(A ? { actor: A } : {}) });
+  const buf = document.createElement("canvas"); buf.width = w; buf.height = h;
+  const bx = buf.getContext("2d"), img = new ImageData(w, h);
+  let last = 0;
+  const SIM = o.sim || D;
+  fxAdd(o.dur || D * 1000 / (o.speed || 1), (ctx, p) => {
+    const dt = Math.max(0, p - last) * SIM; last = p;
+    if (dt > 0) fx.update(dt);
+    frame.color.fill(0); frame.light.fill(0); fx.draw(frame); X.composite(frame, img.data); bx.putImageData(img, 0, 0);
+    const q = o.to ? ease(p) : 0, x = P.x + (o.to ? (o.to.x - P.x) * q : 0), y = P.y + (o.to ? (o.to.y - P.y) * q - Math.sin(q * Math.PI) * 50 * P.s : 0);
+    ctx.imageSmoothingEnabled = false; ctx.drawImage(buf, x - (o.flip ? w - ox : ox) * k, y - oy * k, w * k, h * k);
+  });
+  return true;
+}
+// Boule de feu qui vole de A à B puis explose (pixelfx : Fireball + Small explosion)
+async function pxFireball(A, B) {
+  if (!window.PXFX) return false;
+  pxPlay("fireball", A, { k: 2.2, flip: true, dur: 330, sim: .5, to: B });
+  await sleepFx(330 * FXT);
+  pxPlay("boom", { ...B, y: B.y + 40 * B.s }, { k: 1.8, dur: 750, sim: 1.5 });
+  return true;
+}
 async function hitFx(h, i, big, el) {
   if (!fxOn()) return;
   el = el || h.el;
@@ -3341,12 +3372,13 @@ async function hitFx(h, i, big, el) {
     return;
   }
   const A = heroP(h, .4); if (!A) return;
-  if (el === "metal") { fxLightning(j, "#ffe14a", B); return; }
+  if (el === "metal") { if (!pxPlay("thunder", { ...j, y: P.y + 130 * P.s }, { k: 2.4, dur: 1100, actor: 1 })) fxLightning(j, "#ffe14a", B); else fxBurst(j, ["#ffe14a", "#fff7c0"], 14, B * .7); return; }
   if (el === "terre") { fxRocks(j, B); await sleepFx(320); return; }
   if (el === "bois") { fxLeaves(j, B); await sleepFx(460); return; }
+  if (el === "feu" && await pxFireball(A, j)) return;
   const core = el === "feu" ? "#fff2b0" : "#e8fbff";
   await fxBolt(A, j, col, core, 300);
-  if (el === "eau") fxSplash(j, B); else fxBurst(j, [col, "#ffd27a", "#fff"], 26, B, 1);
+  if (el === "eau") { if (!pxPlay("splash", { ...j, y: P.y + 130 * P.s }, { k: 2.4, dur: 1200 })) fxSplash(j, B); } else fxBurst(j, [col, "#ffd27a", "#fff"], 26, B, 1);
 }
 const sleepFx = (ms) => new Promise((r) => setTimeout(r, ms));
 function supportFx(kind, targets, h) {
@@ -3354,13 +3386,13 @@ function supportFx(kind, targets, h) {
   if (!fxOn()) return;
   for (const t of targets) {
     const P = heroP(t, .55); if (!P) continue;
-    if (kind === "heal") fxPlus(P, "#7dffb0");
+    if (kind === "heal") { if (!pxPlay("heal", heroP(t, .93), { k: 2.3, actor: 1 })) fxPlus(P, "#7dffb0"); }
     else if (kind === "shield") fxHex(P, "#8fd0ff");
     else if (kind === "guard") fxHex(P, "#bcd4ff");
     else if (kind === "buff") fxRise(P, "#ffd27a");
     else if (kind === "taunt") fxRing(P, "#ff7a6a", .5);
     else if (kind === "cleanse") fxRise(P, "#ffffff");
-    else if (kind === "revive") fxPillar(P, "#fff3c4");
+    else if (kind === "revive") { if (!pxPlay("resurrection", heroP(t, .93), { k: 2.3, speed: 1.4, actor: 1 })) fxPillar(P, "#fff3c4"); }
   }
 }
 function bossDebuffFx(col) { if (!fxOn()) return; const P = bossP(); if (P) fxRune({ ...P, y: P.y + 120 * P.s }, col); }
