@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 100; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 101; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5311,16 +5311,18 @@ function footY(img) {
   } catch (e) {}
   return null;
 }
+// position d'un élément dans la scène en pixels de mise en page : insensible aux transformations (respiration, mêlée, sorts, héros actif), sinon le boss monte/descend selon l'acteur
+function layoutTop(el, sc) { let t = 0; for (let e = el; e && e !== sc; e = e.offsetParent) t += e.offsetTop; return t; }
 function alignBossFeet() {
   const bx = document.getElementById("bstage"), bi = document.querySelector("#bstage .bimg"), sc = document.getElementById("scene");
   if (!bx || !bi || !sc || !document.querySelector(".fight.ug")) return;
   if (!bi.complete || !bi.naturalWidth) { bi.addEventListener("load", () => { alignBossFeet(); placeBossName(); }, { once: true }); return; }
-  const k = sc.getBoundingClientRect().width / sc.offsetWidth || 1;
-  bx.style.setProperty("translate", "0 0", "important");
   let hf = -1;
-  document.querySelectorAll(".pcw .pimg").forEach((im) => { if (!im.complete || !im.naturalWidth) return; const r = im.getBoundingClientRect(), f = footY(im); hf = Math.max(hf, r.top + r.height * (f == null ? 1 : f)); });
-  const bf = footY(bi), br = bi.getBoundingClientRect(); if (hf < 0 || bf == null || !br.height) return;
-  bx.style.setProperty("translate", "0 " + ((hf - (br.top + br.height * bf)) / k) + "px", "important");
+  document.querySelectorAll(".pcw .pimg").forEach((im) => { if (!im.complete || !im.naturalWidth) return; const f = footY(im); hf = Math.max(hf, layoutTop(im, sc) + im.offsetHeight * (f == null ? 1 : f)); });
+  const bf = footY(bi); if (hf < 0 || bf == null || !bi.offsetHeight) return;
+  const cs = getComputedStyle(bi), sca = parseFloat(cs.scale) || 1, oy = (parseFloat(cs.transformOrigin.split(" ")[1]) || 0) * (bi.offsetHeight / (parseFloat(cs.height) || bi.offsetHeight));
+  const bfoot = layoutTop(bi, sc) + oy + (bi.offsetHeight * bf - oy) * sca;
+  bx.style.setProperty("translate", "0 " + (hf - bfoot) + "px", "important");
 }
 function placeBossName() {
   alignBossFeet();
