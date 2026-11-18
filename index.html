@@ -2101,7 +2101,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 91; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 92; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2125,8 +2125,7 @@ const RAR = {
   E: { n: "Épique",     c: "#a75cff", mult: 1.2 },
   L: { n: "Légendaire", c: "#ff8a1f", mult: 1.42 },
 };
-const DUPE_JADE = { R: 20, E: 50, L: 120 };
-const SUMMON_COST = 100, SUMMON10_COST = 900, PITY = 30;
+const PITY = 30;
 
 // fx : dmg{m,hits,post,exec} dot{s,m,d} debuff{s,p,d} mark{p,d} heal{m} healPct{p} shield{p} taunt{d}
 //      dr{p,d} buff{p,d} counter{p,d} regen{p,d} evade{p,d} cleanse cdr{n} revive{p}   — on:'self' force le lanceur
@@ -4251,7 +4250,7 @@ addEventListener("pointerdown", () => { if (MEN.armed) return; MEN.armed = true;
 
 // ===================== ÉTAT & SAUVEGARDE =====================
 const SAVE_KEY = "neufcieux_v1";
-function newSave() { return { jade: 300, owned: { t1: { st: 1 }, p1: { st: 1 }, m1: { st: 1 }, s1: { st: 1 } }, pity: 0, team: ["t1", "p1", "m1", "s1"], best: 0, run: null, pulls: 0, last: [], band: false, prog: {} }; }
+function newSave() { return { owned: { t1: { st: 1 }, p1: { st: 1 }, m1: { st: 1 }, s1: { st: 1 } }, pity: 0, team: ["t1", "p1", "m1", "s1"], best: 0, run: null, pulls: 0, last: [], band: false, prog: {} }; }
 function load() { try { const t = localStorage.getItem(SAVE_KEY); return t ? Object.assign(newSave(), JSON.parse(t), { band: false }) : null; } catch (e) { return null; } }
 function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { } }
 let S = load() || newSave();
@@ -4304,19 +4303,20 @@ function heroStats(id, run) {
   return { hp: Math.round(r.hp * m * (1 + (md.hp || 0))), atk: Math.round(r.atk * m * (1 + (md.atk || 0))), def: Math.round(r.def * m * (1 + (md.def || 0))) };
 }
 const RELICS = { kappa: { n: "Écuelle d'eau", k: "碗", d: "La première purge du combat soigne aussi 10 % des PV du héros purgé." }, kitsune: { n: "Queue de renard", k: "尾", d: "La première attaque à cible unique du boss rate." }, oni: { n: "Masque d'oni", k: "面", d: "Les provocations durent 1 tour de plus." }, jiangshi: { n: "Talisman scellé", k: "符", d: "Un allié purgé est protégé contre les malus pendant 3 tours." }, tengu: { n: "Éventail de plume", k: "扇", d: "La recharge de la compétence 1 de chaque héros diminue de 1." }, gasha: { n: "Os de géant", k: "骨", d: "Le premier allié mis à terre revient à 20 % de ses PV, une fois par combat." }, ryujin: { n: "Perle du dragon", k: "珠", d: "Les ultimes sont disponibles dès le tour 2." }, phenix: { n: "Plume noire", k: "羽", d: "Les brûlures que l'équipe inflige durent 1 tour de plus." }, aluna: { n: "Fil d'Aluna", k: "糸", d: "Le bonus de l'état Exposé augmente de 0,25." } };
-const MODES = { n: { n: "Normal", hp: 1, dmg: 0.75, jade: 1 }, h: { n: "Héroïque", hp: 1.5, dmg: 1.1, jade: 1.5 }, m: { n: "Mythique", hp: 2.2, dmg: 1.6, jade: 2.2 } };
+const MODES = { n: { n: "Normal", hp: 1, dmg: 0.75 }, h: { n: "Héroïque", hp: 1.5, dmg: 1.1 }, m: { n: "Mythique", hp: 2.2, dmg: 1.6 } };
 const MODE_ORD = ["n", "h", "m"];
 let SEL = { boss: "kappa", mode: "n" };
 const cleared = (bid, m) => !!(S.prog && S.prog[bid] && S.prog[bid][m]);
 const bossOpen = (bid) => { const i = BOSSES.findIndex((b) => b.id === bid); return i <= 0 || cleared(BOSSES[i - 1].id, "n"); };
-const modeOpen = (bid, m) => { const k = MODE_ORD.indexOf(m); return bossOpen(bid) && (k === 0 || cleared(bid, MODE_ORD[k - 1])); };
+const allCleared = (m) => BOSSES.every((b) => cleared(b.id, m));
+const modeOpen = (bid, m) => { const k = MODE_ORD.indexOf(m); return bossOpen(bid) && (k === 0 || allCleared(MODE_ORD[k - 1])); };
+const modeLockTxt = (m) => { const k = MODE_ORD.indexOf(m); return k > 0 && !allCleared(MODE_ORD[k - 1]) ? `Bats les ${BOSSES.length} boss en ${MODES[MODE_ORD[k - 1]].n} pour débloquer le mode ${MODES[m].n}.` : ""; };
 const nextBoss = () => BOSSES.find((b) => !cleared(b.id, "n")) || BOSSES[0];
 function bossAt(floor) { const i = floor % BOSSES.length, loop = Math.floor(floor / BOSSES.length); return { b: BOSSES[i], i, loop }; }
 
 // ===================== RENDU COMMUN =====================
 const elChip = (e, pre = "") => `<span class="el" style="--c:${ELEM[e].c}">${pre}${ELEM[e].k} ${ELEM[e].n}</span>`;
-const jadeIcon = `<i class="jg"></i>`;
-function topbar() { return `<div class="topbar"><span class="brand">九天<em>Ascend: Nine Heavens</em></span><span class="tbr"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="jade">${jadeIcon}${fmt(S.jade)}</span></span></div>`; }
+function topbar() { return `<div class="topbar"><span class="brand">九天<em>Ascend: Nine Heavens</em></span><span class="tbr"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button></span></div>`; }
 function nav() {
   return `<nav class="nav">${[["home", "Portail", "門"], ["summon", "Invocation", "召"], ["boss", "Boss", "鬼"], ["coll", "Collection", "録"]]
     .map(([k, n, g]) => `<button data-act="go" data-to="${k}" class="${screen === k ? "on" : ""}"><i>${g}</i>${n}${k === "coll" && Object.values(S.owned).some((o) => o.nw) ? '<span class="newdot" aria-label="Nouveau"></span>' : ""}</button>`).join("")}</nav>`;
@@ -4343,12 +4343,12 @@ function renderHome() {
   const order = [lead[1], lead[0], lead[3], lead[2]].filter(Boolean);
   const nb = nextBoss();
   app.innerHTML = `<div class="h-home"><div class="h-bg" style="background-image:url(${ART["bg:kitsune"]})"></div><div class="h-vig"></div><div class="h-band"></div>
-    <div class="h-jade"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="jade">${jadeIcon}${fmt(S.jade)}</span></div>
+    <div class="h-jade"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button></div>
     <div class="h-rec"><div><span>PROGRESSION</span><b>${nCl} / ${BOSSES.length} boss vaincus</b></div></div>
     <div class="h-logo"><div class="k">九天</div><div class="a">Ascend</div><div class="n">Nine Heavens</div></div>
     <div class="h-team">${order.map((c) => `<div class="h-hs"><i></i>${heroArt(c)}</div>`).join("")}</div>
     <div class="h-menu">
-      <button class="btn h-bt" data-act="go" data-to="summon"><i>召</i><b>Invocation</b><span>${Math.floor(S.jade / SUMMON_COST)} tirage(s)</span></button>
+      <button class="btn h-bt" data-act="go" data-to="summon"><i>召</i><b>Invocation</b><span>${(S.tix.n || 0) + (S.tix.h || 0) + (S.tix.m || 0)} ticket(s)</span></button>
       <button class="btn h-cta" data-act="go" data-to="boss"><b>Affronter un boss</b><small>${nb.name.toUpperCase()}</small></button>
       <button class="btn h-bt" data-act="go" data-to="coll"><i>録</i><b>Collection</b><span>${Object.keys(S.owned).length} / ${CHARS.length}</span></button>
     </div><div class="h-ver">v.${GAME_VERSION}</div></div>`;
@@ -4374,7 +4374,7 @@ const mkEs = (e) => `<span class="es" style="--c:${ELEM[e].c}">${ELEM[e].k}</spa
 const mkStar = (n) => "★".repeat(n) + `<u>${"★".repeat(5 - n)}</u>`;
 const mkPt = (id, x = "", act = "") => { const c = CH[id], o = stars(id); return `<button class="pt r-${c.rar} ${c.rar} ${o ? "" : "lk"} ${x}" ${act ? `data-act="${act}" data-id="${id}"` : ""} aria-label="${o ? c.name : "???"}">${heroArt(c)}</button>`; };
 const mkChips = (c) => `<span class="chip2" style="color:${RAR[c.rar].c};border-color:${RAR[c.rar].c}88">${RAR[c.rar].n}</span><span class="chip2">${ROLE[c.role].k} ${ROLE[c.role].n}</span><span class="chip2" style="color:${ELEM[c.el].c}">${ELEM[c.el].k} ${ELEM[c.el].n}</span>`;
-const mkTop = (t, k, to = "home", bl = "Portail") => `<div class="mk-top"><div class="l"><button class="btn sm back" data-act="go" data-to="${to}">‹ ${bl}</button><h2><i>${k}</i>${t}</h2></div><div class="r"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="pill"><i></i>${fmt(S.jade)}</span></div></div>`;
+const mkTop = (t, k, to = "home", bl = "Portail") => `<div class="mk-top"><div class="l"><button class="btn sm back" data-act="go" data-to="${to}">‹ ${bl}</button><h2><i>${k}</i>${t}</h2></div><div class="r"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button></div></div>`;
 
 // ===================== ÉQUIPE =====================
 function renderTeam() {
@@ -4455,8 +4455,7 @@ function renderSummon() {
   <div class="col2"><h3>Taux d'apparition (Rare / Épique / Légendaire)</h3>${MODE_ORD.map((m) => `<div class="rr"><span>${MODES[m].n}</span><b>${RATES[m].join(" / ")} %</b></div>`).join("")}<div class="gar" style="margin-top:4px">1re victoire sur un boss et un mode : Épique et Légendaire ×1,5.</div>
    <div class="gar">Légendaire garanti dans <b>${left}</b><i><s style="width:${(S.pity / PITY) * 100}%"></s></i></div></div>
   <div class="btns2" style="margin-bottom:6px">${MODE_ORD.map((m) => `<button class="btn ${tx[m] ? "" : "ghost"}" data-act="tix" data-m="${m}" ${tx[m] ? "" : "disabled"}><b>Tirage ${MODES[m].n}</b><small>${tx[m] || 0} disponible${(tx[m] || 0) > 1 ? "s" : ""}${tf[m] ? ` · ${tf[m]} bonifié${tf[m] > 1 ? "s" : ""}` : ""}</small></button>`).join("")}</div>
-  <div class="btns2"><button class="btn" data-act="sum" data-n="1" ${S.jade < SUMMON_COST ? "disabled" : ""}><b>Invoquer ×1</b><small>${jadeIcon}${SUMMON_COST}</small></button>
-   <button class="btn big" data-act="sum" data-n="10" ${S.jade < SUMMON10_COST ? "disabled" : ""}><b>Invoquer ×10</b><small>${jadeIcon}${SUMMON10_COST} · 1 Épique+ garanti</small></button></div></div>`;
+  <div class="gar" style="margin:6px 0 0">Chaque boss vaincu donne 1 ticket du mode correspondant (bonifié à la 1re victoire).</div></div>`;
   hydratePx(app);
 }
 const RATES = { n: [84, 15, 1], h: [60, 37, 3], m: [35, 57, 8] };
@@ -4472,7 +4471,7 @@ function grant(rar) {
   const c = rnd(CHARS.filter((c) => c.rar === rar)), o = S.owned[c.id];
   if (!o) { S.owned[c.id] = { st: 1, nw: 1 }; return { id: c.id, isNew: true, st: 1 }; }
   if (o.st < 5) { o.st++; o.nw = 1; return { id: c.id, up: true, st: o.st }; }
-  o.fr = (o.fr || 0) + 1; S.jade += DUPE_JADE[rar]; return { id: c.id, conv: DUPE_JADE[rar], st: 5 };
+  o.fr = (o.fr || 0) + 1; return { id: c.id, st: 5 };
 }
 async function doTicket(m) {
   S.tix = S.tix || {}; S.tixF = S.tixF || {};
@@ -4482,26 +4481,6 @@ async function doTicket(m) {
   S.last = res.map((r) => r.id); save();
   await playSummon(res); render();
 }
-async function doSummon(n) {
-  const cost = n === 10 ? SUMMON10_COST : SUMMON_COST;
-  if (S.jade < cost) return toast("Pas assez de jade : bats des boss pour en gagner.");
-  S.jade -= cost;
-  const rars = []; for (let i = 0; i < n; i++) rars.push(rollRarity());
-  if (n === 10 && rars.every((r) => r === "R")) rars[9] = "E";
-  const res = rars.map(grant);
-  S.last = res.map((r) => r.id);
-  save();
-  await playSummon(res);
-  function fitStage() {
-  const vv = window.visualViewport, w = vv ? vv.width : innerWidth, h = vv ? vv.height : innerHeight;
-  document.documentElement.style.setProperty("--k", Math.min(w / 960, h / 540));
-  document.body.classList.toggle("portrait", h > w * 1.05);
-}
-addEventListener("resize", fitStage); if (window.visualViewport) visualViewport.addEventListener("resize", fitStage);
-fitStage();
-render();
-}
-
 // ---- animation d'invocation ----
 const TORII = `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg"><g stroke="#1b0806" stroke-width="2" stroke-linejoin="round">
   <path d="M8 34 Q150 6 292 34 L288 48 Q150 24 12 48Z" fill="#c8362a"/><path d="M4 30 Q150 0 296 30 L294 36 Q150 8 6 36Z" fill="#1b1014"/>
@@ -4576,9 +4555,9 @@ const SUMFX = (() => {
       $(".eeb").textContent = RAR[rar].n; $(".eeb").style.color = col; $(".enm").textContent = h.name; $(".ett").textContent = h.title;
       $(".ech").innerHTML = `<span class="chip" style="color:${col}">${RAR[rar].n}</span><span class="chip" style="color:#c9b8b8">${ROLE[h.role].k} ${ROLE[h.role].n}</span><span class="chip" style="color:${ec}">${ELEM[h.el].k} ${ELEM[h.el].n}</span>`;
       $(".est").innerHTML = `<span style="color:#e2b250">${"★".repeat(stars)}</span><span style="color:#4a3a3a">${"★".repeat(5 - stars)}</span>`;
-      $(".etag").textContent = best.isNew ? "NOUVEAU" : best.conv ? "+" + best.conv + " jade" : ""; if (!$(".etag").textContent) $(".etag").style.display = "none";
+      $(".etag").textContent = best.isNew ? "NOUVEAU" : ""; if (!$(".etag").textContent) $(".etag").style.display = "none";
       if (n > 1) {
-        grid.innerHTML = res.map((r) => { const c = CH[r.id]; return `<div class="rcard r-${c.rar}"><span class="rb">${r.isNew ? "NOUVEAU" : r.conv ? "+" + r.conv + " jade" : "★".repeat(r.st)}</span>${heroArt(c)}<div class="rn">${c.name}</div></div>`; }).join("");
+        grid.innerHTML = res.map((r) => { const c = CH[r.id]; return `<div class="rcard r-${c.rar}"><span class="rb">${r.isNew ? "NOUVEAU" : "★".repeat(r.st)}</span>${heroArt(c)}<div class="rn">${c.name}</div></div>`; }).join("");
         hydratePx(grid);
       }
       const parts = [".eeb", ".enm", ".ett", ".ech", ".est", ".etag"].map((q) => $(q));
@@ -4635,6 +4614,7 @@ function renderBoss() {
   const nCl = BOSSES.filter((b) => cleared(b.id, "n")).length;
   app.innerHTML = `<div class="mk bz"><div class="vg"></div>${mkTop("Affronter un boss", "鬼")}
   <div class="bsub">${nCl} / ${BOSSES.length} vaincus en Normal</div>
+  ${MODE_ORD.slice(1).map((m) => modeLockTxt(m) ? `<div class="bsub">🔒 ${modeLockTxt(m)}</div>` : "").join("")}
   <div class="bgrid">${BOSSES.map((b, i) => { const open = bossOpen(b.id); return `<div class="bsc ${open ? "" : "lk"}"><div class="bart">${open ? bossArt(b.id) : ""}</div><div class="bi"><span class="floor">${i + 1}</span><b>${open ? b.name.split(",")[0] : "???"}</b><span class="note">${open ? b.ep : "Bats le boss précédent"}</span></div><div class="bm">${MODE_ORD.map((m) => { const ok = modeOpen(b.id, m); return `<button class="bmb ${m} ${cleared(b.id, m) ? "done" : ""}" ${ok ? `data-act="bossmode" data-b="${b.id}" data-m="${m}"` : "disabled"}>${MODES[m].n}${cleared(b.id, m) ? " ✓" : ""}</button>`; }).join("")}</div></div>`; }).join("")}</div></div>` ;
   hydratePx(app);
 }
@@ -4842,6 +4822,7 @@ const modeRules = (id, mode) => { const i = MODEINFO[id]; if (!i || mode === "n"
 // réglage par boss et par mode (issu de la simulation, étape 7) : multiplicateurs de PV et d'ATK en plus de MODES
 let TUNE = {"kappa":{"n":{"hp":3.42,"atk":1.58},"h":{"hp":3.83,"atk":2.24},"m":{"hp":2,"atk":1.52}},"kitsune":{"n":{"hp":2.7,"atk":1.48},"h":{"hp":3.36,"atk":2.07},"m":{"hp":2.83,"atk":1.87}},"oni":{"n":{"hp":2.65,"atk":1.46},"h":{"hp":2.54,"atk":1.75},"m":{"hp":1,"atk":1.0}},"jiangshi":{"n":{"hp":1.7,"atk":1.12},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"tengu":{"n":{"hp":1.53,"atk":1.12},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"gasha":{"n":{"hp":0.92,"atk":0.78},"h":{"hp":1,"atk":1.0},"m":{"hp":1,"atk":1.0}},"ryujin":{"n":{"hp":0.64,"atk":0.66},"h":{"hp":0.59,"atk":0.73},"m":{"hp":1,"atk":1.0}},"phenix":{"n":{"hp":0.52,"atk":0.58},"h":{"hp":0.35,"atk":0.54},"m":{"hp":1,"atk":1.0}},"aluna":{"n":{"hp":0.33,"atk":0.41},"h":{"hp":0.35,"atk":0.54},"m":{"hp":1,"atk":1.0}}};
 function startFight() {
+  if (!modeOpen(SEL.boss, SEL.mode)) { toast(modeLockTxt(SEL.mode) || "Boss verrouillé."); return go("boss"); }
   const b = BOSSES.find((x) => x.id === SEL.boss) || BOSSES[0], bi = BOSSES.indexOf(b), loop = 0, k = 1, M = MODES[SEL.mode] || MODES.n;
   const r = S.run = { mods: {}, heroMods: {}, heroes: S.team.map((id) => ({ id, hpPct: 1 })) };
   const T = (TUNE[b.id] || {})[SEL.mode] || { hp: 1, atk: 1 };
@@ -5779,14 +5760,14 @@ function showSkillUnlock(drop) {
 // ---- fin de combat ----
 function winFight() {
   const b = F.boss, i = BOSSES.findIndex((x) => x.id === b.id), mode = b.mode || "n", M = MODES[mode];
-  const first = !cleared(b.id, mode), jade = Math.round((50 + 25 * i) * M.jade);
-  S.jade += jade; S.prog = S.prog || {}; (S.prog[b.id] = S.prog[b.id] || {})[mode] = 1;
+  const first = !cleared(b.id, mode);
+  S.prog = S.prog || {}; (S.prog[b.id] = S.prog[b.id] || {})[mode] = 1;
   S.best = BOSSES.filter((x) => cleared(x.id, "n")).length;
   const noKo = F.heroes.every((h) => !h.dead), newRelic = mode !== "n" && !S.relics[b.id];
   S.tix[mode] = (S.tix[mode] || 0) + 1; if (first) S.tixF[mode] = (S.tixF[mode] || 0) + 1;
   if (mode !== "n") S.relics[b.id] = 1;
   if (noKo) S.stars[b.id + mode] = 1;
-  S.lastWin = { boss: b.id, mode, jade, first, noKo, relic: mode !== "n" ? b.id : null, newRelic };
+  S.lastWin = { boss: b.id, mode, first, noKo, relic: mode !== "n" ? b.id : null, newRelic };
   S.run = null; F = null; save(); go("victory");
 }
 function defeat() {
@@ -5798,11 +5779,11 @@ function defeat() {
   setTimeout(() => go("defeat"), 900);
 }
 function renderVictory() {
-  const w = S.lastWin || { boss: BOSSES[0].id, mode: "n", jade: 0 }, b = BOSSES.find((x) => x.id === w.boss), k = MODE_ORD.indexOf(w.mode);
-  const unlock = k < 2 ? `Mode ${MODES[MODE_ORD[k + 1]].n} débloqué pour ce boss.` : "";
+  const w = S.lastWin || { boss: BOSSES[0].id, mode: "n" }, b = BOSSES.find((x) => x.id === w.boss), k = MODE_ORD.indexOf(w.mode);
+  const unlock = k < 2 && allCleared(w.mode) ? `Les ${BOSSES.length} boss sont vaincus en ${MODES[w.mode].n} : mode ${MODES[MODE_ORD[k + 1]].n} débloqué !` : "";
   const nx = w.mode === "n" && w.first && BOSSES[BOSSES.indexOf(b) + 1] ? `${BOSSES[BOSSES.indexOf(b) + 1].name} est maintenant accessible.` : "";
   app.innerHTML = topbar() + `<main class="scr"><section class="vic"><span class="floor">${MODES[w.mode].n.toUpperCase()}</span><h1>Victoire</h1><p class="note">${b.name} est vaincu.</p>
-    <div class="reward">${jadeIcon}+${fmt(w.jade)} jade</div>
+    <div class="reward">🎫 +1 ticket ${MODES[w.mode].n}</div>
     <p class="note">+1 tirage ${MODES[w.mode].n}${w.first ? " (bonifié : Épique et Légendaire ×1,5)" : ""}${w.noKo ? " · ⭐ sans KO" : ""}</p>
     ${w.relic ? `<p class="note">${w.newRelic ? "Relique obtenue : " : "Relique : "}${RELICS[w.relic].k} ${RELICS[w.relic].n}</p>` : ""}${w.first ? `<p class="note">${[unlock, nx].filter(Boolean).join(" ")}</p>` : ""}
     <button class="btn wide" data-act="go" data-to="boss">Retour aux boss</button></section></main>` + nav();
@@ -5902,13 +5883,12 @@ document.addEventListener("click", (e) => {
     case "tfilter": teamFilter = t.dataset.f; renderTeam(); break;
     case "togd": document.querySelectorAll(".sheet").forEach((s) => s.remove()); toggleTeam(t.dataset.id); break;
     case "filter": collFilter = t.dataset.f; render(); break;
-    case "sum": doSummon(+t.dataset.n); break;
-    case "tix": doTicket(t.dataset.m); break;
+        case "tix": doTicket(t.dataset.m); break;
     case "relic": S.relicSel = S.relicSel === t.dataset.r ? null : t.dataset.r; save(); screen === "team" ? renderTeam() : renderPrep(); break;
     case "rules": showRules(); break;
     case "rules": showRules(); break;
     case "start": go("boss"); break;
-    case "bossmode": SEL = { boss: t.dataset.b, mode: t.dataset.m }; go("team"); break;
+    case "bossmode": if (!modeOpen(t.dataset.b, t.dataset.m)) { toast(modeLockTxt(t.dataset.m) || "Boss verrouillé."); break; } SEL = { boss: t.dataset.b, mode: t.dataset.m }; go("team"); break;
     case "prep": go("prep"); break;
     case "fight": startFight(); break;
     case "settings": settingsOpen(); break;
