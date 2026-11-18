@@ -2017,6 +2017,18 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .fight[data-b=kappa]{--bsc:1.1}
 .fight[data-b=jiangshi]{--bsc:1.15}
 #app .fight[data-b=tengu] .bossbox{translate:0 calc(14*var(--u))}
+/* tailles boss : tous à la hauteur d'Aluna (97 % du cadre), ancrés aux pieds */
+.bossbox .bimg[data-px="b:kitsune"]{scale:1.411;transform-origin:50% 84.8%}
+.bossbox .bimg[data-px="b:tengu"]{scale:1.449;transform-origin:50% 83.9%}
+.bossbox .bimg[data-px="b:gasha"]{scale:1.429;transform-origin:50% 84.8%}
+.bossbox .bimg[data-px="b:ryujin"]{scale:1.429;transform-origin:50% 83.9%}
+.bossbox .bimg[data-px="b:phenix"]{scale:1.416;transform-origin:50% 83.3%}
+.bossbox .bimg[data-px="b:aluna"]{scale:0.997;transform-origin:50% 100.0%}
+.bossbox .bimg[data-px="b:aluna2"]{scale:1.397;transform-origin:50% 85.2%}
+.bossbox .bimg[data-px="b:aluna3"]{scale:1.416;transform-origin:50% 83.3%}
+.bossbox .bimg[data-px="b:oni"]{scale:1.358;transform-origin:50% 85.7%}
+.bossbox .bimg[data-px="b:jiangshi"]{scale:1.378;transform-origin:50% 85.2%}
+.bossbox .bimg[data-px="b:kappa"]{scale:1.506;transform-origin:50% 82.7%}
 #fbgx{display:none;position:fixed;inset:0;z-index:0;background:#0b0608 center/cover no-repeat;pointer-events:none}
 #fbgx::after{content:"";position:absolute;inset:0;background:rgba(6,3,5,.4)}
 body:has(.fight) #fbgx{display:block}
@@ -2079,7 +2091,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 85; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 86; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
