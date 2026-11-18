@@ -1905,6 +1905,8 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .fight.ug{--u:calc(1px / var(--k,.72))}
 .fight.ug #fsk{position:absolute;z-index:40;right:calc(8*var(--u))!important;bottom:calc(14*var(--u))!important;left:auto!important;top:auto!important;height:auto!important;width:calc(314*var(--u))!important;background:none!important;border:0!important;padding:0!important;backdrop-filter:none!important;display:block}
 .fight.ug #fsk:empty{display:none}
+.fight.ug #fsk{transition:opacity .35s ease}
+.fight.ug #fsk.hid{opacity:0;pointer-events:none}
 .fight.ug #fsk .waitmsg{height:auto!important;border-style:solid!important;width:auto!important}
 .fight.ug .vdock,.fight.ug .bhud .shieldb,.fight.ug .bhud .phase{display:none!important}
 .fight.ug .abf{left:50px!important;right:auto!important;top:8px!important}
@@ -2106,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 98; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 99; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5211,6 +5213,7 @@ function skDesc(h, sk, i) {
 }
 function renderSkills() {
   const box = document.getElementById("fsk"); if (!box) return;
+  box.classList.toggle("hid", !!F.busy && F.phase === "player" && !F.over); // sorts masqués en fondu pendant l'attaque des héros
   if (F.over) { box.innerHTML = ""; return; }
   if (F.phase !== "player") { box.innerHTML = `<div class="waitmsg">${F.boss.name} agit…</div>`; return; }
   if (F.pending) {
