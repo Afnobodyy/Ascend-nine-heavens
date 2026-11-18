@@ -5136,8 +5136,7 @@ function update() {
   $("bhpt").textContent = `${fmt(b.hp)} / ${fmt(b.maxHp)}${b.shield > 0 ? " · bouclier " + fmt(b.shield) : ""}`;
   $("bphase").hidden = b.phase < 2; $("bphase").textContent = "PHASE " + b.phase;
   if (b.forms) { const k = "b:" + b.forms[Math.min(b.phase, b.forms.length) - 1], im = document.querySelector("#bstage .bimg"); if (im && im.dataset.px !== k && ART[k]) { im.dataset.px = k; im.src = ART[k]; } }
-  { const dk = disc(b.id), dmgT = b.pdef > b.mdef * 1.15 ? "m" : b.mdef > b.pdef * 1.15 ? "p" : "";
-    $("bwk").innerHTML = `${dmgT ? `<span class="wi" style="--c:#e8dcc0">${dmgT === "m" ? "術" : "剣"}</span>` : ""}${bossChips(b.st)}${b.gauge ? `<span class="st bad">${b.gauge.n} ${b.gauge.max ? b.gauge.v + "/" + b.gauge.max : "+" + b.gauge.v + " %"}</span>` : ""}`; }
+  { $("bwk").innerHTML = `${bossChips(b.st)}${b.gauge ? `<span class="st bad">${b.gauge.n} ${b.gauge.max ? b.gauge.v + "/" + b.gauge.max : "+" + b.gauge.v + " %"}</span>` : ""}`; }
   $("bstage").classList.toggle("reflect", b.st.some((s) => s.k === "reflect"));
   const it = $("bint");
   const slot = (k, i, extra) => { const mv = b.moves[k], g = mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単"; return `<div class="bslot${mv.big ? " big" : ""}${extra || ""}" data-s="${i}"><span class="btour">Tour ${i + 1}</span>${bossSp(b.id, k, b.el, mv.big) || `<i class="bgl">${g}</i>`}</div>`; };
