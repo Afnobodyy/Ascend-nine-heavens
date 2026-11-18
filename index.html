@@ -2050,7 +2050,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 59; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 60; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5600,6 +5600,16 @@ function settingsOpen(confirm) {
 }
 document.addEventListener("input", (e) => { if (e.target && e.target.id === "musvol") { setMusVolume(e.target.value / 100); const l = document.getElementById("musvolv"); if (l) l.textContent = e.target.value + " %"; } });
 
+// description d'une technique de boss : effet seul + dernière ligne = cible
+function bossEffectDesc(mv) {
+  let d = mv.d || "";
+  [[/^Touche (toute )?l'équipe\.?$/, ""], [/^Touche l'équipe( et |, )/, ""], [/^Dévaste l'équipe et /, "Dévaste et "], [/^Frappe l'allié le plus fort et /, "Frappe et "],
+   [/^(\S+) l'allié le plus \S+( \(sauf provocation\))?\.$/, ""], [/^(Trois|Six|Huit) coups sur des cibles au hasard\.$/, ""], [/^Frappe une cible et /, "Frappe et "], [/ sur (toute )?l'équipe/, ""], [/ sur une cible/, ""], [/^Frappe une cible\.?$/, ""]].forEach(([r, x]) => { d = d.replace(r, x); });
+  return d ? d.charAt(0).toUpperCase() + d.slice(1) : "";
+}
+function bossTargetLine(mv, tg) {
+  return mv.t === "self" ? "Cible : lui-même." : mv.t === "aoe" ? "Touche toute l'équipe." : mv.t === "multi" ? `Touche ${mv.hits} héros au hasard.` : mv.t === "exec" ? "Touche l'allié le plus affaibli (sauf provocation)." : mv.t === "charm" ? "Touche l'allié le plus fort." : tg && tg[0] ? `Touche ${tg[0].c.name}.` : "Touche un héros.";
+}
 // ===================== ÉVÉNEMENTS =====================
 // appui long sur une icône de sort : affiche son nom et sa description (le clic qui suit est ignoré)
 let LP = { t: 0, at: 0, tip: null };
@@ -5612,8 +5622,8 @@ document.addEventListener("pointerdown", (e) => {
       if (b.dataset.s === "stun") { tip.innerHTML = `<b>Étourdi</b><p>Perd son prochain tour, subit +50 % de dégâts.</p>`; }
       else {
         const si = +b.dataset.s, k = si === 0 ? F.boss.intent : (F.boss.queue || [])[si - 1], mv = k && F.boss.moves[k]; if (!mv) return;
-        const tg = si === 0 ? bossTargets() : [], tl = mv.t === "self" ? "" : mv.t === "aoe" ? "Toute l'équipe" : mv.t === "multi" ? `${mv.hits} coups au hasard` : tg[0] ? tg[0].c.name : "";
-        tip.innerHTML = `<b>${F.boss.mode === "m" && si === 0 && mv.fatal ? "⚠ ACTION FATALE · " : ""}${mv.n}</b><em>Tour ${si + 1} du boss${tl ? " · 🎯 " + tl : ""}</em><p>${mv.d}</p>`;
+        const tg = si === 0 ? bossTargets() : [], tl = bossTargetLine(mv, tg), ds = bossEffectDesc(mv);
+        tip.innerHTML = `<b>${F.boss.mode === "m" && si === 0 && mv.fatal ? "⚠ ACTION FATALE · " : ""}${mv.n}</b><em>Tour ${si + 1} du boss</em><p>${ds ? ds + "<br>" : ""}${tl}</p>`;
       }
     } else {
       const h = F.heroes[F.active], raw = b.dataset.i, si = raw === "foc" ? raw : +raw; if (!h) return;
