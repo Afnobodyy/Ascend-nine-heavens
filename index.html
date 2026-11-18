@@ -2079,7 +2079,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 86; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 87; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2965,7 +2965,7 @@ function bossAtk(id) { // joue l'animation d'attaque du boss (si elle existe) pa
   ATKBUSY[k] = 1; let i = 0;
   const step = () => {
     document.querySelectorAll('img[data-px="' + k + '"][src]').forEach((im) => { im.src = a.f[i]; });
-    if (++i < a.f.length) setTimeout(step, a.ms); else setTimeout(() => { ATKBUSY[k] = 0; }, a.ms);
+    if (++i < a.f.length) setTimeout(step, a.ms * TS); else setTimeout(() => { ATKBUSY[k] = 0; }, a.ms * TS);
   };
   step();
 }
@@ -3477,7 +3477,7 @@ function fxPos(el, fy = 0.5, fx = 0.5) {
   const e = el.getBoundingClientRect();
   return { x: (e.left + e.width * fx - c.r.left) * c.d, y: (e.top + e.height * fy - c.r.top) * c.d, s: FXK * (c.r.height * c.d) / 540 };
 }
-const TS = 1.5; // ralentissement global du rythme de combat (1 = ancien rythme)
+const TS = 2; // ralentissement global du rythme de combat (1 = ancien rythme)
 const FXK = 1.8, FXT = 1.3 * TS; // échelle et durée des effets d'attaque
 function fxAdd(dur, draw) {
   FXS.push({ t0: performance.now(), dur: dur * FXT, draw });
@@ -5662,7 +5662,7 @@ async function bossAct(mv) {
   const b = F.boss, fx = mv.fx || {}, M = b.mode || "n", pk = mv.prot || "any";
   log(`${b.name} : ${mv.n}`);
   skBanner("boss", b.name, mv.n, bossSp(b.id, b.intent, b.el, mv.big) || (mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単"));
-  flashCls(document.getElementById("bstage"), "lunge"); bossAtk(b.id);
+  { const bs = document.getElementById("bstage"); if (bs) bs.style.animationDuration = TS * 0.5 + "s"; flashCls(bs, "lunge"); } bossAtk(b.id);
   await sleep(320);
   if (mv.t !== "self") { lightAt("party", mv.type === "m" ? ELEM[b.el].c : "#ff5a3a", mv.big); cam(mv.big ? "shake-b" : "shake-s"); }
   const isT = (h) => h.st.some((s) => s.k === "taunt");
