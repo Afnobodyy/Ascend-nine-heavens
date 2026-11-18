@@ -2079,7 +2079,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 85; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 86; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -3477,7 +3477,8 @@ function fxPos(el, fy = 0.5, fx = 0.5) {
   const e = el.getBoundingClientRect();
   return { x: (e.left + e.width * fx - c.r.left) * c.d, y: (e.top + e.height * fy - c.r.top) * c.d, s: FXK * (c.r.height * c.d) / 540 };
 }
-const FXK = 1.8, FXT = 1.3; // échelle et durée des effets d'attaque
+const TS = 1.5; // ralentissement global du rythme de combat (1 = ancien rythme)
+const FXK = 1.8, FXT = 1.3 * TS; // échelle et durée des effets d'attaque
 function fxAdd(dur, draw) {
   FXS.push({ t0: performance.now(), dur: dur * FXT, draw });
   if (!fxRun) { fxRun = true; requestAnimationFrame(fxLoop); }
@@ -3661,7 +3662,7 @@ const bossP = () => fxPos(bossEl(), .5, .52);
 // Animation du héros : s'avance (mêlée) ou fait un pas en incantant (magie)
 function heroMove(h, kind, dur) {
   const el = heroEl(h); if (!el) return;
-  el.style.animationDuration = dur ? dur + "ms" : "";
+  el.style.animationDuration = dur ? dur * TS + "ms" : "";
   ["dash", "cast", "act", "guardfx"].forEach((c) => el.classList.remove(c));
   flashCls(el, kind === "guard" ? "guardfx" : kind);
 }
@@ -3723,7 +3724,7 @@ function pxPlay(key, P, o = {}) {
   const buf = document.createElement("canvas"); buf.width = w; buf.height = h;
   const bx = buf.getContext("2d"), img = new ImageData(w, h);
   let last = 0, acc = 0;
-  const SIM = o.sim || o.cut || D, real = o.dur || (o.cut || D) * 1000 / speed;
+  const SIM = o.sim || o.cut || D, real = (o.dur || (o.cut || D) * 1000 / speed) * TS;
   const add = o.back ? (d, f) => fxAddB(d, f) : (d, f) => fxAdd(d / FXT, f);
   add(real, (ctx, p) => {
     const dt = Math.max(0, p - last) * SIM; last = p;
@@ -3823,7 +3824,7 @@ function pxCast(h, si, ti) {
     const reps = L.rep || 1;
     for (let i = 0; i < reps; i++) setTimeout(() => {
       if (!document.getElementById("vfx")) return;
-      if (L.sky) { pxSky(L.dur); return; }
+      if (L.sky) { pxSky(L.dur * TS); return; }
       const ptsList = L.at === "team" ? F.heroes.filter((t) => !t.dead) : [null];
       for (const t of ptsList) {
         let P = L.at === "screen" ? { x: 0, y: 0, s: 1 } : L.at === "team" ? heroP(t, .93) : at(L.at, L.m, null);
@@ -3835,7 +3836,7 @@ function pxCast(h, si, ti) {
         if (L.reachTo) { const B = bossP(), d = Math.abs(P.x - B.x) / ((L.k || 1) * P.s); o.opts.reach = Math.max(60, Math.round(d)); o.opts.seed = 6 + i; }
         pxPlay(L.e, P, o);
       }
-    }, (L.t0 || 0) + i * (L.gap || 0));
+    }, ((L.t0 || 0) + i * (L.gap || 0)) * TS);
   }
   return scr;
 }
@@ -3844,7 +3845,7 @@ function pxCast(h, si, ti) {
 async function pxFireball(A, B) {
   if (!window.PXFX) return false;
   pxPlay("fireball", A, { k: 2.2, flip: true, dur: 330, sim: .5, to: B });
-  await sleepFx(330 * FXT);
+  await sleepFx(330 * TS);
   pxPlay("boom", { ...B, y: B.y + 40 * B.s }, { k: 1.8, dur: 750, sim: 1.5 });
   return true;
 }
@@ -3864,8 +3865,8 @@ async function hitFx(h, i, big, el) {
   }
   const A = heroP(h, .4); if (!A) return;
   if (el === "metal") { if (!pxPlay("thunder", { ...j, y: P.y + 130 * P.s }, { k: 2.4, dur: 1100, actor: 1 })) fxLightning(j, "#ffe14a", B); else fxBurst(j, ["#ffe14a", "#fff7c0"], 14, B * .7); return; }
-  if (el === "terre") { fxRocks(j, B); await sleepFx(320); return; }
-  if (el === "bois") { fxLeaves(j, B); await sleepFx(460); return; }
+  if (el === "terre") { fxRocks(j, B); await sleepFx(320 * TS); return; }
+  if (el === "bois") { fxLeaves(j, B); await sleepFx(460 * TS); return; }
   if (el === "feu" && await pxFireball(A, j)) return;
   const core = el === "feu" ? "#fff2b0" : "#e8fbff";
   await fxBolt(A, j, col, core, 300);
@@ -4263,7 +4264,7 @@ let screen = "home", F = null, collFilter = "all", skipAnim = false;
 
 const app = document.getElementById("app");
 const reduceMotion = false;
-const sleep = (ms) => new Promise((r) => setTimeout(r, window.__fast ? 0 : skipAnim || reduceMotion ? Math.min(ms, 40) : ms));
+const sleep = (ms) => new Promise((r) => setTimeout(r, window.__fast ? 0 : skipAnim || reduceMotion ? Math.min(ms, 40) : ms * TS));
 const fmt = (n) => Math.round(n).toLocaleString("fr-FR");
 const rnd = (a) => a[Math.floor(Math.random() * a.length)];
 const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -4703,7 +4704,7 @@ function floatAt(el, text, cls) {
   if (!el) return;
   const f = document.createElement("span"); f.className = "float " + (cls || "");
   f.textContent = text; f.style.left = 30 + Math.random() * 40 + "%"; f.style.top = (el.id === "bstage" ? 30 + Math.random() * 25 : 5 + Math.random() * 20) + "%";
-  el.appendChild(f); setTimeout(() => f.remove(), 1000);
+  el.appendChild(f); f.style.animationDuration = TS + "s"; setTimeout(() => f.remove(), 1000 * TS);
 }
 const bossEl = () => document.getElementById("bstage");
 const heroEl = (h) => document.getElementById("pc" + F.heroes.indexOf(h));
@@ -5095,7 +5096,7 @@ function skBanner(kind, who, name, glyph, col) {
   sc.querySelectorAll(".vban").forEach((e) => e.remove());
   const d = document.createElement("div"); d.className = "vban " + kind; if (col) d.style.setProperty("--c", col);
   d.innerHTML = `<span class="vg${glyph.startsWith('<span class="spi') ? " sp" : ""}">${glyph}</span><span class="vt"><span class="vw">${who}</span><span class="vn">${name}</span></span>`;
-  sc.appendChild(d); setTimeout(() => d.remove(), 1700);
+  sc.appendChild(d); setTimeout(() => d.remove(), 1700 * TS);
 }
 setTimeout(snapBgs, 400);
 function renderFightShell() {
@@ -5548,7 +5549,7 @@ async function useSkill(hi, si, ti) {
       case "revive": if (b.mode === "m") { floatAt(heroEl(h), "Résurrection impossible", "info"); log("En Mythique, un héros tombé reste tombé."); break; } F.heroes.forEach((t) => { if (t.dead) { t.dead = false; setTimeout(() => supportFx("revive", [t]), 30); t.hp = Math.round(t.maxHp * (fx.p + (fx.pPer || 0) * (h.charge || 0))); t.acted = true; floatAt(heroEl(t), "Ranimé", "heal"); log(`${t.c.name} revient au combat !`); } }); break;
     }
   }
-  if (scr) { const rest = scr.block - (performance.now() - T0); if (rest > 0) await sleep(rest); F.scr = null; }
+  if (scr) { const rest = scr.block - (performance.now() - T0) / TS; if (rest > 0) await sleep(rest); F.scr = null; }
   if (cb) applyCombo(cb, h);
   if (sk.discharge) h.charge = sk.capCh ? Math.max(0, (h.charge || 0) - sk.capCh) : 0;
   if (b.mode === "h" && sk.fx.some((f) => f.k === "revive")) h.cd[si] += 1;
