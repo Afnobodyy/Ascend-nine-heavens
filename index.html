@@ -2038,6 +2038,8 @@ body:has(.fight) #fbgx{display:block}
 .fight .flash{mix-blend-mode:normal}
 .fight .hr,.fight .cmd,.fight .ohb,.fight .intent{backdrop-filter:none;-webkit-backdrop-filter:none}
 .fight .ohb,.fight .hr{background-color:rgba(14,8,11,.85)}
+/* bannière « attaque en cours » masquée pour l'instant */
+.vban{display:none!important}
 /* v.59 annonce du boss : 2 icônes (Tour 1 / Tour 2), description en appui long */
 #app .fight #bint{overflow:visible!important;display:flex!important;align-items:flex-end;gap:calc(14*var(--u));width:auto!important;background:none!important;border:0!important;padding:0!important;left:calc(14*var(--u))!important;bottom:calc(8*var(--u))!important}
 #bint .bslot{display:flex;flex-direction:column;align-items:center;gap:calc(4*var(--u));-webkit-touch-callout:none;user-select:none;-webkit-user-select:none;cursor:help}
@@ -2051,7 +2053,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 71; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 72; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5126,12 +5128,12 @@ function celCine(h) {
       if (done) return; if (vid) { vid.remove(); vid = null; }
       ov.classList.add("gen"); ov.insertAdjacentHTML("afterbegin", `<div class="cc-rays"></div><div class="cc-k">${E.k}</div><div class="cc-hero">${heroArt(h.c)}</div><div class="cc-t"><small>${X.j ? X.j + " · " : ""}CELESTIAL</small><b>${X.n || h.c.name}</b></div><div class="cc-bar"></div>`);
       if (typeof sfxDiscover === "function") sfxDiscover();
-      clearTimeout(tm); tm = setTimeout(end, leg ? 4000 : 3200);
+      clearTimeout(tm); tm = setTimeout(end, 1250);
     };
     ov.insertAdjacentHTML("beforeend", `<button class="cc-skip" data-act="ccskip">Passer ›</button>`);
     fight.appendChild(ov);
     requestAnimationFrame(() => ov.classList.add("on"));
-    if (CELV.has(h.id)) {
+    if (false && CELV.has(h.id)) { // vidéos désactivées : version simple pour tous (1,5 s)
       vid = document.createElement("video"); vid.className = "cc-vid"; vid.src = `celestial/${h.id}-${F.boss.id}.mp4`; vid.playsInline = true; vid.preload = "auto";
       vid.onended = end; vid.onerror = generic;
       ov.prepend(vid);
