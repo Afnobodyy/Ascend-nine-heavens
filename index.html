@@ -1431,6 +1431,31 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .intent .itg{display:inline!important;margin:0!important;flex:none;font-size:11px!important}
 .intent .idsc{flex:0 1 auto;min-width:0;overflow:hidden;text-ellipsis:ellipsis;text-overflow:ellipsis;font-size:11px}.pcw .pc .pimg.art{position:absolute;left:50%;bottom:0;top:auto;width:auto;height:128%;max-width:none;margin:0;transform:translateX(-50%)}.kitrow{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.kopt{border:1px solid var(--line2);border-radius:8px;padding:6px 8px;cursor:pointer;background:var(--ink2);font-size:12px}.kopt i{display:block;font-style:normal;font-size:10px;color:var(--muted)}.kopt p{margin:2px 0 0;font-size:11.5px;color:var(--muted)}.kopt.on{border-color:#ffd25a;box-shadow:0 0 0 1px #ffd25a inset}.kopt.lock{opacity:.5;cursor:default}.cbo{font-style:normal;font-weight:700;color:#9aa}.cbo.on{color:#ffd25a;animation:warn 1.2s ease-in-out infinite}.genb{color:#ffd25a;font-weight:700}.awk{font-style:normal;color:#ffd25a;font-weight:700;font-size:.92em}.awk-list p{margin:3px 0;font-size:12px}.awk-list p.on{color:#ffd25a}.awk-list p.off{color:var(--muted);opacity:.6}
 .sk-h b .eli{margin-right:5px;vertical-align:-1px}
+.spi{--s:32px;flex:none;position:relative;display:inline-block;vertical-align:middle;box-sizing:border-box;width:var(--s);height:var(--s);border-radius:22%;background:url(icones-sorts.png) calc(var(--x)*100%/11) calc(var(--y)*100%/11)/1200% 1200% no-repeat,radial-gradient(circle at 50% 40%,var(--c1),var(--c2));image-rendering:pixelated;box-shadow:0 0 0 1px #000a,0 0 0 calc(var(--s)*.05) var(--g)}
+.spi::after{content:"";position:absolute;inset:0;border-radius:22%;box-shadow:inset 0 0 0 calc(var(--s)*.03) #000a,inset 0 0 calc(var(--s)*.1) #0009;pointer-events:none}
+.spi.u{box-shadow:0 0 0 1px #000a,0 0 0 calc(var(--s)*.05) var(--g),0 0 calc(var(--s)*.4) calc(var(--s)*.06) var(--g)}
+.spi.cd{filter:brightness(.55) saturate(.4)}
+.spi .spn{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;font:900 calc(var(--s)*.6)/1 var(--display,sans-serif);font-style:normal;color:#fff;text-shadow:-1px 0 #000,1px 0 #000,0 1px #000,0 -1px #000;filter:none}
+.spi .spb{position:absolute;right:-1px;bottom:-1px;z-index:2;min-width:calc(var(--s)*.4);height:calc(var(--s)*.4);padding:0 2px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:900 calc(var(--s)*.3)/1 var(--display,sans-serif);font-style:normal;color:#1b0f08;background:#ffd25a;border:1px solid #000;border-radius:3px}
+.cg.ico{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:calc(5*var(--u));-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
+.cg.ico .spi{--s:calc(50*var(--u))!important;order:0!important;margin:0!important}
+.cg.ico .pips{margin-top:0!important}
+.cg.ico.ult:not(.cel){border-color:#e2b250}
+.lptip{position:fixed;z-index:999;width:max-content;max-width:min(300px,86vw);padding:8px 11px;border:1px solid #a87a24;border-radius:8px;background:rgba(14,8,11,.97);color:#f2e7d3;box-shadow:0 6px 18px rgba(0,0,0,.6);pointer-events:none;font-size:13px;line-height:1.35}
+.lptip b{display:block;font-family:var(--display);font-size:15px;color:#f2d28a}.lptip em{display:block;font-style:normal;color:#ff9a8a;font-size:12px}.lptip p{margin:3px 0 0}.lptip .lpfx{font-weight:700}.lptip em.fx-buff{color:#4aa8ff;font-weight:700}.lptip .fx-burn{color:#d9600c;font-weight:700}.lptip .fx-poison{color:#4fd35a;font-weight:700}.lptip .fx-bleed{color:#ff3b3b;font-weight:700}.lptip .fx-heal{color:#4fd35a;font-weight:700}.lptip .fx-buff{color:#4aa8ff;font-weight:700}.lptip .fx-debuff{color:#ff3b3b;font-weight:700}.lptip .fx-charm{color:#ff8ec8;font-weight:700}.lptip .fx-charge{color:#c9a4ff;font-weight:700}.lptip .fx-rez{color:#ffd24a;font-weight:700}
+.cg .t .spi{--s:calc(30*var(--u));order:2;margin-left:auto}
+#app .fight.ug .cg.cel .t .spi{--s:calc(18*var(--u));margin-left:calc(1*var(--u))}
+#app .fight.ug .cg.cel .t b{font-size:calc(10*var(--u))}
+#app .fight.ug .cg.cel{padding-left:calc(5*var(--u));padding-right:calc(5*var(--u))}
+.cg .t{gap:calc(4*var(--u))}
+#app .fight.ug .cg .t:has(.spi){height:calc(30*var(--u));min-height:calc(30*var(--u))}
+.sk-h b .spi,.mv b .spi,.kopt b .spi{--s:24px;margin-right:6px;vertical-align:-7px}
+.mv{align-items:center}
+.sbtn .nr .spi{--s:22px;order:-1;margin-right:4px}
+.intent .spi{--s:26px}
+.vban .vg.sp{width:auto;height:auto;border:0;background:none;display:block}
+.vban .vg .spi{--s:36px}
+
 .fight .abf{right:52px}
 .mutebtn{position:absolute;z-index:20;right:12px;top:8px;width:32px;height:26px;border-radius:6px;border:1px solid var(--line2);background:rgba(8,4,6,.6);color:var(--gold);font-size:14px;display:grid;place-items:center}
 .mutebtn.off{color:var(--dim);text-decoration:line-through}
@@ -1462,6 +1487,18 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .scr.prep .tm .note{font-size:10.5px}
 .scr.prep .blessings{gap:4px}
 .scr.prep .bless{font-size:11px;padding:0 7px}
+.intent.alert{border-color:#ff3b30!important;box-shadow:0 0 14px rgba(255,59,48,.7)}
+.inext{display:block;font-style:normal;font-size:10.5px;color:var(--muted);margin-top:2px}
+.bsl{display:flex;flex-direction:column;gap:8px}
+.bs{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px}
+.bs.lk{opacity:.55}
+.bs .bart{width:64px;height:64px;overflow:hidden;display:grid;place-items:center}
+.bs .bart img,.bs .bart svg{max-width:100%;max-height:100%;object-fit:contain}
+.bs .bi{display:flex;flex-direction:column;gap:2px;min-width:0}.bs .bi b{font-size:15px}
+.bm{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.bmb{border:1px solid var(--gold2);background:linear-gradient(180deg,#3a2716,#22150e);color:var(--paper);border-radius:8px;padding:7px 10px;font-size:12.5px}
+.bmb.done{border-color:#5cc26b}
+.bmb:disabled{opacity:.4;border-color:var(--line2)}
 
 
 
@@ -1503,7 +1540,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .fight .binfo{left:14px!important;bottom:90px!important;max-width:300px;z-index:20}
 /* commandes */
 .fight .cmd{left:318px!important;right:0!important;bottom:0!important;top:auto!important;width:auto!important;height:82px;z-index:20;background:none!important;border:0!important;padding:8px 12px!important;backdrop-filter:none!important;border-radius:0!important;display:flex;align-items:center;box-sizing:border-box}
-.fight .cmd .vrow{display:grid;grid-template-columns:62px 62px repeat(3,minmax(0,1fr));gap:6px;width:100%}
+.fight .cmd .vrow{display:grid;grid-template-columns:96px repeat(4,minmax(0,1fr));gap:6px;width:100%}
 .fight .cmd .waitmsg{width:100%;min-height:0;height:62px;border:1px dashed var(--line2);border-radius:8px;display:grid;place-items:center;color:var(--muted);font-size:13px}
 .fight .cmd .pend{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
 .fight .cmd .pend b{display:block;font-family:var(--display);font-size:15px}.fight .cmd .pend span{font-size:12px;color:var(--muted)}
@@ -1554,7 +1591,6 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .pcw.aimed .tgtf{display:block}
 @keyframes tgtbob{50%{transform:translate(-50%,-3px)}}
 
-.fight #bint{display:none!important}
 .vroster{position:absolute;right:10px;top:44px;width:226px;z-index:30;display:flex;flex-direction:column;gap:4px}
 .vro{position:relative;display:grid;grid-template-columns:26px 1fr auto;column-gap:7px;align-items:center;background:linear-gradient(90deg,rgba(14,8,11,.6),rgba(14,8,11,.88));border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:3px 8px 4px 4px;transition:transform .2s}
 .vro .face{grid-row:1/3;width:26px;height:26px;border-radius:4px;background:#2b1a21;overflow:hidden;align-self:start;margin-top:1px}
@@ -1846,6 +1882,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .fight.ug .bhud{width:300px!important;right:auto!important;bottom:auto!important;pointer-events:none;align-items:center;transition:none}
 .fight.ug .bhud .bn{justify-content:center;gap:6px}
 .fight.ug .bhud .bn b{font-size:19px;font-family:var(--display);letter-spacing:.04em;text-shadow:0 2px 4px #000,0 0 10px rgba(0,0,0,.8);color:#f2e7d3}
+.cg.foc{grid-column:1/-1}
 .gridm{display:grid;grid-template-columns:1fr 1fr;gap:calc(5*var(--u))}
 .cg{position:relative;display:block;text-align:left;box-sizing:border-box;min-height:calc(46*var(--u));padding:calc(4*var(--u)) calc(7*var(--u));background:linear-gradient(90deg,rgba(14,8,11,.6),rgba(14,8,11,.88));color:#f2e7d3;border:calc(1*var(--u)) solid rgba(255,255,255,.12);border-radius:calc(6*var(--u));font:inherit;cursor:pointer}
 .cg::before{content:"";position:absolute;inset:calc(-3*var(--u))}
@@ -1893,6 +1930,14 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 #app .fight.ug .cg .ds{margin-top:calc(4*var(--u));-webkit-line-clamp:3}
 #app .fight.ug .cg .ds.vv{font-size:calc(15*var(--u));font-weight:700;color:#fff;display:block}
 #app .fight.ug .cg.cel .pips{margin-top:calc(4*var(--u));height:auto}
+#app .fight.ug #fsk{left:auto!important;right:calc(10*var(--u))!important;bottom:calc(10*var(--u))!important;width:auto!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important}
+#app .fight.ug .gridm{display:flex;flex-direction:row;gap:calc(8*var(--u));justify-content:flex-end}
+#app .fight.ug .cg.ico{min-height:0;padding:0;background:none;border:0;border-radius:calc(8*var(--u));overflow:visible;width:auto}
+#app .fight.ug .cg.ico.sel .spi{box-shadow:0 0 0 2px #000a,0 0 0 calc(4*var(--u)) #ffe08a,0 0 calc(14*var(--u)) #ffe08a}
+#app .fight.ug .cg.ico .spi{--s:calc(56*var(--u))!important}
+.spi.fb{background:radial-gradient(circle at 50% 40%,var(--c1),var(--c2))}
+.spi.fb .fbg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 calc(var(--s)*.5)/1 var(--display,sans-serif);font-style:normal;color:var(--g)}
+.spi.fb .fbg svg{width:55%;height:55%;fill:currentColor}
 #app .fight.ug .cg:disabled{opacity:1}
 #app .fight.ug .cg:disabled:not(.cel) .t b{color:#8f8576}
 #app .fight.ug .cg:disabled:not(.cel) .ic{opacity:.5}
@@ -1993,12 +2038,20 @@ body:has(.fight) #fbgx{display:block}
 .fight .flash{mix-blend-mode:normal}
 .fight .hr,.fight .cmd,.fight .ohb,.fight .intent{backdrop-filter:none;-webkit-backdrop-filter:none}
 .fight .ohb,.fight .hr{background-color:rgba(14,8,11,.85)}
+/* v.59 annonce du boss : 2 icônes (Tour 1 / Tour 2), description en appui long */
+#app .fight #bint{overflow:visible!important;display:flex!important;align-items:flex-end;gap:calc(14*var(--u));width:auto!important;background:none!important;border:0!important;padding:0!important;left:calc(14*var(--u))!important;bottom:calc(8*var(--u))!important}
+#bint .bslot{display:flex;flex-direction:column;align-items:center;gap:calc(4*var(--u));-webkit-touch-callout:none;user-select:none;-webkit-user-select:none;cursor:help}
+#bint .btour{font-family:var(--display);font-weight:800;box-sizing:border-box;width:calc(56*var(--u));text-align:center;white-space:nowrap;font-size:calc(12.5*var(--u));line-height:1;color:#fff;letter-spacing:.02em;text-shadow:0 0 calc(4*var(--u)) #000,0 calc(1*var(--u)) calc(2*var(--u)) #000,0 0 calc(10*var(--u)) rgba(0,0,0,.9);padding:calc(3*var(--u)) 0;background:rgba(8,4,6,.72);border:calc(1*var(--u)) solid rgba(255,255,255,.25);border-radius:calc(5*var(--u))}
+#bint .bslot .spi{--s:calc(56*var(--u))!important;margin:0!important}
+#bint .bslot.big .spi{box-shadow:0 0 calc(12*var(--u)) rgba(255,80,60,.9)}
+#bint .bslot.alert .spi{box-shadow:0 0 0 calc(2*var(--u)) #ff3b2f,0 0 calc(14*var(--u)) rgba(255,59,47,.95)}
+#bint .bgl{display:flex;align-items:center;justify-content:center;width:calc(56*var(--u));height:calc(56*var(--u));border-radius:22%;background:#2a1210;border:calc(2*var(--u)) solid #d8452f;color:#ffd9cf;font-style:normal;font-size:calc(28*var(--u))}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 50; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 71; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2023,7 +2076,7 @@ const RAR = {
   L: { n: "Légendaire", c: "#ff8a1f", mult: 1.42 },
 };
 const DUPE_JADE = { R: 20, E: 50, L: 120 };
-const SUMMON_COST = 100, SUMMON10_COST = 900, PITY = 50;
+const SUMMON_COST = 100, SUMMON10_COST = 900, PITY = 30;
 
 // fx : dmg{m,hits,post,exec} dot{s,m,d} debuff{s,p,d} mark{p,d} heal{m} healPct{p} shield{p} taunt{d}
 //      dr{p,d} buff{p,d} counter{p,d} regen{p,d} evade{p,d} cleanse cdr{n} revive{p}   — on:'self' force le lanceur
@@ -2198,13 +2251,260 @@ const CHARS = [
     skills: [
       { n: "Plume ardente", d: "Soigne un allié (150 % ATK) et ATK +15 % (2 tours).", cd: 0, tgt: "ally", fx: [{ k: "heal", m: 1.5 }, { k: "buff", p: 0.15, d: 2 }] },
       { n: "Hymne du soleil", d: "Équipe : ATK +35 % (2 tours).", cd: 3, tgt: "allies", fx: [{ k: "buff", p: 0.35, d: 2 }] },
-      { n: "Renaissance", d: "Ressuscite les alliés tombés à 40 % PV, soigne les autres de 30 % PV max.", cd: 5, tgt: "allies", fx: [{ k: "revive", p: 0.4 }, { k: "healPct", p: 0.3 }] },
+      { n: "Cendres vivifiantes", d: "Soigne toute l'équipe de 30 % PV max.", cd: 5, tgt: "allies", fx: [{ k: "healPct", p: 0.3 }] },
     ] },
 ];
 CHARS.forEach((c) => { if (!c.skills[0].cd) c.skills[0].cd = 2; c.skills.forEach((s) => { if (!s.el) s.el = c.el; }); });
 const skEl = (h, sk) => (sk && sk.el) || h.el;
 const eli = (e) => `<i class="eli" style="--c:${ELEM[e].c}" title="${ELEM[e].n}">${ELEM[e].k}</i>`;
+// ---------- ICÔNES DE SORTS (atlas icones-sorts.png, 64 px par icône ; cadre et couleur d'élément en CSS) ----------
+const varTag = (h, i) => { const V = VAR[h.c.id]; if (!V) return ""; const k = V.findIndex((v) => v.slot === i && h.c.skills[i] === VSK[h.c.id + V.indexOf(v)]); return k >= 0 ? (k ? "B" : "A") : ""; };
+const SPI = {"akane_s1":[0,0],"akane_s2":[1,0],"akane_s3":[2,0],"akane_ult":[3,0],"bao_s1":[4,0],"bao_s2":[5,0],"bao_s3":[6,0],"bao_ult":[7,0],"yuki_s1":[8,0],"yuki_s2":[9,0],"yuki_s3":[10,0],"yuki_ult":[11,0],"hana_s1":[0,1],"hana_s2":[1,1],"hana_s3":[2,1],"hana_ult":[3,1],"goro_s1":[4,1],"goro_s2":[5,1],"goro_s3":[6,1],"goro_ult":[7,1],"meilin_s1":[8,1],"meilin_s2":[9,1],"meilin_s3":[10,1],"meilin_ult":[11,1],"xuantie_s1":[0,2],"xuantie_s2":[1,2],"xuantie_s3":[2,2],"xuantie_ult":[3,2],"ryuga_s1":[4,2],"ryuga_s2":[5,2],"ryuga_s3":[6,2],"ryuga_ult":[7,2],"kenta_s1":[8,2],"kenta_s2":[9,2],"kenta_s3":[10,2],"kenta_ult":[11,2],"feng_s1":[0,3],"feng_s2":[1,3],"feng_s3":[2,3],"feng_ult":[3,3],"rei_s1":[4,3],"rei_s2":[5,3],"rei_s3":[6,3],"rei_ult":[7,3],"shiranui_s1":[8,3],"shiranui_s2":[9,3],"shiranui_s3":[10,3],"shiranui_ult":[11,3],"kaminari_s1":[0,4],"kaminari_s2":[1,4],"kaminari_s3":[2,4],"kaminari_ult":[3,4],"longxia_s1":[4,4],"longxia_s2":[5,4],"longxia_s3":[6,4],"longxia_ult":[7,4],"muqing_s1":[8,4],"muqing_s2":[9,4],"muqing_s3":[10,4],"muqing_ult":[11,4],"laoshou_s1":[0,5],"laoshou_s2":[1,5],"laoshou_s3":[2,5],"laoshou_ult":[3,5],"yuehua_s1":[4,5],"yuehua_s2":[5,5],"yuehua_s3":[6,5],"yuehua_ult":[7,5],"hoo_s1":[8,5],"hoo_s2":[9,5],"hoo_s3":[10,5],"hoo_ult":[11,5],"momo_s1":[0,6],"momo_s2":[1,6],"momo_s3":[2,6],"momo_ult":[3,6],"jun_s1":[4,6],"jun_s2":[5,6],"jun_s3":[6,6],"jun_ult":[7,6],"sakura_s1":[8,6],"sakura_s2":[9,6],"sakura_s3":[10,6],"sakura_ult":[11,6],"lan_s1":[0,7],"lan_s2":[1,7],"lan_s3":[2,7],"lan_ult":[3,7],"tora_s1":[4,7],"tora_s2":[5,7],"tora_s3":[6,7],"tora_ult":[7,7],"houzi_s1":[8,7],"houzi_s2":[9,7],"houzi_s3":[10,7],"houzi_ult":[11,7],"b_kappa_griffe":[0,8],"b_kappa_jet":[1,8],"b_kappa_plonge":[2,8],"b_kappa_deluge":[3,8],"b_kitsune_follet":[4,8],"b_kitsune_charme":[5,8],"b_kitsune_mirage":[6,8],"b_kitsune_queues":[7,8],"b_oni_massue":[8,8],"b_oni_cri":[9,8],"b_oni_seisme":[10,8],"b_oni_kanabo":[11,8],"b_jiangshi_morsure":[0,9],"b_jiangshi_souffle":[1,9],"b_jiangshi_talisman":[2,9],"b_jiangshi_sceau":[3,9],"b_tengu_eventail":[4,9],"b_tengu_plumes":[5,9],"b_tengu_garde":[6,9],"b_tengu_tornade":[7,9],"b_gasha_poing":[8,9],"b_gasha_armure":[9,9],"b_gasha_cri":[10,9],"b_gasha_etreinte":[11,9],"b_ryujin_raz":[0,10],"b_ryujin_perle":[1,10],"b_ryujin_morsure":[2,10],"b_ryujin_colere":[3,10],"b_ryujin_tsunami":[4,10],"b_phenix_cendre":[5,10],"b_phenix_regard":[6,10],"b_phenix_ailes":[7,10],"b_phenix_nova":[8,10],"b_aluna_morsure":[9,10],"b_aluna_toile":[10,10],"b_aluna_danse":[11,10],"b_aluna_cocon":[0,11],"b_aluna_chev":[1,11],"b_aluna_venin":[2,11],"b_aluna_nuee":[3,11],"b_aluna_piege":[4,11],"b_aluna_festin":[5,11],"b_aluna_etreinte":[6,11],"b_aluna_choeur":[7,11],"b_aluna_tisseuse":[8,11],"b_aluna_jugement":[9,11],"b_aluna_cocon3":[10,11]};
+const SPC = { feu: ["#7a0f0f", "#2a0505", "#ff2a2a"], eau: ["#16467a", "#081a30", "#3da5ff"], terre: ["#6b4a1c", "#2a1d0a", "#c99a4a"], metal: ["#4a5566", "#171c26", "#cfd6e0"], bois: ["#1d5a28", "#0a2410", "#4fd35a"] };
+const HSP = { t1: "bao", t2: "hana", t3: "goro", t4: "meilin", t5: "xuantie", t6: "ryuga", p1: "kenta", p2: "lan", p3: "akane", p4: "tora", p5: "houzi", p6: "shiranui", m1: "yuki", m2: "feng", m3: "rei", m4: "muqing", m5: "longxia", m6: "kaminari", s1: "momo", s2: "jun", s3: "sakura", s4: "laoshou", s5: "yuehua", s6: "hoo" };
+// icône par emplacement (0-2) ; "x" = pas d'icône pour cette technique (le sort du jeu diffère du kit dessiné)
+// opts : cd = recharge restante (assombrit + nombre), v = badge "A"/"B" (voie alternative)
+function spIcon(id, el, opts = {}) {
+  const p = SPI[id]; if (!p) return "";
+  const c = SPC[el] || SPC.terre, ult = opts.u ? " u" : "", cd = opts.cd ? " cd" : "";
+  return `<span class="spi${ult}${cd}" style="--c1:${c[0]};--c2:${c[1]};--g:${c[2]};--x:${p[0]};--y:${p[1]}">${opts.cd > 0 ? `<i class="spn">${opts.cd}</i>` : ""}${opts.v ? `<i class="spb">${opts.v}</i>` : ""}</span>`;
+}
+// héros : si = 0..2 (techniques) ou "cel" (Celestial)
+function heroSpId(hid, si) {
+  const k = HSP[hid]; if (!k) return null;
+  return si === 3 ? k + "_ult" : typeof si === "number" ? k + "_s" + (si + 1) : null;
+}
+const heroSp = (hid, si, el, opts) => { const id = heroSpId(hid, si); return id ? spIcon(id, el, opts) : ""; };
+const bossSp = (bid, key, el, big, opts = {}) => spIcon("b_" + (bid === "aluna" ? "aluna_" : bid + "_") + key, el, { ...opts, u: big });
 const CH = Object.fromEntries(CHARS.map((c) => [c.id, c]));
+
+// ===================== KITS DES 24 HÉROS (redesign puzzle-combat) =====================
+// 3 compétences + 1 ultime (index 3) ; l'action commune Concentration remplace Attaque et Garde.
+// Recharges de départ (à tester) : compétence 1 : 1-2 · compétence 2 : 3 · compétence 3 : 4 · ultime : 6 (disponible dès le tour 3).
+// fx : dmg{m,hits,pen,exec,perCharge} dot{s,m,d} debuff{s,p,d} mark{p,d} heal{m} healPct{p} shield{p} taunt{d} dr{p,d} buff{p,d} counter{p,d}
+//      regen{p,d} evade{p,d} cleanse cdr{n} revive{p} | nouveaux : execimm{d} vanish{d} decoy delay soak{p} mirror nxt{p} charge{n} sheathe ash{d}
+//      on:"self"|"allies" force la cible de l'effet.
+const KITS = {
+  // ---------- GARDIENS ----------
+  t1: [
+    { n: "Bâton lourd", d: "Frappe à 110 % ATK.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.1, post: 14 }] },
+    { n: "Vœu de la montagne", d: "Provoque 2 tours et réduit ses dégâts subis de 50 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.5, d: 2 }] },
+    { n: "Mur de prière", d: "Équipe : bouclier de 15 % PV et −20 % de dégâts subis (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "dr", p: 0.2, d: 2 }] },
+    { n: "Mille prières, une montagne", d: "Tous les coups du boss ce tour visent Bao, qui subit 70 % de dégâts en moins.", cd: 6, tgt: "self", ult: 1, fx: [{ k: "soak", p: 0.7 }] },
+  ],
+  t2: [
+    { n: "Estoc de lance", d: "Frappe à 120 % ATK et provoque 1 tour.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "taunt", d: 1, on: "self" }] },
+    { n: "Défi du pont", d: "Provoque 2 tours, −35 % de dégâts subis et riposte à 90 % ATK quand elle est frappée.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.35, d: 2 }, { k: "counter", p: 0.9, d: 2 }] },
+    { n: "Barrage", d: "Équipe : bouclier de 12 % PV.", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.12 }] },
+    { n: "Le pont ne tombera pas", d: "Équipe immunisée aux exécutions pendant 2 tours. Hana riposte à 150 % ATK.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "execimm", d: 2 }, { k: "counter", p: 1.5, d: 2, on: "self" }] },
+  ],
+  t3: [
+    { n: "Marteau de pierre", d: "Frappe à 120 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2, post: 18 }] },
+    { n: "Racines profondes", d: "Provoque 2 tours et bouclier de 25 % PV.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "shield", p: 0.25 }] },
+    { n: "Grand séisme", d: "Frappe à 200 % ATK et réduit l'ATK du boss de 30 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 2.0, post: 45 }, { k: "debuff", s: "atk", p: 0.3, d: 2 }] },
+    { n: "Le Rocher s'éveille", d: "Frappe à 400 % ATK et repousse la prochaine action du boss d'un tour.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.0, post: 70 }, { k: "delay" }] },
+  ],
+  t4: [
+    { n: "Coup d'éventail", d: "Frappe à 90 % ATK et réduit la DEF du boss de 10 % (2 tours).", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 0.9 }, { k: "debuff", s: "def", p: 0.1, d: 2 }] },
+    { n: "Reflet-leurre", d: "Un allié reçoit un leurre : il absorbe la prochaine attaque à cible unique ou exécution qui le vise.", cd: 3, tgt: "ally", fx: [{ k: "decoy" }] },
+    { n: "Rempart d'acier", d: "Équipe : bouclier de 14 % PV et −15 % de dégâts subis (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.14 }, { k: "dr", p: 0.15, d: 2 }] },
+    { n: "Cent éventails, un seul miroir", d: "Renvoie au boss 100 % des dégâts subis par l'équipe ce tour.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "mirror" }] },
+  ],
+  t5: [
+    { n: "Choc de carapace", d: "Frappe à 90 % ATK et bouclier perso de 6 % PV.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 0.9 }, { k: "shield", p: 0.06, on: "self" }] },
+    { n: "Carapace abyssale", d: "Provoque 2 tours et réduit ses dégâts subis de 50 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.5, d: 2 }] },
+    { n: "Marée protectrice", d: "Équipe : retire les malus et régénère 6 % PV par tour (3 tours).", cd: 4, tgt: "allies", fx: [{ k: "cleanse" }, { k: "regen", p: 0.06, d: 3 }] },
+    { n: "Le Nord s'abat", d: "Équipe : −60 % de dégâts subis (2 tours) et le boss est retardé d'un tour.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "dr", p: 0.6, d: 2 }, { k: "delay" }] },
+  ],
+  t6: [
+    { n: "Kesagiri", d: "Frappe à 120 % ATK et bouclier perso de 8 % PV.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "shield", p: 0.08, on: "self" }] },
+    { n: "Posture du dragon", d: "Provoque 2 tours, −30 % de dégâts subis et riposte à 100 % ATK.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.3, d: 2 }, { k: "counter", p: 1.0, d: 2 }] },
+    { n: "Écailles de jade", d: "Équipe : bouclier de 15 % PV et ATK +20 % (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "buff", p: 0.2, d: 2 }] },
+    { n: "Dragon Azur, tranche le ciel", d: "Frappe à 450 % ATK. ATK de l'équipe +30 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.5, post: 80 }, { k: "buff", p: 0.3, d: 2, on: "allies" }] },
+  ],
+  // ---------- LAMES ----------
+  p1: [
+    { n: "Iaijutsu", d: "Frappe à 130 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.3, post: 20 }] },
+    { n: "Posture d'iaï", d: "Esquive 80 % des attaques (1 tour), rengaine et la prochaine attaque inflige +60 % de dégâts.", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.8, d: 1 }, { k: "nxt", p: 0.6 }, { k: "sheathe" }] },
+    { n: "Double entaille", d: "Deux coups à 85 % ATK. Le boss subit +20 % de dégâts (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.85, hits: 2 }, { k: "mark", p: 0.2, d: 2 }] },
+    { n: "Dernier iaï", d: "Coup unique à 500 % ATK qui ignore la défense.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 5.0, pen: 1, post: 90 }] },
+  ],
+  p2: [
+    { n: "Pointe de bambou", d: "Frappe à 100 % ATK puis Saignement (35 % ATK/tour, 2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0 }, { k: "dot", s: "bleed", m: 0.35, d: 2 }] },
+    { n: "Disparition", d: "Ne peut pas être visée par une attaque à cible unique ce tour.", cd: 3, tgt: "self", fx: [{ k: "vanish", d: 1 }] },
+    { n: "Pluie de lances", d: "Quatre coups à 60 % ATK puis Poison (30 % ATK/tour, 3 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 4 }, { k: "dot", s: "poison", m: 0.3, d: 3 }] },
+    { n: "Forêt de lances", d: "Huit coups à 50 % ATK puis Poison fort (50 % ATK/tour, 4 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.5, hits: 8, post: 5 }, { k: "dot", s: "poison", m: 0.5, d: 4 }] },
+  ],
+  p3: [
+    { n: "Pas de flamme", d: "Deux coups à 70 % ATK. Esquive 40 % des attaques (1 tour).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.7, hits: 2 }, { k: "evade", p: 0.4, d: 1 }] },
+    { n: "Danse embrasée", d: "Équipe : ATK +30 % (2 tours).", cd: 3, tgt: "allies", fx: [{ k: "buff", p: 0.3, d: 2 }] },
+    { n: "Lotus de feu", d: "Cinq coups à 75 % ATK puis Brûlure (40 % ATK/tour, 3 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.75, hits: 5 }, { k: "dot", s: "burn", m: 0.4, d: 3 }] },
+    { n: "Danse des mille braises", d: "Huit coups à 50 % ATK, Brûlure forte (50 % ATK/tour, 3 tours) et ATK d'équipe +20 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.5, hits: 8, post: 5 }, { k: "dot", s: "burn", m: 0.5, d: 3 }, { k: "buff", p: 0.2, d: 2, on: "allies" }] },
+  ],
+  p4: [
+    { n: "Griffe du tigre", d: "Frappe à 100 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 15 }] },
+    { n: "Peau de tigre", d: "−50 % de dégâts subis (2 tours) et riposte à 40 % ATK.", cd: 3, tgt: "self", fx: [{ k: "dr", p: 0.5, d: 2 }, { k: "counter", p: 0.4, d: 2 }] },
+    { n: "Rugissement", d: "Frappe à 50 % ATK et réduit la DEF du boss de 30 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, post: 30 }, { k: "debuff", s: "def", p: 0.3, d: 2 }] },
+    { n: "Tigre des cent montagnes", d: "Huit coups à 40 % ATK qui ignorent l'armure.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.4, hits: 8, pen: 1, post: 5 }] },
+  ],
+  p5: [
+    { n: "Bâton tournoyant", d: "Deux coups à 60 % ATK et ATK +15 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 2, post: 8 }, { k: "buff", p: 0.15, d: 2, on: "self" }] },
+    { n: "Clones de poil", d: "Esquive 60 % des attaques et ATK +30 % pendant 2 tours.", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.6, d: 2 }, { k: "buff", p: 0.3, d: 2 }] },
+    { n: "Bâton des mille lieues", el: "terre", d: "Coup colossal à 320 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 3.2, post: 60 }] },
+    { n: "Le Roi Singe renverse le ciel", d: "Frappe à 600 % ATK. Esquive d'équipe 40 % (1 tour).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 6.0, post: 90 }, { k: "evade", p: 0.4, d: 1, on: "allies" }] },
+  ],
+  p6: [
+    { n: "Croissant", d: "Frappe à 120 % ATK, le boss subit +10 % de dégâts (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.1, d: 2 }] },
+    { n: "Marque lunaire", d: "Le boss subit +30 % de dégâts (2 tours). Aucune attaque.", cd: 3, tgt: "boss", fx: [{ k: "mark", p: 0.3, d: 2 }] },
+    { n: "Éclipse", d: "Frappe à 300 % ATK, ×1,6 si le boss a moins de 35 % PV.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 3.0, exec: 1.6 }] },
+    { n: "Éclipse totale", d: "Frappe à 700 % ATK, ×2 si le boss a moins de 35 % PV.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 7.0, exec: 2.0, post: 100 }] },
+  ],
+  // ---------- ARCANISTES ----------
+  m1: [
+    { n: "Ofuda de givre", d: "Sort à 100 % ATK, ATK du boss −10 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0 }, { k: "debuff", s: "atk", p: 0.1, d: 2 }] },
+    { n: "Sceau purificateur", d: "Un allié : retire les malus et bouclier de 8 % PV.", cd: 3, tgt: "ally", fx: [{ k: "cleanse" }, { k: "shield", p: 0.08 }] },
+    { n: "Shikigami de neige", d: "Trois esprits frappent à 75 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.75, hits: 3 }] },
+    { n: "Tempête de neige", d: "Sort à 250 % ATK, ATK du boss −40 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 2.5, post: 70 }, { k: "debuff", s: "atk", p: 0.4, d: 2 }] },
+  ],
+  m2: [
+    { n: "Pilule explosive", d: "Sort à 100 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 28 }] },
+    { n: "Fumée protectrice", d: "Bouclier perso puissant de 20 % PV.", cd: 3, tgt: "self", fx: [{ k: "shield", p: 0.2 }] },
+    { n: "Grand fourneau", d: "Explosion à 220 % ATK puis Brûlure (30 % ATK/tour, 3 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 2.2, post: 15 }, { k: "dot", s: "burn", m: 0.3, d: 3 }] },
+    { n: "Philtre ardent", d: "Sort à 300 % ATK puis Brûlure massive (60 % ATK/tour, 4 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.0, post: 70 }, { k: "dot", s: "burn", m: 0.6, d: 4 }] },
+  ],
+  m3: [
+    { n: "Kitsunebi", d: "Deux feux follets à 55 % ATK puis Brûlure (25 % ATK/tour, 2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.55, hits: 2 }, { k: "dot", s: "burn", m: 0.25, d: 2 }] },
+    { n: "Illusion", d: "ATK du boss −30 % et DEF −15 % (2 tours).", cd: 3, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
+    { n: "Six flammes", d: "Six coups à 50 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 6 }] },
+    { n: "Danse des cent feux", d: "Neuf flammes à 45 % ATK, Brûlure (40 % ATK/tour, 3 tours) et ATK du boss −20 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.45, hits: 9, post: 5 }, { k: "dot", s: "burn", m: 0.4, d: 3 }, { k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+  ],
+  m4: [
+    { n: "Trait de pinceau", d: "Sort à 120 % ATK, DEF du boss −15 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2, post: 25 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
+    { n: "Calligraphie protectrice", d: "Équipe : bouclier de 10 % PV. Un allié : retire un malus.", cd: 3, tgt: "ally", fx: [{ k: "shield", p: 0.1, on: "allies" }, { k: "cleanse" }] },
+    { n: "Encre empoisonnée", d: "Poison (30 % ATK/tour, 3 tours) et ATK du boss −20 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dot", s: "poison", m: 0.3, d: 3 }, { k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+    { n: "Poème de la tempête", d: "Sort à 320 % ATK. Le boss subit +25 % de dégâts (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.2, post: 70 }, { k: "mark", p: 0.25, d: 2 }] },
+  ],
+  m5: [
+    { n: "Perle d'eau", d: "Sort à 120 % ATK et bouclier perso de 8 % PV.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "shield", p: 0.08, on: "self" }] },
+    { n: "Carapace de perle", d: "Bouclier perso de 30 % PV.", cd: 3, tgt: "self", fx: [{ k: "shield", p: 0.3 }] },
+    { n: "Torrent céleste", d: "Sort à 160 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 1.6, post: 30 }] },
+    { n: "Courroux du Dragon", d: "Sort colossal à 400 % ATK.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.0, post: 90 }] },
+  ],
+  m6: [
+    { n: "Étincelle", d: "Deux éclairs à 60 % ATK. +1 charge (max 5).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 2 }, { k: "charge", n: 1 }] },
+    { n: "Charge statique", d: "Bouclier perso de 20 % PV. +2 charges (max 5).", cd: 3, tgt: "self", fx: [{ k: "shield", p: 0.2 }, { k: "charge", n: 2 }] },
+    { n: "Tambour du tonnerre", d: "Consomme toutes les charges : 100 % ATK + 60 % ATK par charge, DEF du boss −30 % (2 tours).", cd: 4, tgt: "boss", discharge: 1, fx: [{ k: "dmg", m: 1.0, perCharge: 0.6, post: 40 }, { k: "debuff", s: "def", p: 0.3, d: 2 }] },
+    { n: "Jugement céleste", d: "Cinq éclairs à 80 % ATK.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.8, hits: 5, post: 20 }] },
+  ],
+  // ---------- SOUTIENS ----------
+  s1: [
+    { n: "Clochette", d: "Un allié : soigne 200 % ATK.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 2.0 }] },
+    { n: "Bourgeons", d: "Équipe : régénère 10 % PV par tour (3 tours) et −25 % de dégâts subis (2 tours).", cd: 3, tgt: "allies", fx: [{ k: "regen", p: 0.1, d: 3 }, { k: "dr", p: 0.25, d: 2 }] },
+    { n: "Racines de vie", d: "Un allié : retire les malus et soigne 50 % PV.", cd: 4, tgt: "ally", fx: [{ k: "cleanse" }, { k: "healPct", p: 0.5 }] },
+    { n: "Floraison", d: "Ressuscite les alliés tombés à 35 % PV et soigne l'équipe de 25 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.35 }, { k: "healPct", p: 0.25 }] },
+  ],
+  s2: [
+    { n: "Air apaisant", d: "Un allié : soigne 170 % ATK et retire les malus.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.7 }, { k: "cleanse" }] },
+    { n: "Brume des eaux", d: "Équipe : bouclier de 15 % PV.", cd: 3, tgt: "allies", fx: [{ k: "shield", p: 0.15 }] },
+    { n: "Mélodie hypnotique", d: "ATK du boss −20 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+    { n: "Requiem des eaux", d: "Ressuscite les alliés tombés à 30 % PV, soigne l'équipe de 20 % PV et −30 % de dégâts subis (2 tours).", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.3 }, { k: "healPct", p: 0.2 }, { k: "dr", p: 0.3, d: 2 }] },
+  ],
+  s3: [
+    { n: "Pétale soignant", d: "Un allié : soigne 220 % ATK.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 2.2 }] },
+    { n: "Pluie de pétales", d: "Équipe : soigne 20 % PV.", cd: 3, tgt: "allies", fx: [{ k: "healPct", p: 0.2 }] },
+    { n: "Bénédiction de cerisier", d: "Un allié : bouclier puissant de 35 % PV et retire les malus.", cd: 4, tgt: "ally", fx: [{ k: "shield", p: 0.35 }, { k: "cleanse" }] },
+    { n: "Hanami", d: "Ressuscite les alliés tombés à 35 % PV, soigne l'équipe de 20 % PV et ATK +30 % (2 tours).", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.35 }, { k: "healPct", p: 0.2 }, { k: "buff", p: 0.3, d: 2 }] },
+  ],
+  s4: [
+    { n: "Thé vert", d: "Un allié : soigne 160 % ATK et bouclier de 8 % PV.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.6 }, { k: "shield", p: 0.08 }] },
+    { n: "Cérémonie du thé", d: "Les recharges des alliés sont réduites de 1.", cd: 3, tgt: "allies", fx: [{ k: "cdr", n: 1 }] },
+    { n: "Infusion millénaire", d: "Un allié : soigne 25 % PV et régénère 5 % PV par tour (3 tours).", cd: 4, tgt: "ally", fx: [{ k: "healPct", p: 0.25 }, { k: "regen", p: 0.05, d: 3 }] },
+    { n: "Pause du maître", d: "Les recharges des alliés sont réduites de 2 et l'équipe est soignée de 20 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "cdr", n: 2 }, { k: "healPct", p: 0.2 }] },
+  ],
+  s5: [
+    { n: "Rayon de lune", d: "Un allié : soigne 200 % ATK.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 2.0 }] },
+    { n: "Voile lunaire", d: "Équipe : bouclier de 12 % PV et retire les malus.", cd: 3, tgt: "allies", fx: [{ k: "shield", p: 0.12 }, { k: "cleanse" }] },
+    { n: "Lune d'argent", d: "Un allié : bouclier puissant de 35 % PV et immunité aux exécutions (1 tour).", cd: 4, tgt: "ally", fx: [{ k: "shield", p: 0.35 }, { k: "execimm", d: 1 }] },
+    { n: "Retour de l'âme", d: "Ressuscite les alliés tombés à 50 % PV et soigne les autres de 25 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.5 }, { k: "healPct", p: 0.25 }] },
+  ],
+  s6: [
+    { n: "Plume ardente", d: "Un allié : soigne 150 % ATK et ATK +15 % (2 tours). +1 braise (max 3).", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.5 }, { k: "buff", p: 0.15, d: 2 }, { k: "charge", n: 1, max: 3 }] },
+    { n: "Hymne du soleil", d: "Équipe : ATK +35 % (2 tours). +1 braise (max 3).", cd: 3, tgt: "allies", fx: [{ k: "buff", p: 0.35, d: 2 }, { k: "charge", n: 1, max: 3 }] },
+    { n: "Flamme purificatrice", d: "Consomme les braises : frappe à 150 % ATK + 40 % ATK par braise, puis Brûlure (30 % ATK/tour, 3 tours + 1 par braise).", cd: 4, tgt: "boss", discharge: 1, fx: [{ k: "dmg", m: 1.5, perCharge: 0.4, post: 20 }, { k: "dot", s: "burn", m: 0.3, d: 3, dPer: 1 }] },
+    { n: "Renaissance", d: "Ressuscite les alliés tombés à 40 % PV (+10 % par braise, consommées) et soigne l'équipe de 30 % PV.", cd: 6, tgt: "allies", ult: 1, discharge: 1, fx: [{ k: "revive", p: 0.4, pPer: 0.1 }, { k: "healPct", p: 0.3 }] },
+  ],
+};
+CHARS.forEach((c) => { if (KITS[c.id]) { c.skills = KITS[c.id]; c.skills.forEach((s) => { if (!s.el) s.el = c.el; }); } });
+
+// ===================== VARIANTES DE COMPÉTENCES (48) =====================
+// 2e exemplaire du héros : variante A ; 3e : variante B ; 4e : apparence alternative. Une variante remplace une compétence, sans la rendre plus forte.
+const VARDEF = [
+  { o: "Vœu de la montagne", n: "Vœu bref", d: "Provoque 1 tour et réduit ses dégâts subis de 75 %.", cd: 2, tgt: "self", fx: [{ k: "taunt", d: 1 }, { k: "dr", p: 0.75, d: 1 }] },
+  { o: "Mur de prière", n: "Prière unique", d: "Un allié : bouclier de 30 % PV.", tgt: "ally", fx: [{ k: "shield", p: 0.3 }] },
+  { o: "Défi du pont", n: "Ricaneuse", d: "Provoque 1 tour et riposte à 160 % ATK quand elle est frappée.", tgt: "self", fx: [{ k: "taunt", d: 1 }, { k: "counter", p: 1.6, d: 1 }] },
+  { o: "Barrage", n: "Barrage vivant", d: "Bouclier de 30 % PV pour Hana seule et riposte à 60 % ATK (2 tours).", tgt: "self", fx: [{ k: "shield", p: 0.3 }, { k: "counter", p: 0.6, d: 2 }] },
+  { o: "Racines profondes", n: "Racines de soin", d: "Provoque 1 tour, bouclier perso de 25 % PV et soigne un allié de 10 % PV.", tgt: "ally", fx: [{ k: "taunt", d: 1 }, { k: "shield", p: 0.25, on: "self" }, { k: "healPct", p: 0.1 }] },
+  { o: "Grand séisme", n: "Faille", d: "Frappe à 140 % ATK et repousse la prochaine action du boss d'un tour.", cd: 5, tgt: "boss", fx: [{ k: "dmg", m: 1.4, post: 30 }, { k: "delay" }] },
+  { o: "Reflet-leurre", n: "Leurre double", d: "Deux alliés reçoivent un leurre (un seul coup chacun).", cd: 5, tgt: "allies", fx: [{ k: "decoy", pick: 2 }] },
+  { o: "Rempart d'acier", n: "Rempart ciblé", d: "Un allié : bouclier de 25 % PV et −25 % de dégâts subis (2 tours).", tgt: "ally", fx: [{ k: "shield", p: 0.25 }, { k: "dr", p: 0.25, d: 2 }] },
+  { o: "Carapace abyssale", n: "Carapace partagée", d: "Équipe : −30 % de dégâts subis (1 tour), sans provocation.", tgt: "allies", fx: [{ k: "dr", p: 0.3, d: 1 }] },
+  { o: "Marée protectrice", n: "Marée vive", d: "Un allié : retire les malus, soigne 25 % PV et bouclier de 10 % PV.", tgt: "ally", fx: [{ k: "cleanse" }, { k: "healPct", p: 0.25 }, { k: "shield", p: 0.1 }] },
+  { o: "Posture du dragon", n: "Posture offensive", d: "Provoque 1 tour, riposte à 160 % ATK et ATK +25 % (2 tours), sans réduction de dégâts.", tgt: "self", fx: [{ k: "taunt", d: 1 }, { k: "counter", p: 1.6, d: 1 }, { k: "buff", p: 0.25, d: 2 }] },
+  { o: "Écailles de jade", n: "Écailles solaires", d: "Équipe : bouclier de 8 % PV et retire un malus.", tgt: "allies", fx: [{ k: "shield", p: 0.08 }, { k: "cleanse", n: 1 }] },
+  { o: "Iaijutsu", n: "Iaido lent", d: "Frappe à 190 % ATK.", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 1.9, post: 28 }] },
+  { o: "Posture d'iaï", n: "Garde d'iaï", d: "Esquive 100 % des attaques (1 tour), rengaine et la prochaine attaque inflige +30 % de dégâts.", tgt: "self", fx: [{ k: "evade", p: 1, d: 1 }, { k: "nxt", p: 0.3 }, { k: "sheathe" }] },
+  { o: "Pointe de bambou", n: "Cinq poisons", d: "Frappe à 60 % ATK et pose un Poison qui s'empile (25 % ATK/tour, 3 tours).", tgt: "boss", fx: [{ k: "dmg", m: 0.6 }, { k: "dot", s: "poison", m: 0.25, d: 3, stack: 1 }] },
+  { o: "Disparition", n: "Fumigène", d: "Équipe : −35 % de dégâts subis (1 tour).", tgt: "allies", fx: [{ k: "dr", p: 0.35, d: 1 }] },
+  { o: "Pas de flamme", n: "Pas rapide", d: "Trois coups à 50 % ATK. Esquive 25 % des attaques (1 tour).", tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 3 }, { k: "evade", p: 0.25, d: 1 }] },
+  { o: "Danse embrasée", n: "Brasier ciblé", d: "Un allié : ATK +80 % (2 tours).", tgt: "ally", fx: [{ k: "buff", p: 0.8, d: 2 }] },
+  { o: "Peau de tigre", n: "Peau de pierre", d: "−70 % de dégâts subis (1 tour), sans riposte.", tgt: "self", fx: [{ k: "dr", p: 0.7, d: 1 }] },
+  { o: "Rugissement", n: "Rugissement long", d: "Frappe à 30 % ATK et réduit la DEF du boss de 20 % (4 tours).", tgt: "boss", fx: [{ k: "dmg", m: 0.3, post: 15 }, { k: "debuff", s: "def", p: 0.2, d: 4 }] },
+  { o: "Clones de poil", n: "Clone sacrifié", d: "Un clone prend le prochain coup à cible unique visant l'équipe.", tgt: "self", fx: [{ k: "tdecoy" }] },
+  { o: "Bâton des mille lieues", n: "Bâton court", d: "Frappe à 160 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.6, post: 30 }] },
+  { o: "Marque lunaire", n: "Lune pleine", d: "Le boss subit +45 % de dégâts (1 tour). Aucune attaque.", tgt: "boss", fx: [{ k: "mark", p: 0.45, d: 1 }] },
+  { o: "Éclipse", n: "Double éclipse", d: "Frappe à 400 % ATK, sans bonus sous 35 % PV.", tgt: "boss", fx: [{ k: "dmg", m: 4.0, post: 70 }] },
+  { o: "Ofuda de givre", n: "Ofuda double", d: "Deux sorts à 60 % ATK.", tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 2 }] },
+  { o: "Sceau purificateur", n: "Sceau de glace", d: "Équipe : retire les malus, sans bouclier.", tgt: "allies", fx: [{ k: "cleanse" }] },
+  { o: "Fumée protectrice", n: "Fumée commune", d: "Équipe : bouclier de 10 % PV, Feng inclus.", tgt: "allies", fx: [{ k: "shield", p: 0.1 }] },
+  { o: "Grand fourneau", n: "Fourneau lent", d: "Explosion à 160 % ATK puis Brûlure forte (50 % ATK/tour, 3 tours).", tgt: "boss", fx: [{ k: "dmg", m: 1.6, post: 10 }, { k: "dot", s: "burn", m: 0.5, d: 3 }] },
+  { o: "Illusion", n: "Illusion longue", d: "ATK du boss −30 % et DEF −15 % pendant 3 tours.", cd: 4, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 3 }, { k: "debuff", s: "def", p: 0.15, d: 3 }] },
+  { o: "Six flammes", n: "Flamme sacrifiée", d: "Quatre coups à 85 % ATK. Rei perd 10 % de ses PV.", tgt: "boss", fx: [{ k: "dmg", m: 0.85, hits: 4 }, { k: "selfhurt", p: 0.1 }] },
+  { o: "Calligraphie protectrice", n: "Encre pure", d: "Équipe : retire les malus, sans bouclier.", tgt: "allies", fx: [{ k: "cleanse" }] },
+  { o: "Encre empoisonnée", n: "Lavis", d: "Poison (30 % ATK/tour, 5 tours), sans réduction d'ATK.", tgt: "boss", fx: [{ k: "dot", s: "poison", m: 0.3, d: 5 }] },
+  { o: "Carapace de perle", n: "Perle épaisse", d: "Bouclier perso de 45 % PV.", tgt: "self", fx: [{ k: "shield", p: 0.45 }] },
+  { o: "Torrent céleste", n: "Torrent étiré", d: "Trois coups à 50 % ATK, chacun ×1,2 si le boss est exposé.", tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 3, post: 10, expMul: 1.2 }] },
+  { o: "Tambour du tonnerre", n: "Surcharge", d: "Frappe à 100 % ATK. +2 charges, sans réduction de DEF.", tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 30 }, { k: "charge", n: 2 }], nodis: 1 },
+  { o: "Tambour du tonnerre", n: "Décharge limitée", d: "Consomme 3 charges au maximum : 100 % ATK + 60 % par charge, DEF du boss −30 % (2 tours).", cd: 2, tgt: "boss", discharge: 1, capCh: 3, fx: [{ k: "dmg", m: 1.0, perCharge: 0.6, post: 40 }, { k: "debuff", s: "def", p: 0.3, d: 2 }] },
+  { o: "Clochette", n: "Clochette double", d: "Deux alliés : soigne chacun 100 % ATK.", tgt: "allies", fx: [{ k: "heal", m: 1.0, pick: 2 }] },
+  { o: "Racines de vie", n: "Racines profondes", d: "Un allié : retire les malus et régénère 10 % PV par tour (3 tours).", tgt: "ally", fx: [{ k: "cleanse" }, { k: "regen", p: 0.1, d: 3 }] },
+  { o: "Brume des eaux", n: "Marée montante", d: "Équipe : bouclier de 8 % PV et régénère 6 % PV par tour (3 tours).", tgt: "allies", fx: [{ k: "shield", p: 0.08 }, { k: "regen", p: 0.06, d: 3 }] },
+  { o: "Mélodie hypnotique", n: "Berceuse", d: "ATK du boss −30 % (1 tour) et retire les malus d'un allié.", tgt: "ally", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 1 }, { k: "cleanse" }] },
+  { o: "Pluie de pétales", n: "Pétale dédié", d: "Un allié : soigne 60 % PV.", tgt: "ally", fx: [{ k: "healPct", p: 0.6 }] },
+  { o: "Bénédiction de cerisier", n: "Pétales communs", d: "Équipe : bouclier de 12 % PV et retire les malus.", tgt: "allies", fx: [{ k: "shield", p: 0.12 }, { k: "cleanse" }] },
+  { o: "Infusion millénaire", n: "Thé long", d: "Un allié : régénère 8 % PV par tour (4 tours).", tgt: "ally", fx: [{ k: "regen", p: 0.08, d: 4 }] },
+  { o: "Cérémonie du thé", n: "Pause prolongée", d: "Les recharges d'un seul allié sont réduites de 3.", tgt: "ally", fx: [{ k: "cdrOne", n: 3 }] },
+  { o: "Voile lunaire", n: "Voile solitaire", d: "Un allié : bouclier de 25 % PV et retire les malus.", tgt: "ally", fx: [{ k: "shield", p: 0.25 }, { k: "cleanse" }] },
+  { o: "Lune d'argent", n: "Lune étendue", d: "Deux alliés : immunité aux exécutions (1 tour), sans bouclier.", tgt: "allies", fx: [{ k: "execimm", d: 1, pick: 2 }] },
+  { o: "Plume ardente", n: "Plume de flamme", d: "Un allié : soigne 100 % ATK et ATK +30 % (2 tours). +1 braise (max 3).", tgt: "ally", fx: [{ k: "heal", m: 1.0 }, { k: "buff", p: 0.3, d: 2 }, { k: "charge", n: 1, max: 3 }] },
+  { o: "Hymne du soleil", n: "Cendres lentes", d: "Un allié : le prochain coup fatal le laisse à 1 PV (une fois, 6 tours). +1 braise (max 3).", tgt: "ally", fx: [{ k: "ash", d: 6 }, { k: "charge", n: 1, max: 3 }] },
+];
+const VAR = {};
+VARDEF.forEach((v) => { for (const id in KITS) { const i = KITS[id].findIndex((x) => x.n === v.o); if (i >= 0) { (VAR[id] = VAR[id] || []).push({ ...v, slot: i }); break; } } });
+const VSK = {};
+function varSk(id, i) {
+  const k = id + i; if (VSK[k]) return VSK[k];
+  const v = VAR[id][i], base = KITS[id][v.slot];
+  return (VSK[k] = { n: v.n, d: v.d, cd: v.cd != null ? v.cd : base.cd, tgt: v.tgt, fx: v.fx, el: base.el, ...(v.discharge ? { discharge: 1 } : {}), ...(v.capCh ? { capCh: v.capCh } : {}), ...(base.fin ? { fin: base.fin } : {}), varOf: base.n });
+}
+const varGot = (id, i) => stars(id) >= 2 + i;
+const varOn = (id, i) => varGot(id, i) && !(S.owned[id].voff && S.owned[id].voff[i]);
+function toggleVar(id, i) {
+  const o = S.owned[id]; if (!o || !varGot(id, i)) return;
+  o.voff = o.voff || [0, 0]; const on = !o.voff[i] ? 0 : 1; // état actuel -> inverse
+  o.voff[i] = on ? 0 : 1;
+  if (!o.voff[i]) VAR[id].forEach((w, j) => { if (j !== i && w.slot === VAR[id][i].slot) o.voff[j] = 1; });
+  save();
+}
 
 // ---------- BOSS ----------
 // t: single | aoe | multi | exec | self | charm   fx: burn poison atkdown healblock selfheal shield selfatk reflect evade drain enrage dr
@@ -2258,7 +2558,7 @@ const BOSSES = [
     hint: "L'Armure d'ossements absorbe surtout les coups physiques : la magie la brise.",
     moves: {
       poing: { n: "Poing d'os", t: "single", m: 1.5, type: "p", d: "Frappe lourde sur une cible." },
-      armure: { n: "Armure d'ossements", t: "self", d: "Bouclier de 10 % PV. Les coups physiques y font −65 %. Recharge : 6 tours.", cd: 6, fx: { shield: 0.10 } },
+      armure: { n: "Armure d'ossements", t: "self", d: "Bouclier de 10 % PV. Les coups physiques sont réduits de 65 % tant que le bouclier est actif.", cd: 6, fx: { shield: 0.10 } },
       cri: { n: "Cri des morts", t: "aoe", m: 0.6, type: "m", d: "Touche l'équipe, ATK −20 %.", fx: { atkdown: { p: 0.2, d: 2 } } },
       etreinte: { n: "Étreinte funeste", t: "exec", m: 2.3, type: "p", big: 1, d: "Broie l'allié le plus affaibli (sauf provocation)." },
     },
@@ -2267,7 +2567,7 @@ const BOSSES = [
     hint: "Se soigne avec sa Perle : garde du burst pour après. Enrage en phase 2 puis lance Tsunami.",
     moves: {
       raz: { n: "Raz-de-marée", t: "aoe", m: 0.85, type: "m", d: "Touche toute l'équipe." },
-      perle: { n: "Perle du dragon", t: "self", d: "Se soigne de 8 % et gagne un bouclier de 8 %. Recharge : 8 tours.", cd: 8, fx: { selfheal: 0.08, shield: 0.08 } },
+      perle: { n: "Perle du dragon", t: "self", d: "Se soigne de 8 % et gagne un bouclier de 8 %.", cd: 8, fx: { selfheal: 0.08, shield: 0.08 } },
       morsure: { n: "Morsure abyssale", t: "single", m: 1.6, type: "p", d: "Frappe lourde sur une cible." },
       colere: { n: "Colère des mers", t: "self", d: "ATK +30 % pour le reste du combat.", fx: { enrage: 0.3 } },
       tsunami: { n: "Tsunami", t: "aoe", m: 1.55, type: "m", big: 1, d: "Vague colossale sur toute l'équipe." },
@@ -2306,15 +2606,6 @@ const BOSSES = [
     p3: ["choeur", "tisseuse", "jugement", "choeur", "cocon3", "jugement"] },
 ];
 
-const CARD_POOL = [
-  { id: "atk", n: "Encens de guerre", g: "攻", d: "ATK de l'équipe +12 %." },
-  { id: "hp", n: "Souffle vital", g: "命", d: "PV max de l'équipe +15 %." },
-  { id: "def", n: "Armure laquée", g: "甲", d: "DEF de l'équipe +20 %." },
-  { id: "shield", n: "Sceau protecteur", g: "護", d: "Chaque combat commence avec un bouclier de 15 % des PV." },
-  { id: "spring", n: "Source thermale", g: "泉", d: "Soigne l'équipe à 100 % et ressuscite les tombés." },
-  { id: "soul", n: "Lanterne d'âme", g: "魂", d: "1 résurrection automatique à 30 % PV par combat." },
-  { id: "heal", n: "Rosée céleste", g: "露", d: "Soins reçus +25 %." },
-];
 // ===================== SPRITES (SVG originaux) =====================
 let _uid = 0;
 const uid = (p) => p + (++_uid);
@@ -3760,10 +4051,11 @@ addEventListener("pointerdown", () => { if (MEN.armed) return; MEN.armed = true;
 
 // ===================== ÉTAT & SAUVEGARDE =====================
 const SAVE_KEY = "neufcieux_v1";
-function newSave() { return { jade: 300, owned: { t1: { st: 1 }, p1: { st: 1 }, m1: { st: 1 }, s1: { st: 1 } }, pity: 0, team: ["t1", "p1", "m1", "s1"], best: 0, run: null, pulls: 0, last: [], band: false }; }
+function newSave() { return { jade: 300, owned: { t1: { st: 1 }, p1: { st: 1 }, m1: { st: 1 }, s1: { st: 1 } }, pity: 0, team: ["t1", "p1", "m1", "s1"], best: 0, run: null, pulls: 0, last: [], band: false, prog: {} }; }
 function load() { try { const t = localStorage.getItem(SAVE_KEY); return t ? Object.assign(newSave(), JSON.parse(t), { band: false }) : null; } catch (e) { return null; } }
 function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { } }
 let S = load() || newSave();
+S.run = null; S.prog = S.prog || {}; S.tix = S.tix || { n: 0, h: 0, m: 0 }; S.tixF = S.tixF || { n: 0, h: 0, m: 0 }; S.relics = S.relics || {}; S.stars = S.stars || {}; // plus de run : l'état d'un combat n'existe que pendant le combat
 const ROLE_ORD = { tank: 0, phys: 1, mag: 2, sup: 3 };
 const sortRoles = (ids) => ids.map((id, i) => [id, i]).sort((a, b) => (ROLE_ORD[CH[a[0]].role] - ROLE_ORD[CH[b[0]].role]) || a[1] - b[1]).map((x) => x[0]);
 S.team = sortRoles((S.team || []).filter((id) => CH[id]));
@@ -3805,12 +4097,20 @@ function pop(text, color) {
 const stars = (id) => (S.owned[id] && S.owned[id].st) || 0;
 function heroStats(id, run) {
   const c = CH[id], r = ROLE[c.role], st = Math.max(1, stars(id));
-  let m = RAR[c.rar].mult * (1 + 0.1 * (st - 1));
+  let m = RAR[c.rar].mult;
   const hm = run && run.heroMods && run.heroMods[id];
   if (hm && hm.aw) m *= 1 + 0.2 * hm.aw;
   const md = (run && run.mods) || {};
   return { hp: Math.round(r.hp * m * (1 + (md.hp || 0))), atk: Math.round(r.atk * m * (1 + (md.atk || 0))), def: Math.round(r.def * m * (1 + (md.def || 0))) };
 }
+const RELICS = { kappa: { n: "Écuelle d'eau", k: "碗", d: "La première purge du combat soigne aussi 10 % des PV du héros purgé." }, kitsune: { n: "Queue de renard", k: "尾", d: "La première attaque à cible unique du boss rate." }, oni: { n: "Masque d'oni", k: "面", d: "Les provocations durent 1 tour de plus." }, jiangshi: { n: "Talisman scellé", k: "符", d: "Un allié purgé est protégé contre les malus pendant 3 tours." }, tengu: { n: "Éventail de plume", k: "扇", d: "La recharge de la compétence 1 de chaque héros diminue de 1." }, gasha: { n: "Os de géant", k: "骨", d: "Le premier allié mis à terre revient à 20 % de ses PV, une fois par combat." }, ryujin: { n: "Perle du dragon", k: "珠", d: "Les ultimes sont disponibles dès le tour 2." }, phenix: { n: "Plume noire", k: "羽", d: "Les brûlures que l'équipe inflige durent 1 tour de plus." }, aluna: { n: "Fil d'Aluna", k: "糸", d: "Le bonus de l'état Exposé augmente de 0,25." } };
+const MODES = { n: { n: "Normal", hp: 1, dmg: 0.75, jade: 1 }, h: { n: "Héroïque", hp: 1.5, dmg: 1.1, jade: 1.5 }, m: { n: "Mythique", hp: 2.2, dmg: 1.6, jade: 2.2 } };
+const MODE_ORD = ["n", "h", "m"];
+let SEL = { boss: "kappa", mode: "n" };
+const cleared = (bid, m) => !!(S.prog && S.prog[bid] && S.prog[bid][m]);
+const bossOpen = (bid) => { const i = BOSSES.findIndex((b) => b.id === bid); return i <= 0 || cleared(BOSSES[i - 1].id, "n"); };
+const modeOpen = (bid, m) => { const k = MODE_ORD.indexOf(m); return bossOpen(bid) && (k === 0 || cleared(bid, MODE_ORD[k - 1])); };
+const nextBoss = () => BOSSES.find((b) => !cleared(b.id, "n")) || BOSSES[0];
 function bossAt(floor) { const i = floor % BOSSES.length, loop = Math.floor(floor / BOSSES.length); return { b: BOSSES[i], i, loop }; }
 
 // ===================== RENDU COMMUN =====================
@@ -3818,7 +4118,7 @@ const elChip = (e, pre = "") => `<span class="el" style="--c:${ELEM[e].c}">${pre
 const jadeIcon = `<i class="jg"></i>`;
 function topbar() { return `<div class="topbar"><span class="brand">九天<em>Ascend: Nine Heavens</em></span><span class="tbr"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="jade">${jadeIcon}${fmt(S.jade)}</span></span></div>`; }
 function nav() {
-  return `<nav class="nav">${[["home", "Portail", "門"], ["team", "Équipe", "隊"], ["summon", "Invocation", "召"], ["coll", "Collection", "録"]]
+  return `<nav class="nav">${[["home", "Portail", "門"], ["team", "Équipe", "隊"], ["summon", "Invocation", "召"], ["boss", "Boss", "鬼"], ["coll", "Collection", "録"]]
     .map(([k, n, g]) => `<button data-act="go" data-to="${k}" class="${screen === k ? "on" : ""}"><i>${g}</i>${n}${k === "coll" && Object.values(S.owned).some((o) => o.nw) ? '<span class="newdot" aria-label="Nouveau"></span>' : ""}</button>`).join("")}</nav>`;
 }
 function tile(id, act = "detail", sel = false) {
@@ -3832,39 +4132,38 @@ function render() {
   musStop();
   menuStart();
   document.querySelectorAll(".sheet").forEach((s) => s.remove());
-  ({ home: renderHome, team: renderTeam, summon: renderSummon, coll: renderColl, prep: renderPrep, cards: renderCards, defeat: renderDefeat }[screen] || renderHome)();
+  ({ home: renderHome, team: renderTeam, summon: renderSummon, coll: renderColl, prep: renderPrep, boss: renderBoss, victory: renderVictory, defeat: renderDefeat }[screen] || renderHome)();
 }
 function go(to) { screen = to; render(); }
 
 // ===================== PORTAIL =====================
 function renderHome() {
   const lead = S.team.filter((id) => CH[id]).map((id) => CH[id]);
-  const r = S.run;
+  const nCl = BOSSES.filter((b) => cleared(b.id, "n")).length;
   const order = [lead[1], lead[0], lead[3], lead[2]].filter(Boolean);
-  const nb = r ? bossAt(r.floor).b : BOSSES[0];
+  const nb = nextBoss();
   app.innerHTML = `<div class="h-home"><div class="h-bg" style="background-image:url(${ART["bg:kitsune"]})"></div><div class="h-vig"></div><div class="h-band"></div>
     <div class="h-jade"><button class="mutebtn ${S.mute ? "off" : ""}" data-act="mute" aria-label="Son">♪</button><span class="jade">${jadeIcon}${fmt(S.jade)}</span></div>
-    <div class="h-rec"><div><span>${r ? "ASCENSION EN COURS" : "RECORD"}</span><b>${r ? "Ciel " + (r.floor + 1) : S.best ? "Ciel " + S.best + " franchi" : "Aucun ciel franchi"}</b></div>${r ? `<button class="btn ghost sm h-ab" data-act="abandon" id="abBtn">Abandonner</button>` : ""}</div>
+    <div class="h-rec"><div><span>PROGRESSION</span><b>${nCl} / ${BOSSES.length} boss vaincus</b></div></div>
     <div class="h-logo"><div class="k">九天</div><div class="a">Ascend</div><div class="n">Nine Heavens</div></div>
     <div class="h-team">${order.map((c) => `<div class="h-hs"><i></i>${heroArt(c)}</div>`).join("")}</div>
     <div class="h-menu">
       <button class="btn h-bt" data-act="go" data-to="summon"><i>召</i><b>Invocation</b><span>${Math.floor(S.jade / SUMMON_COST)} tirage(s)</span></button>
       <button class="btn h-bt" data-act="go" data-to="team"><i>隊</i><b>Équipe</b><span>${lead.length === TEAM_N ? lead.map((c) => c.name).slice(0, 2).join(" · ") + "…" : "incomplète"}</span></button>
-      ${r ? `<button class="btn h-cta" data-act="prep"><b>Continuer l'ascension</b><small>CIEL ${r.floor + 1} · ${nb.name.toUpperCase()}</small></button>`
-          : `<button class="btn h-cta" data-act="start"><b>Commencer l'ascension</b><small>CIEL 1 · ${nb.name.toUpperCase()}</small></button>`}
+      <button class="btn h-cta" data-act="go" data-to="boss"><b>Affronter un boss</b><small>${nb.name.toUpperCase()}</small></button>
       <button class="btn h-bt" data-act="go" data-to="coll"><i>録</i><b>Collection</b><span>${Object.keys(S.owned).length} / ${CHARS.length}</span></button>
       <button class="btn h-bt" data-act="rules"><i>問</i><b>Règles</b><span>comment jouer</span></button>
     </div><div class="h-ver">v.${GAME_VERSION}</div></div>`;
 }
 function showRules() {
   const sh = document.createElement("div"); sh.className = "sheet";
-  sh.innerHTML = `<div class="sheet-in rules-sheet" role="dialog" aria-label="Règles de l'ascension"><h3>Règles de l'ascension</h3><ul>
-      <li>Ton équipe de 4 affronte une suite de boss, de plus en plus forts. Après le 8e ciel, le cycle recommence plus dur.</li>
+  sh.innerHTML = `<div class="sheet-in rules-sheet" role="dialog" aria-label="Règles"><h3>Règles</h3><ul>
+      <li>Choisis une équipe de 4 héros, modifiable entre deux combats. Les PV sont pleins à chaque combat.</li>
+      <li>Chaque boss existe en <b>Normal</b>, <b>Héroïque</b> et <b>Mythique</b>. Bats-le en Normal pour débloquer le mode suivant et le boss d'après.</li>
       <li>L'<b>intention</b> du boss est toujours affichée : prépare provocations, boucliers et soins.</li>
+      <li>Chaque héros a 3 compétences et 1 ultime (disponible au tour 3). La <b>Concentration</b> réduit les recharges et les dégâts subis.</li>
       <li>Frapper sa <b>faiblesse</b> élémentaire inflige ×1,5 de dégâts.</li>
-      <li>Après chaque victoire, choisis 1 bénédiction parmi 3. Elles durent jusqu'à la fin de l'ascension.</li>
-      <li>Au-delà de ${FURY_ROUND} tours, le boss entre en <b>Fureur céleste</b> : +20 % d'ATK à chaque tour.</li>
-      <li>En cas de défaite, l'ascension repart du Ciel 1. Tu gardes tes héros et ton jade.</li></ul>
+      <li>Au-delà de ${FURY_ROUND} tours, le boss entre en <b>Fureur céleste</b> : +20 % d'ATK à chaque tour.</li></ul>
     <div class="cycle">Domine :&nbsp;${["eau", "feu", "metal", "bois", "terre", "eau"].map((e) => elChip(e)).join(" › ")}</div>
     <button class="btn wide" style="margin-top:14px" data-act="closesheet">Fermer</button></div>`;
   document.body.appendChild(sh);
@@ -3887,7 +4186,7 @@ function renderTeam() {
   const ids = CHARS.map((x) => x.id).filter((x) => teamFilter === "all" || CH[x].role === teamFilter).sort((a, b) => (stars(a) ? 0 : 1) - (stars(b) ? 0 : 1) || byRar(a, b));
   const roles = new Set(S.team.map((x) => CH[x].role));
   const slots = [0, 1, 2, 3].map((i) => S.team[i] ? mkPt(S.team[i], S.team[i] === id ? "cur" : "", "tfocus") : `<span class="em">+</span>`).join("");
-  const btn = !own ? `<button class="btn" disabled>Non obtenu</button>` : locked ? `<button class="btn" disabled>Ascension en cours</button>` : `<button class="btn" data-act="togd" data-id="${id}">${inTeam ? "Retirer de l'équipe" : "Ajouter à l'équipe"}</button>`;
+  const btn = !own ? `<button class="btn" disabled>Non obtenu</button>` : locked ? `<button class="btn" disabled>Combat en cours</button>` : `<button class="btn" data-act="togd" data-id="${id}">${inTeam ? "Retirer de l'équipe" : "Ajouter à l'équipe"}</button>`;
   app.innerHTML = `<div class="mk tc"><div class="bgp" style="background-image:url(${ART["bg:jiangshi"]})"></div><div class="vg"></div><div class="shade"></div>${mkTop("Équipe", "隊")}
   <div class="med">${slots}</div>
   <div class="list"><div class="tabs2">${[["all", "全"], ...Object.keys(ROLE).map((k) => [k, ROLE[k].k])].map(([k, g]) => `<span data-act="tfilter" data-f="${k}" class="${teamFilter === k ? "on" : ""}">${g}</span>`).join("")}</div>
@@ -3902,7 +4201,7 @@ function renderTeam() {
   hydratePx(app);
 }
 function toggleTeam(id) {
-  if (S.run) return toast("Termine ou abandonne l'ascension pour changer d'équipe.");
+  if (S.run) return toast("Termine ou abandonne le combat pour changer d'équipe.");
   if (!stars(id)) return;
   const i = S.team.indexOf(id);
   if (i >= 0) S.team.splice(i, 1);
@@ -3940,8 +4239,8 @@ function showDetail(id) {
         <span class="stars ${own ? "" : "dim"}" style="font-size:14px">${own ? "★".repeat(own) + "☆".repeat(5 - own) : "Non obtenu"}</span>
         <div class="statrow"><div class="stat"><span>PV</span><b>${own ? fmt(st.hp) : "???"}</b></div><div class="stat"><span>ATK</span><b>${own ? fmt(st.atk) : "???"}</b></div><div class="stat"><span>DEF</span><b>${own ? fmt(st.def) : "???"}</b></div></div>
       </div></div>
-    <p class="note" style="margin-top:10px" ${own ? "" : "hidden"}>Chaque doublon invoqué ajoute une étoile (+10 % de stats et une amélioration de sort, max 5★). Au-delà, il est converti en jade. Dégâts ${ROLE[c.role].dt === "p" ? "physiques" : "magiques"}.</p>
-    ${own ? "" : `<div class="sk-list"><p class="note">Héros non débloqué : invoque-le pour découvrir ses capacités.</p>${[1, 2, 3].map(() => `<div class="sk"><div class="sk-h"><b>???</b><span>???</span></div><p>???</p></div>`).join("")}</div>`}<div class="sk-list" ${own ? "" : "hidden"}><div class="sk"><div class="sk-h"><b>Attaque · Garde</b><span>Sans recharge</span></div><p>Attaque : 100 % ATK ${ROLE[c.role].dt === "p" ? "physique" : "magique"} de son élément. Garde : −50 % de dégâts subis jusqu'au prochain tour et recharges −1${c.role === "tank" ? ", et provoque le boss" : ""}.</p></div>${c.skills.map((s, i) => `<div class="sk"><div class="sk-h"><b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(s.el) : ""}${s.n}</b><span>Recharge ${s.cd} tours</span></div><p>${s.d}${awTag(id, i)}</p></div>`).join("")}${awList(id)}${kitList(id)}</div>
+    <p class="note" style="margin-top:10px" ${own ? "" : "hidden"}>Chaque doublon ajoute une étoile : 2★ variante A, 3★ variante B, 4★ apparence alternative. Les statistiques ne changent jamais. Au-delà de 5★, le doublon donne des fragments et du jade. Dégâts ${ROLE[c.role].dt === "p" ? "physiques" : "magiques"}.</p>
+    ${own ? "" : `<div class="sk-list"><p class="note">Héros non débloqué : invoque-le pour découvrir ses capacités.</p>${[1, 2, 3, 4].map(() => `<div class="sk"><div class="sk-h"><b>???</b><span>???</span></div><p>???</p></div>`).join("")}</div>`}<div class="sk-list" ${own ? "" : "hidden"}><div class="sk"><div class="sk-h"><b>Concentration</b><span>Sans recharge</span></div><p>Aucune attaque : recharges −1 sur tous les sorts et −25 % de dégâts subis ce tour.</p></div>${c.skills.map((s, i) => `<div class="sk"><div class="sk-h"><b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(s.el) : ""}${s.n}</b><span>Recharge ${s.cd} tours</span></div><p>${s.d}${awTag(id, i)}</p></div>`).join("")}${awList(id)}${kitList(id)}</div>
     <div class="d-acts">${own && !S.run ? `<button class="btn ${inTeam ? "ghost" : ""}" data-act="togd" data-id="${id}">${inTeam ? "Retirer de l'équipe" : "Ajouter à l'équipe"}</button>` : ""}<button class="btn ghost" data-act="closesheet">Fermer</button></div>
   </div>`;
   document.body.appendChild(sh);
@@ -3950,21 +4249,23 @@ function showDetail(id) {
 // ===================== INVOCATION =====================
 function renderSummon() {
   const c = CH[FEATURED], left = PITY - S.pity;
-  const rates = [["R", 75], ["E", 20], ["L", 5]];
+  const tx = S.tix || {}, tf = S.tixF || {};
   app.innerHTML = `<div class="mk sd r-${c.rar}">${mkTop("Invocation", "召")}<div class="bigname">${c.name.toUpperCase()}</div>
   <div class="hero">${heroArt(c)}</div>
   <div class="info"><span class="tag">NOUVEAU HÉROS · ${RAR[c.rar].n.toUpperCase()}</span><h2>${c.name}</h2><div class="ti">${c.title}</div><div class="chs">${mkChips(c)}</div></div>
-  <div class="col2"><h3>Taux d'apparition</h3>${rates.map(([r, p]) => `<div class="rr r-${r}"><span>${RAR[r].n}</span><b>${p} %</b></div>`).join("")}
+  <div class="col2"><h3>Taux d'apparition (Rare / Épique / Légendaire)</h3>${MODE_ORD.map((m) => `<div class="rr"><span>${MODES[m].n}</span><b>${RATES[m].join(" / ")} %</b></div>`).join("")}<div class="gar" style="margin-top:4px">1re victoire sur un boss et un mode : Épique et Légendaire ×1,5.</div>
    <div class="gar">Légendaire garanti dans <b>${left}</b><i><s style="width:${(S.pity / PITY) * 100}%"></s></i></div></div>
+  <div class="btns2" style="margin-bottom:6px">${MODE_ORD.map((m) => `<button class="btn ${tx[m] ? "" : "ghost"}" data-act="tix" data-m="${m}" ${tx[m] ? "" : "disabled"}><b>Tirage ${MODES[m].n}</b><small>${tx[m] || 0} disponible${(tx[m] || 0) > 1 ? "s" : ""}${tf[m] ? ` · ${tf[m]} bonifié${tf[m] > 1 ? "s" : ""}` : ""}</small></button>`).join("")}</div>
   <div class="btns2"><button class="btn" data-act="sum" data-n="1" ${S.jade < SUMMON_COST ? "disabled" : ""}><b>Invoquer ×1</b><small>${jadeIcon}${SUMMON_COST}</small></button>
    <button class="btn big" data-act="sum" data-n="10" ${S.jade < SUMMON10_COST ? "disabled" : ""}><b>Invoquer ×10</b><small>${jadeIcon}${SUMMON10_COST} · 1 Épique+ garanti</small></button></div></div>`;
   hydratePx(app);
 }
-function rollRarity() {
+const RATES = { n: [84, 15, 1], h: [60, 37, 3], m: [35, 57, 8] };
+function rollRarity(mode = "n", boost = false) {
   S.pity++; S.pulls++;
   let rar;
   if (S.pity >= PITY) rar = "L";
-  else { const x = Math.random(); rar = x < 0.05 ? "L" : x < 0.25 ? "E" : "R"; }
+  else { let [, e, l] = RATES[mode].map((p) => p / 100); if (boost) { e *= 1.5; l *= 1.5; } const x = Math.random(); rar = x < l ? "L" : x < l + e ? "E" : "R"; }
   if (rar === "L") S.pity = 0;
   return rar;
 }
@@ -3972,7 +4273,15 @@ function grant(rar) {
   const c = rnd(CHARS.filter((c) => c.rar === rar)), o = S.owned[c.id];
   if (!o) { S.owned[c.id] = { st: 1, nw: 1 }; return { id: c.id, isNew: true, st: 1 }; }
   if (o.st < 5) { o.st++; o.nw = 1; return { id: c.id, up: true, st: o.st }; }
-  S.jade += DUPE_JADE[rar]; return { id: c.id, conv: DUPE_JADE[rar], st: 5 };
+  o.fr = (o.fr || 0) + 1; S.jade += DUPE_JADE[rar]; return { id: c.id, conv: DUPE_JADE[rar], st: 5 };
+}
+async function doTicket(m) {
+  S.tix = S.tix || {}; S.tixF = S.tixF || {};
+  if (!S.tix[m]) return toast("Aucun tirage disponible : bats un boss pour en gagner.");
+  S.tix[m]--; const boost = S.tixF[m] > 0; if (boost) S.tixF[m]--;
+  const res = [grant(rollRarity(m, boost))];
+  S.last = res.map((r) => r.id); save();
+  await playSummon(res); render();
 }
 async function doSummon(n) {
   const cost = n === 10 ? SUMMON10_COST : SUMMON_COST;
@@ -4120,18 +4429,18 @@ const SUMFX = (() => {
 function playSummon(res) { return SUMFX.play(res); }
 
 // ===================== ASCENSION =====================
-function startRun() {
-  if (S.team.length !== TEAM_N) { toast(`Choisis ${TEAM_N} héros avant de partir.`); return go("team"); }
-  S.run = { floor: 0, mods: {}, heroMods: {}, heroes: S.team.map((id) => ({ id, hpPct: 1 })), picked: [], jadeRun: 0, cards: null };
-  save(); go("prep");
-}
 const disc = (id) => { S.disc = S.disc || {}; return S.disc[id] || {}; };
 const unkChip = `<span class="el" style="--c:#8a7a72">? Inconnue</span>`;
-function moveLine(mv) { return `<div class="mv ${mv.big ? "big" : ""}"><b>${mv.big ? "⚠ " : ""}${mv.n}</b><span>${mv.d}</span></div>`; }
+function moveLine(mv, bid, key, el) { return `<div class="mv ${mv.big ? "big" : ""}"><b>${bid ? bossSp(bid, key, el, mv.big) : ""}${mv.big ? "⚠ " : ""}${mv.n}</b><span>${mv.d}</span></div>`; }
+function renderBoss() {
+  const nCl = BOSSES.filter((b) => cleared(b.id, "n")).length;
+  app.innerHTML = topbar() + `<main class="scr"><div class="sec-h"><h2>Boss</h2><span class="note">${nCl} / ${BOSSES.length} vaincus en Normal</span></div>
+    <div class="bsl">${BOSSES.map((b, i) => { const open = bossOpen(b.id); return `<div class="bs ${open ? "" : "lk"}"><div class="bart">${open ? bossArt(b.id) : ""}</div><div class="bi"><span class="floor">${i + 1}</span><b>${open ? b.name : "???"}</b><span class="note">${open ? b.ep : "Bats le boss précédent en Normal"}</span></div><div class="bm">${MODE_ORD.map((m) => { const ok = modeOpen(b.id, m); return `<button class="bmb ${cleared(b.id, m) ? "done" : ""}" ${ok ? `data-act="bossmode" data-b="${b.id}" data-m="${m}"` : "disabled"}>${MODES[m].n}${cleared(b.id, m) ? " ✓" : ""}</button>`; }).join("")}</div></div>`; }).join("")}</div>
+  </main>` + nav();
+}
 function renderPrep() {
-  const r = S.run; if (!r) return go("home");
-  if (r.cards) return go("cards");
-  const { b, loop } = bossAt(r.floor);
+  const b0 = BOSSES.find((x) => x.id === SEL.boss) || BOSSES[0], b = cloneBoss(b0, SEL.mode), M = MODES[SEL.mode] || MODES.n, loop = 0;
+  const r = { heroes: S.team.map((id) => ({ id, hpPct: 1 })), picked: [], mods: {}, heroMods: {} };
   const uniq = (arr) => [...new Set(arr)];
   const p1 = uniq(b.p1), p2 = uniq(b.p2).filter((k) => !p1.includes(k));
   const prof = b.pdef > b.mdef * 1.3 ? "Armure lourde : la magie passe mieux" : b.mdef > b.pdef * 1.3 ? "Garde mystique : les armes passent mieux" : "Défenses équilibrées";
@@ -4139,7 +4448,7 @@ function renderPrep() {
   app.innerHTML = topbar() + `<main class="scr two prep">
     <section class="prep-boss L">
       <div class="pb-top"><div class="bart">${bossArt(b.id)}</div>
-        <div class="pb-info"><span class="floor">CIEL ${r.floor + 1}${loop ? " · CYCLE " + (loop + 1) : ""}</span>
+        <div class="pb-info"><span class="floor">${BOSSES.indexOf(b0) + 1} / ${BOSSES.length} · ${M.n.toUpperCase()}</span>
           <h2>${b.name}</h2><span class="ep">${b.ep}</span>
           <div class="intel">
             <div><span>Faiblesse ×1,5</span>${dk.w ? elChip(weakTo(b.el)) : unkChip}</div>
@@ -4147,18 +4456,23 @@ function renderPrep() {
           </div></div></div>
       ${dk.w ? "" : `<p class="disc">Touche le boss avec la bonne nature d'attaque pour révéler sa faiblesse.</p>`}
       <div class="hint">${b.hint}</div>
-      <div class="pb-acts"><button class="btn" data-act="fight">Affronter ${b.name.split(",")[0]}</button><button class="btn ghost" data-act="go" data-to="home">Portail</button></div>
+      ${modeRules(b.id, SEL.mode).map((t) => `<div class="hint" style="margin-top:4px;${t.startsWith("⚠") ? "border-color:#ff3b30;color:#ffb4ac" : ""}">${t}</div>`).join("")}
+      ${SEL.mode === "n" ? "" : `<div class="hint" style="margin-top:4px">${SEL.mode === "m" ? "Un héros tombé ne revient pas." : "Résurrection : recharge +1."} Pas de soin entre les phases.</div>`}
+      <div class="pb-acts"><button class="btn" data-act="fight">Affronter ${b.name.split(",")[0]}</button><button class="btn ghost" data-act="go" data-to="boss">Retour</button><button class="btn ghost" data-act="go" data-to="team">Équipe</button></div>
     </section>
     <div class="pr-r">
     <section class="panel"><span class="lbl">Ton équipe</span>
       <div class="tmini" style="margin-top:6px">${r.heroes.map((h) => { const c = CH[h.id], s = heroStats(h.id, r); return `<div class="tm"><b>${c.name}</b><span class="note">${ROLE[c.role].n} · ${ELEM[c.el].k}${dk.w && weakTo(b.el) === c.el ? " ✓" : ""}</span><div class="bar"><i style="width:${h.hpPct * 100}%"></i></div><span class="note">${fmt(s.hp * h.hpPct)} / ${fmt(s.hp)}</span></div>`; }).join("")}</div>
       ${r.picked.length ? `<div class="lbl" style="margin-top:8px">Bénédictions</div><div class="blessings" style="margin-top:4px">${r.picked.map((p) => `<span class="bless">${p}</span>`).join("")}</div>` : ""}
     </section>
+    <section class="panel"><span class="lbl">Relique (une par équipe)</span>
+      <div class="moves" style="margin-top:4px">${Object.keys(RELICS).filter((k) => S.relics && S.relics[k]).map((k) => `<div class="mv ${S.relicSel === k ? "big" : ""}" data-act="relic" data-r="${k}" style="cursor:pointer"><b>${S.relicSel === k ? "✓ " : ""}${RELICS[k].k} ${RELICS[k].n}</b><span>${RELICS[k].d}</span></div>`).join("") || `<span class="note">Aucune relique : bats un boss en Héroïque ou en Mythique.</span>`}</div>
+    </section>
     <section class="panel"><span class="lbl">Techniques connues</span>
-      <div class="moves" style="margin-top:4px">${p1.map((k) => moveLine(b.moves[k])).join("")}
-      ${p2.length ? `<div class="ph">Sous 50 % de PV</div>${p2.map((k) => moveLine(b.moves[k])).join("")}` : ""}
+      <div class="moves" style="margin-top:4px">${p1.map((k) => moveLine(b.moves[k], b.id, k, b.el)).join("")}
+      ${p2.length ? `<div class="ph">Sous 50 % de PV</div>${p2.map((k) => moveLine(b.moves[k], b.id, k, b.el)).join("")}` : ""}
       <div class="ph">Après ${FURY_ROUND} tours</div><div class="mv big"><b>Fureur céleste</b><span>+20 % d'ATK à chaque tour.</span></div>
-      ${b.rebirth ? `<div class="ph">Passif</div><div class="mv big"><b>Renaissance</b><span>Revient une fois à ${b.rebirth * 100} % PV.</span></div>` : ""}</div>
+      ${b.births.length ? `<div class="ph">Passif</div><div class="mv big"><b>Renaissance</b><span>Revient ${b.births.length > 1 ? "deux fois" : "une fois"} à ${b.births.map((x) => Math.round(x * 100)).join(" % puis ")} % PV.</span></div>` : ""}</div>
     </section>
     </div>
   </main>`;
@@ -4167,16 +4481,18 @@ function renderPrep() {
 // ===================== COMBAT =====================
 let HPMUL = 0.8, ATKMUL = 2.15;
 const FURY_ROUND = 12;
-const NEG = ["burn", "poison", "bleed", "atkdown", "healblock"];
+const NEG = ["burn", "poison", "bleed", "atkdown", "healblock", "shieldblock", "charmed", "thread"];
 const DOTS = ["burn", "poison", "bleed"];
 const STL = { buff: ["ATK↑", 1], atkdown: ["ATK↓", 0], dr: ["Garde", 1], taunt: ["Provoc.", 1], counter: ["Riposte", 1], regen: ["Régén.", 1], evade: ["Esquive", 1],
+  execimm: ["Anti-exéc.", 1], vanish: ["Intouchable", 1], decoy: ["Leurre", 1], nxt: ["Prochain+", 1], ash: ["Cendres", 1],
+  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0],
   burn: ["Brûlure", 0], poison: ["Poison", 0], bleed: ["Saign.", 0], healblock: ["Anti-soin", 0], defdown: ["DEF↓", 0], mark: ["Marque", 0], selfatk: ["ATK↑", 1], reflect: ["Renvoi", 1] };
 const sum = (st, k) => st.filter((s) => s.k === k).reduce((a, s) => a + (s.p || 0), 0);
 const md = () => (S.run && S.run.mods) || {};
 const hAtk = (h) => h.atk * Math.max(0.3, 1 + sum(h.st, "buff") - sum(h.st, "atkdown"));
 const hDr = (h) => Math.min(0.75, sum(h.st, "dr"));
-const bAtk = () => F.boss.atk * Math.max(0.3, 1 + sum(F.boss.st, "selfatk") + F.boss.enr - sum(F.boss.st, "atkdown"));
-const bDef = (t) => (t === "p" ? F.boss.pdef : F.boss.mdef) * Math.max(0, 1 - sum(F.boss.st, "defdown"));
+const bAtk = () => F.boss.atk * Math.max(0.3, 1 + sum(F.boss.st, "selfatk") + F.boss.enr + (F.boss.rage || 0) + (F.boss.st.some((s) => s.k === "exposed") ? 0 : F.boss.blood || 0) + (F.boss.tide || 0) - sum(F.boss.st, "atkdown"));
+const bDef = (t) => (t === "p" ? F.boss.pdef : F.boss.mdef) * Math.max(0, 1 - sum(F.boss.st, "defdown")) * (1 + (F.boss.fer || 0));
 const alive = () => F.heroes.filter((h) => !h.dead);
 
 function addSt(u, s) {
@@ -4203,17 +4519,143 @@ function lightAt(side, color, big) {
 function cam(kind) { const c = document.getElementById("cam"); if (c) flashCls(c, kind); }
 function log(msg) { F.log.push(msg); if (F.log.length > 2) F.log.shift(); const l = document.getElementById("flog"); if (l) l.innerHTML = F.log.map((m) => `<div>${m}</div>`).join(""); }
 
+
+// ---- mécaniques propres aux boss, par mode (Normal / Héroïque / Mythique) ----
+const prot = (h, kind) => kind === "shield" ? h.shield > 0 : kind === "sum60" ? hDr(h) + h.shield / h.maxHp >= 0.6 : (h.shield > 0 || hDr(h) >= 0.4);
+function killHero(h, why) { if (h.dead) return; h.hp = 0; h.dead = true; h.st = []; h.shield = 0; floatAt(heroEl(h), "Mort", "hurt"); log(why || `${h.c.name} est tombé.`); }
+function fatalLose(why) { F.heroes.forEach((h) => { h.hp = 0; h.dead = true; h.st = []; h.shield = 0; }); F.lost = true; pop("RÈGLE FATALE", "#ff2a2a"); log(why || "L'équipe est anéantie."); }
+const exposedNow = (b) => b.st.some((s) => s.k === "exposed");
+function exposeBoss(b) {
+  const M = b.mode || "n", mult = (M === "n" ? 2 : 1.5) + (F.relic === "aluna" ? 0.25 : 0), t = String(mult).replace(".", ",");
+  addSt(b, { k: "exposed", p: mult - 1, d: 1, lim: M === "m" ? 2 : 0 });
+  pop("EXPOSÉ ×" + t, "#ffd25a"); log(`${b.name} est exposé : dégâts ×${t} au prochain tour.`); sfxDiscover();
+}
+function markThreads() {
+  const b = F.boss; if (!b.threads) return;
+  F.heroes.forEach((h) => { h.st = h.st.filter((s) => s.k !== "thread"); });
+  const pick = alive().sort(() => Math.random() - 0.5).slice(0, 2);
+  pick.forEach((h) => h.st.push({ k: "thread", d: 99 }));
+  if (pick.length) log("Un fil du destin se noue autour de " + pick.map((h) => h.c.name).join(" et ") + ".");
+}
+function onBirth(b) {
+  if (b.birthBurn) F.heroes.forEach((h) => { if (!h.dead) addSt(h, { k: "burn", dmg: Math.round(bAtk() * 0.2), d: 3 }); });
+  if (b.sunOn) b.sun = true;
+  if (b.birthNova) b.queue = ["nova"];
+  if (b.permBlock) F.heroes.forEach((h) => { if (!h.dead) { addSt(h, { k: "healblock", d: 99 }); addSt(h, { k: "shieldblock", d: 99 }); h.st.forEach((s) => { if (s.k === "healblock" || s.k === "shieldblock") s.perm = true; }); } });
+  if (b.threads) markThreads();
+  b.sh = null; b.splash = false; b.rage = 0; b.fer = 0;
+}
+function bossSetup(b) {
+  const M = b.mode || "n", H = M !== "n", X = M === "m", mv = b.moves;
+  const set = (k, o) => Object.assign(mv[k], o);
+  const err = (n, h, m) => ({ n, h, m })[M];
+  switch (b.id) {
+    case "kappa":
+      set("deluge", { prot: "any", expose: "prot", err: err({ team: 0.35 }, { team: 0.7 }, { lose: 1 }), fatal: X });
+      if (H) {
+        b.p1 = ["griffe", "jet", "deluge", "plonge"];
+        set("plonge", { d: "Se soigne de 10 %, −30 % de dégâts subis. Chaque attaque reçue le soigne de 5 %." + (X ? " Aucun soin possible chez toi." : ""), fx: { selfheal: 0.1, dr: { p: 0.3, d: 1 }, swell: 1, ...(X ? { dive: 1 } : {}) } });
+      }
+      break;
+    case "kitsune":
+      if (H) {
+        mv.reflet = { k: "reflet", n: "Reflet", t: "self", d: "Renvoie 30 % de la magie pendant 2 tours.", fx: { reflect: { type: "m", p: 0.3, d: 2 } } };
+        b.p1 = ["follet", "charme", "mirage", "follet", "charme", "reflet"];
+        b.p2 = ["mirage", "follet", "queues", "charme", "reflet", "follet"];
+        set("charme", { d: "Frappe l'allié le plus fort, ATK −30 %, et le charme : non purgé, " + (X ? "il se jette dans les flammes." : "il frappe un allié."), fx: { atkdown: { p: 0.3, d: 2 }, charmed: 1 }, fatal: X });
+      }
+      if (X) b.gauge = { n: "Queues", v: 0, max: 9 };
+      break;
+    case "oni":
+      set("kanabo", { expose: "taunt", floor: { n: 0.4, h: 0.15, m: 0 } });
+      if (H) { b.rageOn = true; set("kanabo", { two: true, d: "Écrase les 2 alliés les plus affaiblis (la provocation en couvre un)." }); }
+      if (X) {
+        set("cri", { d: "ATK +30 % 2 tours. DEF +30 % jusqu'au Kanabō.", fx: { selfatk: { p: 0.3, d: 2 }, fer: 0.3 } });
+        set("kanabo", { sweep: 0.5, chain: true, fatal: true, d: "Écrase les 2 alliés les plus affaiblis. Tout héros sous 50 % PV sans bouclier meurt." });
+      }
+      break;
+    case "jiangshi":
+      set("talisman", { prot: "any", expose: "prot" });
+      if (H) { set("talisman", { d: "Bloque les soins ET les boucliers de l'équipe pendant 2 tours.", fx: { healblock: 2, shieldblock: 2 } }); set("morsure", { blood: true }); }
+      if (X) {
+        b.births = [0.3]; b.permBlock = true;
+        set("sceau", { d: "Renvoie 100 % des dégâts magiques pendant 2 tours. Un arcaniste sous 60 % PV qui lance un sort meurt.", fx: { reflect: { type: "m", p: 1, d: 2 } }, fatal: true });
+      }
+      break;
+    case "tengu":
+      set("plumes", { prot: "any", expose: "prot", floor: { n: 0.3, h: 0.25, m: 0 }, disperse: true });
+      if (H) {
+        mv.ouest = { k: "ouest", n: "Vent d'ouest", t: "self", d: "Renvoie 50 % des dégâts magiques pendant 2 tours.", fx: { reflect: { type: "m", p: 0.5, d: 2 } } };
+        b.p1 = ["eventail", "plumes", "garde", "plumes", "ouest"];
+        b.p2 = ["garde", "eventail", "tornade", "plumes", "ouest"];
+        set("plumes", { hits: 5, d: "Cinq coups sur des cibles au hasard." });
+      }
+      if (X) {
+        set("plumes", { disperse: false, twice: true, fatal: true, d: "Cinq coups, parfois deux sur le même héros. Deux touches sans réduction ≥ 50 % = mort." });
+        mv.oeil = { k: "oeil", n: "Œil de la tempête", t: "aoe", m: 1.3, type: "m", big: 1, d: "Tornade sur l'équipe, ATK −30 % cumulatif.", fx: { atkdown: { p: 0.3, d: 99, stack: 1 } } };
+        b.every = { n: 4, k: "oeil" };
+      }
+      break;
+    case "gasha":
+      if (H) { set("cri", { d: "Touche l'équipe, ATK −30 %.", fx: { atkdown: { p: 0.3, d: 2 } } }); set("etreinte", { floor: { n: 0.4, h: 0.1, m: 0.1 } }); }
+      if (X) { b.bones = true; set("etreinte", { noTaunt: true, dieBelow: 0.6, fatal: true, d: "Broie l'allié le plus affaibli, ignore la provocation. Sous 60 % PV : mort." }); }
+      break;
+    case "ryujin":
+      set("tsunami", { prot: "sum60", expose: "prot", err: err({ team: 0.4 }, { team: 0.75 }, { lose: 1 }), fatal: X });
+      if (H) { b.tideOn = true; b.splashOn = true; b.gauge = { n: "Marée", v: 0, max: 0 }; set("perle", { d: "Se soigne de 8 % et gagne un bouclier de 8 %. Non brisé le tour même, il renvoie 20 %." }); }
+      if (X) { b.look = 3; set("colere", { d: "ATK +15 % cumulatif à chaque tour.", fx: { enrage: 0.15 }, wrath: true }); }
+      break;
+    case "phenix":
+      set("nova", { prot: "shield", expose: "prot", err: err({ team: 0.4 }, { team: 0.75, burn: 1 }, { lose: 1 }), fatal: X });
+      if (H) { b.births = [0.4, 0.2]; b.birthBurn = true; b.sister = true; }
+      if (X) { b.sunOn = true; b.birthNova = true; }
+      break;
+    case "aluna":
+      set("chev", { expose: "parry" }); set("tisseuse", { expose: "parry" });
+      if (H) b.threads = true;
+      if (X) {
+        b.births = [0.66, 0.33]; b.fury3 = 0.15;
+        const ex = { noTaunt: true, protReq: true, fatal: true, floor: { n: 0.4, h: 0.1, m: 0.1 } };
+        set("chev", ex); set("tisseuse", ex);
+        set("jugement", { prot: "shield", err: { lose: 1 }, fatal: true });
+      }
+      break;
+  }
+}
+function cloneBoss(b, mode) {
+  const o = { ...b, moves: Object.fromEntries(Object.entries(b.moves).map(([k, v]) => [k, { ...v, k }])), p1: b.p1.slice(), p2: b.p2.slice(), p3: b.p3 ? b.p3.slice() : undefined, mode, births: b.rebirth ? [b.rebirth] : [], bn: 0 };
+  bossSetup(o); return o;
+}
+const MODEINFO = {
+  kappa: { h: ["Plongée enflée : toute attaque reçue pendant la Plongée le soigne de 5 %.", "Marée basse : le Déluge arrive dès la phase 1."], m: ["Noyade : aucun soin possible pendant la Plongée.", "⚠ FATAL : un Déluge sans protection (bouclier ou −40 % de dégâts) = défaite."] },
+  kitsune: { h: ["Illusion alternée : le Mirage alterne avec un Reflet (renvoi de 30 % de la magie).", "Charme contagieux : un héros charmé non purgé frappe un allié (−40 % PV)."], m: ["Neuf queues : jauge 0-9, +1 par tour où un héros emploie le mauvais type de dégâts.", "⚠ FATAL : 9 queues, ou un Charme non purgé (mort du charmé)."] },
+  oni: { h: ["Kanabō double : frappe les 2 alliés les plus affaiblis (la provocation en couvre un).", "Rage rouge : chaque coup physique reçu donne +5 % d'ATK jusqu'au Kanabō."], m: ["Armure de fer : +30 % de DEF après chaque Cri, jusqu'au Kanabō.", "Fureur : s'il n'est pas Exposé, il enchaîne un second Kanabō.", "⚠ FATAL : au Kanabō, tout héros sous 50 % PV sans bouclier meurt."] },
+  jiangshi: { h: ["Talisman scellé : bloque aussi les boucliers (pas la réduction de dégâts).", "Rituel de sang : chaque Morsure réussie donne +5 % d'ATK tant qu'il n'est pas Exposé."], m: ["Dernier souffle : renaît à 30 % PV, Talisman actif jusqu'à la fin.", "Sceau total : renvoie 100 % de la magie.", "⚠ FATAL : un arcaniste sous 60 % PV qui lance un sort pendant le Sceau meurt."] },
+  tengu: { h: ["Vent changeant : la Garde du vent alterne avec le Vent d'ouest (renvoi de 50 % de la magie).", "Plumes tranchantes : 5 coups."], m: ["Plumes de rapace : les coups peuvent viser deux fois le même héros.", "Œil de la tempête : tous les 4 tours, Tornade et ATK −30 % cumulatif.", "⚠ FATAL : un héros touché 2 fois par les Plumes en un tour meurt (sauf réduction ≥ 50 %)."] },
+  gasha: { h: ["Os régénérés : l'Armure non brisée en un tour se reforme pleine.", "Cri des morts : ATK −30 %."], m: ["Éclats d'os : briser l'Armure inflige 180 % à l'équipe.", "L'Étreinte ignore la provocation.", "⚠ FATAL : Étreinte sur un héros sous 60 % PV = mort définitive."] },
+  ryujin: { h: ["Marée montante : +5 % d'ATK du boss par tour.", "Perle éclaboussante : le bouclier de la Perle, non brisé le tour même, renvoie 20 %."], m: ["Tsunami annoncé 3 tours à l'avance : bouclier + réduction cumulés ≥ 60 % requis.", "Colère : +15 % d'ATK cumulatif par tour.", "⚠ FATAL : un Tsunami sans protection suffisante = défaite."] },
+  phenix: { h: ["Deuxième œuf : renaît deux fois (40 % puis 20 %), chaque renaissance brûle l'équipe.", "Flamme sœur : une Aile sur trois renvoie aussi 30 % du physique."], m: ["Soleil noir : après la 1re renaissance, l'équipe perd 5 % PV par tour jusqu'à un retrait de malus.", "Supernova inévitable à chaque renaissance.", "⚠ FATAL : une Supernova sans bouclier d'équipe actif = défaite."] },
+  aluna: { h: ["Fils du destin : 2 héros marqués d'un fil au début de chaque forme. Le fil devient la cible de l'exécution : retire le malus ou protège la cible (provocation + réduction ≥ 50 %)."], m: ["Trame fermée : la Tisseuse ne peut plus être provoquée.", "Renaissance double (66 % puis 33 %) et Fureur +15 % par tour en forme 3.", "⚠ FATAL : une exécution sur un héros non protégé (provocation + réduction ≥ 50 %), ou un Jugement sans bouclier d'équipe = défaite."] },
+};
+const modeRules = (id, mode) => { const i = MODEINFO[id]; if (!i || mode === "n") return []; return mode === "m" ? [...i.h, ...i.m] : i.h; };
+
+// réglage par boss et par mode (issu de la simulation, étape 7) : multiplicateurs de PV et d'ATK en plus de MODES
+let TUNE = {"kappa":{"n":{"hp":6.85,"atk":3.17},"h":{"hp":3.83,"atk":2.24},"m":{"hp":2,"atk":1.52}},"kitsune":{"n":{"hp":4.5,"atk":2.47},"h":{"hp":3.36,"atk":2.07},"m":{"hp":2.83,"atk":1.87}},"oni":{"n":{"hp":4.42,"atk":2.44},"h":{"hp":2.54,"atk":1.75},"m":{"hp":1,"atk":1.0}},"jiangshi":{"n":{"hp":2.83,"atk":1.87},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"tengu":{"n":{"hp":2.18,"atk":1.6},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"gasha":{"n":{"hp":1.54,"atk":1.3},"h":{"hp":1,"atk":1.0},"m":{"hp":1,"atk":1.0}},"ryujin":{"n":{"hp":0.92,"atk":0.95},"h":{"hp":0.59,"atk":0.73},"m":{"hp":1,"atk":1.0}},"phenix":{"n":{"hp":0.74,"atk":0.83},"h":{"hp":0.35,"atk":0.54},"m":{"hp":1,"atk":1.0}},"aluna":{"n":{"hp":0.55,"atk":0.69},"h":{"hp":0.35,"atk":0.54},"m":{"hp":1,"atk":1.0}}};
 function startFight() {
-  const r = S.run, { b, i: bi, loop } = bossAt(r.floor), k = Math.pow(1.3, loop);
-  const boss = { ...b, maxHp: Math.round(b.hp * k * HPMUL * (1 + 0.06 * bi)), atk: Math.round(b.atk * k * ATKMUL * (1 + 0.1 * bi)), pdef: Math.round(b.pdef * (1 + 0.08 * loop)), mdef: Math.round(b.mdef * (1 + 0.08 * loop)),
+  const b = BOSSES.find((x) => x.id === SEL.boss) || BOSSES[0], bi = BOSSES.indexOf(b), loop = 0, k = 1, M = MODES[SEL.mode] || MODES.n;
+  const r = S.run = { mods: {}, heroMods: {}, heroes: S.team.map((id) => ({ id, hpPct: 1 })) };
+  const T = (TUNE[b.id] || {})[SEL.mode] || { hp: 1, atk: 1 };
+  const boss = { ...cloneBoss(b, SEL.mode), maxHp: Math.round(b.hp * k * M.hp * T.hp * HPMUL * (1 + 0.06 * bi)), atk: Math.round(b.atk * k * M.dmg * T.atk * ATKMUL * (1 + 0.1 * bi)), pdef: Math.round(b.pdef * (1 + 0.08 * loop)), mdef: Math.round(b.mdef * (1 + 0.08 * loop)),
     shield: 0, st: [], broken: false, stun: false, phase: 1, step: 0, intent: null, reborn: false, enr: 0 };
   boss.hp = boss.maxHp;
   const m = r.mods || {};
+  const relic = S.relicSel && S.relics && S.relics[S.relicSel] ? S.relicSel : null;
   const heroes = sortRoles(r.heroes.map((x) => x.id)).map((id) => r.heroes.find((x) => x.id === id)).map((rh) => {
     const s = heroStats(rh.id, r), c = kitOf(CH[rh.id]), hp = Math.round(s.hp * rh.hpPct);
-    return { id: rh.id, c, maxHp: s.hp, hp, atk: s.atk, def: s.def, el: c.el, dt: ROLE[c.role].dt, cd: [0, 0, 3], st: [], shield: hp > 0 && m.shield ? Math.round(s.hp * 0.15 * m.shield) : 0, acted: false, dead: hp <= 0 };
+    return { id: rh.id, c, maxHp: s.hp, hp, atk: s.atk, def: s.def, el: c.el, dt: ROLE[c.role].dt, cd: [0, 0, 0, relic === "ryujin" ? 1 : 2], charge: 0, sheath: c.id === "p1", draw: 0, st: [], shield: hp > 0 && m.shield ? Math.round(s.hp * 0.15 * m.shield) : 0, acted: false, dead: hp <= 0 };
   });
-  F = { boss, heroes, round: 1, phase: "player", active: 0, pending: null, busy: false, souls: m.soul || 0, log: [], over: false, gauge: 0, sel: null, acting: null };
+  F = { boss, heroes, round: 1, phase: "player", active: 0, pending: null, busy: false, souls: m.soul || 0, log: [], over: false, gauge: 0, sel: null, acting: null, soak: null, mirrorOn: false, mirror: 0, lost: false, wrong: false, relic, rlUsed: 0, teamDecoy: false };
+  if (boss.threads) markThreads();
   screen = "fight";
   musStart();
   pickIntent();
@@ -4221,14 +4663,29 @@ function startFight() {
   newRound(true);
   log(`${boss.name} vous barre la route.`);
 }
-function pickIntent() {
-  const b = F.boss, pat = b.phase === 3 && b.p3 ? b.p3 : b.phase >= 2 ? b.p2 : b.p1;
+// règles de mode : Normal soigne l'équipe entre les phases (30 %, à régler), pas Héroïque ni Mythique
+function phaseHeal(b) {
+  if ((b.mode || "n") !== "n" || !F) return;
+  F.heroes.forEach((h) => { if (!h.dead) healHero(h, h.maxHp * 0.3, true); });
+  log("L'équipe reprend son souffle (+30 % PV).");
+}
+function nextMove(b) {
+  if (b.every && ((b.nmc = (b.nmc || 0) + 1) % b.every.n === 0)) return b.every.k;
+  const pat = b.phase === 3 && b.p3 ? b.p3 : b.phase >= 2 ? b.p2 : b.p1;
   b.mcd = b.mcd || {};
   for (const k in b.mcd) if (b.mcd[k] > 0) b.mcd[k]--;
   let pick = null;
   for (let t = 0; t < pat.length && !pick; t++) { const k = pat[(b.step + t) % pat.length]; if (!(b.moves[k].cd && b.mcd[k] > 0)) { pick = k; b.step += t; } }
-  b.intent = pick || pat[b.step % pat.length]; b.step++;
-  if (b.moves[b.intent].cd) b.mcd[b.intent] = b.moves[b.intent].cd;
+  const key = pick || pat[b.step % pat.length]; b.step++;
+  if (b.moves[key].cd) b.mcd[key] = b.moves[key].cd;
+  return key;
+}
+// annonce 2 tours à l'avance : b.intent (prochain tour du boss) + b.queue[0] (celui d'après)
+function pickIntent() {
+  const b = F.boss; b.queue = b.queue || [];
+  const L = (b.look || 2) - 1;
+  while (b.queue.length < L + 1) b.queue.push(nextMove(b));
+  b.intent = b.queue.shift();
   const al = alive(); b.aim = al.length ? F.heroes.indexOf(rnd(al)) : -1;
 }
 // Héros visés par la prochaine technique du boss (même logique que bossAct)
@@ -4236,17 +4693,25 @@ function bossTargets() {
   const b = F.boss; if (!b || b.stun || F.over) return [];
   const mv = b.moves[b.intent], al = alive();
   if (!mv || !al.length || mv.t === "self") return [];
+  if (F.soak && F.heroes[F.soak.hi] && !F.heroes[F.soak.hi].dead) return [F.heroes[F.soak.hi]];
   if (mv.t === "aoe" || mv.t === "multi") return al;
-  const tt = al.find((h) => h.st.some((s) => s.k === "taunt")); if (tt) return [tt];
-  if (mv.t === "charm") return [al.slice().sort((x, y) => hAtk(y) - hAtk(x))[0]];
-  if (mv.t === "exec") return [al.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp)[0]];
-  let h = F.heroes[b.aim]; if (!h || h.dead) { h = rnd(al); b.aim = F.heroes.indexOf(h); }
+  const vis = al.filter((h) => !h.st.some((s) => s.k === "vanish")), pool = vis.length ? vis : al;
+  const isT = (h) => h.st.some((s) => s.k === "taunt"), tt = mv.noTaunt ? null : al.find(isT);
+  if (mv.t === "exec" && b.threads) {
+    const th = pool.filter((h) => h.st.some((s) => s.k === "thread"));
+    if (th.length) { const tk = mv.noTaunt ? null : al.find((h) => isT(h) && hDr(h) >= 0.5); return [tk || th[0]]; }
+  }
+  if (mv.t === "exec" && mv.two) {
+    const rest = pool.filter((h) => h !== tt).sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp);
+    return (tt ? [tt, rest[0]] : rest.slice(0, 2)).filter(Boolean);
+  }
+  if (tt) return [tt];
+  if (mv.t === "charm") return [pool.slice().sort((x, y) => hAtk(y) - hAtk(x))[0]];
+  if (mv.t === "exec") return [pool.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp)[0]];
+  let h = F.heroes[b.aim]; if (!h || h.dead || !pool.includes(h)) { h = rnd(pool); b.aim = F.heroes.indexOf(h); }
   return [h];
 }
-const BASIC = { n: "Attaque", d: "Frappe à 100 % ATK.", cd: 0, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 6 }] };
-function guardSk(h) {
-  return { n: "Garde", d: "−50 % de dégâts subis jusqu'à ton prochain tour.", cd: 0, tgt: "self", fx: [{ k: "dr", p: 0.5, d: 1 }] };
-}
+const FOC = { n: "Concentration", d: "Aucune attaque : les recharges de tes compétences baissent de 1 et tu subis 25 % de dégâts en moins ce tour.", cd: 0, tgt: "self", foc: true, fx: [{ k: "dr", p: 0.25, d: 1 }] };
 const AWK = [
   null,
   { si: 0, t: "★2 · Attaque +10 % de puissance" },
@@ -4254,10 +4719,10 @@ const AWK = [
   { si: 2, t: "★4 · Ultime : recharge −1 tour" },
   { si: 2, t: "★5 · Ultime : +50 % de puissance" },
 ];
-const awMul = (id, si) => { const st = stars(id); return si === 0 && st >= 2 ? 1.1 : si === 2 && st >= 5 ? 1.5 : 1; };
-const awCd = (id, si) => (si === 2 && stars(id) >= 4) || (si === 1 && stars(id) >= 3) ? 1 : 0;
+const awMul = () => 1; // redesign : plus de renforcement de statistiques
+const awCd = () => 0;
 const awTag = (id, si) => { const m = awMul(id, si), c = awCd(id, si); return (m > 1 || c) ? ` <em class="awk">★ ${m > 1 ? "+" + Math.round((m - 1) * 100) + " %" : ""}${m > 1 && c ? " · " : ""}${c ? "recharge −1" : ""}</em>` : ""; };
-const awList = (id) => `<div class="sk awk-list"><div class="sk-h"><b>Éveil</b><span>${stars(id) || 0} / 5 ★</span></div>${AWK.map((a, k) => a ? `<p class="${stars(id) >= k + 1 ? "on" : "off"}">${a.t}</p>` : "").join("")}</div>`;
+const awList = () => "";
 // ===================== VOIES ALTERNATIVES ET COMBOS =====================
 const ALT = {
   t1: [{ n: "Posture du moine", d: "Provoque 3 tours et réduit ses dégâts subis de 20 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 3 }, { k: "dr", p: 0.2, d: 3 }] },
@@ -4313,13 +4778,14 @@ Object.keys(ALT).forEach((id) => ALT[id].forEach((s) => { if (!s.el) s.el = CH[i
 const altGot = (id, si) => !!(S.owned[id] && S.owned[id].alt && S.owned[id].alt[si - 1]);
 const altEq = (id, si) => altGot(id, si) && !!(S.owned[id].eq && S.owned[id].eq[si - 1]);
 function kitOf(c) {
-  if (!ALT[c.id] || !S.owned[c.id]) return c;
+  const V = VAR[c.id], o = S.owned[c.id]; if (!V || !o) return c;
   const sk = c.skills.slice();
-  [1, 2].forEach((si) => { if (altEq(c.id, si)) sk[si] = ALT[c.id][si - 1]; });
-  return sk.some((s, i) => s !== c.skills[i]) ? { ...c, skills: sk } : c;
+  V.forEach((v, i) => { if (varOn(c.id, i)) sk[v.slot] = varSk(c.id, i); });
+  return sk.some((x, i) => x !== c.skills[i]) ? { ...c, skills: sk } : c;
 }
 function setAlt(id, si, v) { const o = S.owned[id]; if (!o) return; o.eq = o.eq || [0, 0]; o.eq[si - 1] = v && altGot(id, si) ? 1 : 0; save(); }
 function rollDrop() {
+  return null; // redesign : remplacé par les variantes A/B
   const r = S.run; if (!r || Math.random() > 0.15) return null;
   const pool = [];
   r.heroes.forEach((rh) => { if (ALT[rh.id]) [1, 2].forEach((si) => { if (!altGot(rh.id, si)) pool.push([rh.id, si]); }); });
@@ -4328,12 +4794,11 @@ function rollDrop() {
   o.alt = o.alt || [0, 0]; o.alt[si - 1] = 1; o.nw = 1; save();
   return { id, si, n: ALT[id][si - 1].n };
 }
-const kitList = (id) => { const o = S.owned[id]; if (!o || !ALT[id]) return "";
-  return `<div class="sk kitlist"><div class="sk-h"><b>Voies alternatives</b><span>${[1, 2].filter((si) => altGot(id, si)).length} / 2 obtenues</span></div>` + [1, 2].map((si) => {
-    const base = CH[id].skills[si], alt = ALT[id][si - 1], got = altGot(id, si), eq = altEq(id, si);
-    return `<div class="kitrow"><div class="kopt ${eq ? "" : "on"}" data-act="eqalt" data-id="${id}" data-si="${si}" data-v="0"><i>${si === 2 ? "Ultime" : "Sort"} · d'origine</i><b>${base.n}</b><p>${base.d}</p></div>`
-      + `<div class="kopt ${eq ? "on" : ""} ${got ? "" : "lock"}" ${got ? `data-act="eqalt" data-id="${id}" data-si="${si}" data-v="1"` : ""}><i>${si === 2 ? "Ultime" : "Sort"} · voie alternative</i><b>${got ? alt.n : "🔒 Technique inconnue"}</b><p>${got ? alt.d : "S'obtient par drop aléatoire après une victoire, une seule fois."}</p></div></div>`;
-  }).join("") + `</div>`; };
+const kitList = (id) => { const V = VAR[id], o = S.owned[id]; if (!V || !o) return "";
+  return `<div class="sk kitlist"><div class="sk-h"><b>Variantes de compétences</b><span>${V.filter((_, i) => varGot(id, i)).length} / 2 débloquées</span></div>` + V.map((v, i) => {
+    const got = varGot(id, i), on = varOn(id, i), base = KITS[id][v.slot];
+    return `<div class="kitrow"><div class="kopt ${on ? "on" : ""} ${got ? "" : "lock"}" ${got ? `data-act="vareq" data-id="${id}" data-i="${i}"` : ""}><i>${i ? "B" : "A"} · remplace « ${base.n} »${got ? (on ? " — équipée" : " — touche pour équiper") : ""}</i><b>${got ? v.n : "🔒 " + (i ? "3" : "2") + " exemplaires requis"}</b><p>${got ? v.d : "Une variante change l'usage d'une compétence, sans la rendre plus forte."}</p></div></div>`;
+  }).join("") + `<p class="note">4 exemplaires : apparence alternative (illustration à venir).${o.fr ? ` Fragments : ${o.fr}.` : ""}</p></div>`; };
 
 // ---- combos amorce / finisseur ----
 const COMBO = {
@@ -4381,11 +4846,12 @@ const CELX = {
   s5: { j: "満月の蓮", n: "Lotus de la pleine lune", m: 3.5, tgt: "allies", d: "Résurrection (60 %), soin 30 %, −25 % dégâts subis (2 tours).", fx: [{ k: "revive", p: 0.6 }, { k: "healPct", p: 0.3 }, { k: "dr", p: 0.25, d: 2 }] },
   s6: { j: "鳳凰の再生", n: "Renaissance du Phénix", m: 4.5, tgt: "allies", d: "Résurrection (50 %), ATK d'équipe +25 % (2 tours), dégâts de Feu au boss.", fx: [{ k: "revive", p: 0.5 }, { k: "buff", p: 0.25, d: 2 }] }
 };
+CHARS.forEach((c) => { if (CELX[c.id]) CELX[c.id].n = c.skills[3].n; });
 const CELV = new Set(["p1", "p2", "p3", "p4", "p5"]); // cinématiques vidéo disponibles
-const celSk = (h) => { const x = CELX[h.id]; if (!x) return { n: "Celestial", d: `Invocation à ${Math.round(CEL_M * 100)} % ATK. Vide la jauge.`, cd: 0, tgt: "boss", cel: true, fx: [{ k: "dmg", m: CEL_M, post: 90 }] }; return { n: x.n, d: x.d, cd: 0, tgt: x.tgt, cel: true, fx: [...(x.pre || []), { k: "dmg", m: x.m, post: 90, ...(x.hits ? { hits: x.hits, m: x.m / x.hits } : {}) }, ...x.fx] }; };
-const getSk = (h, si) => (si === "atk" ? BASIC : si === "grd" ? guardSk(h) : si === "cel" ? celSk(h) : h.c.skills[si]);
-const skName = (h, si) => (typeof si === "number" ? getSk(h, si).n : si === "grd" ? "Garde" : si === "cel" ? "Celestial" : "Attaque");
-const celReady = () => F && F.gauge >= 9 && !F.plan.some((p) => p && p.si === "cel");
+// Ultime : cinématique (celCine) puis effets de la compétence 4
+const getSk = (h, si) => (si === "foc" ? FOC : h.c.skills[si]);
+const skName = (h, si) => (si === "foc" ? "Concentration" : getSk(h, si).n);
+const ultReady = (h) => h.cd[3] <= 0;
 let stopPart = null;
 // ===================== ENVIRONNEMENT DE COMBAT (filtre « cinéma », pixel snap, ombres) =====================
 window.SNAP = window.SNAP || {};
@@ -4430,7 +4896,7 @@ function skBanner(kind, who, name, glyph, col) {
   const sc = document.getElementById("scene"); if (!sc) return;
   sc.querySelectorAll(".vban").forEach((e) => e.remove());
   const d = document.createElement("div"); d.className = "vban " + kind; if (col) d.style.setProperty("--c", col);
-  d.innerHTML = `<span class="vg">${glyph}</span><span class="vt"><span class="vw">${who}</span><span class="vn">${name}</span></span>`;
+  d.innerHTML = `<span class="vg${glyph.startsWith('<span class="spi') ? " sp" : ""}">${glyph}</span><span class="vt"><span class="vw">${who}</span><span class="vn">${name}</span></span>`;
   sc.appendChild(d); setTimeout(() => d.remove(), 1700);
 }
 setTimeout(snapBgs, 400);
@@ -4466,7 +4932,7 @@ function renderFightShell() {
 const VIC = { atk: '<svg viewBox="0 0 24 24"><path d="M12 2l6 8h-4v7h-4v-7H6z" fill="currentColor"/><rect x="6" y="19" width="12" height="3" fill="currentColor"/></svg>', guard: '<svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>', poison: '<svg viewBox="0 0 24 24"><path d="M12 2C9 8 5 11 5 15a7 7 0 0014 0c0-4-4-7-7-13z" fill="currentColor"/><circle cx="9.5" cy="15" r="1.6" fill="#0c0709"/></svg>', burn: '<svg viewBox="0 0 24 24"><path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-4 2-7 2 1 3 2 4-5z" fill="currentColor"/></svg>' };
 const VKEY = { buff: "atk", selfatk: "atk", dr: "guard", poison: "poison", burn: "burn" };
 const vChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : n; const ic = VKEY[s.k]; return `<span class="vs ${ic ? "s-" + ic : good ? "good" : "bad"}" title="${label}">${ic ? VIC[ic] : label.slice(0, 3)}<sub>${s.d}</sub></span>`; }).join("");
-const stChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : n; return `<span class="st ${good ? "good" : "bad"}">${label}<sub>${s.d}</sub></span>`; }).join("");
+const stChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : n; return `<span class="st ${good ? "good" : "bad"}">${label}${s.d < 50 ? `<sub>${s.d}</sub>` : ""}</span>`; }).join("");
 function update() {
   if (!F) return;
   const b = F.boss;
@@ -4479,17 +4945,16 @@ function update() {
   if (b.forms) { const k = "b:" + b.forms[Math.min(b.phase, b.forms.length) - 1], im = document.querySelector("#bstage .bimg"); if (im && im.dataset.px !== k && ART[k]) { im.dataset.px = k; im.src = ART[k]; } }
   { const dk = disc(b.id), dmgT = b.pdef > b.mdef * 1.15 ? "m" : b.mdef > b.pdef * 1.15 ? "p" : "";
     const we = weakTo(b.el);
-    $("bwk").innerHTML = `<span class="lbl">Faible</span>${dk.w ? `<span class="wi" style="--c:${ELEM[we].c}" title="${ELEM[we].n}">${ELEM[we].k}</span>` : `<span class="wi unk" title="Faiblesse inconnue">?</span>`}${dmgT ? `<span class="wi" style="--c:#e8dcc0">${dmgT === "m" ? "術" : "剣"}</span>` : ""}${stChips(b.st)}`; }
+    $("bwk").innerHTML = `<span class="lbl">Faible</span>${dk.w ? `<span class="wi" style="--c:${ELEM[we].c}" title="${ELEM[we].n}">${ELEM[we].k}</span>` : `<span class="wi unk" title="Faiblesse inconnue">?</span>`}${dmgT ? `<span class="wi" style="--c:#e8dcc0">${dmgT === "m" ? "術" : "剣"}</span>` : ""}${stChips(b.st)}${b.gauge ? `<span class="st bad">${b.gauge.n} ${b.gauge.max ? b.gauge.v + "/" + b.gauge.max : "+" + b.gauge.v + " %"}</span>` : ""}`; }
   $("bstage").classList.toggle("reflect", b.st.some((s) => s.k === "reflect"));
   const it = $("bint");
-  if (b.stun) { it.className = "intent stun"; it.innerHTML = `<i>暈</i><b>Étourdi</b><span class="idsc">Perd son prochain tour, subit +50 % de dégâts.</span>`; }
+  const slot = (k, i, extra) => { const mv = b.moves[k], g = mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単"; return `<div class="bslot${mv.big ? " big" : ""}${extra || ""}" data-s="${i}"><span class="btour">Tour ${i + 1}</span>${bossSp(b.id, k, b.el, mv.big) || `<i class="bgl">${g}</i>`}</div>`; };
+  if (b.stun) { it.className = "intent stun"; it.innerHTML = `<div class="bslot stunned" data-s="stun"><span class="btour">Tour 1</span><i class="bgl">暈</i></div>`; }
   else {
-    const mv = b.moves[b.intent];
-    const g = mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単";
+    const mv = b.moves[b.intent], alert = mv.fatal && b.mode === "m";
     it.className = "intent" + (mv.big ? " big" : "");
-    const tg = bossTargets();
-    const tl = mv.t === "self" ? "" : mv.t === "aoe" ? "Toute l'équipe" : mv.t === "multi" ? `${mv.hits} coups au hasard` : tg[0] ? tg[0].c.name : "";
-    it.title = mv.d; it.innerHTML = `<i>${g}</i><b>${mv.n}</b>${tl ? `<em class="itg">🎯 ${tl}</em>` : ""}<span class="idsc">${mv.d}</span>`;
+    const nx = (b.queue || []).slice(0, (b.look || 2) - 1);
+    it.innerHTML = slot(b.intent, 0, alert ? " alert" : "") + nx.map((k, j) => slot(k, j + 1)).join("");
   }
   const aims = bossTargets();
   const order = F.heroes.map((h, i) => ({ h, i })).filter((o) => !o.h.dead);
@@ -4553,9 +5018,9 @@ function renderSkills() {
   const dis = F.busy ? "disabled" : "";
   if (!S.band) { box.innerHTML = gridHtml(h); return; }
   box.innerHTML = launchHtml() + `<div class="vrow">
-    <button class="bbtn" data-act="skill" data-i="atk" ${dis} aria-label="Attaque" title="Attaque : 100 % ATK · ${ELEM[h.el].n} · ${h.dt === "p" ? "physique" : "magique"}"><div class="ic">${eli(h.el)}</div><div class="lb">Attaque</div><div class="vl">${fmt(skDmgVal(h, 100, -1))}</div></button>
-    <button class="bbtn grd" data-act="skill" data-i="grd" ${dis} aria-label="Garde" title="Garde : −50 % de dégâts subis"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Garde</div><div class="vl">−50 %</div></button>
-    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 2 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : ""}</div><p>${skDesc(h, s, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
+
+    <button class="bbtn grd" data-act="skill" data-i="foc" ${dis} aria-label="Concentration" title="Concentration : aucune attaque, recharges −1, −25 % de dégâts subis"><div class="ic"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg></div><div class="lb">Concentration</div><div class="vl">−25 %</div></button>
+    ${h.c.skills.map((s, i) => `<button class="sbtn ${i === 3 ? "ult" : ""}" data-act="skill" data-i="${i}" ${h.cd[i] > 0 || F.busy ? "disabled" : ""}><div class="nr"><b>${s.n}</b>${heroSp(h.c.id, i, skEl(h, s), { u: i === 3, v: varTag(h, i) }) || (s.fx.some((f) => f.k === "dmg" || f.k === "dot") ? eli(skEl(h, s)) : "")}</div><p>${skDesc(h, s, i)}${comboTag(h, s)}</p>${h.cd[i] > 0 ? `<div class="cdv"><div>${h.cd[i]}<small>tour${h.cd[i] > 1 ? "s" : ""}</small></div></div>` : ""}</button>`).join("")}
   </div>`;
 }
 
@@ -4563,19 +5028,19 @@ function renderSkills() {
 const icEl = (e) => `<span class="ic" style="--c:${ELEM[e].c}" title="${ELEM[e].n}">${ELEM[e].k}</span>`;
 const SWORD_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5l-.4 5.6-8.6 8.6-3.2-3.2 8.6-8.6z"/><path d="M6.4 13.3l4.3 4.3-1.4 1.4 1.5 1.5-1.5 1.5-1.5-1.5-2.4 2.4-1.5-1.5 2.4-2.4-1.5-1.5 1.5-1.5z"/></svg>';
 const SHIELD_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>';
+// repli sans dessin : pastille de la couleur de l'élément avec son symbole
+const fbIcon = (el, u, cd) => { const c = SPC[el] || SPC.terre; return `<span class="spi fb${u ? " u" : ""}${cd ? " cd" : ""}" style="--c1:${c[0]};--c2:${c[1]};--g:${c[2]}"><i class="fbg">${ELEM[el].k}</i>${cd > 0 ? `<i class="spn">${cd}</i>` : ""}</span>`; };
 function gridHtml(h) {
   const hi = F.heroes.indexOf(h), dis = F.busy ? "disabled" : "", key = (k) => (F.sel === hi + ":" + k ? " sel" : "");
-  const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${off || F.busy ? "disabled" : ""}>${inner}</button>`;
+  const cell = (k, inner, cls = "", off = false) => `<button class="cg ${cls}${key(k)}" data-act="skill" data-i="${k}" ${(off || F.busy) && !cls.includes("ico") ? "disabled" : ""}>${inner}</button>`;
   const sk = h.c.skills.map((s, i) => {
     const dmg = s.fx.some((f) => f.k === "dmg" || f.k === "dot"), cd = h.cd[i];
-    return cell(i, `<div class="t">${dmg ? icEl(skEl(h, s)) : '<span class="ic ph"></span>'}<b>${s.n}</b></div>${cd > 0 ? `<div class="ds lk">🔒 Recharge : ${cd} tour${cd > 1 ? "s" : ""}</div>` : `<div class="ds">${skDesc(h, s, i)}${comboTag(h, s)}</div>`}`, i === 2 ? "ult" : "", cd > 0);
+    const spi = heroSp(h.c.id, i, skEl(h, s), { u: i === 3, cd, v: varTag(h, i) });
+    return cell(i, spi || fbIcon(skEl(h, s), i === 3, cd), "ico" + (i === 3 ? " ult" : ""), cd > 0);
   });
-  const ready = celReady(), g = F.gauge;
-  const cel = cell("cel", `<div class="t">${icEl(h.el)}<b>Celestial</b></div>${ready ? `<div class="ds rd">${skDesc(h, celSk(h), -1)}</div>` : `<div class="pips">${Array.from({ length: 9 }, (_, q) => `<i class="${q < g ? "on" : ""}"></i>`).join("")}</div>`}`, "cel" + (ready ? " ready" : ""), !ready);
   return `<div class="gridm">
-    ${cell("atk", `<div class="t"><span class="ic grdi" style="--c:#ffd9a0">${SWORD_SVG}</span><b>Attaque</b></div><div class="ds vv">${fmt(skDmgVal(h, 100, -1))}</div>`, "small")}
-    ${cell("grd", `<div class="t"><span class="ic grdi" style="--c:#9fc0ff">${SHIELD_SVG}</span><b>Garde</b></div><div class="ds vv">−50 %</div>`, "small grd")}
-    ${sk.join("")}${cel}</div>`;
+    ${cell("foc", `<span class="spi fb" style="--c1:#2a3a5a;--c2:#0c1424;--g:#9fc0ff"><i class="fbg">${SHIELD_SVG}</i></span>`, "ico grd foc")}
+    ${sk.join("")}</div>`;
 }
 // héros actif avancé au centre, les autres estompés
 function layoutFront() {
@@ -4611,7 +5076,31 @@ function bossHead(img) {
     return (HEADC[k] = { ty: top / h, cx: n ? sx / n / w : 0.5 });
   } catch (e) { return null; }
 }
+// pieds du boss : toujours sur la même ligne que les pieds du héros le plus bas (dernier pixel opaque des sprites)
+const FOOTC = {};
+function footY(img) {
+  const k = img.currentSrc || img.src; if (!k || !img.naturalWidth) return null;
+  if (FOOTC[k] != null) return FOOTC[k];
+  try {
+    const w = img.naturalWidth, h = img.naturalHeight, c = document.createElement("canvas"); c.width = w; c.height = h;
+    const x = c.getContext("2d"); x.drawImage(img, 0, 0); const d = x.getImageData(0, 0, w, h).data;
+    for (let y = h - 1; y >= 0; y--) for (let i = 0; i < w; i++) if (d[(y * w + i) * 4 + 3] > 40) return (FOOTC[k] = (y + 1) / h);
+  } catch (e) {}
+  return null;
+}
+function alignBossFeet() {
+  const bx = document.getElementById("bstage"), bi = document.querySelector("#bstage .bimg"), sc = document.getElementById("scene");
+  if (!bx || !bi || !sc || !document.querySelector(".fight.ug")) return;
+  if (!bi.complete || !bi.naturalWidth) { bi.addEventListener("load", () => { alignBossFeet(); placeBossName(); }, { once: true }); return; }
+  const k = sc.getBoundingClientRect().width / sc.offsetWidth || 1;
+  bx.style.setProperty("translate", "0 0", "important");
+  let hf = -1;
+  document.querySelectorAll(".pcw .pimg").forEach((im) => { if (!im.complete || !im.naturalWidth) return; const r = im.getBoundingClientRect(), f = footY(im); hf = Math.max(hf, r.top + r.height * (f == null ? 1 : f)); });
+  const bf = footY(bi), br = bi.getBoundingClientRect(); if (hf < 0 || bf == null || !br.height) return;
+  bx.style.setProperty("translate", "0 " + ((hf - (br.top + br.height * bf)) / k) + "px", "important");
+}
 function placeBossName() {
+  alignBossFeet();
   const sc = document.getElementById("scene"), bi = document.querySelector("#bstage .bimg"), bh = document.querySelector(".bhud"); if (!sc || !bi || !bh) return;
   if (!bi.complete || !bi.naturalWidth) { bi.addEventListener("load", placeBossName, { once: true }); return; }
   const fg = document.querySelector(".fight.ug"); if (!fg) { bh.style.removeProperty("left"); bh.style.removeProperty("top"); return; }
@@ -4654,7 +5143,7 @@ function celCine(h) {
 // ===================== PLANIFICATION DU TOUR =====================
 function actPrio(h, si) {
   const sk = getSk(h, si), ks = sk.fx.map((f) => f.k), has = (a) => ks.some((k) => a.includes(k));
-  if (has(["dmg"])) return has(["debuff", "dot", "mark"]) ? 1 : sk.fin || si === 2 || si === "cel" ? 3 : 2; // l'ultime ne passe en dernier que s'il n'applique ni soin, buff, affaiblissement ni poison
+  if (has(["dmg"])) return has(["debuff", "dot", "mark"]) ? 1 : sk.fin || si === 3 ? 3 : 2; // l'ultime ne passe en dernier que s'il n'applique ni soin, buff, affaiblissement ni poison
   if (has(["debuff", "dot", "mark"])) return 1;
   if (has(["heal", "healPct", "regen", "revive"])) return -1;
   return 0;
@@ -4685,8 +5174,8 @@ async function launchPlan() {
     if (F.boss.hp <= 0 && await bossDown()) return;
     const h = F.heroes[i], p = F.plan[i]; if (!h || h.dead || h.acted) continue;
     let si = p.si, ti = p.ti;
-    if (typeof si === "number" && h.cd[si] > 0) si = "atk";
-    if (si === "cel" && F.gauge < 9) si = "atk";
+    if (typeof si === "number" && h.cd[si] > 0) si = "foc";
+
     const sk = getSk(h, si);
     if (sk.tgt === "ally" && (ti == null || F.heroes[ti].dead)) { const al = F.heroes.findIndex((t) => !t.dead); ti = al; }
     const f = F; await useSkill(i, si, ti);
@@ -4702,6 +5191,7 @@ function nextActive() {
 function newRound(first) {
   if (!first) F.heroes.forEach((h) => { h.cd = h.cd.map((c) => Math.max(0, c - 1)); });
   F.heroes.forEach((h) => { h.acted = h.dead; });
+  F.soak = null; F.mirrorOn = false; F.mirror = 0; F.wrong = false;
   F.phase = "player"; F.pending = null; F.busy = false; F.plan = [];
   nextActive(); update();
 }
@@ -4714,28 +5204,36 @@ function discover(b, el, type) {
 function dmgBoss(h, m, o = {}) {
   const b = F.boss, type = h.dt, mods = md(), bs = bossEl(), el = o.el || h.el;
   if (b.hp <= 0) return 0;
+  if (F.phase === "player" && b.gauge && b.gauge.max && ((type === "p" && b.st.some((s) => s.k === "evade")) || (type === "m" && b.st.some((s) => s.k === "reflect" && s.type === "m")))) F.wrong = true;
+  if (b.rageOn && type === "p") b.rage = (b.rage || 0) + 0.05;
   if (type === "p") { const ev = b.st.find((s) => s.k === "evade"); if (ev && Math.random() < ev.p) { floatAt(bs, "Esquive", "info"); return 0; } }
   let d = hAtk(h) * m * 100 / (100 + bDef(type) * (1 - (o.pen || 0)));
   const weak = weakTo(b.el) === el;
   discover(b, el, type);
   if (weak) d *= 1.5 * (1 + (mods.weak || 0));
-  d *= 1 + sum(b.st, "mark");
+  d *= 1 + sum(b.st, "mark") + b.st.filter((s) => s.k === "exposed" && (!s.lim || F.heroes.filter((x) => x.acted && !x.dead).length < s.lim)).reduce((a, s) => a + (s.p || 0), 0);
   if (o.exec && b.hp / b.maxHp < 0.35) d *= o.exec;
   d *= 1 - Math.min(0.6, sum(b.st, "dr"));
   const crit = o.crit || Math.random() < 0.08 + (mods.crit || 0); if (crit) d *= 1.6;
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
-  let toHp = d;
+  let toHp = d; const hadSh = b.shield > 0, spl = b.splash;
   if (b.shield > 0) { const eff = type === "p" ? 0.35 : 1, abs = Math.min(b.shield, d * eff); b.shield = Math.round(b.shield - abs); toHp = Math.max(0, Math.round(d - abs / eff)); floatAt(bs, "Bouclier −" + fmt(abs), "shield"); }
+  if (b.shield <= 0) b.splash = false;
   b.hp = Math.max(0, b.hp - toHp);
+  if (hadSh && spl && !h.dead) hurtHero(h, d * 0.2, { raw: true, type: "p", noCounter: true });
+  const sw = b.st.find((s) => s.k === "swell");
+  if (sw && b.hp > 0) { sw.hit = sw.hit || {}; if (!sw.hit[h.id]) { sw.hit[h.id] = 1; const v = Math.round(b.maxHp * 0.05); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bs, "+" + fmt(v), "heal"); } }
   if (toHp > 0) floatAt(bs, (crit ? "Critique " : "") + fmt(toHp), crit ? "crit" : weak ? "weak" : "");
   flashCls(document.querySelector("#bstage .bimg"), "hit");
   lightAt("boss", ELEM[el].c, crit || weak);
   if (crit || o.post >= 30 || m >= 2.2) cam("zoom"); else if (weak) cam("shake-s");
   if (mods.ls) healHero(h, toHp * mods.ls, true);
   const rf = b.st.find((s) => s.k === "reflect" && s.type === type);
+  if (rf && rf.p >= 1 && d > 0 && h.c.role === "mag" && h.hp / h.maxHp < 0.6 && !h.dead) killHero(h, `${h.c.name} est terrassé par le Sceau.`);
   if (rf && d > 0) hurtHero(h, d * rf.p, { raw: true, noCounter: true });
   if (b.phase === 1 && b.hp > 0 && b.hp / b.maxHp < 0.5) {
-    b.phase = 2; b.step = 0; log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
+    b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
+    if (b.threads) markThreads();
     if (!b.stun) pickIntent();
   }
   return toHp;
@@ -4747,11 +5245,15 @@ function hurtHero(h, raw, o = {}) {
   let d = o.raw ? raw : raw * 100 / (100 + h.def * (o.type === "m" ? 0.75 : 1));
   d *= 1 - hDr(h);
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
+  if (F.mirrorOn && !o.dot) F.mirror = (F.mirror || 0) + d;
   if (h.shield > 0) { const a = Math.min(h.shield, d); h.shield -= a; d -= a; if (a) floatAt(el, "−" + fmt(a), "shield"); }
+  if (o.floorPct != null && o.type) { d = Math.min(d, Math.max(0, h.hp - Math.ceil(h.maxHp * o.floorPct))); }
   if (d > 0) { h.hp -= d; floatAt(el, "−" + fmt(d), o.dot ? "dot" : "hurt"); flashCls(el, "hit"); }
+  if (h.hp <= 0 && h.st.some((s) => s.k === "ash")) { h.st = h.st.filter((s) => s.k !== "ash"); h.hp = 1; floatAt(el, "Cendres du phénix", "heal"); log(`${h.c.name} renaît de ses cendres (1 PV).`); }
   if (h.hp <= 0) {
     h.hp = 0;
-    if (F.souls > 0) { F.souls--; h.hp = Math.round(h.maxHp * 0.3); log(`La Lanterne d'âme ramène ${h.c.name} !`); floatAt(el, "Ranimé", "heal"); }
+    if (F.relic === "gasha" && !F.rlUsed) { F.rlUsed = 1; h.hp = Math.round(h.maxHp * 0.2); log(`L'os de géant relève ${h.c.name} !`); floatAt(el, "Os de géant", "heal"); }
+    else if (F.souls > 0) { F.souls--; h.hp = Math.round(h.maxHp * 0.3); log(`La Lanterne d'âme ramène ${h.c.name} !`); floatAt(el, "Ranimé", "heal"); }
     else { h.dead = true; h.st = []; h.shield = 0; log(`${h.c.name} est tombé.`); }
   } else if (!o.noCounter) {
     const ct = h.st.find((s) => s.k === "counter");
@@ -4762,6 +5264,7 @@ function hurtHero(h, raw, o = {}) {
 function healHero(h, amt, quiet) {
   if (h.dead) return 0;
   const el = heroEl(h);
+  if (F.boss.st.some((s) => s.k === "dive")) { if (!quiet) floatAt(el, "Noyade", "info"); return 0; }
   if (h.st.some((s) => s.k === "healblock")) { if (!quiet) floatAt(el, "Soins bloqués", "info"); return 0; }
   amt *= 1 + (md().heal || 0);
   const real = Math.min(h.maxHp - h.hp, Math.round(amt));
@@ -4775,48 +5278,83 @@ async function useSkill(hi, si, ti) {
   const h = F.heroes[hi], sk = getSk(h, si), b = F.boss, num = typeof si === "number";
   if (h.dead || h.acted || (num && h.cd[si] > 0)) return;
   F.busy = true; F.pending = null; F.sel = null; F.acting = hi;
-  if (si === "cel") { update(); await celCine(h); F.gauge = 0; }
+  if (sk.ult) { update(); await celCine(h); }
   const hm = S.run.heroMods[h.id] || {};
   let pw = num ? (1 + 0.3 * ((hm.sp || [])[si] || 0)) * awMul(h.id, si) : 1;
  
+  // effets spéciaux : prochaine attaque boostée (nxt), Fourreau de Kenta
+  let penX = 0;
+  if (sk.fx.some((f) => f.k === "dmg")) {
+    const nx = h.st.find((s) => s.k === "nxt"); if (nx) { pw *= 1 + nx.p; h.st = h.st.filter((s) => s !== nx); }
+    if (h.id === "p1") {
+      if (h.sheath) { pw *= 1.8; penX = 0.5; h.sheath = false; h.draw = 0; pop("IAÏ", "#ffd25a"); }
+      else { h.draw = (h.draw || 0) + 1; pw *= Math.max(0.4, 1 - 0.2 * h.draw); }
+    }
+  }
+  if (sk.foc) {
+    h.cd = h.cd.map((c) => Math.max(0, c - 1));
+    if (h.id === "m6") { h.charge = Math.min(5, (h.charge || 0) + 2); floatAt(heroEl(h), `Charges ${h.charge}/5`, "info"); }
+    if (h.id === "p1" && !h.sheath) { h.sheath = true; h.draw = 0; floatAt(heroEl(h), "Rengainé", "info"); }
+  }
   const cb = comboFor(h, sk);
   if (cb) { pw *= cb.mul || 1; pop("COMBO : " + cb.n.toUpperCase(), "#ffd25a"); log(`Combo ${cb.n} !`); sfxDiscover(); }
   const CM = cb ? { ...(cb.crit ? { crit: true } : {}), ...(cb.pen ? { pen: cb.pen } : {}) } : {};
   log(`${h.c.name} : ${sk.n}`);
-  skBanner("hero", h.c.name, sk.n, si === "grd" ? "守" : ELEM[skEl(h, sk)].k, si === "grd" ? "#9fc0ff" : ELEM[skEl(h, sk)].c);
+  skBanner("hero", h.c.name, sk.n, si === "foc" ? "集" : heroSp(h.c.id, si, skEl(h, sk), { u: !!sk.ult }) || ELEM[skEl(h, sk)].k, si === "foc" ? "#9fc0ff" : ELEM[skEl(h, sk)].c);
   const dmgFx = sk.fx.find((f) => f.k === "dmg"), melee = MELEE.includes(h.c.look.wpn);
-  heroMove(h, si === "grd" ? "guard" : dmgFx ? (melee ? "dash" : "cast") : "act", dmgFx ? 420 + (dmgFx.hits || 1) * 170 : 0);
-  if (si === "grd") supportFx("guard", [h]);
+  heroMove(h, si === "foc" ? "guard" : dmgFx ? (melee ? "dash" : "cast") : "act", dmgFx ? 420 + (dmgFx.hits || 1) * 170 : 0);
+  if (si === "foc") supportFx("guard", [h]);
   update();
   await sleep(dmgFx && melee ? 190 : 220);
   const allyT = sk.tgt === "ally" ? [F.heroes[ti]] : sk.tgt === "allies" ? F.heroes : [h];
   for (const fx of sk.fx) {
-    const tg = (fx.on === "self" ? [h] : allyT).filter((t) => t && !t.dead);
+    let tg = (fx.on === "self" ? [h] : fx.on === "allies" ? F.heroes : allyT).filter((t) => t && !t.dead);
+    if (fx.pick) tg = tg.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp).slice(0, fx.pick);
     switch (fx.k) {
       case "dmg":
-        for (let i = 0; i < (fx.hits || 1); i++) { if (b.hp <= 0 || h.dead) break; const big = (num && si === 2) || si === "cel"; sfxHit(skEl(h, sk), melee, big, i); await hitFx(h, i, big, skEl(h, sk)); dmgBoss(h, fx.m * pw, { ...fx, ...CM, el: skEl(h, sk) }); update(); await sleep(fx.hits > 1 ? 190 : 330); }
+        for (let i = 0; i < (fx.hits || 1); i++) { if (b.hp <= 0 || h.dead) break; const big = !!sk.ult; sfxHit(skEl(h, sk), melee, big, i); await hitFx(h, i, big, skEl(h, sk)); dmgBoss(h, (fx.m + (fx.perCharge || 0) * Math.min(h.charge || 0, sk.capCh || 99)) * pw * (fx.expMul && b.st.some((x) => x.k === "exposed") ? fx.expMul : 1), { ...fx, ...CM, pen: Math.max(fx.pen || 0, penX), el: skEl(h, sk) }); update(); await sleep(fx.hits > 1 ? 190 : 330); }
         break;
-      case "dot": { dotFx(h, skEl(h, sk)); const weak = weakTo(b.el) === skEl(h, sk); addSt(b, { k: fx.s, dmg: Math.round(hAtk(h) * fx.m * pw * (weak ? 1.5 : 1)), d: fx.d }); break; }
+      case "dot": { dotFx(h, skEl(h, sk)); const weak = weakTo(b.el) === skEl(h, sk); addSt(b, { k: fx.s, ...(fx.stack ? { type: "stk" + Math.random() } : {}), dmg: Math.round(hAtk(h) * fx.m * pw * (weak ? 1.5 : 1)), d: fx.d + (fx.dPer || 0) * (h.charge || 0) + (fx.s === "burn" && F.relic === "phenix" ? 1 : 0) }); break; }
       case "debuff": bossDebuffFx("#b46cff"); addSt(b, { k: fx.s + "down", p: fx.p, d: fx.d }); break;
       case "mark": bossDebuffFx("#ff6a9a"); addSt(b, { k: "mark", p: fx.p, d: fx.d }); break;
       case "heal": supportFx("heal", tg); tg.forEach((t) => healHero(t, hAtk(h) * fx.m * pw)); break;
       case "healPct": supportFx("heal", tg); tg.forEach((t) => healHero(t, t.maxHp * fx.p * pw)); break;
-      case "shield": supportFx("shield", tg); tg.forEach((t) => { const v = Math.round(h.maxHp * fx.p * pw); t.shield += v; floatAt(heroEl(t), "Bouclier " + fmt(v), "shield"); }); break;
-      case "taunt": supportFx("taunt", [h]); addSt(h, { k: "taunt", d: fx.d }); break;
-      case "dr": if (si !== "grd") supportFx("guard", tg); tg.forEach((t) => addSt(t, { k: "dr", p: fx.p, d: fx.d })); break;
+      case "shield": supportFx("shield", tg); tg.forEach((t) => { if (t.st.some((s) => s.k === "shieldblock")) { floatAt(heroEl(t), "Bouclier bloqué", "info"); return; } const v = Math.round(h.maxHp * fx.p * pw); t.shield += v; floatAt(heroEl(t), "Bouclier " + fmt(v), "shield"); }); break;
+      case "taunt": supportFx("taunt", [h]); addSt(h, { k: "taunt", d: fx.d + (F.relic === "oni" ? 1 : 0) }); break;
+      case "dr": if (si !== "foc") supportFx("guard", tg); tg.forEach((t) => addSt(t, { k: "dr", p: fx.p, d: fx.d })); break;
       case "buff": supportFx("buff", tg); tg.forEach((t) => addSt(t, { k: "buff", p: fx.p, d: fx.d })); break;
       case "counter": addSt(h, { k: "counter", p: fx.p * pw, d: fx.d }); break;
       case "regen": supportFx("heal", tg); tg.forEach((t) => addSt(t, { k: "regen", p: fx.p * pw, d: fx.d })); break;
-      case "evade": addSt(h, { k: "evade", p: fx.p, d: fx.d }); break;
-      case "cleanse": supportFx("cleanse", tg); tg.forEach((t) => { t.st = t.st.filter((s) => !NEG.includes(s.k)); }); break;
+      case "evade": tg.forEach((t) => addSt(t, { k: "evade", p: fx.p, d: fx.d })); break;
+      case "cleanse": supportFx("cleanse", tg); tg.forEach((t) => {
+        const had = t.st.some((s) => NEG.includes(s.k) && !s.perm);
+        if (fx.n) { let k = fx.n; t.st = t.st.filter((s) => { if (k > 0 && NEG.includes(s.k) && !s.perm) { k--; return false; } return true; }); }
+        else t.st = t.st.filter((s) => !NEG.includes(s.k) || s.perm);
+        if (F.relic === "jiangshi") addSt(t, { k: "ward", d: 3 });
+        if (F.relic === "kappa" && !F.rlUsed && had) { F.rlUsed = 1; healHero(t, t.maxHp * 0.1); }
+      }); if (b.sun) { b.sun = false; log("Le soleil noir s'éteint."); } break;
+      case "cdrOne": supportFx("buff", tg); tg.forEach((t) => { t.cd = t.cd.map((c) => Math.max(0, c - fx.n)); }); break;
+      case "selfhurt": hurtHero(h, h.maxHp * fx.p, { raw: true, type: "p", noCounter: true, floorPct: 0.01 }); break;
+      case "tdecoy": supportFx("shield", [h]); F.teamDecoy = true; floatAt(heroEl(h), "Clone", "info"); break;
       case "cdself": h.cd = h.cd.map((c) => Math.max(0, c - fx.n)); break;
       case "cdr": supportFx("buff", F.heroes.filter((t) => t !== h && !t.dead)); F.heroes.forEach((t) => { if (t !== h) t.cd = t.cd.map((c) => Math.max(0, c - fx.n)); }); break;
-      case "revive": F.heroes.forEach((t) => { if (t.dead) { t.dead = false; setTimeout(() => supportFx("revive", [t]), 30); t.hp = Math.round(t.maxHp * fx.p); t.acted = true; floatAt(heroEl(t), "Ranimé", "heal"); log(`${t.c.name} revient au combat !`); } }); break;
+      case "execimm": supportFx("guard", tg); tg.forEach((t) => addSt(t, { k: "execimm", d: fx.d })); break;
+      case "vanish": supportFx("guard", [h]); addSt(h, { k: "vanish", d: fx.d }); break;
+      case "decoy": supportFx("shield", tg); tg.forEach((t) => addSt(t, { k: "decoy", d: 3 })); break;
+      case "delay": bossDebuffFx("#b46cff"); b.delay = (b.delay || 0) + 1; floatAt(bossEl(), "Retardé", "info"); break;
+      case "soak": supportFx("taunt", [h]); F.soak = { hi: F.heroes.indexOf(h) }; addSt(h, { k: "dr", p: fx.p, d: 1 }); break;
+      case "mirror": supportFx("guard", F.heroes.filter((t) => !t.dead)); F.mirrorOn = true; F.mirror = 0; break;
+      case "nxt": addSt(h, { k: "nxt", p: fx.p, d: 3 }); break;
+      case "charge": h.charge = Math.min(fx.max || 5, (h.charge || 0) + fx.n); floatAt(heroEl(h), h.id === "s6" ? `Braises ${h.charge}/3` : `Charges ${h.charge}/5`, "info"); break;
+      case "sheathe": if (h.id === "p1") { h.sheath = true; h.draw = 0; floatAt(heroEl(h), "Rengainé", "info"); } break;
+      case "ash": supportFx("heal", tg); tg.forEach((t) => addSt(t, { k: "ash", d: fx.d || 4 })); break;
+      case "revive": if (b.mode === "m") { floatAt(heroEl(h), "Résurrection impossible", "info"); log("En Mythique, un héros tombé reste tombé."); break; } F.heroes.forEach((t) => { if (t.dead) { t.dead = false; setTimeout(() => supportFx("revive", [t]), 30); t.hp = Math.round(t.maxHp * (fx.p + (fx.pPer || 0) * (h.charge || 0))); t.acted = true; floatAt(heroEl(t), "Ranimé", "heal"); log(`${t.c.name} revient au combat !`); } }); break;
     }
   }
   if (cb) applyCombo(cb, h);
-  if (num && sk.fx.some((f) => f.k === "dmg" || f.k === "dot")) F.gauge = Math.min(9, F.gauge + 1);
-  if (num) h.cd[si] = sk.cd ? Math.max(1, sk.cd - ((hm.cd || [])[si] || 0) - awCd(h.id, si)) : 0;
+  if (sk.discharge) h.charge = sk.capCh ? Math.max(0, (h.charge || 0) - sk.capCh) : 0;
+  if (b.mode === "h" && sk.fx.some((f) => f.k === "revive")) h.cd[si] += 1;
+  if (num) h.cd[si] = sk.cd ? Math.max(1, sk.cd - ((hm.cd || [])[si] || 0) - awCd(h.id, si) - (si === 0 && F.relic === "tengu" ? 1 : 0)) : 0;
   h.acted = true; F.acting = null;
   update();
   await sleep(250);
@@ -4825,15 +5363,16 @@ async function useSkill(hi, si, ti) {
   F.busy = false;
   if (nextActive() < 0) await bossTurn(); else update();
 }
-async function rebirthCine(b) {
+async function rebirthCine(b, p) {
   const fight = document.querySelector(".fight"), ov = document.createElement("div");
   ov.className = "cine"; ov.innerHTML = '<div class="ct"><i>復活</i><b>' + b.name.split(",")[0] + ' renaît…</b></div>';
   if (fight) fight.appendChild(ov);
   musStop(); sfxBreak && sfxBreak();
   requestAnimationFrame(() => ov.classList.add("on"));
   await sleep(1100);
-  b.hp = Math.round(b.maxHp * b.rebirth); b.st = []; b.shield = 0; b.phase = 3; b.step = 0; b.stun = false; b.enr = 0;
+  b.hp = Math.round(b.maxHp * p); b.st = []; b.shield = 0; b.phase = 3; b.step = 0; b.queue = []; b.stun = false; b.enr = 0; phaseHeal(b);
   F.heroes.forEach((h) => { h.st = h.st.filter((s) => !(s.k === "poison" || s.k === "atkdown")); });
+  onBirth(b);
   pickIntent(); update(); log(b.name + " revient sous sa forme véritable !");
   await sleep(1500);
   ov.classList.remove("on"); await sleep(700); ov.remove();
@@ -4841,10 +5380,11 @@ async function rebirthCine(b) {
 }
 async function bossDown() {
   const b = F.boss;
-  if (b.rebirth && !b.reborn && b.forms) { b.reborn = true; await rebirthCine(b); return false; }
-  if (b.rebirth && !b.reborn) {
-    b.reborn = true; b.hp = Math.round(b.maxHp * b.rebirth); b.st = b.st.filter((s) => !DOTS.includes(s.k)); b.phase = 2;
-    log(`${b.name} renaît de ses cendres !`); pop("RENAISSANCE", "#ff8a1f"); update(); await sleep(900);
+  if (b.births && b.bn < b.births.length) {
+    const p = b.births[b.bn++];
+    if (b.forms) { await rebirthCine(b, p); return false; }
+    b.hp = Math.round(b.maxHp * p); b.st = b.st.filter((s) => !DOTS.includes(s.k)); b.phase = 2; b.step = 0; b.queue = []; b.shield = 0; phaseHeal(b); onBirth(b);
+    log(`${b.name} renaît de ses cendres !`); pop("RENAISSANCE", "#ff8a1f"); if (!b.stun) pickIntent(); update(); await sleep(900);
     return false;
   }
   F.over = true; update();
@@ -4854,19 +5394,49 @@ async function bossDown() {
   return true;
 }
 async function bossTurn() {
-  const b = F.boss;
+  const b = F.boss, M = b.mode || "n";
   F.phase = "boss"; F.busy = true; update();
   await sleep(450);
+  // contrôles de début de tour (mécaniques de mode)
+  if (b.sh) {
+    const a = b.sh; a.t++;
+    if (b.shield <= 0) {
+      if (a.t === 1 && a.kind === "armure") {
+        exposeBoss(b);
+        if (b.bones) { log("Les éclats d'os jaillissent !"); cam("shake-b"); lightAt("party", "#e8dcc0", true); alive().forEach((h) => hurtHero(h, bAtk() * 1.8, { type: "p" })); update(); await sleep(600); }
+      }
+      b.sh = null; b.splash = false;
+    } else if (a.kind === "armure" && M !== "n") { b.shield = a.full; a.t = 0; floatAt(bossEl(), "Os régénérés", "shield"); }
+    else if (a.kind === "perle" && b.splashOn && a.t >= 1) b.splash = true;
+  }
+  if (b.gauge && b.gauge.max) {
+    if (F.wrong) { b.gauge.v++; floatAt(bossEl(), `Queue ${b.gauge.v}/${b.gauge.max}`, "info"); update(); if (b.gauge.v >= b.gauge.max) fatalLose("Les neuf queues se déploient."); }
+    F.wrong = false;
+  }
+  for (const h of alive()) {
+    const c = h.st.find((s) => s.k === "charmed"); if (!c) continue;
+    h.st = h.st.filter((s) => s !== c);
+    if (M === "m") killHero(h, `${h.c.name}, charmé, se jette dans les flammes.`);
+    else { const v = rnd(alive().filter((x) => x !== h)); if (v) { log(`${h.c.name}, charmé, frappe ${v.c.name} !`); hurtHero(v, Math.round(v.maxHp * 0.4), { raw: true, type: "p", noCounter: true, floorPct: 0.01 }); } }
+    update(); await sleep(500);
+  }
+  if (b.sun && !F.lost) { alive().forEach((h) => hurtHero(h, Math.round(h.maxHp * 0.05), { raw: true, type: "p", noCounter: true, dot: true })); log("Le soleil noir consume l'équipe."); update(); await sleep(450); }
+  if (F.lost || !alive().length) return defeat();
   for (const s of b.st.filter((s) => DOTS.includes(s.k))) {
     if (b.hp <= 0) break;
     b.hp = Math.max(0, b.hp - s.dmg); floatAt(bossEl(), fmt(s.dmg), "dot"); update(); await sleep(260);
   }
   if (b.hp <= 0 && await bossDown()) return;
+  let delayed = false;
   if (b.stun) {
     b.stun = false; log(`${b.name} est étourdi et perd son tour.`); floatAt(bossEl(), "Étourdi", "info"); await sleep(700);
+  } else if (b.delay > 0) {
+    b.delay--; delayed = true; log(`${b.name} est retardé : son action est repoussée d'un tour.`); floatAt(bossEl(), "Retardé", "info"); await sleep(700);
   } else {
     await bossAct(b.moves[b.intent]);
   }
+  if (F.lost) return defeat();
+  if (F.mirrorOn && F.mirror > 0 && b.hp > 0) { const v = Math.round(F.mirror); b.hp = Math.max(0, b.hp - v); floatAt(bossEl(), "Miroir " + fmt(v), "crit"); lightAt("boss", "#d6dde6", true); update(); await sleep(600); }
   if (b.hp <= 0 && await bossDown()) return;
   if (!alive().length) return defeat();
   // effets sur la durée des héros
@@ -4880,49 +5450,110 @@ async function bossTurn() {
   if (!alive().length) { await sleep(400); return defeat(); }
   const tick = (u) => { u.st = u.st.filter((s) => { if (s.fresh) { s.fresh = false; return true; } s.d--; return s.d > 0; }); };
   tick(b); F.heroes.forEach(tick);
-  if (!b.stun) pickIntent();
+  if (!b.stun && !delayed) pickIntent();
   F.round++;
-  if (b.phase === 3 && b.fury3) { b.enr += b.fury3; floatAt(bossEl(), "Fureur +10 %", "info"); }
+  if (b.tideOn) { b.tide = (b.tide || 0) + 0.05; b.gauge.v = Math.round(b.tide * 100); floatAt(bossEl(), "Marée +5 %", "info"); }
+  if (b.wrath) { b.enr += 0.15; floatAt(bossEl(), "Colère +15 %", "info"); }
+  if (b.phase === 3 && b.fury3) { b.enr += b.fury3; floatAt(bossEl(), `Fureur +${Math.round(b.fury3 * 100)} %`, "info"); }
   if (F.round > FURY_ROUND) { b.enr += 0.2; log(`Fureur céleste : ${b.name} gagne +20 % d'ATK.`); if (F.round === FURY_ROUND + 1) pop("FUREUR CÉLESTE", "#ff5a4a"); }
   await sleep(300);
   newRound(false);
 }
 async function bossAct(mv) {
-  const b = F.boss, fx = mv.fx || {};
+  const b = F.boss, fx = mv.fx || {}, M = b.mode || "n", pk = mv.prot || "any";
   log(`${b.name} : ${mv.n}`);
-  skBanner("boss", b.name, mv.n, mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単");
+  skBanner("boss", b.name, mv.n, bossSp(b.id, b.intent, b.el, mv.big) || (mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単"));
   flashCls(document.getElementById("bstage"), "lunge");
   await sleep(320);
   if (mv.t !== "self") { lightAt("party", mv.type === "m" ? ELEM[b.el].c : "#ff5a3a", mv.big); cam(mv.big ? "shake-b" : "shake-s"); }
-  const taunter = () => alive().find((h) => h.st.some((s) => s.k === "taunt"));
+  const isT = (h) => h.st.some((s) => s.k === "taunt");
+  const taunter = () => alive().find(isT);
+  const hitLog = []; let parried = false;
+  const sweep = mv.sweep ? alive().filter((h) => h.hp / h.maxHp < mv.sweep && h.shield <= 0) : [];
+  const flo = mv.floor ? mv.floor[M] : mv.t === "exec" ? { n: 0.4, h: 0.1, m: 0 }[M] : 0;
   const hitOne = (h, m) => {
+    const e = { h, hp0: h.hp, sh: h.shield > 0, dr: hDr(h), taunt: isT(h), pr: prot(h, pk), ev: h.st.some((s) => s.k === "evade") };
+    hitLog.push(e);
     bossHitFx(h, mv, b.el); sfxBossHit(mv, b.el);
-    const d = hurtHero(h, bAtk() * m, { type: mv.type });
+    const frac = h.hp / h.maxHp;
+    const d = hurtHero(h, bAtk() * m, { type: mv.type, floorPct: flo });
+    if (mv.dieBelow && frac < mv.dieBelow && !h.dead) killHero(h, `${h.c.name} est broyé.`);
+    if (mv.blood && d > 0 && !exposedNow(b)) b.blood = (b.blood || 0) + 0.05;
     if (fx.drain && d > 0) { const v = Math.round(d * fx.drain); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bossEl(), "+" + fmt(v), "heal"); }
+    return d;
   };
   const neg = (h) => {
-    if (h.dead) return;
+    if (h.dead || h.st.some((s) => s.k === "ward")) return;
     if (fx.burn) addSt(h, { k: "burn", dmg: Math.round(bAtk() * fx.burn.m), d: fx.burn.d });
     if (fx.poison) addSt(h, { k: "poison", dmg: Math.round(bAtk() * fx.poison.m), d: fx.poison.d });
-    if (fx.atkdown) addSt(h, { k: "atkdown", p: fx.atkdown.p, d: fx.atkdown.d });
+    if (fx.atkdown) addSt(h, { k: "atkdown", p: fx.atkdown.p, d: fx.atkdown.d, ...(fx.atkdown.stack ? { type: "s" + F.round } : {}) });
     if (fx.healblock) addSt(h, { k: "healblock", d: fx.healblock });
+    if (fx.shieldblock) addSt(h, { k: "shieldblock", d: fx.shieldblock });
+    if (fx.charmed) addSt(h, { k: "charmed", d: 2 });
   };
   if (mv.t === "single" || mv.t === "charm" || mv.t === "exec") {
-    const t = bossTargets()[0];
-    if (t) { hitOne(t, mv.m); neg(t); }
+    const ts = mv.t === "exec" ? bossTargets() : bossTargets().slice(0, 1);
+    for (const t of ts) {
+      const dc = t.st.find((s) => s.k === "decoy");
+      if (F.relic === "kitsune" && !F.rlUsed && mv.t === "single") { F.rlUsed = 1; floatAt(heroEl(t), "Raté", "info"); log("La queue de renard détourne le coup."); bossHitFx(t, mv, b.el); continue; }
+      if (F.teamDecoy && (mv.t === "single" || mv.t === "exec")) { F.teamDecoy = false; parried = true; floatAt(heroEl(t), "Clone", "info"); log("Un clone prend le coup."); bossHitFx(t, mv, b.el); continue; }
+      if (dc) { parried = true; t.st = t.st.filter((s) => s !== dc); floatAt(heroEl(t), "Leurre", "info"); log(`Le leurre de ${t.c.name} absorbe l'attaque.`); bossHitFx(t, mv, b.el); }
+      else if (mv.t === "exec" && t.st.some((s) => s.k === "execimm")) { parried = true; floatAt(heroEl(t), "Immunisé", "info"); log(`${t.c.name} est immunisé à l'exécution.`); }
+      else if (mv.protReq && !(isT(t) && hDr(t) >= 0.5)) { bossHitFx(t, mv, b.el); fatalLose(`${t.c.name} est exécuté : l'exécution n'était pas parée.`); }
+      else { hitOne(t, mv.m); neg(t); }
+    }
   } else if (mv.t === "multi") {
-    for (let i = 0; i < mv.hits; i++) { const al = alive(); if (!al.length) break; const t = taunter() || rnd(al); hitOne(t, mv.m); update(); await sleep(200); }
+    const cnt = {}; let bag = [];
+    for (let i = 0; i < mv.hits; i++) {
+      const al = alive(); if (!al.length) break;
+      const sk0 = F.soak && F.heroes[F.soak.hi] && !F.heroes[F.soak.hi].dead ? F.heroes[F.soak.hi] : null, vis = al.filter((h) => !h.st.some((s) => s.k === "vanish"));
+      let t = sk0 || taunter();
+      if (!t) {
+        if (mv.disperse) { bag = bag.filter((x) => !x.dead); if (!bag.length) bag = (vis.length ? vis : al).slice().sort(() => Math.random() - 0.5); t = bag.pop(); }
+        else t = rnd(vis.length ? vis : al);
+      }
+      const d = hitOne(t, mv.m); cnt[t.id] = (cnt[t.id] || 0) + (d > 0 ? 1 : 0);
+      if (mv.twice && cnt[t.id] >= 2 && !t.dead && hDr(t) < 0.5) killHero(t, `${t.c.name} est transpercé.`);
+      update(); await sleep(200);
+    }
   } else if (mv.t === "aoe") {
-    alive().forEach((h) => { hitOne(h, mv.m); neg(h); });
+    (F.soak && F.heroes[F.soak.hi] && !F.heroes[F.soak.hi].dead ? [F.heroes[F.soak.hi]] : alive()).forEach((h) => { hitOne(h, mv.m); neg(h); });
+  }
+  sweep.forEach((h) => { if (!h.dead) killHero(h, `${h.c.name} succombe à la fureur du Kanabō.`); });
+  if (mv.err && hitLog.length) {
+    const bad = hitLog.filter((e) => !e.pr);
+    if (bad.length) {
+      if (mv.err.lose) fatalLose("Aucune protection : l'équipe est balayée.");
+      else bad.forEach((e) => {
+        const h = e.h; if (h.dead) return;
+        const extra = Math.round(h.maxHp * mv.err.team) - Math.max(0, e.hp0 - h.hp);
+        if (extra > 0) hurtHero(h, extra, { raw: true, type: "p", noCounter: true, floorPct: 0.01 });
+        if (mv.err.burn) addSt(h, { k: "burn", dmg: Math.round(bAtk() * 0.2), d: 3 });
+      });
+    }
+  }
+  if (F.lost) { update(); await sleep(700); return; }
+  if (mv.expose && b.hp > 0) {
+    const ok = mv.expose === "prot" ? hitLog.length > 0 && hitLog.every((e) => e.pr || e.ev) : mv.expose === "taunt" ? hitLog.some((e) => e.taunt) : mv.expose === "parry" ? parried || hitLog.some((e) => e.taunt) : false;
+    if (ok) exposeBoss(b);
+  }
+  if (mv.k === "kanabo") {
+    b.rage = 0; b.fer = 0;
+    if (mv.chain && b.phase >= 2) { if (!b.chained && !exposedNow(b)) { b.chained = true; b.queue.unshift("kanabo"); log(`${b.name} enchaîne, furieux !`); } else b.chained = false; }
   }
   if (fxOn()) { const P = bossP(); if (P) { if (fx.selfheal) fxPlus(P, "#7dffb0"); if (fx.shield || fx.reflect || fx.evade || fx.dr) fxRing(P, "#8fd0ff", 1.2); if (fx.selfatk || fx.enrage) fxRise(P, "#ff5a3a"); } }
   if (fx.selfheal) { const v = Math.round(b.maxHp * fx.selfheal); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bossEl(), "+" + fmt(v), "heal"); }
-  if (fx.shield) { b.shield += Math.round(b.maxHp * fx.shield); floatAt(bossEl(), "Bouclier", "shield"); }
+  if (fx.shield) { b.shield += Math.round(b.maxHp * fx.shield); floatAt(bossEl(), "Bouclier", "shield"); if (mv.k === "armure" || mv.k === "perle") b.sh = { full: b.shield, t: 0, kind: mv.k }; }
   if (fx.selfatk) addSt(b, { k: "selfatk", p: fx.selfatk.p, d: fx.selfatk.d });
   if (fx.reflect) addSt(b, { k: "reflect", type: fx.reflect.type, p: fx.reflect.p, d: fx.reflect.d });
+  if (fx.reflect && mv.k === "ailes" && b.sister) { b.wings = (b.wings || 0) + 1; if (b.wings % 3 === 0) { addSt(b, { k: "reflect", type: "p", p: 0.3, d: 2 }); log("La Flamme sœur renvoie aussi le physique."); } }
   if (fx.evade) addSt(b, { k: "evade", p: fx.evade.p, d: fx.evade.d });
   if (fx.dr) addSt(b, { k: "dr", p: fx.dr.p, d: fx.dr.d });
+  if (fx.swell) addSt(b, { k: "swell", d: fx.swell });
+  if (fx.dive) addSt(b, { k: "dive", d: fx.dive });
+  if (fx.fer) b.fer = (b.fer || 0) + fx.fer;
   if (fx.enrage) { b.enr += fx.enrage; pop("ENRAGÉ", "#ff5a4a"); }
+  if (mv.wrath) b.wrath = true;
   update();
   await sleep(550);
 }
@@ -4947,88 +5578,47 @@ function showSkillUnlock(drop) {
 
 // ---- fin de combat ----
 function winFight() {
-  const r = S.run, { i, loop } = bossAt(r.floor);
-  const jade = Math.round((50 + 25 * i) * (1 + 0.6 * loop));
-  S.jade += jade; r.jadeRun = (r.jadeRun || 0) + jade;
-  r.floor++; S.best = Math.max(S.best, r.floor);
-  r.heroes = F.heroes.map((h) => ({ id: h.id, hpPct: h.dead ? 0.3 : Math.min(1, h.hp / h.maxHp + 0.35) }));
-  r.cards = drawCards(); r.lastJade = jade;
-  const drop = rollDrop();
-  F = null; save(); go("cards");
-  if (drop) setTimeout(() => showSkillUnlock(drop), 600);
+  const b = F.boss, i = BOSSES.findIndex((x) => x.id === b.id), mode = b.mode || "n", M = MODES[mode];
+  const first = !cleared(b.id, mode), jade = Math.round((50 + 25 * i) * M.jade);
+  S.jade += jade; S.prog = S.prog || {}; (S.prog[b.id] = S.prog[b.id] || {})[mode] = 1;
+  S.best = BOSSES.filter((x) => cleared(x.id, "n")).length;
+  const noKo = F.heroes.every((h) => !h.dead), newRelic = mode !== "n" && !S.relics[b.id];
+  S.tix[mode] = (S.tix[mode] || 0) + 1; if (first) S.tixF[mode] = (S.tixF[mode] || 0) + 1;
+  if (mode !== "n") S.relics[b.id] = 1;
+  if (noKo) S.stars[b.id + mode] = 1;
+  S.lastWin = { boss: b.id, mode, jade, first, noKo, relic: mode !== "n" ? b.id : null, newRelic };
+  S.run = null; F = null; save(); go("victory");
 }
 function defeat() {
   if (!F || F.over) return;
   F.over = true;
-  const r = S.run;
-  S.lastRun = { floor: r.floor, jade: r.jadeRun || 0, boss: bossAt(r.floor).b.name };
+  S.lastRun = { boss: F.boss.name, mode: F.boss.mode || "n" };
   S.run = null; F = null; save();
   pop("DÉFAITE", "#d8452f"); musStop();
   setTimeout(() => go("defeat"), 900);
 }
-function drawCards() {
-  const r = S.run;
-  let pool = CARD_POOL.slice();
-  if (r.heroes.every((h) => h.hpPct >= 0.99)) pool = pool.filter((c) => c.id !== "spring");
-  r.heroes.forEach((rh) => {
-    const c = kitOf(CH[rh.id]), hm = r.heroMods[rh.id] || {};
-    [2].forEach((si) => pool.push({ id: `sp:${c.id}:${si}`, hero: c.id, g: "鋭", n: "Maîtrise", d: `« ${c.skills[si].n} » +30 % de puissance.` }));
-    const ult = c.skills[2];
-    if (ult.cd - ((hm.cd || [])[2] || 0) > 2) pool.push({ id: `cd:${c.id}:2`, hero: c.id, g: "禅", n: "Méditation", d: `Recharge de « ${ult.n} » −1 tour.` });
-    pool.push({ id: `aw:${c.id}`, hero: c.id, g: "覚", n: "Éveil fugace", d: "PV, ATK et DEF +20 % pour cette ascension." });
-  });
-  shuffle(pool);
-  const out = [], heroCount = {};
-  for (const c of pool) {
-    if (out.length >= 3) break;
-    if (c.hero && (heroCount[c.hero] || 0) >= 1) continue;
-    if (c.hero) heroCount[c.hero] = 1;
-    out.push(c);
-  }
-  return out;
-}
-const MODV = { atk: 0.12, hp: 0.15, def: 0.2, crit: 0.1, weak: 0.25, shield: 1, soul: 1, ls: 0.1, heal: 0.25 };
-function applyCard(idx) {
-  const r = S.run, c = r.cards && r.cards[idx]; if (!c) return;
-  const [t, hid, si] = c.id.split(":");
-  if (t === "sp" || t === "cd" || t === "aw") {
-    const hm = r.heroMods[hid] = r.heroMods[hid] || {};
-    if (t === "aw") hm.aw = (hm.aw || 0) + 1;
-    else { hm[t] = hm[t] || [0, 0, 0]; hm[t][+si]++; }
-    r.picked.push(`${CH[hid].name} · ${c.n}`);
-  } else {
-    if (t === "spring") r.heroes.forEach((h) => { h.hpPct = 1; });
-    else r.mods[t] = (r.mods[t] || 0) + MODV[t];
-    r.picked.push(c.n);
-  }
-  r.cards = null; save(); go("prep");
-}
-function renderCards() {
-  const r = S.run; if (!r || !r.cards) return go("prep");
-  const { b } = bossAt(r.floor - 1);
-  app.innerHTML = topbar() + `<main class="scr">
-    <section class="vic"><span class="floor">CIEL ${r.floor} FRANCHI</span><h1>Victoire</h1><p class="note">${b.name} est vaincu.</p>
-      <div class="reward">${jadeIcon}+${fmt(r.lastJade || 0)} jade</div>
-      <p class="note">L'équipe récupère 35 % de ses PV. Les héros tombés reviennent à 30 %.</p></section>
-    <div class="sec-h"><h2 style="font-size:20px">Choisis une bénédiction</h2></div>
-    <div class="cards">${r.cards.map((c, i) => `<button class="card ${c.hero ? "hero" : ""}" data-act="card" data-i="${i}"><span class="g">${c.g}</span>${c.hero ? `<span class="who">${CH[c.hero].name}</span>` : `<span class="who">Équipe</span>`}<b>${c.n}</b><p>${c.d}</p></button>`).join("")}</div>
-  </main>`;
+function renderVictory() {
+  const w = S.lastWin || { boss: BOSSES[0].id, mode: "n", jade: 0 }, b = BOSSES.find((x) => x.id === w.boss), k = MODE_ORD.indexOf(w.mode);
+  const unlock = k < 2 ? `Mode ${MODES[MODE_ORD[k + 1]].n} débloqué pour ce boss.` : "";
+  const nx = w.mode === "n" && w.first && BOSSES[BOSSES.indexOf(b) + 1] ? `${BOSSES[BOSSES.indexOf(b) + 1].name} est maintenant accessible.` : "";
+  app.innerHTML = topbar() + `<main class="scr"><section class="vic"><span class="floor">${MODES[w.mode].n.toUpperCase()}</span><h1>Victoire</h1><p class="note">${b.name} est vaincu.</p>
+    <div class="reward">${jadeIcon}+${fmt(w.jade)} jade</div>
+    <p class="note">+1 tirage ${MODES[w.mode].n}${w.first ? " (bonifié : Épique et Légendaire ×1,5)" : ""}${w.noKo ? " · ⭐ sans KO" : ""}</p>
+    ${w.relic ? `<p class="note">${w.newRelic ? "Relique obtenue : " : "Relique : "}${RELICS[w.relic].k} ${RELICS[w.relic].n}</p>` : ""}${w.first ? `<p class="note">${[unlock, nx].filter(Boolean).join(" ")}</p>` : ""}
+    <button class="btn wide" data-act="go" data-to="boss">Retour aux boss</button></section></main>` + nav();
 }
 function renderDefeat() {
-  const l = S.lastRun || { floor: 0, jade: 0, boss: "" };
+  const l = S.lastRun || { boss: "", mode: "n" };
   app.innerHTML = topbar() + `<main class="scr"><section class="def">
-    <span class="floor">L'ASCENSION S'ARRÊTE</span><h1>Défaite</h1>
-    <p class="note">${l.boss ? `Ton équipe est tombée face à ${l.boss}, au Ciel ${l.floor + 1}.` : "Ascension abandonnée."}</p>
-    <div class="reward vic" style="padding:0"><div class="reward">${jadeIcon}${fmt(l.jade)} jade gagné pendant l'ascension</div></div>
-    <p class="note">Record : ${S.best ? "Ciel " + S.best : "aucun ciel franchi"}. Ton jade et tes héros sont conservés.</p>
-    <button class="btn wide" data-act="go" data-to="summon">Invoquer de nouveaux héros</button>
-    <button class="btn ghost wide" data-act="go" data-to="home">Retour au portail</button>
-  </section></main>`;
+    <span class="floor">COMBAT PERDU</span><h1>Défaite</h1>
+    <p class="note">${l.boss ? `Ton équipe est tombée face à ${l.boss} (${MODES[l.mode].n}).` : "Combat abandonné."}</p>
+    <p class="note">Tes héros et ton jade sont conservés. Change d'équipe ou retente le combat.</p>
+    <button class="btn wide" data-act="go" data-to="boss">Retour aux boss</button>
+    <button class="btn ghost wide" data-act="go" data-to="team">Modifier l'équipe</button>
+  </section></main>` + nav();
 }
 function abandon() {
-  const r = S.run; if (!r) return;
-  S.lastRun = { floor: r.floor, jade: r.jadeRun || 0, boss: "" };
-  S.run = null; F = null; save(); go("defeat");
+  S.run = null; F = null; save(); go("boss");
 }
 function settingsClose() { document.querySelectorAll(".setov").forEach((e) => e.remove()); }
 function settingsOpen(confirm) {
@@ -5037,20 +5627,73 @@ function settingsOpen(confirm) {
   settingsClose();
   const v = Math.round(musVolume() * 100);
   fg.insertAdjacentHTML("beforeend", confirm
-    ? `<div class="setov" data-act="setbg"${home ? ' style="position:fixed;--k:1"' : ""}><div class="setp"><h3>Abandonner ?</h3><p>Ton ascension s'arrête ici et la progression du combat sera perdue.</p><div class="two"><button class="no" data-act="setclose">Rester</button><button class="yes" data-act="abandonok">Abandonner</button></div></div></div>`
+    ? `<div class="setov" data-act="setbg"${home ? ' style="position:fixed;--k:1"' : ""}><div class="setp"><h3>Abandonner ?</h3><p>Le combat s'arrête ici, sans pénalité.</p><div class="two"><button class="no" data-act="setclose">Rester</button><button class="yes" data-act="abandonok">Abandonner</button></div></div></div>`
     : `<div class="setov" data-act="setbg"><div class="setp"><h3>Réglages</h3><div class="srow"><label for="musvol">Musique</label><input type="range" id="musvol" min="0" max="100" step="1" value="${v}"><span class="pct" id="musvolv">${v} %</span></div><button class="give" data-act="abandonask">Abandonner</button><button class="sclose" data-act="setclose">Reprendre le combat</button></div></div>`);
 }
 document.addEventListener("input", (e) => { if (e.target && e.target.id === "musvol") { setMusVolume(e.target.value / 100); const l = document.getElementById("musvolv"); if (l) l.textContent = e.target.value + " %"; } });
 
+// couleurs des effets dans les infobulles (brûlure rouge, poison vert, buff bleu, malus violet, soin rose)
+const FXC = [
+  [/Br[ûu]lure(?: forte)?/g, "fx-burn"], [/Poison(?: fort| puissant)?/g, "fx-poison"], [/Saignement/g, "fx-bleed"],
+  [/Ressuscite|ressuscite|[Rr]éanime|Résurrection/g, "fx-rez"],
+  [/soigne|soignée|retire les malus|retire un malus|régénère|Régén\w*/g, "fx-heal"],
+  [/Charmé|Charme/g, "fx-charm"],
+  [/\+\d+ charges?|toutes les charges|par charge/g, "fx-charge"], [/\+\d+ braises?|Consomme les braises|par braise|\(\+\d+ % par braise, consommées\)/g, "fx-burn"],
+  [/ignore la défense|ignorent l'armure|×\d+(?:,\d+)? si le boss a moins de \d+ % PV|[Bb]ouclier|subit \d+ % de dégâts en moins|sont réduits de \d+ % tant que le bouclier est actif|immunité aux exécutions|inflige \+\d+ % de dégâts|recharges des alliés sont réduites de \d|Provoque|provoque|riposte|Esquive|esquive|leurre|immunisée?|[−-]\d+ % de dégâts subis|dégâts subis de \d+ %|ATK (?:d'équipe |de l'équipe )?\+\d+ %|renvoie|Renvoie|Garde/g, "fx-buff"],
+  [/[Rr]éduit (?:l'ATK|la DEF|son ATK) (?:du boss )?de \d+ %|ATK (?:du boss )?[−-]\d+ %|DEF (?:du boss )?[−-]\d+ %|subit \+\d+ % de dégâts|retardé|repousse la prochaine action du boss d'un tour|Bloque les soins|Marque|Exposé/g, "fx-debuff"],
+];
+function fxColor(html) {
+  return html.split(/(<[^>]+>)/).map((part, i) => { if (i % 2) return part; FXC.forEach(([re, c]) => { part = part.replace(re, (m) => `\u0001${c}\u0002${m}\u0003`); }); return part; }).join("").replace(/\u0001([a-z-]+)\u0002/g, '<span class="$1">').replace(/\u0003/g, "</span>");
+}
+const noEndDot = (t) => t.replace(/\.(\s*)$/, "$1");
+// description d'une technique de boss : effet seul + dernière ligne = cible
+function bossEffectDesc(mv) {
+  let d = mv.d || "";
+  [[/^Touche (toute )?l'équipe\.?$/, ""], [/^Touche l'équipe( et |, )/, ""], [/^Dévaste l'équipe et /, "Dévaste et "], [/^Frappe l'allié le plus fort et /, "Frappe et "],
+   [/^(\S+) l'allié le plus \S+( \(sauf provocation\))?\.$/, ""], [/^(Trois|Six|Huit) coups sur des cibles au hasard\.$/, ""], [/^Frappe une cible et /, "Frappe et "], [/ sur (toute )?l'équipe/, ""], [/ sur une cible/, ""], [/^Frappe une cible\.?$/, ""]].forEach(([r, x]) => { d = d.replace(r, x); });
+  return d ? d.charAt(0).toUpperCase() + d.slice(1) : "";
+}
+function bossTargetLine(mv, tg) {
+  return mv.t === "self" ? "Cible : lui-même" : mv.t === "aoe" ? "Touche toute l'équipe" : mv.t === "multi" ? `Touche ${mv.hits} héros au hasard` : mv.t === "exec" ? "Touche l'allié le plus affaibli (sauf provocation)" : mv.t === "charm" ? "Touche l'allié le plus fort" : tg && tg[0] ? `Touche ${tg[0].c.name}` : "Touche un héros";
+}
 // ===================== ÉVÉNEMENTS =====================
+// appui long sur une icône de sort : affiche son nom et sa description (le clic qui suit est ignoré)
+let LP = { t: 0, at: 0, tip: null };
+function lpHide() { clearTimeout(LP.t); if (LP.tip) { LP.tip.remove(); LP.tip = null; LP.at = Date.now(); } }
+document.addEventListener("pointerdown", (e) => {
+  const b = e.target.closest && e.target.closest(".cg.ico, .bslot"); lpHide(); if (!b || !F) return;
+  LP.t = setTimeout(() => {
+    const tip = document.createElement("div"); tip.className = "lptip";
+    if (b.classList.contains("bslot")) {
+      if (b.dataset.s === "stun") { tip.innerHTML = `<b>Étourdi</b><p>Perd son prochain tour, subit +50 % de dégâts.</p>`; }
+      else {
+        const si = +b.dataset.s, k = si === 0 ? F.boss.intent : (F.boss.queue || [])[si - 1], mv = k && F.boss.moves[k]; if (!mv) return;
+        const tg = si === 0 ? bossTargets() : [], tl = bossTargetLine(mv, tg), ds = bossEffectDesc(mv);
+        tip.innerHTML = `<b>${F.boss.mode === "m" && si === 0 && mv.fatal ? "⚠ ACTION FATALE · " : ""}${mv.n}</b><p>${ds ? `<span class="lpfx">${fxColor(noEndDot(ds))}</span><br>` : ""}${tl}</p>`;
+      }
+    } else {
+      const h = F.heroes[F.active], raw = b.dataset.i, si = raw === "foc" ? raw : +raw; if (!h) return;
+      const sk = getSk(h, si); if (!sk) return;
+      tip.innerHTML = `<b>${sk.n}</b>${typeof si === "number" && h.cd[si] > 0 ? `<em class="fx-buff">Recharge : ${h.cd[si]} tour${h.cd[si] > 1 ? "s" : ""}</em>` : ""}<p>${si === "foc" ? fxColor("Aucune attaque. Recharges −1 pour tous tes sorts, −25 % de dégâts subis ce tour") : fxColor(noEndDot(skDesc(h, sk, si)))}${si === "foc" ? "" : comboTag(h, sk)}</p>`;
+    }
+    document.body.appendChild(tip); LP.tip = tip;
+    const r = b.getBoundingClientRect(), w = tip.offsetWidth, hh = tip.offsetHeight;
+    if (b.classList.contains("bslot")) { tip.style.left = Math.max(6, r.left) + "px"; tip.style.top = Math.max(6, r.top - hh - 8) + "px"; }
+    else { tip.style.left = Math.max(6, r.left - w - 10) + "px"; tip.style.top = Math.max(6, Math.min(innerHeight - hh - 6, r.top + r.height / 2 - hh / 2)) + "px"; }
+  }, 380);
+});
+["pointerup", "pointercancel", "pointerleave", "scroll"].forEach((ev) => document.addEventListener(ev, lpHide, true));
+document.addEventListener("contextmenu", (e) => { if (e.target.closest && e.target.closest(".cg.ico, .bslot")) e.preventDefault(); });
 document.addEventListener("click", (e) => {
+  if (Date.now() - LP.at < 700 && e.target.closest(".cg.ico, .bslot")) { e.stopImmediatePropagation(); return; }
   const t = e.target.closest("[data-act]"); if (!t) return;
   const a = t.dataset.act;
   if (a === "closesheet") { if (e.target === t || t.tagName === "BUTTON") t.closest(".sheet")?.remove(); return; }
-  if (t.closest(".sheet") && a !== "togd" && a !== "eqalt") return;
+  if (t.closest(".sheet") && a !== "togd" && a !== "eqalt" && a !== "vareq") return;
   switch (a) {
     case "go": go(t.dataset.to); break;
     case "detail": showDetail(t.dataset.id); break;
+    case "vareq": toggleVar(t.dataset.id, +t.dataset.i); document.querySelectorAll(".sheet").forEach((x) => x.remove()); showDetail(t.dataset.id); break;
     case "eqalt": setAlt(t.dataset.id, +t.dataset.si, +t.dataset.v); document.querySelectorAll(".sheet").forEach((x) => x.remove()); showDetail(t.dataset.id); break;
     case "tog": toggleTeam(t.dataset.id); break;
     case "tfocus": teamFocus = t.dataset.id; renderTeam(); break;
@@ -5058,9 +5701,12 @@ document.addEventListener("click", (e) => {
     case "togd": document.querySelectorAll(".sheet").forEach((s) => s.remove()); toggleTeam(t.dataset.id); break;
     case "filter": collFilter = t.dataset.f; render(); break;
     case "sum": doSummon(+t.dataset.n); break;
+    case "tix": doTicket(t.dataset.m); break;
+    case "relic": S.relicSel = S.relicSel === t.dataset.r ? null : t.dataset.r; save(); renderPrep(); break;
     case "rules": showRules(); break;
     case "rules": showRules(); break;
-    case "start": startRun(); break;
+    case "start": go("boss"); break;
+    case "bossmode": if (S.team.length !== TEAM_N) { toast(`Choisis ${TEAM_N} héros avant de combattre.`); go("team"); break; } SEL = { boss: t.dataset.b, mode: t.dataset.m }; go("prep"); break;
     case "prep": go("prep"); break;
     case "fight": startFight(); break;
     case "settings": settingsOpen(); break;
@@ -5070,14 +5716,13 @@ document.addEventListener("click", (e) => {
     case "abandon": settingsOpen(true); break;
     case "abandonok": if (F && F.busy) { settingsClose(); toast("Attends la fin du tour pour abandonner."); break; } settingsClose(); abandon(); break;
     case "mute": S.mute = !S.mute; save(); auMute(); t.classList.toggle("off", S.mute); if (!S.mute && F) musStart(); else if (!S.mute) menuStart(); break;
-    case "card": applyCard(+t.dataset.i); break;
     case "cancelT": if (F) { F.pending = null; update(); } break;
     case "skill": {
       if (!F || F.busy || F.phase !== "player") return;
-      const raw = t.dataset.i, si = raw === "atk" || raw === "grd" || raw === "cel" ? raw : +raw, h = F.heroes[F.active];
+      const raw = t.dataset.i, si = raw === "foc" ? raw : +raw, h = F.heroes[F.active];
       if (!h) return; const sk = getSk(h, si);
       if (!sk || (typeof si === "number" && h.cd[si] > 0)) return;
-      if (si === "cel" && !celReady()) return;
+
       if (sk.tgt === "ally") { F.pending = { hi: F.active, si }; update(); }
       else setPlan(F.active, si);
       break;
