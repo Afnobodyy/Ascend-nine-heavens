@@ -1442,7 +1442,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .cg.ico .pips{margin-top:0!important}
 .cg.ico.ult:not(.cel){border-color:#e2b250}
 .lptip{position:fixed;z-index:999;width:max-content;max-width:min(300px,86vw);padding:8px 11px;border:1px solid #a87a24;border-radius:8px;background:rgba(14,8,11,.97);color:#f2e7d3;box-shadow:0 6px 18px rgba(0,0,0,.6);pointer-events:none;font-size:13px;line-height:1.35}
-.lptip b{display:block;font-family:var(--display);font-size:15px;color:#f2d28a}.lptip em{display:block;font-style:normal;color:#ff9a8a;font-size:12px}.lptip p{margin:3px 0 0}
+.lptip b{display:block;font-family:var(--display);font-size:15px;color:#f2d28a}.lptip em{display:block;font-style:normal;color:#ff9a8a;font-size:12px}.lptip p{margin:3px 0 0}.lptip .lpfx{color:#ff4a3a;font-weight:700}
 .cg .t .spi{--s:calc(30*var(--u));order:2;margin-left:auto}
 #app .fight.ug .cg.cel .t .spi{--s:calc(18*var(--u));margin-left:calc(1*var(--u))}
 #app .fight.ug .cg.cel .t b{font-size:calc(10*var(--u))}
@@ -2050,7 +2050,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 61; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 62; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5623,7 +5623,7 @@ document.addEventListener("pointerdown", (e) => {
       else {
         const si = +b.dataset.s, k = si === 0 ? F.boss.intent : (F.boss.queue || [])[si - 1], mv = k && F.boss.moves[k]; if (!mv) return;
         const tg = si === 0 ? bossTargets() : [], tl = bossTargetLine(mv, tg), ds = bossEffectDesc(mv);
-        tip.innerHTML = `<b>${F.boss.mode === "m" && si === 0 && mv.fatal ? "⚠ ACTION FATALE · " : ""}${mv.n}</b><p>${ds ? ds + "<br>" : ""}${tl}</p>`;
+        tip.innerHTML = `<b>${F.boss.mode === "m" && si === 0 && mv.fatal ? "⚠ ACTION FATALE · " : ""}${mv.n}</b><p>${ds ? `<span class="lpfx">${ds.replace(/\.$/, "")}</span><br>` : ""}${tl}</p>`;
       }
     } else {
       const h = F.heroes[F.active], raw = b.dataset.i, si = raw === "foc" ? raw : +raw; if (!h) return;
