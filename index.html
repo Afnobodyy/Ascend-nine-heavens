@@ -1353,6 +1353,11 @@ body{overflow:hidden}
 .vign{background:radial-gradient(ellipse 80% 75% at 45% 55%,transparent 55%,rgba(0,0,0,.7))}
 
 .vfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:8}
+.spotbg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 75% at 50% 62%,rgba(2,3,10,.55) 0%,rgba(2,3,10,.82) 45%,rgba(0,0,0,.97) 78%,#000 100%);opacity:0;pointer-events:none;transition:opacity .3s}
+.cam.spot .spotbg{opacity:1}
+.cam.spot .shafts,.cam.spot .fogl{opacity:0;transition:opacity .3s}
+.pcw.shade,.bossbox.shade{filter:brightness(.08) saturate(.4)!important}
+.pcw,.bossbox{transition-property:filter,translate,opacity,z-index}
 .vfxbg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .fight.skyon .bgimg,.fight.skyon .bgl,.fight.skyon .bloom,.fight.skyon .fogb,.fight.skyon .shafts,.fight.skyon .fogl{opacity:0!important;transition:opacity .35s}
 .pc.dash{animation:pdash .6s cubic-bezier(.25,.8,.3,1);z-index:6}
@@ -2101,7 +2106,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 96; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 97; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5100,7 +5105,7 @@ function renderFightShell() {
     <div class="scene" id="scene" style="--glow:${T.glow};--fog:${T.fog}">
       <div class="cam" id="cam">
         ${ART["bg:" + b.id] ? `<img class="bgimg" src="${(window.SNAP && SNAP[b.id]) || ART["bg:" + b.id]}" alt=""><div class="bloom"></div><div class="fogb"></div>` : `<canvas class="bgl far" id="bgfar"></canvas><div class="bloom"></div><canvas class="bgl mid" id="bgmid"></canvas><div class="fogb"></div><canvas class="bgl floor" id="bgfloor"></canvas>`}
-        <canvas class="vfxbg" id="vfxbg"></canvas><div class="shafts"></div>
+        <div class="spotbg"></div><canvas class="vfxbg" id="vfxbg"></canvas><div class="shafts"></div>
         <div class="bossbox" id="bstage"><div class="bshadow"></div><div class="breathe">${bossArt(b.id, "bimg")}</div></div>
         <div class="party n${F.heroes.length}">${F.heroes.map((h, i) => `<div class="pcw p${i}" id="pw${i}">
           <button class="ohb" id="hc${i}" data-act="hsel" data-i="${i}"><span class="aimtag">⚔ CIBLÉ</span><span class="plantag"></span>
@@ -5465,6 +5470,22 @@ function healHero(h, amt, quiet) {
 }
 
 // ---- action d'un héros ----
+function spotOn(h, sk, allyT) {
+  const cam = document.getElementById("cam"); if (!cam) return;
+  const keep = new Set([heroEl(h) && heroEl(h).closest(".pcw")]);
+  let boss = false;
+  for (const fx of sk.fx) {
+    if (["dmg", "dot", "debuff", "mark", "delay"].includes(fx.k)) boss = true;
+    else (fx.on === "self" ? [h] : fx.on === "allies" ? F.heroes : allyT).forEach((t) => { const e = t && heroEl(t); if (e) keep.add(e.closest(".pcw")); });
+  }
+  cam.classList.add("spot");
+  document.querySelectorAll(".pcw").forEach((w) => w.classList.toggle("shade", !keep.has(w)));
+  const bs = document.getElementById("bstage"); if (bs) bs.classList.toggle("shade", !boss);
+}
+function spotOff() {
+  const cam = document.getElementById("cam"); if (cam) cam.classList.remove("spot");
+  document.querySelectorAll(".pcw.shade,.bossbox.shade").forEach((w) => w.classList.remove("shade"));
+}
 async function useSkill(hi, si, ti) {
   const h = F.heroes[hi], sk = getSk(h, si), b = F.boss, num = typeof si === "number";
   if (h.dead || h.acted || (num && h.cd[si] > 0)) return;
@@ -5501,6 +5522,7 @@ async function useSkill(hi, si, ti) {
   const T0 = performance.now(), scr = pxCast(h, si, ti); F.scr = scr;
   await sleep(scr ? (scr.lead != null ? scr.lead : Math.min(500, scr.block * .4)) : (dmgFx && melee ? 190 : 220));
   const allyT = sk.tgt === "ally" ? [F.heroes[ti]] : sk.tgt === "allies" ? F.heroes : [h];
+  spotOn(h, sk, allyT);
   for (const fx of sk.fx) {
     let tg = (fx.on === "self" ? [h] : fx.on === "allies" ? F.heroes : allyT).filter((t) => t && !t.dead);
     if (fx.pick) tg = tg.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp).slice(0, fx.pick);
@@ -5546,6 +5568,7 @@ async function useSkill(hi, si, ti) {
     }
   }
   if (scr) { const rest = scr.block - (performance.now() - T0) / TS; if (rest > 0) await sleep(rest); F.scr = null; }
+  spotOff();
   if (mv0) await mv0.home();
   if (cb) applyCombo(cb, h);
   if (sk.discharge) h.charge = sk.capCh ? Math.max(0, (h.charge || 0) - sk.capCh) : 0;
