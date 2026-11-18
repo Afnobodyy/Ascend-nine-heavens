@@ -2101,7 +2101,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 92; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 93; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4452,10 +4452,10 @@ function renderSummon() {
   app.innerHTML = `<div class="mk sd r-${c.rar}">${mkTop("Invocation", "召")}<div class="bigname">${c.name.toUpperCase()}</div>
   <div class="hero">${heroArt(c)}</div>
   <div class="info"><span class="tag">NOUVEAU HÉROS · ${RAR[c.rar].n.toUpperCase()}</span><h2>${c.name}</h2><div class="ti">${c.title}</div><div class="chs">${mkChips(c)}</div></div>
-  <div class="col2"><h3>Taux d'apparition (Rare / Épique / Légendaire)</h3>${MODE_ORD.map((m) => `<div class="rr"><span>${MODES[m].n}</span><b>${RATES[m].join(" / ")} %</b></div>`).join("")}<div class="gar" style="margin-top:4px">1re victoire sur un boss et un mode : Épique et Légendaire ×1,5.</div>
+  <div class="col2"><h3>Taux d'apparition (Rare / Épique / Légendaire)</h3>${MODE_ORD.map((m) => `<div class="rr"><span>${MODES[m].n}</span><b>${RATES[m].join(" / ")} %</b></div>`).join("")}<div class="gar" style="margin-top:4px">1 ticket par boss vaincu. 1re victoire sur un boss et un mode : Épique et Légendaire ×1,5.</div>
    <div class="gar">Légendaire garanti dans <b>${left}</b><i><s style="width:${(S.pity / PITY) * 100}%"></s></i></div></div>
   <div class="btns2" style="margin-bottom:6px">${MODE_ORD.map((m) => `<button class="btn ${tx[m] ? "" : "ghost"}" data-act="tix" data-m="${m}" ${tx[m] ? "" : "disabled"}><b>Tirage ${MODES[m].n}</b><small>${tx[m] || 0} disponible${(tx[m] || 0) > 1 ? "s" : ""}${tf[m] ? ` · ${tf[m]} bonifié${tf[m] > 1 ? "s" : ""}` : ""}</small></button>`).join("")}</div>
-  <div class="gar" style="margin:6px 0 0">Chaque boss vaincu donne 1 ticket du mode correspondant (bonifié à la 1re victoire).</div></div>`;
+</div>`;
   hydratePx(app);
 }
 const RATES = { n: [84, 15, 1], h: [60, 37, 3], m: [35, 57, 8] };
