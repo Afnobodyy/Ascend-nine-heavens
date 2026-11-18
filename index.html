@@ -2050,7 +2050,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script>
-const GAME_VERSION = 69; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 70; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2557,7 +2557,7 @@ const BOSSES = [
     hint: "L'Armure d'ossements absorbe surtout les coups physiques : la magie la brise.",
     moves: {
       poing: { n: "Poing d'os", t: "single", m: 1.5, type: "p", d: "Frappe lourde sur une cible." },
-      armure: { n: "Armure d'ossements", t: "self", d: "Bouclier de 10 % PV. Les coups physiques y font −65 %. Recharge : 6 tours.", cd: 6, fx: { shield: 0.10 } },
+      armure: { n: "Armure d'ossements", t: "self", d: "Bouclier de 10 % PV. Les coups physiques sont réduits de 65 % tant que le bouclier est actif.", cd: 6, fx: { shield: 0.10 } },
       cri: { n: "Cri des morts", t: "aoe", m: 0.6, type: "m", d: "Touche l'équipe, ATK −20 %.", fx: { atkdown: { p: 0.2, d: 2 } } },
       etreinte: { n: "Étreinte funeste", t: "exec", m: 2.3, type: "p", big: 1, d: "Broie l'allié le plus affaibli (sauf provocation)." },
     },
@@ -2566,7 +2566,7 @@ const BOSSES = [
     hint: "Se soigne avec sa Perle : garde du burst pour après. Enrage en phase 2 puis lance Tsunami.",
     moves: {
       raz: { n: "Raz-de-marée", t: "aoe", m: 0.85, type: "m", d: "Touche toute l'équipe." },
-      perle: { n: "Perle du dragon", t: "self", d: "Se soigne de 8 % et gagne un bouclier de 8 %. Recharge : 8 tours.", cd: 8, fx: { selfheal: 0.08, shield: 0.08 } },
+      perle: { n: "Perle du dragon", t: "self", d: "Se soigne de 8 % et gagne un bouclier de 8 %.", cd: 8, fx: { selfheal: 0.08, shield: 0.08 } },
       morsure: { n: "Morsure abyssale", t: "single", m: 1.6, type: "p", d: "Frappe lourde sur une cible." },
       colere: { n: "Colère des mers", t: "self", d: "ATK +30 % pour le reste du combat.", fx: { enrage: 0.3 } },
       tsunami: { n: "Tsunami", t: "aoe", m: 1.55, type: "m", big: 1, d: "Vague colossale sur toute l'équipe." },
@@ -4570,7 +4570,7 @@ function bossSetup(b) {
       break;
     case "ryujin":
       set("tsunami", { prot: "sum60", expose: "prot", err: err({ team: 0.4 }, { team: 0.75 }, { lose: 1 }), fatal: X });
-      if (H) { b.tideOn = true; b.splashOn = true; b.gauge = { n: "Marée", v: 0, max: 0 }; set("perle", { d: "Se soigne de 8 % et gagne un bouclier de 8 %. Non brisé le tour même, il renvoie 20 %. Recharge : 8 tours." }); }
+      if (H) { b.tideOn = true; b.splashOn = true; b.gauge = { n: "Marée", v: 0, max: 0 }; set("perle", { d: "Se soigne de 8 % et gagne un bouclier de 8 %. Non brisé le tour même, il renvoie 20 %." }); }
       if (X) { b.look = 3; set("colere", { d: "ATK +15 % cumulatif à chaque tour.", fx: { enrage: 0.15 }, wrath: true }); }
       break;
     case "phenix":
@@ -5607,7 +5607,7 @@ const FXC = [
   [/soigne|soignée|retire les malus|retire un malus|régénère|Régén\w*/g, "fx-heal"],
   [/Charmé|Charme/g, "fx-charm"],
   [/\+\d+ charges?|toutes les charges|par charge/g, "fx-charge"], [/\+\d+ braises?|Consomme les braises|par braise|\(\+\d+ % par braise, consommées\)/g, "fx-burn"],
-  [/ignore la défense|ignorent l'armure|×\d+(?:,\d+)? si le boss a moins de \d+ % PV|Recharge : \d+ tours?|[Bb]ouclier|subit \d+ % de dégâts en moins|y font [−-]\d+ %|immunité aux exécutions|inflige \+\d+ % de dégâts|recharges des alliés sont réduites de \d|Provoque|provoque|riposte|Esquive|esquive|leurre|immunisée?|[−-]\d+ % de dégâts subis|dégâts subis de \d+ %|ATK (?:d'équipe |de l'équipe )?\+\d+ %|renvoie|Renvoie|Garde/g, "fx-buff"],
+  [/ignore la défense|ignorent l'armure|×\d+(?:,\d+)? si le boss a moins de \d+ % PV|[Bb]ouclier|subit \d+ % de dégâts en moins|sont réduits de \d+ % tant que le bouclier est actif|immunité aux exécutions|inflige \+\d+ % de dégâts|recharges des alliés sont réduites de \d|Provoque|provoque|riposte|Esquive|esquive|leurre|immunisée?|[−-]\d+ % de dégâts subis|dégâts subis de \d+ %|ATK (?:d'équipe |de l'équipe )?\+\d+ %|renvoie|Renvoie|Garde/g, "fx-buff"],
   [/[Rr]éduit (?:l'ATK|la DEF|son ATK) (?:du boss )?de \d+ %|ATK (?:du boss )?[−-]\d+ %|DEF (?:du boss )?[−-]\d+ %|subit \+\d+ % de dégâts|retardé|repousse la prochaine action du boss d'un tour|Bloque les soins|Marque|Exposé/g, "fx-debuff"],
 ];
 function fxColor(html) {
