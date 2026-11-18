@@ -5011,7 +5011,7 @@ const COMBO = {
 const comboFor = (h, sk) => { const c = sk.fin && COMBO[sk.fin]; return c && F && c.need(F.boss, h) ? c : null; };
 function applyCombo(c, h) {
   const b = F.boss;
-  if (c.explode) { let tot = 0; b.st.forEach((s) => { if ((s.k === "poison" || s.k === "bleed") && s.dmg) tot += s.dmg * s.d; }); tot = Math.round(tot); if (tot > 0) { b.hp = Math.max(0, b.hp - tot); floatAt(bossEl(), "Explosion " + fmt(tot), "crit"); } }
+  if (c.explode) { let tot = 0; b.st.forEach((s) => { if ((s.k === "poison" || s.k === "bleed") && s.dmg) tot += s.dmg * s.d; }); tot = Math.round(tot); if (tot > 0) { b.hp = Math.max(0, b.hp - tot);  } }
   if (c.eat) b.st = b.st.filter((s) => !c.eat.includes(s.k));
   if (c.n === "Vapeur") addSt(b, { k: "defdown", p: 0.3, d: 2 });
 }
@@ -5413,13 +5413,12 @@ function dmgBoss(h, m, o = {}) {
   const crit = o.crit || Math.random() < 0.08 + (mods.crit || 0); if (crit) d *= 1.6;
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
   let toHp = d; const hadSh = b.shield > 0, spl = b.splash;
-  if (b.shield > 0) { const eff = type === "p" ? 0.35 : 1, abs = Math.min(b.shield, d * eff); b.shield = Math.round(b.shield - abs); toHp = Math.max(0, Math.round(d - abs / eff)); floatAt(bs, "Bouclier −" + fmt(abs), "shield"); }
+  if (b.shield > 0) { const eff = type === "p" ? 0.35 : 1, abs = Math.min(b.shield, d * eff); b.shield = Math.round(b.shield - abs); toHp = Math.max(0, Math.round(d - abs / eff));  }
   if (b.shield <= 0) b.splash = false;
   b.hp = Math.max(0, b.hp - toHp);
   if (hadSh && spl && !h.dead) hurtHero(h, d * 0.2, { raw: true, type: "p", noCounter: true });
   const sw = b.st.find((s) => s.k === "swell");
-  if (sw && b.hp > 0) { sw.hit = sw.hit || {}; if (!sw.hit[h.id]) { sw.hit[h.id] = 1; const v = Math.round(b.maxHp * 0.05); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bs, "+" + fmt(v), "heal"); } }
-  if (toHp > 0) floatAt(bs, (crit ? "Critique " : "") + fmt(toHp), crit ? "crit" : weak ? "weak" : "");
+  if (sw && b.hp > 0) { sw.hit = sw.hit || {}; if (!sw.hit[h.id]) { sw.hit[h.id] = 1; const v = Math.round(b.maxHp * 0.05); b.hp = Math.min(b.maxHp, b.hp + v);  } }
   flashCls(document.querySelector("#bstage .bimg"), "hit");
   lightAt("boss", ELEM[el].c, crit || weak);
   if (crit || o.post >= 30 || m >= 2.2) cam("zoom"); else if (weak) cam("shake-s");
@@ -5442,9 +5441,9 @@ function hurtHero(h, raw, o = {}) {
   d *= 1 - hDr(h);
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
   if (F.mirrorOn && !o.dot) F.mirror = (F.mirror || 0) + d;
-  if (h.shield > 0) { const a = Math.min(h.shield, d); h.shield -= a; d -= a; if (a) floatAt(el, "−" + fmt(a), "shield"); }
+  if (h.shield > 0) { const a = Math.min(h.shield, d); h.shield -= a; d -= a; }
   if (o.floorPct != null && o.type) { d = Math.min(d, Math.max(0, h.hp - Math.ceil(h.maxHp * o.floorPct))); }
-  if (d > 0) { h.hp -= d; floatAt(el, "−" + fmt(d), o.dot ? "dot" : "hurt"); flashCls(el, "hit"); }
+  if (d > 0) { h.hp -= d;  flashCls(el, "hit"); }
   if (h.hp <= 0 && h.st.some((s) => s.k === "ash")) { h.st = h.st.filter((s) => s.k !== "ash"); h.hp = 1; floatAt(el, "Cendres du phénix", "heal"); log(`${h.c.name} renaît de ses cendres (1 PV).`); }
   if (h.hp <= 0) {
     h.hp = 0;
@@ -5465,7 +5464,7 @@ function healHero(h, amt, quiet) {
   amt *= 1 + (md().heal || 0);
   const real = Math.min(h.maxHp - h.hp, Math.round(amt));
   h.hp += real;
-  if (real > 0) { floatAt(el, "+" + fmt(real), "heal"); if (!quiet) lightAt("party", "#6fe0a8"); }
+  if (real > 0) {  if (!quiet) lightAt("party", "#6fe0a8"); }
   return real;
 }
 
@@ -5535,7 +5534,7 @@ async function useSkill(hi, si, ti) {
       case "mark": bossDebuffFx("#ff6a9a"); addSt(b, { k: "mark", p: fx.p, d: fx.d }); break;
       case "heal": supportFx("heal", tg); tg.forEach((t) => healHero(t, hAtk(h) * fx.m * pw)); break;
       case "healPct": supportFx("heal", tg); tg.forEach((t) => healHero(t, t.maxHp * fx.p * pw)); break;
-      case "shield": supportFx("shield", tg); tg.forEach((t) => { if (t.st.some((s) => s.k === "shieldblock")) { floatAt(heroEl(t), "Bouclier bloqué", "info"); return; } const v = Math.round(h.maxHp * fx.p * pw); t.shield += v; floatAt(heroEl(t), "Bouclier " + fmt(v), "shield"); }); break;
+      case "shield": supportFx("shield", tg); tg.forEach((t) => { if (t.st.some((s) => s.k === "shieldblock")) { floatAt(heroEl(t), "Bouclier bloqué", "info"); return; } const v = Math.round(h.maxHp * fx.p * pw); t.shield += v;  }); break;
       case "taunt": supportFx("taunt", [h]); addSt(h, { k: "taunt", d: fx.d + (F.relic === "oni" ? 1 : 0) }); break;
       case "dr": if (si !== "foc") supportFx("guard", tg); tg.forEach((t) => addSt(t, { k: "dr", p: fx.p, d: fx.d })); break;
       case "buff": supportFx("buff", tg); tg.forEach((t) => addSt(t, { k: "buff", p: fx.p, d: fx.d })); break;
@@ -5643,7 +5642,7 @@ async function bossTurn() {
   if (F.lost || !alive().length) return defeat();
   for (const s of b.st.filter((s) => DOTS.includes(s.k))) {
     if (b.hp <= 0) break;
-    b.hp = Math.max(0, b.hp - s.dmg); floatAt(bossEl(), fmt(s.dmg), "dot"); update(); await sleep(260);
+    b.hp = Math.max(0, b.hp - s.dmg);  update(); await sleep(260);
   }
   if (b.hp <= 0 && await bossDown()) return;
   let delayed = false;
@@ -5655,7 +5654,7 @@ async function bossTurn() {
     await bossAct(b.moves[b.intent]);
   }
   if (F.lost) return defeat();
-  if (F.mirrorOn && F.mirror > 0 && b.hp > 0) { const v = Math.round(F.mirror); b.hp = Math.max(0, b.hp - v); floatAt(bossEl(), "Miroir " + fmt(v), "crit"); lightAt("boss", "#d6dde6", true); update(); await sleep(600); }
+  if (F.mirrorOn && F.mirror > 0 && b.hp > 0) { const v = Math.round(F.mirror); b.hp = Math.max(0, b.hp - v);  lightAt("boss", "#d6dde6", true); update(); await sleep(600); }
   if (b.hp <= 0 && await bossDown()) return;
   if (!alive().length) return defeat();
   // effets sur la durée des héros
@@ -5701,7 +5700,7 @@ async function bossAct(mv) {
     const d = hurtHero(h, bAtk() * m, { type: mv.type, floorPct: flo });
     if (mv.dieBelow && frac < mv.dieBelow && !h.dead) killHero(h, `${h.c.name} est broyé.`);
     if (mv.blood && d > 0 && !exposedNow(b)) b.blood = (b.blood || 0) + 0.05;
-    if (fx.drain && d > 0) { const v = Math.round(d * fx.drain); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bossEl(), "+" + fmt(v), "heal"); }
+    if (fx.drain && d > 0) { const v = Math.round(d * fx.drain); b.hp = Math.min(b.maxHp, b.hp + v);  }
     return d;
   };
   const neg = (h) => {
@@ -5764,7 +5763,7 @@ async function bossAct(mv) {
     if (mv.chain && b.phase >= 2) { if (!b.chained && !exposedNow(b)) { b.chained = true; b.queue.unshift("kanabo"); log(`${b.name} enchaîne, furieux !`); } else b.chained = false; }
   }
   if (fxOn()) { const P = bossP(); if (P) { if (fx.selfheal) fxPlus(P, "#7dffb0"); if (fx.shield || fx.reflect || fx.evade || fx.dr) fxRing(P, "#8fd0ff", 1.2); if (fx.selfatk || fx.enrage) fxRise(P, "#ff5a3a"); } }
-  if (fx.selfheal) { const v = Math.round(b.maxHp * fx.selfheal); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bossEl(), "+" + fmt(v), "heal"); }
+  if (fx.selfheal) { const v = Math.round(b.maxHp * fx.selfheal); b.hp = Math.min(b.maxHp, b.hp + v);  }
   if (fx.shield) { b.shield += Math.round(b.maxHp * fx.shield); floatAt(bossEl(), "Bouclier", "shield"); if (mv.k === "armure" || mv.k === "perle") b.sh = { full: b.shield, t: 0, kind: mv.k }; }
   if (fx.selfatk) addSt(b, { k: "selfatk", p: fx.selfatk.p, d: fx.selfatk.d });
   if (fx.reflect) addSt(b, { k: "reflect", type: fx.reflect.type, p: fx.reflect.p, d: fx.reflect.d });
