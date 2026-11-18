@@ -2057,7 +2057,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 81; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 82; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4275,7 +4275,9 @@ const MODE_ORD = ["n", "h", "m"];
 let SEL = { boss: "kappa", mode: "n" };
 const cleared = (bid, m) => !!(S.prog && S.prog[bid] && S.prog[bid][m]);
 const bossOpen = (bid) => { const i = BOSSES.findIndex((b) => b.id === bid); return i <= 0 || cleared(BOSSES[i - 1].id, "n"); };
-const modeOpen = (bid, m) => { const k = MODE_ORD.indexOf(m); return bossOpen(bid) && (k === 0 || cleared(bid, MODE_ORD[k - 1])); };
+const allCleared = (m) => BOSSES.every((b) => cleared(b.id, m));
+const modeOpen = (bid, m) => { const k = MODE_ORD.indexOf(m); return bossOpen(bid) && (k === 0 || allCleared(MODE_ORD[k - 1])); };
+const modeLockTxt = (m) => { const k = MODE_ORD.indexOf(m); return k > 0 && !allCleared(MODE_ORD[k - 1]) ? `Bats les ${BOSSES.length} boss en ${MODES[MODE_ORD[k - 1]].n} pour débloquer le mode ${MODES[m].n}.` : ""; };
 const nextBoss = () => BOSSES.find((b) => !cleared(b.id, "n")) || BOSSES[0];
 function bossAt(floor) { const i = floor % BOSSES.length, loop = Math.floor(floor / BOSSES.length); return { b: BOSSES[i], i, loop }; }
 
@@ -4601,6 +4603,7 @@ function moveLine(mv, bid, key, el) { return `<div class="mv ${mv.big ? "big" : 
 function renderBoss() {
   const nCl = BOSSES.filter((b) => cleared(b.id, "n")).length;
   app.innerHTML = topbar() + `<main class="scr"><div class="sec-h"><h2>Boss</h2><span class="note">${nCl} / ${BOSSES.length} vaincus en Normal</span></div>
+    ${MODE_ORD.slice(1).map((m) => modeLockTxt(m) ? `<div class="hint" style="margin-bottom:4px">🔒 ${modeLockTxt(m)}</div>` : "").join("")}
     <div class="bsl">${BOSSES.map((b, i) => { const open = bossOpen(b.id); return `<div class="bs ${open ? "" : "lk"}"><div class="bart">${open ? bossArt(b.id) : ""}</div><div class="bi"><span class="floor">${i + 1}</span><b>${open ? b.name : "???"}</b><span class="note">${open ? b.ep : "Bats le boss précédent en Normal"}</span></div><div class="bm">${MODE_ORD.map((m) => { const ok = modeOpen(b.id, m); return `<button class="bmb ${cleared(b.id, m) ? "done" : ""}" ${ok ? `data-act="bossmode" data-b="${b.id}" data-m="${m}"` : "disabled"}>${MODES[m].n}${cleared(b.id, m) ? " ✓" : ""}</button>`; }).join("")}</div></div>`; }).join("")}</div>
   </main>` + nav();
 }
@@ -5767,7 +5770,7 @@ function defeat() {
 }
 function renderVictory() {
   const w = S.lastWin || { boss: BOSSES[0].id, mode: "n", jade: 0 }, b = BOSSES.find((x) => x.id === w.boss), k = MODE_ORD.indexOf(w.mode);
-  const unlock = k < 2 ? `Mode ${MODES[MODE_ORD[k + 1]].n} débloqué pour ce boss.` : "";
+  const unlock = k < 2 && allCleared(w.mode) ? `Les ${BOSSES.length} boss sont vaincus en ${MODES[w.mode].n} : mode ${MODES[MODE_ORD[k + 1]].n} débloqué !` : "";
   const nx = w.mode === "n" && w.first && BOSSES[BOSSES.indexOf(b) + 1] ? `${BOSSES[BOSSES.indexOf(b) + 1].name} est maintenant accessible.` : "";
   app.innerHTML = topbar() + `<main class="scr"><section class="vic"><span class="floor">${MODES[w.mode].n.toUpperCase()}</span><h1>Victoire</h1><p class="note">${b.name} est vaincu.</p>
     <div class="reward">${jadeIcon}+${fmt(w.jade)} jade</div>
