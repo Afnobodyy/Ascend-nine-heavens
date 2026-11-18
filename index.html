@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 105; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 106; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -3744,20 +3744,60 @@ function fxLoopB() {
   }
   if (FXSB.length) requestAnimationFrame(fxLoopB); else { ctx.clearRect(0, 0, cv.width, cv.height); fxRunB = false; }
 }
+// cadre visible : emprise (en pixels de l'effet) des pixels visibles d'un effet, calculée une fois par effet/options (échantillonnage de la simulation)
+const PXB = {};
+function pxBounds(X, mod, key, o, w, h, ox, oy, sim, skip) {
+  const ck = key + "|" + (o.seed != null ? o.seed : "") + "|" + JSON.stringify(o.opts || {}) + "|" + sim + "|" + skip + "|" + (o.actor ? 1 : 0);
+  if (PXB[ck] !== undefined) return PXB[ck];
+  let b = null;
+  try {
+    const frame = X.createFrame(w, h), img = new ImageData(w, h);
+    const fx = X.createFx(mod, { x: ox, y: oy, flip: false, seed: o.seed != null ? o.seed : 1, ...(o.opts || {}), ...(o.actor ? { actor: { ...X.actor() } } : {}) });
+    for (let i = 0; i < Math.round(skip * 60); i++) fx.update(1 / 60);
+    const n = Math.max(1, Math.round(sim * 60)), every = Math.max(1, Math.round(n / 30));
+    for (let i = 1; i <= n; i++) {
+      fx.update(1 / 60);
+      if (i % every && i !== n) continue;
+      frame.color.fill(0); frame.light.fill(0); fx.draw(frame); X.composite(frame, img.data);
+      const d = img.data;
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 35) {
+        if (!b) b = { x0: x, y0: y, x1: x, y1: y };
+        else { if (x < b.x0) b.x0 = x; if (x > b.x1) b.x1 = x; if (y < b.y0) b.y0 = y; if (y > b.y1) b.y1 = y; }
+      }
+    }
+  } catch (e) { b = null; }
+  return (PXB[ck] = b);
+}
 function pxPlay(key, P, o = {}) {
   const X = window.PXFX, mod = X && X.E[key]; if (!mod) return false;
   const cvs = o.back ? fxCvB() : fxCv(); if (!cvs) return false;
   const m = mod.meta, D = m.duration, [w, h] = m.size || [320, 180], [ox, oy] = m.origin || [0, 0], speed = o.speed || 1;
   P = P || { x: 0, y: 0, s: 1 };
-  const cover = !!o.cover, k = o.fitH ? o.fitH * cvs.cv.height / h : (o.k || 1) * P.s;
+  const cover = !!o.cover; let k = o.fitH ? o.fitH * cvs.cv.height / h : (o.k || 1) * P.s;
   const hit = o.m === "C" ? (o.hit || [w / 2, h / 2]) : [ox, oy];
   const A = o.actor ? (o.actor === 1 ? { ...X.actor() } : pxActor(o.actor)) : null;
   const frame = X.createFrame(w, h), fx = X.createFx(mod, { x: ox, y: oy, flip: false, seed: o.seed != null ? o.seed : Math.floor(Math.random() * 99), ...(o.opts || {}), ...(A ? { actor: A } : {}) });
   const buf = document.createElement("canvas"); buf.width = w; buf.height = h;
   const bx = buf.getContext("2d"), img = new ImageData(w, h);
   let last = 0, acc = 0;
-  const SIM = o.sim || o.cut || D, real = (o.dur || (o.cut || D) * 1000 / speed) * TS;
+  const SK = o.skip || 0, SIM = (o.sim || o.cut || D) - SK, real = (o.dur || SIM * 1000 / speed) * TS;
+  for (let i = 0; i < Math.round(SK * 60); i++) fx.update(1 / 60); // saute le début de l'effet (ex. grenade avant la fumée)
   const add = o.back ? (d, f) => fxAddB(d, f) : (d, f) => fxAdd(d / FXT, f);
+  // garde l'effet dans le cadre visible : réduit puis décale si son emprise dépasse du canvas (sauf plein écran, projectiles et jets dont la portée est calculée)
+  if (!cover && !o.fitH && !o.to && !o.noclamp && !(o.opts && o.opts.length)) {
+    const bb = pxBounds(X, mod, key, { ...o, noscale: 0 }, w, h, ox, oy, SIM, SK), W = cvs.cv.width, H = cvs.cv.height;
+    if (bb) {
+      let Lx = (hit[0] - bb.x0) * k, Rx = (bb.x1 + 1 - hit[0]) * k; if (o.flip) [Lx, Rx] = [Rx, Lx];
+      const Ty = (hit[1] - bb.y0) * k, By = (bb.y1 + 1 - hit[1]) * k, m = 16, sx = .12 * W, sy = .15 * H;
+      let f = Math.min(1, (P.x + sx - m) / Math.max(Lx, 1), (W - m - P.x + sx) / Math.max(Rx, 1), (P.y + sy - m) / Math.max(Ty, 1), (H - m - P.y + sy) / Math.max(By, 1), (W - 2 * m) / Math.max(Lx + Rx, 1), (H - 2 * m) / Math.max(Ty + By, 1));
+      f = o.noscale ? 1 : Math.max(f, .4);
+      const l = P.x - f * Lx, r = P.x + f * Rx, t = P.y - f * Ty, bt = P.y + f * By;
+      let dx = 0, dy = 0;
+      if (r - l > W - 2 * m) dx = W / 2 - (l + r) / 2; else if (l < m) dx = m - l; else if (r > W - m) dx = W - m - r;
+      if (bt - t > H - 2 * m) dy = H / 2 - (t + bt) / 2; else if (t < m) dy = m - t; else if (bt > H - m) dy = H - m - bt;
+      if (f < 1 || dx || dy) { k *= f; P = { ...P, x: P.x + dx, y: P.y + dy }; }
+    }
+  }
   add(real, (ctx, p) => {
     const dt = Math.max(0, p - last) * SIM; last = p;
     acc += dt; while (acc >= 1 / 60) { fx.update(1 / 60); acc -= 1 / 60; }
@@ -3767,6 +3807,7 @@ function pxPlay(key, P, o = {}) {
     if (cover) { ctx.drawImage(buf, 0, 0, cvs.cv.width, cvs.cv.height); return; }
     const q = o.to ? ease(p) : 0, x = P.x + (o.to ? (o.to.x - P.x) * q : 0), y = P.y + (o.to ? (o.to.y - P.y) * q - Math.sin(q * Math.PI) * 50 * P.s : 0);
     if (o.flip) { ctx.translate(x, 0); ctx.scale(-1, 1); ctx.drawImage(buf, -hit[0] * k, y - hit[1] * k, w * k, h * k); }
+    else if (o.rot) { ctx.translate(x, y); ctx.rotate(o.rot); ctx.drawImage(buf, -hit[0] * k, -hit[1] * k, w * k, h * k); }
     else ctx.drawImage(buf, x - hit[0] * k, y - hit[1] * k, w * k, h * k);
   });
   return true;
@@ -3780,6 +3821,8 @@ const PXC = {
   coldP: ["#3a4a70", "#8fa4c8", "#d8e4f4", "#ffffff"],
   ice: ["#151a3d", "#212f6b", "#2c58aa", "#3a8bd8", "#62c8f4", "#a6ecff", "#dcfbff", "#ffffff"],
 };
+// fumigène : fumée seule (la grenade du début est sautée et masquée), durée raccourcie, fondu de sortie
+const PXSMOKE = { skip: .93, cut: 3, speed: 1.3, fade: 800, opts: { nocan: 1 } };
 const PXS = {
   p1: [
     { n: "Iaijutsu", block: 800, L: [{ e: "dashstrike", at: "boss", m: "C", hit: [242, 92], flip: 1, k: 1.5, actor: "self" }] },
@@ -3789,7 +3832,7 @@ const PXS = {
   ],
   p2: [
     { n: "Pointe de bambou", block: 900, L: [{ e: "spearsweep", at: "boss", m: "F", flip: 1, k: 2.2 }] },
-    { n: "Disparition", block: 1300, L: [{ e: "smokebomb", at: "self", m: "F", k: 2 }] },
+    { n: "Disparition", block: 1300, L: [{ e: "smokebomb", at: "self", m: "F", k: 2, ...PXSMOKE }] },
     { n: "Pluie de lances", block: 1100, L: [{ e: "vinewhip", at: "boss", m: "F", flip: 1, k: 2.2 }] },
     { n: "Forêt de lances", block: 1800, L: [{ e: "thorns", at: "boss", m: "F", flip: 1, k: 2.4 }] },
   ],
@@ -3825,7 +3868,7 @@ const PXS = {
   ],
   m2: [
     { n: "Pilule explosive", block: 2800, L: [{ e: "grenade", at: "boss", m: "F", flip: 1, k: 2.2 }] },
-    { n: "Fumée protectrice", block: 1500, L: [{ e: "smokebomb", at: "self", m: "F", k: 2 }] },
+    { n: "Fumée protectrice", block: 1500, L: [{ e: "smokebomb", at: "self", m: "F", k: 2, ...PXSMOKE }] },
     { n: "Grand fourneau", block: 900, L: [{ e: "boom", at: "boss", m: "F", k: 2.6 }] },
     { n: "Philtre ardent", block: 3300, L: [{ e: "bigexplosion", at: "boss", m: "F", k: 2.4 }, { e: "burnaway", at: "screen", cover: 1, t0: 2000, cut: 1.05, fade: 400 }] },
   ],
@@ -3863,9 +3906,9 @@ function pxCast(h, si, ti) {
         if (!P) continue;
         if (L.at === "screen" && L.m === "C") { const c = fxCv(); P = { x: c.cv.width / 2, y: c.cv.height * (L.back ? .5 : .5), s: 1 }; }
         if (L.jit) P = { ...P, x: P.x + (((i * 37 + 11) % 11) / 5 - 1) * L.jit[0] * P.s, y: P.y + (((i * 53 + 7) % 9) / 4 - 1) * L.jit[1] * P.s };
-        const o = { k: L.k, m: L.m, hit: L.hit, flip: !!L.flip, speed: L.speed, cover: !!L.cover, fitH: L.fitH, back: !!L.back, dur: L.dur, cut: L.cut, fade: L.fade, seed: i + 1, opts: { ...(L.opts || {}) } };
+        const o = { k: L.k, m: L.m, hit: L.hit, flip: !!L.flip, speed: L.speed, cover: !!L.cover, fitH: L.fitH, back: !!L.back, dur: L.dur, cut: L.cut, fade: L.fade, skip: L.skip, seed: i + 1, opts: { ...(L.opts || {}) } };
         if (L.actor) o.actor = actorEl(L.actor);
-        if (L.reachTo) { const B = bossP(), d = Math.abs(P.x - B.x) / ((L.k || 1) * P.s); o.opts.reach = Math.max(60, Math.round(d)); o.opts.seed = 6 + i; }
+        if (L.reachTo) { o.noscale = 1; const B = bossP(), d = Math.abs(P.x - B.x) / ((L.k || 1) * P.s); o.opts.reach = Math.max(60, Math.round(d)); o.opts.seed = 6 + i; }
         pxPlay(L.e, P, o);
       }
     }, ((L.t0 || 0) + i * (L.gap || 0)) * TS);
@@ -3928,13 +3971,19 @@ const BPX = { oni: {
   kanabo: { e: "dirtexplosion", k: 1.8, feet: 1 },
 }, kappa: {
   griffe: { e: "clawswipe", k: 2.2, m: "C" },
-  jet: { e: "waterjet", k: 2, jet: 1, opts: { palette: PXMUD } },
+  jet: { e: "waterjet", k: 2, jet: 1, mouth: [.735, .49], opts: { palette: PXMUD } },
   deluge: { e: "wavecrash", k: 1.7, speed: 2, feet: 1 },
 }, kitsune: {
   follet: { e: "arcanemissiles", k: 2, jet: 126, opts: { palette: PXC.ice } },
   charme: { e: "charmed", k: 2.4, feet: 1, dur: 1800 },
   queues: { e: "starfall", k: 1.5, speed: 1.6, feet: 1, opts: { palette: PXC.ice } },
 } }; // effets pixelfx posés sur chaque héros touché par un sort de boss (jet : part du boss vers le héros)
+// point de l'image du boss (fractions de son sprite) dans le repère du canvas d'effets
+function bossMouth(f) {
+  const c = fxCv(), e = bossEl() && bossEl().querySelector("img.bimg"); if (!c || !e) return null;
+  const r = e.getBoundingClientRect();
+  return { x: (r.left + r.width * f[0] - c.r.left) * c.d, y: (r.top + r.height * f[1] - c.r.top) * c.d };
+}
 function bossHitFx(t, mv, el) {
   if (!fxOn()) return;
   const P = heroP(t, .5); if (!P) return;
@@ -3949,7 +3998,9 @@ function bossHitFx(t, mv, el) {
     if (G && (!bx.jet || B0)) {
       const o = { k: bx.k, speed: bx.speed, m: bx.m, dur: bx.dur, opts: { ...(bx.opts || {}) } }, S = bx.k * G.s;
       let Q = G;
-      if (bx.jet) { Q = { x: B0.x, y: G.y, s: G.s }; if (bx.jet === 1) o.opts.length = Math.max(40, Math.round((G.x - B0.x) / S)); else o.k = Math.max(1.2, Math.min(4, (G.x - B0.x) / (bx.jet * G.s))); } // jet:1 = longueur du jet ; jet:N = effet de portée N px mis à l'échelle
+      const MO = bx.mouth && bossMouth(bx.mouth); // bouche du boss : le jet en part et vise le héros touché
+      if (MO && bx.jet === 1) { Q = { x: MO.x, y: MO.y, s: G.s }; o.rot = Math.atan2(G.y - MO.y, G.x - MO.x); o.opts.length = Math.max(40, Math.round(Math.hypot(G.x - MO.x, G.y - MO.y) / S)); }
+      else if (bx.jet) { Q = { x: B0.x, y: G.y, s: G.s }; if (bx.jet === 1) o.opts.length = Math.max(40, Math.round((G.x - B0.x) / S)); else o.k = Math.max(1.2, Math.min(4, (G.x - B0.x) / (bx.jet * G.s))); } // jet:1 = longueur du jet ; jet:N = effet de portée N px mis à l'échelle
       if (pxPlay(bx.e, Q, o)) return;
     }
   }
