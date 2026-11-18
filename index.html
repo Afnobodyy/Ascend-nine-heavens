@@ -2101,7 +2101,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 91; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 92; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -3658,6 +3658,16 @@ function fxPillar(P, col) {
 // ---------- haut niveau ----------
 const heroP = (h, fy = .5) => fxPos(heroEl(h), fy);
 const bossP = () => fxPos(bossEl(), .5, .52);
+// Déplacement de mêlée : l'acteur (.pcw héros ou .bossbox) s'avance au milieu de l'arène puis revient (translation simple, à remplacer par le gif de déplacement)
+function meleeGo(el, ms = 280) {
+  const sc = document.getElementById("scene"); if (!el || !sc || !el.animate) return null;
+  const a = el.getBoundingClientRect(), r = sc.getBoundingClientRect(), k = r.width / (sc.offsetWidth || r.width);
+  const dx = ((r.left + r.width / 2) - (a.left + a.width / 2)) / k;
+  if (Math.abs(dx) < 4) return null;
+  const to = "translateX(" + dx + "px)";
+  const an = el.animate([{ transform: "none" }, { transform: to }], { duration: ms, easing: "ease-out", fill: "forwards" });
+  return { home: () => { try { an.cancel(); } catch (e) {} const b = el.animate([{ transform: to }, { transform: "none" }], { duration: ms, easing: "ease-in" }); return b.finished.catch(() => {}); }, in: an.finished.catch(() => {}) };
+}
 // Animation du héros : s'avance (mêlée) ou fait un pas en incantant (magie)
 function heroMove(h, kind, dur) {
   const el = heroEl(h); if (!el) return;
@@ -5503,6 +5513,8 @@ async function useSkill(hi, si, ti) {
   heroMove(h, si === "foc" ? "guard" : dmgFx ? (melee ? "dash" : "cast") : "act", dmgFx ? 420 + (dmgFx.hits || 1) * 170 : 0);
   if (si === "foc") supportFx("guard", [h]);
   update();
+  const mv0 = dmgFx && melee && si !== "foc" ? meleeGo(heroEl(h) && heroEl(h).closest(".pcw")) : null;
+  if (mv0) await mv0.in;
   const T0 = performance.now(), scr = pxCast(h, si, ti); F.scr = scr;
   await sleep(scr ? (scr.lead != null ? scr.lead : Math.min(500, scr.block * .4)) : (dmgFx && melee ? 190 : 220));
   const allyT = sk.tgt === "ally" ? [F.heroes[ti]] : sk.tgt === "allies" ? F.heroes : [h];
@@ -5551,6 +5563,7 @@ async function useSkill(hi, si, ti) {
     }
   }
   if (scr) { const rest = scr.block - (performance.now() - T0); if (rest > 0) await sleep(rest); F.scr = null; }
+  if (mv0) await mv0.home();
   if (cb) applyCombo(cb, h);
   if (sk.discharge) h.charge = sk.capCh ? Math.max(0, (h.charge || 0) - sk.capCh) : 0;
   if (b.mode === "h" && sk.fx.some((f) => f.k === "revive")) h.cd[si] += 1;
@@ -5663,7 +5676,10 @@ async function bossAct(mv) {
   const b = F.boss, fx = mv.fx || {}, M = b.mode || "n", pk = mv.prot || "any";
   log(`${b.name} : ${mv.n}`);
   skBanner("boss", b.name, mv.n, bossSp(b.id, b.intent, b.el, mv.big) || (mv.big ? "⚠" : mv.t === "aoe" ? "全" : mv.t === "self" ? "守" : mv.t === "multi" ? "連" : "単"));
-  flashCls(document.getElementById("bstage"), "lunge"); bossAtk(b.id);
+  const bmel = mv.type === "p" && mv.t !== "self" ? meleeGo(document.getElementById("bstage")) : null;
+  if (!bmel) flashCls(document.getElementById("bstage"), "lunge");
+  bossAtk(b.id);
+  if (bmel) await bmel.in;
   await sleep(320);
   if (mv.t !== "self") { lightAt("party", mv.type === "m" ? ELEM[b.el].c : "#ff5a3a", mv.big); cam(mv.big ? "shake-b" : "shake-s"); }
   const isT = (h) => h.st.some((s) => s.k === "taunt");
@@ -5732,7 +5748,7 @@ async function bossAct(mv) {
       });
     }
   }
-  if (F.lost) { update(); await sleep(700); return; }
+  if (F.lost) { update(); if (bmel) await bmel.home(); await sleep(700); return; }
   if (mv.expose && b.hp > 0) {
     const ok = mv.expose === "prot" ? hitLog.length > 0 && hitLog.every((e) => e.pr || e.ev) : mv.expose === "taunt" ? hitLog.some((e) => e.taunt) : mv.expose === "parry" ? parried || hitLog.some((e) => e.taunt) : false;
     if (ok) exposeBoss(b);
@@ -5755,6 +5771,7 @@ async function bossAct(mv) {
   if (fx.enrage) { b.enr += fx.enrage; pop("ENRAGÉ", "#ff5a4a"); }
   if (mv.wrath) b.wrath = true;
   update();
+  if (bmel) await bmel.home();
   await sleep(550);
 }
 
