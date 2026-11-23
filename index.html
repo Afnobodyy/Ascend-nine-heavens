@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 116; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 117; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2605,14 +2605,14 @@ const BOSSES = [
     },
     p1: ["morsure", "souffle", "morsure", "souffle"], p2: ["morsure", "souffle", "morsure", "souffle"] },
   { id: "tengu", name: "Tengu des Cimes", ep: "Seigneur des vents", el: "bois", hp: 6000, atk: 172, pdef: 58, mdef: 58,
-    hint: "La Garde du vent renvoie les coups physiques. La Tornade arrive en phase 2 : prépare des boucliers.",
+    hint: "Ses Plumes visent ton meilleur attaquant : protège-le. En phase 2, un héros est tourmenté par le vent.",
     moves: {
       eventail: { n: "Éventail de feuilles", t: "aoe", m: 0.7, type: "m", d: "Touche toute l'équipe." },
       plumes: { n: "Plumes tranchantes", t: "multi", hits: 3, m: 0.55, type: "p", d: "Trois coups sur des cibles au hasard." },
-      garde: { n: "Garde du vent", t: "self", d: "Renvoie 50 % des dégâts physiques pendant 2 tours.", fx: { reflect: { type: "p", p: 0.5, d: 2 } } },
-      tornade: { n: "Tornade", t: "aoe", m: 1.3, type: "m", big: 1, d: "Tornade sur l'équipe, ATK −20 %.", fx: { atkdown: { p: 0.2, d: 2 } } },
+      garde: { n: "Garde du vent", t: "self", d: "Réduit de 50 % les dégâts subis pendant 1 tour.", fx: { dr: { p: 0.5, d: 1 } } },
+      cyclone: { n: "Cyclone", t: "self", d: "Enferme un héros 2 tours : il ne peut pas agir (aucun dégât). La provocation détourne le cyclone." },
     },
-    p1: ["eventail", "plumes", "garde", "plumes"], p2: ["garde", "eventail", "tornade", "plumes"] },
+    p1: ["eventail", "plumes", "garde", "plumes"], p2: ["plumes", "eventail", "plumes", "garde"] },
   { id: "gasha", name: "Gashadokuro", ep: "Le squelette affamé", el: "terre", hp: 7800, atk: 182, pdef: 72, mdef: 40,
     hint: "L'Armure d'ossements absorbe surtout les coups physiques : la magie la brise.",
     moves: {
@@ -4783,7 +4783,7 @@ const NEG = ["burn", "poison", "bleed", "atkdown", "healblock", "shieldblock", "
 const DOTS = ["burn", "poison", "bleed"];
 const STL = { buff: ["ATK↑", 1], atkdown: ["ATK↓", 0], dr: ["Garde", 1], taunt: ["Provoc.", 1], counter: ["Riposte", 1], regen: ["Régén.", 1], evade: ["Esquive", 1],
   execimm: ["Anti-exéc.", 1], vanish: ["Intouchable", 1], decoy: ["Leurre", 1], nxt: ["Prochain+", 1], ash: ["Cendres", 1],
-  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1], cond: ["Condamné", 0],
+  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1], cond: ["Condamné", 0], cyclone: ["Cyclone", 0], vent: ["Vent contraire", 0],
   burn: ["Brûlure", 0], poison: ["Poison", 0], bleed: ["Saign.", 0], healblock: ["Anti-soin", 0], defdown: ["DEF↓", 0], mark: ["Marque", 0], selfatk: ["ATK↑", 1], reflect: ["Renvoi", 1] };
 const sum = (st, k) => st.filter((s) => s.k === k).reduce((a, s) => a + (s.p || 0), 0);
 const md = () => (S.run && S.run.mods) || {};
@@ -4892,18 +4892,9 @@ function bossSetup(b) {
       set("morsure", { d: "Frappe et se soigne de 60 % des dégâts. Bouclier : pas de soin. Provocation + protection : Exposé.", fx: { drain: 0.6 }, expose: "jade", thirst: 2 });
       break;
     case "tengu":
-      set("plumes", { prot: "any", expose: "prot", floor: { n: 0.3, h: 0.25, m: 0 }, disperse: true });
-      if (H) {
-        mv.ouest = { k: "ouest", n: "Vent d'ouest", t: "self", d: "Renvoie 50 % des dégâts magiques pendant 2 tours.", fx: { reflect: { type: "m", p: 0.5, d: 2 } } };
-        b.p1 = ["eventail", "plumes", "garde", "plumes", "ouest"];
-        b.p2 = ["garde", "eventail", "tornade", "plumes", "ouest"];
-        set("plumes", { hits: 5, d: "Cinq coups sur des cibles au hasard." });
-      }
-      if (X) {
-        set("plumes", { disperse: false, twice: true, fatal: true, d: "Cinq coups, parfois deux sur le même héros. Deux touches sans réduction ≥ 50 % = mort." });
-        mv.oeil = { k: "oeil", n: "Œil de la tempête", t: "aoe", m: 1.3, type: "m", big: 1, d: "Tornade sur l'équipe, ATK −30 % cumulatif.", fx: { atkdown: { p: 0.3, d: 99, stack: 1 } } };
-        b.every = { n: 4, k: "oeil" };
-      }
+      b.first = true; b.look = M === "n" ? 3 : 2; b.windRatio = { n: 0.3, h: 0.4, m: 0.5 }[M]; b.windHero = -1;
+      set("plumes", { prot: "light2", expose: "prot", hunt: true, hits: M === "n" ? 3 : 5, d: "Plumes sur ton héros qui a infligé le plus de dégâts. Bouclier ou +DEF2 : Tengu est Exposé.", floor: { n: 0.3, h: 0.25, m: 0 } });
+      b.every = { n: 5, k: "cyclone", p2: true };
       break;
     case "gasha":
       if (H) { set("cri", { d: "Touche l'équipe, ATK −30 %.", fx: { atkdown: { p: 0.3, d: 2 } } }); set("etreinte", { floor: { n: 0.4, h: 0.1, m: 0.1 } }); }
@@ -4981,7 +4972,7 @@ function phaseHeal(b) {
   log("L'équipe reprend son souffle (+30 % PV).");
 }
 function nextMove(b) {
-  if (b.every && ((b.nmc = (b.nmc || 0) + 1) % b.every.n === 0)) return b.every.k;
+  if (b.every && (!b.every.p2 || b.phase >= 2) && ((b.nmc = (b.nmc || 0) + 1) % b.every.n === 0)) return b.every.k;
   const pat = b.phase === 3 && b.p3 ? b.p3 : b.phase >= 2 ? b.p2 : b.p1;
   b.mcd = b.mcd || {};
   for (const k in b.mcd) if (b.mcd[k] > 0) b.mcd[k]--;
@@ -5514,7 +5505,8 @@ function nextActive() {
 }
 function newRound(first) {
   if (!first) F.heroes.forEach((h) => { h.cd = h.cd.map((c) => Math.max(0, c - 1)); });
-  F.heroes.forEach((h) => { h.acted = h.dead; });
+  F.heroes.forEach((h) => { h._prev = h._turn || 0; h._turn = 0; h.acted = h.dead || h.st.some((s) => s.k === "cyclone"); h.st = h.st.filter((s) => s.k !== "vent"); });
+  if (F.boss && F.boss.windRatio && F.boss.phase >= 2 && alive().length) { const w = rnd(alive()); F.boss.windHero = F.heroes.indexOf(w); w.st.push({ k: "vent", d: 1 }); }
   F.soak = null; F.mirrorOn = false; F.mirror = 0; F.wrong = false; F.attackers = new Set(); if (F.boss) F.boss.rgCut = false;
   F.phase = "player"; F.pending = null; F.busy = false; F.plan = [];
   nextActive(); update();
@@ -5570,7 +5562,8 @@ function dmgBoss(h, m, o = {}) {
     if (!b.stun) pickIntent();
   }
   if (b.chargeOn) { b.charge += toHp; const th = b.thr * b.maxHp; b.gauge = { n: "Charge du Kanabō", v: Math.min(100, Math.round(100 * b.charge / th)), max: 100 }; }
-  h._dealt = (h._dealt || 0) + toHp;
+  h._dealt = (h._dealt || 0) + toHp; h._turn = (h._turn || 0) + toHp;
+  if (b.windRatio && b.phase >= 2 && F.heroes[b.windHero] === h && h.shield <= 0 && !h.dead && toHp > 0) { hurtHero(h, Math.round(toHp * b.windRatio), { raw: true, type: "p", noCounter: true, floorPct: 0.01 }); floatAt(heroEl(h), "Vent contraire", "info"); }
   return toHp;
 }
 function hurtHero(h, raw, o = {}) {
@@ -5865,7 +5858,10 @@ async function bossAct(mv) {
     if (fx.shieldblock) addSt(h, { k: "shieldblock", d: fx.shieldblock });
     if (fx.charmed) addSt(h, { k: "charmed", d: 2 });
   };
-  if (mv.k === "cercueil") {
+  if (mv.k === "cyclone") {
+    const pool = alive().filter((h) => !h.st.some((s) => s.k === "cyclone")), tt = taunter(), v = tt && !tt.st.some((s) => s.k === "cyclone") ? tt : rnd(pool);
+    if (v) { addSt(v, { k: "cyclone", d: 2 }); floatAt(heroEl(v), "Cyclone", "info"); log(`${v.c.name} est pris dans le cyclone (2 tours).`); v.acted = true; }
+  } else if (mv.k === "cercueil") {
     const live = b.tal.filter((x) => x > 0).length;
     if (!live) { b.inCoffin = false; b.gauge = null; log("Tous les talismans sont détruits : l'Empereur sort, sans défense."); exposeBoss(b); }
     else {
@@ -5932,6 +5928,7 @@ async function bossAct(mv) {
       const al = alive(); if (!al.length) break;
       const sk0 = F.soak && F.heroes[F.soak.hi] && !F.heroes[F.soak.hi].dead ? F.heroes[F.soak.hi] : null, vis = al.filter((h) => !h.st.some((s) => s.k === "vanish"));
       let t = sk0 || taunter();
+      if (!t && mv.hunt) t = alive().slice().sort((x, y) => (y._prev || 0) - (x._prev || 0))[0];
       if (!t) {
         if (mv.disperse) { bag = bag.filter((x) => !x.dead); if (!bag.length) bag = (vis.length ? vis : al).slice().sort(() => Math.random() - 0.5); t = bag.pop(); }
         else t = rnd(vis.length ? vis : al);
