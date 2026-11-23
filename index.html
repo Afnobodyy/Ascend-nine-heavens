@@ -14,7 +14,7 @@
 .dbang{position:absolute;left:50%;top:-6%;transform:translateX(-50%);z-index:60;pointer-events:none;font:900 34px/1 var(--display,sans-serif);color:#ff4a3a;text-shadow:0 0 0 #000,2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 10px #ff4a3a;animation:dbang 1.1s ease-out forwards}
 @keyframes dbang{0%{opacity:0;transform:translate(-50%,10px) scale(.4)}20%{opacity:1;transform:translate(-50%,-6px) scale(1.4)}40%{transform:translate(-50%,-2px) scale(1)}85%{opacity:1}100%{opacity:0;transform:translate(-50%,-22px) scale(1)}}
 /* survol souris (PC) */
-@media (hover:hover) and (pointer:fine){
+@media (any-hover:hover) and (any-pointer:fine){
   .cg.ico{transition:transform .12s,filter .12s}
   .cg.ico:not(.off):not(.cd):hover{transform:translateY(-3px);filter:brightness(1.2)}
   .cg.ico:hover .spi,#bint .bslot:hover .spi{box-shadow:0 0 0 2px #000a,0 0 0 calc(3*var(--u)) #ffe08a,0 0 calc(12*var(--u)) #ffe08a}
@@ -1646,6 +1646,7 @@ body.portrait #rot{display:flex;position:fixed;z-index:100;inset:auto 0 0 0;padd
 .vs{display:inline-flex;align-items:center;gap:1px;height:14px;padding:0 4px 0 3px;border-radius:7px;font-size:9px;font-weight:700;line-height:14px;border:1px solid}
 .vs svg{width:10px;height:10px;flex:none}.vs sub{font-size:9px;margin-left:1px;vertical-align:baseline}
 .vs.good{color:#8fe6c4;background:rgba(76,196,156,.18);border-color:#3ea88a}.vs.bad{color:#ffa99a;background:rgba(255,90,74,.18);border-color:#d4573a}
+.vs.s-givre{color:#9fe8ff;background:rgba(60,150,230,.28);border-color:#5ab8ff}.vs.s-givre svg{width:12px;height:12px}.vs.s-givre.fg,.vs.s-givre.fb{border-color:#5ab8ff!important}
 .vs.s-poison{color:#c8f08a;background:rgba(120,170,40,.22);border-color:#7da83a}
 .vs.s-guard{color:#a9d4ff;background:rgba(70,130,220,.22);border-color:#4f86d4}
 .vs.s-atk{color:#ffd58a;background:rgba(230,150,40,.22);border-color:#d49a38}
@@ -2138,7 +2139,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 141; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 142; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2549,7 +2550,6 @@ const VARDEF = [
   { o: "Bâton des mille lieues", n: "Bâton court", d: "Frappe à 160 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.6, post: 30 }] },
   { o: "Marque lunaire", n: "Lune pleine", d: "Le boss subit +45 % de dégâts (1 tour). Aucune attaque.", tgt: "boss", fx: [{ k: "mark", p: 0.45, d: 1 }] },
   { o: "Éclipse", n: "Double éclipse", d: "Frappe à 400 % ATK, sans bonus sous 35 % PV.", tgt: "boss", fx: [{ k: "dmg", m: 4.0, post: 70 }] },
-  { o: "Ofuda de givre", n: "Ofuda concentré", d: "Un gros orbe à 120 % ATK et 2 Givre.", tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "givre", n: 2 }] },
   { o: "Souffle polaire", n: "Bouclier de givre", d: "Bouclier de 15 % PV sur Yuki et 2 Givre, aucun dégât.", tgt: "self", fx: [{ k: "shield", p: 0.15 }, { k: "givre", n: 2 }] },
   { o: "Éclat de givre", n: "Éclat contrôlé", d: "Consomme au plus 3 Givre : 100 % ATK + 30 % ATK par Givre.", tgt: "boss", fx: [{ k: "dmg", m: 1.0, perGivre: 0.3, consume: 3 }] },
   { o: "Fumée protectrice", n: "Fumée commune", d: "Équipe : bouclier de 10 % PV, Feng inclus.", tgt: "allies", fx: [{ k: "shield", p: 0.1 }] },
@@ -2662,7 +2662,7 @@ const BOSSES = [
       vague: { n: "Vague du Tsunami", t: "self", big: 1, d: "Frappe 2 héros désignés. Bouclier ou +DEF2 : protégé. Sinon lourdes pertes." },
     },
     p1: ["raz", "morsure", "raz", "morsure"], p2: ["colere", "raz", "morsure", "vague", "vague", "vague"] },
-  { id: "phenix", name: "Phénix Noir", ep: "Cendre du Neuvième Ciel", el: "feu", hp: 10200, atk: 210, pdef: 66, mdef: 82,
+  { id: "phenix", name: "Phénix Noir", ep: "Cendre du Neuvième Ciel", el: "feu", hp: 11730, atk: 210, pdef: 66, mdef: 82,
     hint: "Trois formes : Feu, Glace puis Foudre, chacune avec toute sa vie. Entre deux, un œuf : protège l'équipe de la pulsation.",
     moves: {
       cendre: { n: "Plumes de cendre", t: "aoe", m: 0.7, type: "m", d: "Touche l'équipe et inflige Brûlure.", fx: { burn: { m: 0.2, d: 2 } } },
@@ -3024,14 +3024,14 @@ function bossKey(b) { // clé de l'image affichée pour le boss (formes d'Aluna,
   if (b.pats) return b.egg > 0 ? (b.form === 0 ? "b:phenixegg1" : "b:phenixegg2") : ["b:phenix", "b:phenixglace", "b:phenixfoudre"][b.form] || "b:phenix";
   return "b:" + b.id;
 }
-let HITSEQ = 0; const HITRUN = {}; const HITSPD = 0.45; // coups reçus : GIF accéléré, joué à l'instant exact des dégâts
+let HITSEQ = 0; const HITRUN = {}; const HITK = { "b:tengu": 0.5 }; const HITSPD = 0.45; // coups reçus : GIF accéléré, joué à l'instant exact des dégâts
 function bossHit(b) { // joue le GIF de coup reçu (relancé à chaque coup) ; false si le boss n'en a pas ou est occupé
   const k = bossKey(b), H = HIT[k]; if (!H || (ATKBUSY[k] && !HITRUN[k])) return false;
-  sfxRecv(true); const g = ++HITSEQ; HITRUN[k] = g; ATKBUSY[k] = 1; let i = 0;
+  sfxRecv(true); const g = ++HITSEQ; HITRUN[k] = g; ATKBUSY[k] = 1; let i = 0; const spd = HITSPD * (HITK[k] || 1), raw = k === "b:kitsune"; // renarde : les anneaux sous ses pieds faussaient le recalage
   const step = () => {
     if (HITRUN[k] !== g) return;
-    document.querySelectorAll('img[data-px="' + k + '"][src]').forEach((im) => bossFrame(im, H.f[i]));
-    if (++i < H.f.length) setTimeout(step, H.d[i - 1] * TS * HITSPD); else setTimeout(() => { if (HITRUN[k] === g) { HITRUN[k] = 0; ATKBUSY[k] = 0; } }, H.d[i - 1] * TS * HITSPD);
+    document.querySelectorAll('img[data-px="' + k + '"][src]').forEach((im) => { if (raw) { im.src = H.f[i]; im.style.translate = ""; } else bossFrame(im, H.f[i]); });
+    if (++i < H.f.length) setTimeout(step, H.d[i - 1] * TS * spd); else setTimeout(() => { if (HITRUN[k] === g) { HITRUN[k] = 0; ATKBUSY[k] = 0; } }, H.d[i - 1] * TS * spd);
   };
   step(); return true;
 }
@@ -3051,7 +3051,7 @@ function heroDeathSync(h) { // appelé à chaque mise à jour : lance la mort (G
   const k = "h:" + h.id, D = HDIE[k], el = heroEl(h);
   if (h.dead && !h._dying) {
     if (!D) return; h._dying = 1; h._hitg = 0; ATKBUSY[k] = 1; let i = 0;
-    const step = () => { if (!h._dying) return; heroFrame(h, D, i); if (++i < D.f.length) setTimeout(step, D.d[i - 1] * TS); };
+    const step = () => { if (!h._dying) return; heroFrame(h, D, i); if (++i < D.f.length) setTimeout(step, D.d[i - 1] * TS * 0.45); };
     step(); if (el) el.classList.add("hcorpse");
   } else if (!h.dead && h._dying) { h._dying = 0; ATKBUSY[k] = 0; heroReset(h); if (el) el.classList.remove("hcorpse"); }
 }
@@ -5064,7 +5064,7 @@ function startFight() {
   const relic = S.relicSel && S.relics && S.relics[S.relicSel] ? S.relicSel : null;
   const heroes = sortRoles(r.heroes.map((x) => x.id)).map((id) => r.heroes.find((x) => x.id === id)).map((rh) => {
     const s = heroStats(rh.id, r), c = kitOf(CH[rh.id]), hp = Math.round(s.hp * rh.hpPct);
-    return { id: rh.id, c, maxHp: s.hp, hp, atk: s.atk, def: s.def, el: c.el, dt: ROLE[c.role].dt, cd: [0, 0, 0, relic === "ryujin" ? 1 : 2], charge: 0, sheath: c.id === "p1", draw: 0, st: [], shield: hp > 0 && m.shield ? Math.round(s.hp * 0.15 * m.shield) : 0, acted: false, dead: hp <= 0 };
+    return { id: rh.id, c, maxHp: s.hp, hp, atk: s.atk, def: s.def, el: c.el, dt: ROLE[c.role].dt, cd: [0, 0, 0, Math.max(0, ((c.skills[3] && c.skills[3].cd) || 3) - 1 - (relic === "ryujin" ? 1 : 0))], charge: 0, sheath: c.id === "p1", draw: 0, st: [], shield: hp > 0 && m.shield ? Math.round(s.hp * 0.15 * m.shield) : 0, acted: false, dead: hp <= 0 };
   });
   F = { boss, heroes, round: 1, phase: "player", active: 0, pending: null, busy: false, souls: m.soul || 0, log: [], over: false, gauge: 0, sel: null, acting: null, soak: null, mirrorOn: false, mirror: 0, lost: false, wrong: false, relic, rlUsed: 0, teamDecoy: false };
   if (boss.threads) markThreads();
@@ -5350,8 +5350,9 @@ function renderFightShell() {
   fightEnv();
 }
 const VIC = { atk: '<svg viewBox="0 0 24 24"><path d="M12 2l6 8h-4v7h-4v-7H6z" fill="currentColor"/><rect x="6" y="19" width="12" height="3" fill="currentColor"/></svg>', guard: '<svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>', poison: '<svg viewBox="0 0 24 24"><path d="M12 2C9 8 5 11 5 15a7 7 0 0014 0c0-4-4-7-7-13z" fill="currentColor"/><circle cx="9.5" cy="15" r="1.6" fill="#0c0709"/></svg>', burn: '<svg viewBox="0 0 24 24"><path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-4 2-7 2 1 3 2 4-5z" fill="currentColor"/></svg>' };
-const VKEY = { buff: "atk", selfatk: "atk", dr: "guard", poison: "poison", burn: "burn" };
-const vChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : s.k === "dr" ? "+DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : s.k === "bowl" ? "Bol −" + Math.round((s.p || 0) * 100) + " %" : s.k === "givre" ? "Givre " + s.n : s.k === "defdown" || s.k === "mark" ? "−DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : n; const ic = VKEY[s.k]; return `<span class="vs ${ic ? "s-" + ic : good ? "good" : "bad"} ${good ? "fg" : "fb"}" title="${label}">${ic ? VIC[ic] : label.slice(0, 3)}<sub>${s.d}</sub></span>`; }).join("");
+const VKEY = { buff: "atk", selfatk: "atk", dr: "guard", poison: "poison", burn: "burn", givre: "givre" };
+VIC.givre = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 2v20M3.3 7l17.4 10M20.7 7L3.3 17"/><path d="M9.5 3.8L12 6.5l2.5-2.7M9.5 20.2L12 17.5l2.5 2.7M3.5 10.5l3.6.3-.9-3.4M20.5 13.5l-3.6-.3.9 3.4M3.5 13.5l3.6-.3-.9 3.4M20.5 10.5l-3.6.3.9-3.4" stroke-width="1.6"/></svg>';
+const vChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : s.k === "dr" ? "+DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : s.k === "bowl" ? "Bol −" + Math.round((s.p || 0) * 100) + " %" : s.k === "givre" ? "Givre " + s.n : s.k === "defdown" || s.k === "mark" ? "−DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : n; const ic = VKEY[s.k]; return `<span class="vs ${ic ? "s-" + ic : good ? "good" : "bad"} ${good ? "fg" : "fb"}" title="${label}">${ic ? VIC[ic] : label.slice(0, 3)}${s.k === "givre" ? `<sub>${s.n}</sub>` : s.d < 50 ? `<sub>${s.d}</sub>` : ""}</span>`; }).join("");
 // buffs/debuffs ATK/DEF du boss : flèche ↑/↓ + ATK/DEF (sans valeur) ; les autres statuts en pastilles icône comme les héros
 const bossChips = (st) => {
   const mk = (n, up, d, tip) => `<span class="bfx ${up ? "up" : "dn"}" title="${tip}"><em>${up ? "↑" : "↓"}</em>${n}${d < 50 ? `<sub>${d}</sub>` : ""}</span>`;
@@ -6266,13 +6267,7 @@ function bossTargetLine(mv, tg) {
   return mv.t === "self" ? "Cible : lui-même" : mv.t === "aoe" ? "Touche toute l'équipe" : mv.t === "multi" ? `Touche ${mv.hits} héros au hasard` : mv.t === "exec" ? "Touche l'allié le plus affaibli (sauf provocation)" : mv.t === "charm" ? "Touche l'allié le plus fort" : tg && tg[0] ? `Touche ${tg[0].c.name}` : "Touche un héros";
 }
 // ===================== ÉVÉNEMENTS =====================
-// appui long sur une icône de sort : affiche son nom et sa description (le clic qui suit est ignoré)
-let LP = { t: 0, skip: false, tip: null };
-function lpHide() { clearTimeout(LP.t); if (LP.tip) { LP.tip.remove(); LP.tip = null; } }
-document.addEventListener("pointerdown", (e) => {
-  const b = e.target.closest && e.target.closest(".cg.ico, .bslot"); lpHide(); LP.skip = false; if (!b || !F) return;
-  LP.dn = performance.now(); b.classList.add("tap"); // le rétrécissement de l'icône doit toujours se voir, même sur un appui très bref
-  LP.t = setTimeout(() => {
+function lpBuild(b) {
     const tip = document.createElement("div"); tip.className = "lptip";
     if (b.classList.contains("bslot")) {
       if (b.dataset.s === "stun") { tip.innerHTML = `<b>Étourdi</b><p>Perd son prochain tour, subit +50 % de dégâts.</p>`; }
@@ -6290,7 +6285,25 @@ document.addEventListener("pointerdown", (e) => {
     const r = b.getBoundingClientRect(), w = tip.offsetWidth, hh = tip.offsetHeight;
     if (b.classList.contains("bslot")) { tip.style.left = Math.max(6, r.left) + "px"; tip.style.top = Math.max(6, r.top - hh - 8) + "px"; }
     else { tip.style.left = Math.max(6, r.left - w - 10) + "px"; tip.style.top = Math.max(6, Math.min(innerHeight - hh - 6, r.top + r.height / 2 - hh / 2)) + "px"; }
-  }, 380);
+}
+// survol à la souris (PC) : même infobulle que l'appui long, sans clic
+document.addEventListener("pointerover", (e) => {
+  if (e.pointerType !== "mouse" || !F) return;
+  const b = e.target.closest && e.target.closest(".cg.ico, .bslot"); if (!b || b.contains(e.relatedTarget)) return;
+  lpHide(); LP.t = setTimeout(() => lpBuild(b), 140);
+});
+document.addEventListener("pointerout", (e) => {
+  if (e.pointerType !== "mouse") return;
+  const b = e.target.closest && e.target.closest(".cg.ico, .bslot"); if (!b || b.contains(e.relatedTarget)) return;
+  lpHide();
+});
+// appui long sur une icône de sort : affiche son nom et sa description (le clic qui suit est ignoré)
+let LP = { t: 0, skip: false, tip: null };
+function lpHide() { clearTimeout(LP.t); if (LP.tip) { LP.tip.remove(); LP.tip = null; } }
+document.addEventListener("pointerdown", (e) => {
+  const b = e.target.closest && e.target.closest(".cg.ico, .bslot"); lpHide(); LP.skip = false; if (!b || !F) return;
+  LP.dn = performance.now(); b.classList.add("tap"); // le rétrécissement de l'icône doit toujours se voir, même sur un appui très bref
+  LP.t = setTimeout(() => lpBuild(b), 380);
 });
 // relâcher après un appui long : la description reste affichée, le clic qui suit est ignoré ; le prochain appui valide
 ["pointerup", "pointercancel"].forEach((ev) => document.addEventListener(ev, () => { if (LP.tip) LP.skip = true; else clearTimeout(LP.t); setTimeout(() => document.querySelectorAll(".tap").forEach((x) => x.classList.remove("tap")), 170); }, true));
