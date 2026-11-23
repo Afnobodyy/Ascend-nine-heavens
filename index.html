@@ -28,6 +28,9 @@
 .tal i{position:absolute;left:18%;right:18%;bottom:6%;height:5px;background:rgba(0,0,0,.65);border-radius:3px;overflow:hidden}
 .tal i b{display:block;height:100%;background:#ffd25a;transition:width .3s}
 .tal.gone{opacity:0;transform:scale(1.5) rotate(8deg)}
+.tals.pick .tal:not(.gone){pointer-events:auto;cursor:pointer;animation:talpick 1s ease-in-out infinite}
+@keyframes talpick{50%{filter:drop-shadow(0 0 14px #6fe0a8) drop-shadow(0 0 4px #fff)}}
+.tal:hover{filter:drop-shadow(0 0 12px #fff)}
 </style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#14102f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Nine Heavens"><link rel="apple-touch-icon" href="apple-touch-icon.png"><title>Ascend: Nine Heavens</title></head><body>
 <title>Ascend: Nine Heavens</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -2146,7 +2149,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 147; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 148; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -3055,9 +3058,10 @@ function syncTals(b) { // talismans du cercueil de Jiangshi : un GIF par talisma
   if (!b.inCoffin || !b.tal) { if (L) L.remove(); return; }
   if (!L) { L = document.createElement("div"); L.className = "tals"; st.appendChild(L); }
   const full = Math.max(1, Math.round((b.talPct || 0.04) * b.maxHp));
+  L.classList.toggle("pick", !!(F && F.pending && F.pending.tal));
   b.tal.forEach((v, i) => {
     let e = L.children[i];
-    if (!e) { e = document.createElement("div"); e.className = "tal"; const p = TALPOS[i % TALPOS.length]; e.style.left = p[0] + "%"; e.style.top = p[1] + "%"; e.innerHTML = `<img src="${TALGIF}" alt=""><i><b></b></i>`; L.appendChild(e); }
+    if (!e) { e = document.createElement("div"); e.className = "tal"; const p = TALPOS[i % TALPOS.length]; e.style.left = p[0] + "%"; e.style.top = p[1] + "%"; e.dataset.act = "tal"; e.dataset.i = i; e.innerHTML = `<img src="${TALGIF}" alt=""><i><b></b></i>`; L.appendChild(e); }
     e.querySelector("b").style.width = Math.max(0, Math.min(100, (v / full) * 100)) + "%";
     if (v <= 0 && !e.classList.contains("gone")) e.classList.add("gone");
   });
@@ -5455,7 +5459,7 @@ function update() {
       x.classList.toggle("dead", h.dead);
       x.classList.toggle("done", !h.dead && h.acted && F.phase === "player");
       x.classList.toggle("active", act);
-      x.classList.toggle("target", !!F.pending && !h.dead);
+      x.classList.toggle("target", !!F.pending && !F.pending.tal && !h.dead);
     });
     pc.classList.toggle("guard", h.st.some((s) => s.k === "dr" && s.p >= 0.5));
     $("pw" + i).classList.toggle("aimed", !F.over && !h.dead && aims.includes(h));
@@ -5482,7 +5486,7 @@ function renderSkills() {
   if (F.phase !== "player") { box.innerHTML = `<div class="waitmsg">${F.boss.name} agit…</div>`; return; }
   if (F.pending) {
     const h = F.heroes[F.pending.hi], sk = getSk(h, F.pending.si);
-    box.innerHTML = `<div class="pend"><div><b>${sk.n}</b><span>Touche l'allié à cibler</span></div><button class="btn ghost" data-act="cancelT">Annuler</button></div>`;
+    box.innerHTML = `<div class="pend"><div><b>${sk.n}</b><span>${F.pending.tal ? "Touche le talisman à viser" : "Touche l'allié à cibler"}</span></div><button class="btn ghost" data-act="cancelT">Annuler</button></div>`;
     return;
   }
   const h = F.heroes[F.active];
@@ -5630,8 +5634,8 @@ function planOrder() {
   const pr = (i) => actPrio(F.heroes[i], F.plan[i].si);
   return idx.slice().sort((a, b) => { if (pr(a) !== pr(b)) return pr(a) - pr(b); const xa = x(a), xb = x(b); return xa == null || xb == null || xa === xb ? a - b : xa - xb; });
 }
-function setPlan(hi, si, ti) {
-  F.plan[hi] = { si, ti }; F.pending = null;
+function setPlan(hi, si, ti, tt) {
+  F.plan[hi] = { si, ti, tt }; F.pending = null;
   const n = F.heroes.length;
   for (let k = 1; k <= n; k++) { const j = (hi + k) % n; if (!F.heroes[j].dead && !F.plan[j]) { F.active = j; break; } }
   update();
@@ -5653,7 +5657,7 @@ async function launchPlan() {
 
     const sk = getSk(h, si);
     if (sk.tgt === "ally" && (ti == null || F.heroes[ti].dead)) { const al = F.heroes.findIndex((t) => !t.dead); ti = al; }
-    const f = F; await useSkill(i, si, ti);
+    F.talSel = p.tt; const f = F; await useSkill(i, si, ti);
     if (F !== f || !F) break;
   }
 }
@@ -5695,7 +5699,8 @@ function dmgBoss(h, m, o = {}) {
   const crit = o.crit || Math.random() < 0.08 + (mods.crit || 0); if (crit) d *= 1.6;
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
   if (b.inCoffin) {
-    let r = d; for (let i = 0; i < b.tal.length && r > 0; i++) { const x = Math.min(b.tal[i], r); b.tal[i] -= x; r -= x; }
+    let ti = F.talSel; if (ti == null || !(b.tal[ti] > 0)) ti = b.tal.findIndex((v) => v > 0); // les coups suivants d'un sort multi-hits passent au talisman suivant si le visé est détruit
+    if (ti >= 0) b.tal[ti] = Math.max(0, b.tal[ti] - d);
     const tot = b.tal.reduce((a, x) => a + x, 0); b.gauge.v = tot; floatAt(bs, tot ? "Talisman " + d : "Talismans détruits", "info"); flashCls(document.querySelector("#bstage .bimg"), "hit"); return 0;
   }
   if (b.skel && b.skel.length) { let r = d; const n0 = b.skel.length; while (b.skel.length && r >= b.skel[0]) r -= b.skel.shift(); if (b.skel.length < n0) { b.gauge.v = b.skel.length; floatAt(bs, `Squelette abattu ×${n0 - b.skel.length}`, "info"); } else if (b.skel.length) b.skel[0] -= r; }
@@ -6386,6 +6391,7 @@ document.addEventListener("click", (e) => {
     case "abandon": settingsOpen(true); break;
     case "abandonok": if (F && F.busy) { settingsClose(); toast("Attends la fin du tour pour abandonner."); break; } settingsClose(); abandon(); break;
     case "mute": S.mute = !S.mute; save(); auMute(); t.classList.toggle("off", S.mute); if (!S.mute && F) musStart(); else if (!S.mute) menuStart(); break;
+    case "tal": if (F && F.pending && F.pending.tal && !F.busy) { const pd = F.pending; setPlan(pd.hi, pd.si, null, +t.dataset.i); } break;
     case "cancelT": if (F) { F.pending = null; update(); } break;
     case "skill": {
       if (!F || F.busy || F.phase !== "player") return;
@@ -6394,6 +6400,10 @@ document.addEventListener("click", (e) => {
       if (!sk || (typeof si === "number" && h.cd[si] > 0)) return;
 
       if (sk.tgt === "ally") { F.pending = { hi: F.active, si }; update(); }
+      else if (sk.tgt === "boss" && F.boss.inCoffin && F.boss.tal) { // phase des talismans : chaque talisman est une cible
+        const live = F.boss.tal.map((v, i) => (v > 0 ? i : -1)).filter((i) => i >= 0);
+        if (live.length > 1) { F.pending = { hi: F.active, si, tal: true }; update(); } else setPlan(F.active, si, null, live[0]);
+      }
       else setPlan(F.active, si);
       break;
     }
@@ -6405,7 +6415,7 @@ document.addEventListener("click", (e) => {
     case "hsel": {
       if (!F || F.busy || F.phase !== "player") return;
       const i = +t.dataset.i, h = F.heroes[i];
-      if (F.pending) { if (!h.dead) setPlan(F.pending.hi, F.pending.si, i); return; }
+      if (F.pending) { if (!h.dead && !F.pending.tal) setPlan(F.pending.hi, F.pending.si, i); return; }
       if (!h.dead && !h.acted) { F.active = i; F.sel = null; update(); }
       break;
     }
