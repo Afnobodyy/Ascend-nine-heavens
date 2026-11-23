@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 120; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 121; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5897,7 +5897,7 @@ async function bossAct(mv) {
     });
   } else if (mv.k === "eclosion") {
     b.form++; b.egg = 0; b.el = b.formEl[b.form]; b.hp = b.maxHp; b.p1 = b.pats[b.form].slice(); b.p2 = b.pats[b.form].slice(); b.step = 0; b.queue = [];
-    pop("RENAISSANCE", "#ff8a1f"); log(`${b.name} renaît sous une nouvelle forme (${ELEM[b.el].n}) !`);
+    pop("RENAISSANCE", "#ff8a1f"); log(`${b.name} renaît sous une nouvelle forme (${["Feu", "Glace", "Foudre"][b.form]}) !`);
   } else if (mv.k === "gel") {
     const tt = taunter(), v = tt && !tt.st.some((s) => s.k === "gel") ? tt : rnd(alive().filter((h) => !h.st.some((s) => s.k === "gel")));
     if (v) { addSt(v, { k: "gel", d: 1 }); floatAt(heroEl(v), "Gelé", "info"); log(`${v.c.name} est gelé.`); v.acted = true; }
