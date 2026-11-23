@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 128; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 129; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2413,7 +2413,7 @@ const KITS = {
     { n: "Rayon lunaire", d: "Frappe à 120 % ATK, le boss subit +10 % de dégâts (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.1, d: 2 }] },
     { n: "Marque lunaire", d: "Le boss subit +30 % de dégâts (2 tours). Aucune attaque.", cd: 3, tgt: "boss", fx: [{ k: "mark", p: 0.3, d: 2 }] },
     { n: "Éclipse", d: "Frappe à 300 % ATK, ×1,6 si le boss a moins de 35 % PV.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 3.0, exec: 1.6 }] },
-    { n: "Trou noir", d: "Frappe à 700 % ATK, ×2 si le boss a moins de 35 % PV.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 7.0, exec: 2.0, post: 100 }] },
+    { n: "Trou noir", d: "Frappe à 350 % ATK, ×1,5 si le boss a moins de 35 % PV.", cd: 7, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.5, exec: 1.5, post: 100 }] },
   ],
   // ---------- ARCANISTES ----------
   m1: [
