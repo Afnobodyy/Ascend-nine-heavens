@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 125; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 126; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2346,7 +2346,7 @@ const KITS = {
     { n: "Bâton lourd", d: "Frappe à 110 % ATK.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.1, post: 14 }] },
     { n: "Vœu de la montagne", d: "Provoque 2 tours et réduit ses dégâts subis de 50 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.45, d: 2 }] },
     { n: "Mur de prière", d: "Équipe : bouclier de 15 % PV et +DEF1 (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "dr", p: 0.15, d: 2 }] },
-    { n: "Mille prières, une montagne", d: "Tous les coups du boss ce tour visent Bao, qui subit 70 % de dégâts en moins.", cd: 6, tgt: "self", ult: 1, fx: [{ k: "soak", p: 0.7 }] },
+    { n: "Mille prières, une montagne", d: "Tous les coups du boss ce tour visent Bao, qui subit 75 % de dégâts en moins.", cd: 6, tgt: "self", ult: 1, fx: [{ k: "soak", p: 0.75 }] },
   ],
   t2: [
     { n: "Estoc de lance", d: "Frappe à 120 % ATK et provoque 1 tour.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "taunt", d: 1, on: "self" }] },
