@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 108; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 109; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4417,7 +4417,7 @@ function heroStats(id, run) {
   return { hp: Math.round(r.hp * m * (1 + (md.hp || 0))), atk: Math.round(r.atk * m * (1 + (md.atk || 0))), def: Math.round(r.def * m * (1 + (md.def || 0))) };
 }
 const RELICS = { kappa: { n: "Écuelle d'eau", k: "碗", d: "La première purge du combat soigne aussi 10 % des PV du héros purgé." }, kitsune: { n: "Queue de renard", k: "尾", d: "La première attaque à cible unique du boss rate." }, oni: { n: "Masque d'oni", k: "面", d: "Les provocations durent 1 tour de plus." }, jiangshi: { n: "Talisman scellé", k: "符", d: "Un allié purgé est protégé contre les malus pendant 3 tours." }, tengu: { n: "Éventail de plume", k: "扇", d: "La recharge de la compétence 1 de chaque héros diminue de 1." }, gasha: { n: "Os de géant", k: "骨", d: "Le premier allié mis à terre revient à 20 % de ses PV, une fois par combat." }, ryujin: { n: "Perle du dragon", k: "珠", d: "Les ultimes sont disponibles dès le tour 2." }, phenix: { n: "Plume noire", k: "羽", d: "Les brûlures que l'équipe inflige durent 1 tour de plus." }, aluna: { n: "Fil d'Aluna", k: "糸", d: "Le bonus de l'état Exposé augmente de 0,25." } };
-const MODES = { n: { n: "Normal", hp: 1, dmg: 0.9375 }, h: { n: "Héroïque", hp: 1.5, dmg: 1.1 }, m: { n: "Mythique", hp: 2.2, dmg: 1.6 } };
+const MODES = { n: { n: "Normal", hp: 1, dmg: 1.1 }, h: { n: "Héroïque", hp: 1.5, dmg: 1.3 }, m: { n: "Mythique", hp: 2.2, dmg: 1.8 } };
 const MODE_ORD = ["n", "h", "m"];
 let SEL = { boss: "kappa", mode: "n" };
 const cleared = (bid, m) => !!(S.prog && S.prog[bid] && S.prog[bid][m]);
@@ -4935,7 +4935,7 @@ const MODEINFO = {
 const modeRules = (id, mode) => { const i = MODEINFO[id]; if (!i || mode === "n") return []; return mode === "m" ? [...i.h, ...i.m] : i.h; };
 
 // réglage par boss et par mode (issu de la simulation, étape 7) : multiplicateurs de PV et d'ATK en plus de MODES
-let TUNE = {"kappa":{"n":{"hp":3.42,"atk":1.58},"h":{"hp":3.83,"atk":2.24},"m":{"hp":2,"atk":1.52}},"kitsune":{"n":{"hp":2.7,"atk":1.48},"h":{"hp":3.36,"atk":2.07},"m":{"hp":2.83,"atk":1.87}},"oni":{"n":{"hp":2.65,"atk":1.46},"h":{"hp":2.54,"atk":1.75},"m":{"hp":1,"atk":1.0}},"jiangshi":{"n":{"hp":1.7,"atk":1.12},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"tengu":{"n":{"hp":1.53,"atk":1.12},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"gasha":{"n":{"hp":0.92,"atk":0.78},"h":{"hp":1,"atk":1.0},"m":{"hp":1,"atk":1.0}},"ryujin":{"n":{"hp":0.64,"atk":0.66},"h":{"hp":0.59,"atk":0.73},"m":{"hp":1,"atk":1.0}},"phenix":{"n":{"hp":0.52,"atk":0.58},"h":{"hp":0.35,"atk":0.54},"m":{"hp":1,"atk":1.0}},"aluna":{"n":{"hp":0.33,"atk":0.41},"h":{"hp":0.35,"atk":0.54},"m":{"hp":1,"atk":1.0}}};
+let TUNE = {"kappa":{"n":{"hp":3.42,"atk":1.58},"h":{"hp":3.83,"atk":2.24},"m":{"hp":2,"atk":1.52}},"kitsune":{"n":{"hp":2.7,"atk":1.48},"h":{"hp":3.36,"atk":2.07},"m":{"hp":2.83,"atk":1.87}},"oni":{"n":{"hp":2.65,"atk":1.46},"h":{"hp":2.54,"atk":1.75},"m":{"hp":1,"atk":1.0}},"jiangshi":{"n":{"hp":1.7,"atk":1.12},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"tengu":{"n":{"hp":1.53,"atk":1.12},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"gasha":{"n":{"hp":0.92,"atk":0.78},"h":{"hp":1,"atk":1.0},"m":{"hp":1,"atk":1.0}},"ryujin":{"n":{"hp":0.64,"atk":0.66},"h":{"hp":0.59,"atk":0.73},"m":{"hp":1,"atk":1.0}},"phenix":{"n":{"hp":0.52,"atk":0.58},"h":{"hp":0.35,"atk":0.54},"m":{"hp":1,"atk":1.0}},"aluna":{"n":{"hp":0.4,"atk":0.5},"h":{"hp":0.55,"atk":0.75},"m":{"hp":1,"atk":1.0}}};
 function startFight() {
   if (!modeOpen(SEL.boss, SEL.mode)) { toast(modeLockTxt(SEL.mode) || "Boss verrouillé."); return go("boss"); }
   const b = BOSSES.find((x) => x.id === SEL.boss) || BOSSES[0], bi = BOSSES.indexOf(b), loop = 0, k = 1, M = MODES[SEL.mode] || MODES.n;
