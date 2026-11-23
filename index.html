@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 129; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 130; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2432,7 +2432,7 @@ const KITS = {
     { n: "Kitsunebi", d: "Deux feux follets à 55 % ATK puis Brûlure (25 % ATK/tour, 2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.55, hits: 2 }, { k: "dot", s: "burn", m: 0.25, d: 2 }] },
     { n: "Illusion", d: "ATK du boss −30 % et DEF −15 % (2 tours).", cd: 3, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
     { n: "Tornade de flammes", d: "Six coups à 50 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 6 }] },
-    { n: "Danse des cent feux", d: "Neuf flammes à 45 % ATK, Brûlure (40 % ATK/tour, 3 tours) et ATK du boss −20 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.45, hits: 9, post: 5 }, { k: "dot", s: "burn", m: 0.4, d: 3 }, { k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+    { n: "Danse des cent feux", d: "Neuf flammes à 39 % ATK, Brûlure (40 % ATK/tour, 3 tours) et ATK du boss −20 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.39, hits: 9, post: 5 }, { k: "dot", s: "burn", m: 0.4, d: 3 }, { k: "debuff", s: "atk", p: 0.2, d: 2 }] },
   ],
   m4: [
     { n: "Trait de pinceau", d: "Sort à 120 % ATK, DEF du boss −15 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2, post: 25 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
