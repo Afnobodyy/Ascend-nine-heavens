@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 124; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 125; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2532,16 +2532,16 @@ const VARDEF = [
   { o: "Torrent céleste", n: "Torrent étiré", d: "Trois coups à 50 % ATK, chacun ×1,2 si le boss est exposé.", tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 3, post: 10, expMul: 1.2 }] },
   { o: "Tambour du tonnerre", n: "Surcharge", d: "Frappe à 100 % ATK. +2 charges, sans réduction de DEF.", tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 30 }, { k: "charge", n: 2 }], nodis: 1 },
   { o: "Tambour du tonnerre", n: "Décharge limitée", d: "Consomme 3 charges au maximum : 100 % ATK + 60 % par charge, DEF du boss −30 % (2 tours).", cd: 2, tgt: "boss", discharge: 1, capCh: 3, fx: [{ k: "dmg", m: 1.0, perCharge: 0.6, post: 40 }, { k: "debuff", s: "def", p: 0.3, d: 2 }] },
-  { o: "Clochette", n: "Clochette double", d: "Deux alliés : soigne chacun 100 % ATK.", tgt: "allies", fx: [{ k: "heal", m: 1.0, pick: 2 }] },
-  { o: "Racines de vie", n: "Racines profondes", d: "Un allié : retire les malus et régénère 10 % PV par tour (3 tours).", tgt: "ally", fx: [{ k: "cleanse" }, { k: "regen", p: 0.1, d: 3 }] },
-  { o: "Brume des eaux", n: "Marée montante", d: "Équipe : bouclier de 8 % PV et régénère 6 % PV par tour (3 tours).", tgt: "allies", fx: [{ k: "shield", p: 0.08 }, { k: "regen", p: 0.06, d: 3 }] },
-  { o: "Mélodie hypnotique", n: "Berceuse", d: "ATK du boss −30 % (1 tour) et retire les malus d'un allié.", tgt: "ally", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 1 }, { k: "cleanse" }] },
-  { o: "Pluie de pétales", n: "Pétale dédié", d: "Un allié : soigne 60 % PV.", tgt: "ally", fx: [{ k: "healPct", p: 0.6 }] },
-  { o: "Bénédiction de cerisier", n: "Pétales communs", d: "Équipe : bouclier de 12 % PV et retire les malus.", tgt: "allies", fx: [{ k: "shield", p: 0.12 }, { k: "cleanse" }] },
-  { o: "Infusion millénaire", n: "Thé long", d: "Un allié : régénère 8 % PV par tour (4 tours).", tgt: "ally", fx: [{ k: "regen", p: 0.08, d: 4 }] },
-  { o: "Cérémonie du thé", n: "Pause prolongée", d: "Les recharges d'un seul allié sont réduites de 3.", tgt: "ally", fx: [{ k: "cdrOne", n: 3 }] },
-  { o: "Voile lunaire", n: "Voile solitaire", d: "Un allié : bouclier de 25 % PV et retire les malus.", tgt: "ally", fx: [{ k: "shield", p: 0.25 }, { k: "cleanse" }] },
-  { o: "Lune d'argent", n: "Lune étendue", d: "Deux alliés : immunité aux exécutions (1 tour), sans bouclier.", tgt: "allies", fx: [{ k: "execimm", d: 1, pick: 2 }] },
+  { o: "Bourgeon", n: "Graine tenace", d: "Un allié : régénère 6 % PV par tour (4 tours), cumulable 2 fois.", tgt: "ally", fx: [{ k: "regen", p: 0.06, d: 4, stack: 2 }] },
+  { o: "Épines venimeuses", n: "Poison lent", d: "Pose un Poison sur le boss (25 % ATK/tour, 4 tours). Aucun dégât direct.", tgt: "boss", fx: [{ k: "dot", s: "poison", m: 0.25, d: 4 }] },
+  { o: "Note aiguë", n: "Note grave", d: "Sort à 70 % ATK et DEF du boss −15 % (2 tours).", tgt: "boss", fx: [{ k: "dmg", m: 0.7, post: 15 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
+  { o: "Mélodie hypnotique", n: "Berceuse", d: "ATK du boss −30 % (2 tours) et retire les malus de l'équipe.", tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "cleanse", on: "allies" }] },
+  { o: "Pétale soignant", n: "Pétale dédié", d: "Un allié : soigne 25 % PV max.", cd: 3, tgt: "ally", fx: [{ k: "healPct", p: 0.25 }] },
+  { o: "Bénédiction de cerisier", n: "Vœu de printemps", d: "Un allié : soigne 15 % PV max et ATK +30 % (2 tours).", tgt: "ally", fx: [{ k: "healPct", p: 0.15 }, { k: "buff", p: 0.3, d: 2 }] },
+  { o: "Thé apaisant", n: "Thé fort", d: "Un allié : soigne 120 % ATK et ses recharges sont réduites de 1.", cd: 3, tgt: "ally", fx: [{ k: "heal", m: 1.2 }, { k: "cdrOne", n: 1 }] },
+  { o: "Défi du maître", n: "Défi prolongé", d: "Provoque 2 tours, +DEF2 sur lui et riposte à 100 % ATK.", cd: 5, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.3, d: 2 }, { k: "counter", p: 1.0, d: 2 }] },
+  { o: "Lame de lune", n: "Double lame", d: "Deux coups à 55 % ATK. Soigne l'allié le plus bas de 45 % des dégâts infligés.", tgt: "boss", fx: [{ k: "dmg", m: 0.55, hits: 2, post: 20 }, { k: "steal", p: 0.45, to: "low" }] },
+  { o: "Voile lunaire", n: "Voile de sang", d: "Sort à 100 % ATK. Soigne l'équipe de 40 % des dégâts infligés (répartis).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 15 }, { k: "steal", p: 0.4, to: "all", split: 1 }] },
   { o: "Plume ardente", n: "Plume de flamme", d: "Un allié : soigne 100 % ATK et ATK +30 % (2 tours). +1 braise (max 3).", tgt: "ally", fx: [{ k: "heal", m: 1.0 }, { k: "buff", p: 0.3, d: 2 }, { k: "charge", n: 1, max: 3 }] },
   { o: "Hymne du soleil", n: "Cendres lentes", d: "Un allié : le prochain coup fatal le laisse à 1 PV (une fois, 6 tours). +1 braise (max 3).", tgt: "ally", fx: [{ k: "ash", d: 6 }, { k: "charge", n: 1, max: 3 }] },
 ];
