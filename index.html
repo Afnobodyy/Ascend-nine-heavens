@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 117; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 118; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2614,14 +2614,14 @@ const BOSSES = [
     },
     p1: ["eventail", "plumes", "garde", "plumes"], p2: ["plumes", "eventail", "plumes", "garde"] },
   { id: "gasha", name: "Gashadokuro", ep: "Le squelette affamé", el: "terre", hp: 7800, atk: 182, pdef: 72, mdef: 40,
-    hint: "L'Armure d'ossements absorbe surtout les coups physiques : la magie la brise.",
+    hint: "Chaque squelette le protège : abats-les d'un coup de zone. En phase 2 il grandit : protège-toi de l'Écrasement.",
     moves: {
       poing: { n: "Poing d'os", t: "single", m: 1.5, type: "p", d: "Frappe lourde sur une cible." },
-      armure: { n: "Armure d'ossements", t: "self", d: "Bouclier de 10 % PV. Les coups physiques sont réduits de 65 % tant que le bouclier est actif.", cd: 6, fx: { shield: 0.10 } },
-      cri: { n: "Cri des morts", t: "aoe", m: 0.6, type: "m", d: "Touche l'équipe, ATK −20 %.", fx: { atkdown: { p: 0.2, d: 2 } } },
-      etreinte: { n: "Étreinte funeste", t: "exec", m: 2.3, type: "p", big: 1, d: "Broie l'allié le plus affaibli (sauf provocation)." },
+      relever: { n: "Légion d'os", t: "self", d: "Relève un squelette qui le protège (−20 % de dégâts subis). Chaque squelette frappe un héros par tour." },
+      cotes: { n: "Coup de côtes", t: "aoe", m: 0.9, type: "p", d: "Touche l'équipe. Au moins 2 héros avec bouclier ou +DEF1 : Gasha est Exposé.", prot: "light", expose: "two" },
+      ecrasement: { n: "Écrasement du géant", t: "self", big: 1, d: "Écrase toute l'équipe. Sans bouclier et +DEF requis : lourdes pertes." },
     },
-    p1: ["armure", "poing", "cri", "poing"], p2: ["armure", "etreinte", "cri", "poing"] },
+    p1: ["relever", "cotes", "poing", "relever", "poing", "cotes", "relever", "poing", "poing", "relever", "cotes", "poing"], p2: ["poing", "poing", "ecrasement", "poing"] },
   { id: "ryujin", name: "Ryūjin", ep: "Roi-Dragon des Mers", el: "eau", hp: 9200, atk: 196, pdef: 72, mdef: 72,
     hint: "Se soigne avec sa Perle : garde du burst pour après. Enrage en phase 2 puis lance Tsunami.",
     moves: {
@@ -4897,8 +4897,9 @@ function bossSetup(b) {
       b.every = { n: 5, k: "cyclone", p2: true };
       break;
     case "gasha":
-      if (H) { set("cri", { d: "Touche l'équipe, ATK −30 %.", fx: { atkdown: { p: 0.3, d: 2 } } }); set("etreinte", { floor: { n: 0.4, h: 0.1, m: 0.1 } }); }
-      if (X) { b.bones = true; set("etreinte", { noTaunt: true, dieBelow: 0.6, fatal: true, d: "Broie l'allié le plus affaibli, ignore la provocation. Sous 60 % PV : mort." }); }
+      b.skel = []; b.skelPct = { n: 0.03, h: 0.035, m: 0.04 }[M]; b.skelCap = { n: 2, h: 3, m: 3 }[M]; b.look = M === "n" ? 3 : 2;
+      b.gig = 0; b.gigCap = { n: 0.5, h: 0.7, m: 1 }[M]; b.gigThr = { n: 0.04, h: 0.05, m: 0.06 }[M]; b.ecrKind = { n: "light2", h: "both", m: "both3" }[M];
+      b.gauge = { n: "Squelettes", v: 0, max: b.skelCap };
       break;
     case "ryujin":
       set("tsunami", { prot: "sum60", expose: "prot", err: err({ team: 0.4 }, { team: 0.75 }, { lose: 1 }), fatal: X });
@@ -4932,7 +4933,7 @@ const MODEINFO = {
   oni: { h: ["Rage rouge : chaque coup physique reçu donne +5 % d'ATK (plafond +40 %).", "P2 : un Condamné est désigné ; brise le Kanabō avec 6 % de PV de dégâts, ou protège-le (bouclier ET +DEF2)."], m: ["Rage plafonnée à +60 %. Le Condamné n'est désigné qu'au 2e tour.", "⚠ Kanabō : bouclier ET +DEF3 requis ; onde de choc 35 % PV max sur les autres."] },
   jiangshi: { h: ["Cercueil : 2 talismans (4,5 % PV max) à détruire en 3 tours, sinon il se soigne.", "Soif 8 : Festin = 40 % PV max à tous (bouclier ET +DEF2 requis)."], m: ["3 talismans, cercueil 2 tours, pression 5 %/talisman.", "⚠ Soif 6 : Festin 50 % PV max, bouclier ET +DEF3 requis sinon mort."] },
   tengu: { h: ["Vent changeant : la Garde du vent alterne avec le Vent d'ouest (renvoi de 50 % de la magie).", "Plumes tranchantes : 5 coups."], m: ["Plumes de rapace : les coups peuvent viser deux fois le même héros.", "Œil de la tempête : tous les 4 tours, Tornade et ATK −30 % cumulatif.", "⚠ FATAL : un héros touché 2 fois par les Plumes en un tour meurt (sauf réduction ≥ 50 %)."] },
-  gasha: { h: ["Os régénérés : l'Armure non brisée en un tour se reforme pleine.", "Cri des morts : ATK −30 %."], m: ["Éclats d'os : briser l'Armure inflige 180 % à l'équipe.", "L'Étreinte ignore la provocation.", "⚠ FATAL : Étreinte sur un héros sous 60 % PV = mort définitive."] },
+  gasha: { h: ["Légion d'os : 3 squelettes max (−20 % de dégâts subis chacun), abats-les en zone.", "Colosse : +5 % d'ATK par tour (max +70 %). Écrasement : bouclier ET +DEF2 requis."], m: ["Colosse : ATK jusqu'à +100 %.", "⚠ Écrasement : bouclier ET +DEF3 requis sinon mort."] },
   ryujin: { h: ["Marée montante : +5 % d'ATK du boss par tour.", "Perle éclaboussante : le bouclier de la Perle, non brisé le tour même, renvoie 20 %."], m: ["Tsunami annoncé 3 tours à l'avance : bouclier + réduction cumulés ≥ 60 % requis.", "Colère : +15 % d'ATK cumulatif par tour.", "⚠ FATAL : un Tsunami sans protection suffisante = défaite."] },
   phenix: { h: ["Deuxième œuf : renaît deux fois (40 % puis 20 %), chaque renaissance brûle l'équipe.", "Flamme sœur : une Aile sur trois renvoie aussi 30 % du physique."], m: ["Soleil noir : après la 1re renaissance, l'équipe perd 5 % PV par tour jusqu'à un retrait de malus.", "Supernova inévitable à chaque renaissance.", "⚠ FATAL : une Supernova sans bouclier d'équipe actif = défaite."] },
   aluna: { h: ["Fils du destin : 2 héros marqués d'un fil au début de chaque forme. Le fil devient la cible de l'exécution : retire le malus ou protège la cible (provocation + réduction ≥ 50 %)."], m: ["Trame fermée : la Tisseuse ne peut plus être provoquée.", "Renaissance double (66 % puis 33 %) et Fureur +15 % par tour en forme 3.", "⚠ FATAL : une exécution sur un héros non protégé (provocation + réduction ≥ 50 %), ou un Jugement sans bouclier d'équipe = défaite."] },
@@ -5531,13 +5532,15 @@ function dmgBoss(h, m, o = {}) {
   d *= 1 + sum(b.st, "mark") + b.st.filter((s) => s.k === "exposed" && (!s.lim || F.heroes.filter((x) => x.acted && !x.dead).length < s.lim)).reduce((a, s) => a + (s.p || 0), 0);
   if (o.exec && b.hp / b.maxHp < 0.35) d *= o.exec;
   if (b.bowl > 0) d *= 1 - 0.1 * b.bowl;
-  d *= 1 - Math.min(0.6, sum(b.st, "dr"));
+  d *= 1 - Math.min(0.6, sum(b.st, "dr") + (b.skel ? 0.2 * b.skel.length : 0));
   const crit = o.crit || Math.random() < 0.08 + (mods.crit || 0); if (crit) d *= 1.6;
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
   if (b.inCoffin) {
     let r = d; for (let i = 0; i < b.tal.length && r > 0; i++) { const x = Math.min(b.tal[i], r); b.tal[i] -= x; r -= x; }
     const tot = b.tal.reduce((a, x) => a + x, 0); b.gauge.v = tot; floatAt(bs, tot ? "Talisman " + d : "Talismans détruits", "info"); flashCls(document.querySelector("#bstage .bimg"), "hit"); return 0;
   }
+  if (b.skel && b.skel.length) { let r = d; const n0 = b.skel.length; while (b.skel.length && r >= b.skel[0]) r -= b.skel.shift(); if (b.skel.length < n0) { b.gauge.v = b.skel.length; floatAt(bs, `Squelette abattu ×${n0 - b.skel.length}`, "info"); } else if (b.skel.length) b.skel[0] -= r; }
+  if (b.gigCap && b.phase >= 2 && d >= b.gigThr * b.maxHp && b.gig > 0) { const c = Math.min(0.1, b.gig); b.gig -= c; b.enr -= c; b.gauge.v = Math.round(b.gig * 100); floatAt(bs, "Gigantisme −10 %", "info"); }
   if (b.thirstMax && b.phase === 2 && d >= b.bigThr * b.maxHp) { b.thirst = Math.max(0, b.thirst - 2); b.gauge.v = b.thirst; floatAt(bs, "Soif −2", "info"); }
   let toHp = d; const hadSh = b.shield > 0, spl = b.splash;
   if (b.shield > 0) { const eff = type === "p" ? 0.35 : 1, abs = Math.min(b.shield, d * eff); b.shield = Math.round(b.shield - abs); toHp = Math.max(0, Math.round(d - abs / eff));  }
@@ -5557,7 +5560,7 @@ function dmgBoss(h, m, o = {}) {
   if (b.bowl > 0 && d >= b.bowlThr * b.maxHp) { b.bowl--; bowlChip(b); floatAt(bs, "Bol −10 %", "info"); log(b.bowl ? `Le bol se vide : −${b.bowl * 10} % de dégâts subis.` : "Le bol est brisé !"); }
   coffinCheck(b);
   if (b.phase === 1 && b.hp > 0 && (b.bowl !== undefined ? b.bowl === 0 : b.queues !== undefined ? false : b.hp / b.maxHp < 0.5)) {
-    b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); if (b.rage) b.rage *= 0.5; if (b.thirstMax) { b.thirst = 0; b.gauge = { n: "Soif", v: 0, max: b.thirstMax }; } log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
+    b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); if (b.skel) { b.enr += 0.25 * b.skel.length; b.skel = []; b.gauge = { n: "Gigantisme", v: 0, max: Math.round(b.gigCap * 100) }; log("Les squelettes fusionnent : le Colosse se dresse !"); } if (b.rage) b.rage *= 0.5; if (b.thirstMax) { b.thirst = 0; b.gauge = { n: "Soif", v: 0, max: b.thirstMax }; } log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
     if (b.threads) markThreads();
     if (!b.stun) pickIntent();
   }
@@ -5789,6 +5792,7 @@ async function bossTurn() {
   } else {
     await bossAct(b.moves[b.intent]);
   }
+  if (b.skel && b.skel.length && b.hp > 0 && alive().length) { b.skel.forEach(() => { const t = rnd(alive()); if (t) hurtHero(t, bAtk() * 0.4, { type: "p" }); }); update(); await sleep(350); }
   if (F.lost) return defeat();
   if (F.mirrorOn && F.mirror > 0 && b.hp > 0) { const v = Math.round(F.mirror); b.hp = Math.max(0, b.hp - v);  lightAt("boss", "#d6dde6", true); update(); await sleep(600); }
   if (b.hp <= 0 && await bossDown()) return;
@@ -5813,6 +5817,7 @@ async function bossTurn() {
   F.round++;
   if (b.tideMax && b.bowl === 0) { b.flood++; b.tide = 0.05 * b.flood; b.gauge.v = b.flood; floatAt(bossEl(), `Marée ${b.flood}/${b.tideMax}`, "info"); if (b.flood >= b.tideMax) { fatalLose("Le Déluge final engloutit l'équipe."); update(); await sleep(400); return defeat(); } }
   if (b.tideOn) { b.tide = (b.tide || 0) + 0.05; b.gauge.v = Math.round(b.tide * 100); floatAt(bossEl(), "Marée +5 %", "info"); }
+  if (b.gigCap && b.phase >= 2 && b.gig < b.gigCap) { b.gig = Math.min(b.gigCap, b.gig + 0.05); b.enr += 0.05; b.gauge.v = Math.round(b.gig * 100); }
   if (b.wrath) { b.enr += 0.15; floatAt(bossEl(), "Colère +15 %", "info"); }
   if (b.phase === 3 && b.fury3) { b.enr += b.fury3; floatAt(bossEl(), `Fureur +${Math.round(b.fury3 * 100)} %`, "info"); }
   if (F.round > FURY_ROUND) { b.enr += 0.2; log(`Fureur céleste : ${b.name} gagne +20 % d'ATK.`); if (F.round === FURY_ROUND + 1) pop("FUREUR CÉLESTE", "#ff5a4a"); }
@@ -5858,7 +5863,17 @@ async function bossAct(mv) {
     if (fx.shieldblock) addSt(h, { k: "shieldblock", d: fx.shieldblock });
     if (fx.charmed) addSt(h, { k: "charmed", d: 2 });
   };
-  if (mv.k === "cyclone") {
+  if (mv.k === "relever") {
+    if (b.skel.length < b.skelCap) { b.skel.push(Math.round(b.skelPct * b.maxHp)); b.gauge.v = b.skel.length; floatAt(bossEl(), "Squelette relevé", "info"); log(`${b.name} relève un squelette.`); }
+  } else if (mv.k === "ecrasement") {
+    let allOk = true;
+    alive().forEach((h) => {
+      const ok = prot(h, b.ecrKind); if (!ok) allOk = false;
+      bossHitFx(h, mv, b.el); hurtHero(h, bAtk() * 1.3, { type: "p", floorPct: 0.01 });
+      if (!ok && !h.dead) { if (M === "m") killHero(h, `${h.c.name} est écrasé.`); else if (M === "h") hurtHero(h, h.hp - 1, { raw: true, type: "p", noCounter: true, floorPct: 0.01 }); else hurtHero(h, Math.round(h.hp / 2), { raw: true, type: "p", noCounter: true, floorPct: 0.01 }); }
+    });
+    if (allOk) exposeBoss(b);
+  } else if (mv.k === "cyclone") {
     const pool = alive().filter((h) => !h.st.some((s) => s.k === "cyclone")), tt = taunter(), v = tt && !tt.st.some((s) => s.k === "cyclone") ? tt : rnd(pool);
     if (v) { addSt(v, { k: "cyclone", d: 2 }); floatAt(heroEl(v), "Cyclone", "info"); log(`${v.c.name} est pris dans le cyclone (2 tours).`); v.acted = true; }
   } else if (mv.k === "cercueil") {
@@ -5961,7 +5976,7 @@ async function bossAct(mv) {
   if (mv.k === "queues" && b.queues !== undefined) { b.regrow = 0; b.gauge.v = 0; }
   if (mv.thirst && b.thirstMax && b.phase === 2) { b.thirst = Math.min(b.thirstMax, b.thirst + mv.thirst); b.gauge.v = b.thirst; }
   if (mv.expose && b.hp > 0) {
-    const ok = mv.expose === "prot" ? hitLog.length > 0 && hitLog.every((e) => e.pr || e.ev) : mv.expose === "taunt" ? hitLog.some((e) => e.taunt) : mv.expose === "jade" ? hitLog.some((e) => e.taunt && (e.sh || e.dr >= 0.3)) : mv.expose === "parry" ? parried || hitLog.some((e) => e.taunt) : false;
+    const ok = mv.expose === "prot" ? hitLog.length > 0 && hitLog.every((e) => e.pr || e.ev) : mv.expose === "taunt" ? hitLog.some((e) => e.taunt) : mv.expose === "two" ? hitLog.filter((e) => e.pr).length >= 2 : mv.expose === "jade" ? hitLog.some((e) => e.taunt && (e.sh || e.dr >= 0.3)) : mv.expose === "parry" ? parried || hitLog.some((e) => e.taunt) : false;
     if (ok) exposeBoss(b);
   }
   if (mv.k === "kanabo") {
