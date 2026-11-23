@@ -2140,7 +2140,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 143; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 144; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -3079,7 +3079,7 @@ for (const k in ANIM) ART[k] = ANIM[k].f[ANIM[k].o[0]];
 setInterval(() => {
   const t = Date.now();
   for (const k in ANIM) {
-    if (ATKBUSY[k] || k[0] === "h") continue; // héros : plus de respiration (idle figé)
+    if (ATKBUSY[k]) continue;
     const a = ANIM[k], sh = ATK[k] && ATK[k].sh, inShell = sh && typeof F !== "undefined" && F && F.boss && "b:" + F.boss.id === k && F.boss.st.some((s) => s.k === "dr"); // Kappa en carapace tant que Plongée le protège
     const src = inShell ? sh[Math.floor(t / 200) % sh.length] : a.f[a.o[Math.floor(t / a.ms) % a.o.length]];
     document.querySelectorAll('img[data-px="' + k + '"][src]').forEach((im) => { if (im.src !== src) bossFrame(im, src); });
