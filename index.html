@@ -2146,7 +2146,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 148; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 149; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5415,7 +5415,7 @@ function update() {
   $("bhpt").textContent = `${fmt(b.hp)} / ${fmt(b.maxHp)}${b.shield > 0 ? " · bouclier " + fmt(b.shield) : ""}`;
   $("bphase").hidden = b.phase < 2; $("bphase").textContent = "PHASE " + b.phase;
   { const k = bossKey(b), im = document.querySelector("#bstage .bimg"); if (im && im.dataset.px !== k && ART[k]) { im.dataset.px = k; im.src = ART[k]; } }
-  { $("bwk").innerHTML = `${bossChips(b.st)}${b.gauge ? `<span class="st bad">${b.gauge.n} ${b.gauge.max ? b.gauge.v + "/" + b.gauge.max : "+" + b.gauge.v + " %"}</span>` : ""}`; }
+  { $("bwk").innerHTML = `${bossChips(b.st)}${b.gauge && b.gauge.n !== "Talismans" ? `<span class="st bad">${b.gauge.n} ${b.gauge.max ? b.gauge.v + "/" + b.gauge.max : "+" + b.gauge.v + " %"}</span>` : ""}`; }
   $("bstage").classList.toggle("reflect", b.st.some((s) => s.k === "reflect"));
   syncTals(b);
   const it = $("bint");
