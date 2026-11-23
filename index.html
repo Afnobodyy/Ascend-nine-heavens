@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 115; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 116; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5468,12 +5468,11 @@ function celCine(h) {
 // ===================== PLANIFICATION DU TOUR =====================
 function actPrio(h, si) {
   const sk = getSk(h, si), ks = sk.fx.map((f) => f.k), has = (a) => ks.some((k) => a.includes(k));
-  if (has(["dmg"])) return has(["debuff", "dot", "mark"]) ? 1 : sk.fin || si === 3 ? 3 : 2; // l'ultime ne passe en dernier que s'il n'applique ni soin, buff, affaiblissement ni poison
-  if (has(["debuff", "dot", "mark"])) return 1;
-  if (has(["heal", "healPct", "regen", "revive"]) && !has(["shield", "dr", "buff", "taunt", "counter", "cdr", "cdrOne", "cleanse", "soak"])) return 0; // soin pur : après les buffs et protections
-  return -1;
+  const prep = has(["shield", "dr", "buff", "taunt", "counter", "cdr", "cdrOne", "cleanse", "soak", "debuff", "dot", "mark"]), heal = has(["heal", "healPct", "regen", "revive"]);
+  if (has(["dmg"])) return prep ? -1 : heal ? 0 : sk.fin || si === 3 ? 3 : 2; // dégâts + affaiblissement ou buff : en premier ; dégâts + soin : avec les soins ; dégâts purs ensuite, ultime en dernier
+  return heal && !prep ? 0 : -1;
 }
-// ordre d'exécution : buffs et protections, puis soins, puis affaiblissements/poisons, puis dégâts, ultime en dernier ; à priorité égale, de gauche à droite à l'écran
+// ordre d'exécution : buffs, protections, affaiblissements (et sorts de dégâts qui en ont), puis soins (et dégâts + soin), puis dégâts purs, ultime offensif en dernier ; à priorité égale, de gauche à droite à l'écran
 function planOrder() {
   const idx = F.heroes.map((h, i) => i).filter((i) => !F.heroes[i].dead && !F.heroes[i].acted && F.plan[i]);
   const x = (i) => { const el = document.getElementById("pw" + i); return el ? el.getBoundingClientRect().left : null; };
