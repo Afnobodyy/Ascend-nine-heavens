@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 107; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 108; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2380,7 +2380,7 @@ const KITS = {
   ],
   // ---------- LAMES ----------
   p1: [
-    { n: "Iaijutsu", d: "Frappe à 130 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.3, post: 20 }] },
+    { n: "Iaijutsu", d: "Frappe à 110 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.1, post: 20 }] },
     { n: "Posture d'iaï", d: "Esquive 80 % des attaques (1 tour), rengaine et la prochaine attaque inflige +60 % de dégâts.", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.8, d: 1 }, { k: "nxt", p: 0.6 }, { k: "sheathe" }] },
     { n: "Double entaille", d: "Deux coups à 85 % ATK. Le boss subit +20 % de dégâts (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.85, hits: 2 }, { k: "mark", p: 0.2, d: 2 }] },
     { n: "Dernier iaï", d: "Coup unique à 350 % ATK qui ignore 50 % de la défense.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.5, pen: 0.5, post: 90 }] },
@@ -5612,7 +5612,7 @@ async function useSkill(hi, si, ti) {
   if (sk.fx.some((f) => f.k === "dmg")) {
     const nx = h.st.find((s) => s.k === "nxt"); if (nx) { pw *= 1 + nx.p; h.st = h.st.filter((s) => s !== nx); }
     if (h.id === "p1") {
-      if (h.sheath) { pw *= 1.8; penX = 0.5; h.sheath = false; h.draw = 0; pop("IAÏ", "#ffd25a"); }
+      if (h.sheath) { pw *= 1.5; penX = 0.5; h.sheath = false; h.draw = 0; pop("IAÏ", "#ffd25a"); }
       else { h.draw = (h.draw || 0) + 1; pw *= Math.max(0.4, 1 - 0.2 * h.draw); }
     }
   }
