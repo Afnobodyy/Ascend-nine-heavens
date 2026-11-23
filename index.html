@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 127; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 128; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2407,7 +2407,7 @@ const KITS = {
     { n: "Bâton tournoyant", d: "Deux coups à 60 % ATK et ATK +15 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 2, post: 8 }, { k: "buff", p: 0.15, d: 2, on: "self" }] },
     { n: "Clones de poil", d: "Esquive 60 % des attaques et ATK +30 % pendant 2 tours.", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.6, d: 2 }, { k: "buff", p: 0.3, d: 2 }] },
     { n: "Bâton des mille lieues", el: "terre", d: "Coup colossal à 320 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 3.2, post: 60 }] },
-    { n: "Le Roi Singe renverse le ciel", d: "Frappe à 600 % ATK. Esquive d'équipe 40 % (1 tour).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 6.0, post: 90 }, { k: "evade", p: 0.4, d: 1, on: "allies" }] },
+    { n: "Le Roi Singe renverse le ciel", d: "Frappe à 450 % ATK. Esquive d'équipe 60 % (1 tour).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.5, post: 90 }, { k: "evade", p: 0.6, d: 1, on: "allies" }] },
   ],
   p6: [
     { n: "Rayon lunaire", d: "Frappe à 120 % ATK, le boss subit +10 % de dégâts (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.1, d: 2 }] },
