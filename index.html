@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 118; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 119; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2623,15 +2623,14 @@ const BOSSES = [
     },
     p1: ["relever", "cotes", "poing", "relever", "poing", "cotes", "relever", "poing", "poing", "relever", "cotes", "poing"], p2: ["poing", "poing", "ecrasement", "poing"] },
   { id: "ryujin", name: "Ryūjin", ep: "Roi-Dragon des Mers", el: "eau", hp: 9200, atk: 196, pdef: 72, mdef: 72,
-    hint: "Se soigne avec sa Perle : garde du burst pour après. Enrage en phase 2 puis lance Tsunami.",
+    hint: "Sa Perle le soigne chaque tour : détruis-la d'abord. En phase 2, le Tsunami frappe deux héros par vague : protège-les.",
     moves: {
       raz: { n: "Raz-de-marée", t: "aoe", m: 0.85, type: "m", d: "Touche toute l'équipe." },
-      perle: { n: "Perle du dragon", t: "self", d: "Se soigne de 8 % et gagne un bouclier de 8 %.", cd: 8, fx: { selfheal: 0.08, shield: 0.08 } },
       morsure: { n: "Morsure abyssale", t: "single", m: 1.6, type: "p", d: "Frappe lourde sur une cible." },
       colere: { n: "Colère des mers", t: "self", d: "ATK +30 % pour le reste du combat.", fx: { enrage: 0.3 } },
-      tsunami: { n: "Tsunami", t: "aoe", m: 1.55, type: "m", big: 1, d: "Vague colossale sur toute l'équipe." },
+      vague: { n: "Vague du Tsunami", t: "self", big: 1, d: "Frappe 2 héros désignés. Bouclier ou +DEF2 : protégé. Sinon lourdes pertes." },
     },
-    p1: ["raz", "morsure", "perle", "morsure"], p2: ["colere", "raz", "tsunami", "morsure", "perle"] },
+    p1: ["raz", "morsure", "raz", "morsure"], p2: ["colere", "raz", "morsure", "vague", "vague", "vague"] },
   { id: "phenix", name: "Phénix Noir", ep: "Cendre du Neuvième Ciel", el: "feu", hp: 10200, atk: 210, pdef: 66, mdef: 82,
     hint: "Renaît une fois à 40 % PV. Supernova en phase 2 : protège l'équipe.",
     moves: {
@@ -4783,7 +4782,7 @@ const NEG = ["burn", "poison", "bleed", "atkdown", "healblock", "shieldblock", "
 const DOTS = ["burn", "poison", "bleed"];
 const STL = { buff: ["ATK↑", 1], atkdown: ["ATK↓", 0], dr: ["Garde", 1], taunt: ["Provoc.", 1], counter: ["Riposte", 1], regen: ["Régén.", 1], evade: ["Esquive", 1],
   execimm: ["Anti-exéc.", 1], vanish: ["Intouchable", 1], decoy: ["Leurre", 1], nxt: ["Prochain+", 1], ash: ["Cendres", 1],
-  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1], cond: ["Condamné", 0], cyclone: ["Cyclone", 0], vent: ["Vent contraire", 0],
+  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1], cond: ["Condamné", 0], cyclone: ["Cyclone", 0], vague: ["Désigné", 0], vent: ["Vent contraire", 0],
   burn: ["Brûlure", 0], poison: ["Poison", 0], bleed: ["Saign.", 0], healblock: ["Anti-soin", 0], defdown: ["DEF↓", 0], mark: ["Marque", 0], selfatk: ["ATK↑", 1], reflect: ["Renvoi", 1] };
 const sum = (st, k) => st.filter((s) => s.k === k).reduce((a, s) => a + (s.p || 0), 0);
 const md = () => (S.run && S.run.mods) || {};
@@ -4902,9 +4901,9 @@ function bossSetup(b) {
       b.gauge = { n: "Squelettes", v: 0, max: b.skelCap };
       break;
     case "ryujin":
-      set("tsunami", { prot: "sum60", expose: "prot", err: err({ team: 0.4 }, { team: 0.75 }, { lose: 1 }), fatal: X });
-      if (H) { b.tideOn = true; b.splashOn = true; b.gauge = { n: "Marée", v: 0, max: 0 }; set("perle", { d: "Se soigne de 8 % et gagne un bouclier de 8 %. Non brisé le tour même, il renvoie 20 %." }); }
-      if (X) { b.look = 3; set("colere", { d: "ATK +15 % cumulatif à chaque tour.", fx: { enrage: 0.15 }, wrath: true }); }
+      b.pearlMax = Math.round({ n: 0.06, h: 0.065, m: 0.07 }[M] * b.maxHp); b.pearl = b.pearlMax; b.pearlOff = 0; b.pearlHeal = 0.12; b.look = M === "n" ? 4 : 3; b.vague = 0; b.vPct = { n: 0.4, h: 0.6, m: 1 }[M];
+      b.gauge = { n: "Perle", v: b.pearl, max: b.pearlMax };
+      if (X) set("colere", { d: "ATK +15 % cumulatif à chaque tour.", fx: { enrage: 0.15 }, wrath: true });
       break;
     case "phenix":
       set("nova", { prot: "shield", expose: "prot", err: err({ team: 0.4 }, { team: 0.75, burn: 1 }, { lose: 1 }), fatal: X });
@@ -4934,7 +4933,7 @@ const MODEINFO = {
   jiangshi: { h: ["Cercueil : 2 talismans (4,5 % PV max) à détruire en 3 tours, sinon il se soigne.", "Soif 8 : Festin = 40 % PV max à tous (bouclier ET +DEF2 requis)."], m: ["3 talismans, cercueil 2 tours, pression 5 %/talisman.", "⚠ Soif 6 : Festin 50 % PV max, bouclier ET +DEF3 requis sinon mort."] },
   tengu: { h: ["Vent changeant : la Garde du vent alterne avec le Vent d'ouest (renvoi de 50 % de la magie).", "Plumes tranchantes : 5 coups."], m: ["Plumes de rapace : les coups peuvent viser deux fois le même héros.", "Œil de la tempête : tous les 4 tours, Tornade et ATK −30 % cumulatif.", "⚠ FATAL : un héros touché 2 fois par les Plumes en un tour meurt (sauf réduction ≥ 50 %)."] },
   gasha: { h: ["Légion d'os : 3 squelettes max (−20 % de dégâts subis chacun), abats-les en zone.", "Colosse : +5 % d'ATK par tour (max +70 %). Écrasement : bouclier ET +DEF2 requis."], m: ["Colosse : ATK jusqu'à +100 %.", "⚠ Écrasement : bouclier ET +DEF3 requis sinon mort."] },
-  ryujin: { h: ["Marée montante : +5 % d'ATK du boss par tour.", "Perle éclaboussante : le bouclier de la Perle, non brisé le tour même, renvoie 20 %."], m: ["Tsunami annoncé 3 tours à l'avance : bouclier + réduction cumulés ≥ 60 % requis.", "Colère : +15 % d'ATK cumulatif par tour.", "⚠ FATAL : un Tsunami sans protection suffisante = défaite."] },
+  ryujin: { h: ["Perle : 6,5 % des PV du boss, le soigne de 12 % par tour ; détruite, plus de soin 3 tours.", "Tsunami : 3 vagues, 2 héros désignés par vague, bouclier ou +DEF2 requis."], m: ["Perle : 7 % des PV du boss.", "⚠ Vague : un héros désigné sans bouclier ni +DEF2 meurt."] },
   phenix: { h: ["Deuxième œuf : renaît deux fois (40 % puis 20 %), chaque renaissance brûle l'équipe.", "Flamme sœur : une Aile sur trois renvoie aussi 30 % du physique."], m: ["Soleil noir : après la 1re renaissance, l'équipe perd 5 % PV par tour jusqu'à un retrait de malus.", "Supernova inévitable à chaque renaissance.", "⚠ FATAL : une Supernova sans bouclier d'équipe actif = défaite."] },
   aluna: { h: ["Fils du destin : 2 héros marqués d'un fil au début de chaque forme. Le fil devient la cible de l'exécution : retire le malus ou protège la cible (provocation + réduction ≥ 50 %)."], m: ["Trame fermée : la Tisseuse ne peut plus être provoquée.", "Renaissance double (66 % puis 33 %) et Fureur +15 % par tour en forme 3.", "⚠ FATAL : une exécution sur un héros non protégé (provocation + réduction ≥ 50 %), ou un Jugement sans bouclier d'équipe = défaite."] },
 };
@@ -4990,6 +4989,12 @@ function pickIntent() {
   while (b.queue.length < L + 1) b.queue.push(nextMove(b));
   b.intent = b.queue.shift();
   const al = alive(); b.aim = al.length ? F.heroes.indexOf(rnd(al)) : -1;
+  if (b.vPct && b.intent === "vague") {
+    F.heroes.forEach((h) => { h.st = h.st.filter((s) => s.k !== "vague"); });
+    const pool = al.filter((h) => !(b.lastV || []).includes(h)), src = pool.length >= 2 ? pool : al;
+    const pick = (b.mode === "n" ? src.slice().sort((x, y) => y.hp / y.maxHp - x.hp / x.maxHp) : src.slice().sort(() => Math.random() - 0.5)).slice(0, 2);
+    pick.forEach((h) => h.st.push({ k: "vague", d: 3 })); b.curV = pick; b.lastV = pick;
+  }
 }
 // Héros visés par la prochaine technique du boss (même logique que bossAct)
 function bossTargets() {
@@ -5542,6 +5547,7 @@ function dmgBoss(h, m, o = {}) {
   if (b.skel && b.skel.length) { let r = d; const n0 = b.skel.length; while (b.skel.length && r >= b.skel[0]) r -= b.skel.shift(); if (b.skel.length < n0) { b.gauge.v = b.skel.length; floatAt(bs, `Squelette abattu ×${n0 - b.skel.length}`, "info"); } else if (b.skel.length) b.skel[0] -= r; }
   if (b.gigCap && b.phase >= 2 && d >= b.gigThr * b.maxHp && b.gig > 0) { const c = Math.min(0.1, b.gig); b.gig -= c; b.enr -= c; b.gauge.v = Math.round(b.gig * 100); floatAt(bs, "Gigantisme −10 %", "info"); }
   if (b.thirstMax && b.phase === 2 && d >= b.bigThr * b.maxHp) { b.thirst = Math.max(0, b.thirst - 2); b.gauge.v = b.thirst; floatAt(bs, "Soif −2", "info"); }
+  if (b.pearlMax && b.pearl > 0) { const x = Math.min(b.pearl, d); b.pearl -= x; d -= x; b.gauge.v = b.pearl; if (b.pearl <= 0) { b.pearlOff = 3; b.gauge = { n: "Perle détruite", v: 0, max: b.pearlMax }; floatAt(bs, "Perle détruite", "info"); log("La Perle est détruite : plus de soin pendant 3 tours."); } if (d <= 0) { flashCls(document.querySelector("#bstage .bimg"), "hit"); return 0; } }
   let toHp = d; const hadSh = b.shield > 0, spl = b.splash;
   if (b.shield > 0) { const eff = type === "p" ? 0.35 : 1, abs = Math.min(b.shield, d * eff); b.shield = Math.round(b.shield - abs); toHp = Math.max(0, Math.round(d - abs / eff));  }
   if (b.shield <= 0) b.splash = false;
@@ -5817,6 +5823,10 @@ async function bossTurn() {
   F.round++;
   if (b.tideMax && b.bowl === 0) { b.flood++; b.tide = 0.05 * b.flood; b.gauge.v = b.flood; floatAt(bossEl(), `Marée ${b.flood}/${b.tideMax}`, "info"); if (b.flood >= b.tideMax) { fatalLose("Le Déluge final engloutit l'équipe."); update(); await sleep(400); return defeat(); } }
   if (b.tideOn) { b.tide = (b.tide || 0) + 0.05; b.gauge.v = Math.round(b.tide * 100); floatAt(bossEl(), "Marée +5 %", "info"); }
+  if (b.pearlMax) {
+    if (b.pearl > 0) { const v = Math.round(b.maxHp * b.pearlHeal); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bossEl(), "Perle +" + v, "heal"); }
+    else if (--b.pearlOff <= 0) { b.pearl = b.pearlMax; b.gauge = { n: "Perle", v: b.pearl, max: b.pearlMax }; log("La Perle revient."); }
+  }
   if (b.gigCap && b.phase >= 2 && b.gig < b.gigCap) { b.gig = Math.min(b.gigCap, b.gig + 0.05); b.enr += 0.05; b.gauge.v = Math.round(b.gig * 100); }
   if (b.wrath) { b.enr += 0.15; floatAt(bossEl(), "Colère +15 %", "info"); }
   if (b.phase === 3 && b.fury3) { b.enr += b.fury3; floatAt(bossEl(), `Fureur +${Math.round(b.fury3 * 100)} %`, "info"); }
@@ -5863,7 +5873,17 @@ async function bossAct(mv) {
     if (fx.shieldblock) addSt(h, { k: "shieldblock", d: fx.shieldblock });
     if (fx.charmed) addSt(h, { k: "charmed", d: 2 });
   };
-  if (mv.k === "relever") {
+  if (mv.k === "vague") {
+    const type = ["p", "m", "pure"][b.vague % 3]; b.vague++;
+    const des = (b.curV || []).filter((h) => !h.dead), tt = des.find((h) => h.st.some((s) => s.k === "taunt")), ts = tt ? [tt] : des;
+    ts.forEach((h) => {
+      const ok = h.shield > 0 || hDr(h) >= 0.3; bossHitFx(h, mv, b.el);
+      if (ok) hurtHero(h, bAtk() * 0.6, { type: type === "pure" ? "p" : type, floorPct: 0.01 });
+      else if (M === "m") killHero(h, `${h.c.name} est emporté par la vague.`);
+      else hurtHero(h, Math.round(h.maxHp * b.vPct), { raw: true, type: "m", noCounter: true, floorPct: 0.01 });
+    });
+    F.heroes.forEach((h) => { h.st = h.st.filter((s) => s.k !== "vague"); });
+  } else if (mv.k === "relever") {
     if (b.skel.length < b.skelCap) { b.skel.push(Math.round(b.skelPct * b.maxHp)); b.gauge.v = b.skel.length; floatAt(bossEl(), "Squelette relevé", "info"); log(`${b.name} relève un squelette.`); }
   } else if (mv.k === "ecrasement") {
     let allOk = true;
