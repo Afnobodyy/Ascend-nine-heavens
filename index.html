@@ -2100,12 +2100,17 @@ body:has(.fight) #fbgx{display:block}
 #bint .bslot.big .spi{box-shadow:0 0 calc(12*var(--u)) rgba(255,80,60,.9)}
 #bint .bslot.alert .spi{box-shadow:0 0 0 calc(2*var(--u)) #ff3b2f,0 0 calc(14*var(--u)) rgba(255,59,47,.95)}
 #bint .bgl{display:flex;align-items:center;justify-content:center;width:calc(56*var(--u));height:calc(56*var(--u));border-radius:22%;background:#2a1210;border:calc(2*var(--u)) solid #d8452f;color:#ffd9cf;font-style:normal;font-size:calc(28*var(--u))}
+/* mise en page combat (23/11) : héros −20 %, boss +15 %, barre de vie du boss = 60 % de la largeur de l'écran */
+.fight.ug .pcw{scale:.96}
+.fight.ug .pcw .ohb{scale:1.0417}
+#app .fight.ug .bossbox{height:66.7%}
+#app .fight.ug .bhud{width:60%!important}
 </style>
 <div id="app"></div>
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 135; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 136; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
