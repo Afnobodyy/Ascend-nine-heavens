@@ -2105,7 +2105,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 134; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 135; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4799,11 +4799,19 @@ const bAtk = () => F.boss.atk * Math.max(0.3, 1 + sum(F.boss.st, "selfatk") + F.
 const bDef = (t) => (t === "p" ? F.boss.pdef : F.boss.mdef) * Math.max(0, 1 - sum(F.boss.st, "defdown")) * (1 + (F.boss.fer || 0));
 const alive = () => F.heroes.filter((h) => !h.dead);
 
+const PXST = { burn: "burning", poison: "poisoned", bleed: "bleeding", charmed: "charmed", gel: "frozen" }; // statut -> effet pixelfx joué sur l'unité touchée
+function pxStatus(u, k) { // une boucle de l'effet sur le corps de l'unité (application du statut, puis à chaque tick)
+  const e = PXST[k]; if (!e || !window.PXFX || !fxOn() || !u) return;
+  const boss = u === F.boss, el = boss ? bossEl() : heroEl(u); if (!el || (u.dead)) return;
+  const now = Date.now(); u._pxs = u._pxs || {}; if (now - (u._pxs[k] || 0) < 900) return; u._pxs[k] = now;
+  const P = boss ? fxPos(el, .93) : heroP(u, .93); if (!P) return;
+  pxPlay(e, P, { m: "F", k: boss ? 2.4 : 2.2, actor: el, dur: 1500, noscale: 1 });
+}
 function addSt(u, s) {
   s.fresh = F.phase === "boss";
   const ex = u.st.find((x) => x.k === s.k && x.type === s.type);
   if (ex) { ex.d = Math.max(ex.d, s.d); if (s.p !== undefined) ex.p = Math.max(ex.p || 0, s.p); if (s.dmg) ex.dmg = Math.max(ex.dmg || 0, s.dmg); ex.fresh = ex.fresh && s.fresh; }
-  else u.st.push(s);
+  else { u.st.push(s); pxStatus(u, s.k); }
 }
 function floatAt(el, text, cls) {
   if (!el) return;
@@ -4869,7 +4877,7 @@ function setGivre(b, n) { b.givreN = Math.max(0, n); b.st = b.st.filter((s) => s
 function gelBoss(b) {
   const mv = b.moves[b.intent];
   if (b.gelImm > 0 || (mv && mv.fatal)) { floatAt(bossEl(), "Insensible au Gel", "info"); log(`${b.name} résiste au Gel.`); return; }
-  b.delay = (b.delay || 0) + 1; b.gelImm = 3; floatAt(bossEl(), "Gelé", "info"); pop("GEL", "#9fe8ff"); log(`${b.name} est gelé : il saute son prochain tour.`);
+  b.delay = (b.delay || 0) + 1; b.gelImm = 3; pxStatus(b, "gel"); floatAt(bossEl(), "Gelé", "info"); pop("GEL", "#9fe8ff"); log(`${b.name} est gelé : il saute son prochain tour.`);
 }
 function bowlChip(b) { b.st = b.st.filter((s) => s.k !== "bowl"); if (b.bowl > 0) b.st.push({ k: "bowl", p: 0.1 * b.bowl, d: 999 }); }
 function bossSetup(b) {
@@ -5806,6 +5814,7 @@ async function bossTurn() {
   if (F.lost || !alive().length) return defeat();
   for (const s of b.st.filter((s) => DOTS.includes(s.k))) {
     if (b.hp <= 0) break;
+    pxStatus(b, s.k);
     b.hp = Math.max(0, b.hp - Math.max(1, Math.round(s.dmg * 100 / (100 + bDef(s.dt || "m")))));  update(); await sleep(260);
   }
   if (b.hp <= 0 && await bossDown()) return;
@@ -5825,7 +5834,7 @@ async function bossTurn() {
   // effets sur la durée des héros
   for (const h of alive()) {
     for (const s of h.st) {
-      if (DOTS.includes(s.k) && !s.fresh) hurtHero(h, s.dmg, { type: "m", noCounter: true, dot: true });
+      if (DOTS.includes(s.k) && !s.fresh) pxStatus(h, s.k), hurtHero(h, s.dmg, { type: "m", noCounter: true, dot: true });
       if (s.k === "regen" && !h.dead) healHero(h, h.maxHp * s.p, true);
     }
   }
