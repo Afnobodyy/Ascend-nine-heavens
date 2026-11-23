@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 111; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 112; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2589,9 +2589,12 @@ const BOSSES = [
       massue: { n: "Coup de massue", t: "single", m: 1.4, type: "p", d: "Frappe lourde sur une cible." },
       cri: { n: "Cri de guerre", t: "self", d: "ATK +30 % pendant 2 tours.", fx: { selfatk: { p: 0.3, d: 2 } } },
       seisme: { n: "Séisme", t: "aoe", m: 0.7, type: "p", d: "Touche toute l'équipe." },
-      kanabo: { n: "Kanabō écrasant", t: "exec", m: 2.6, type: "p", big: 1, d: "Écrase l'allié le plus affaibli (sauf provocation)." },
+      kanabo: { n: "Kanabō écrasant", t: "exec", m: 2.6, type: "p", big: 1, cond: 1, d: "Écrase le Condamné (la provocation ne le couvre pas) et frappe les autres d'une onde de choc." },
+      sentence: { n: "Sentence", t: "self", d: "Désigne un Condamné et charge le Kanabō." },
+      course: { n: "Kanabō brandi", t: "self", d: "Le Kanabō se charge : inflige assez de dégâts pour le briser." },
+      souffle: { n: "Souffle", t: "self", d: "Reprend son souffle." },
     },
-    p1: ["massue", "seisme", "cri", "massue"], p2: ["cri", "kanabo", "seisme", "massue"] },
+    p1: ["massue", "seisme", "cri", "massue"], p2: ["sentence", "course", "kanabo", "souffle"] },
   { id: "jiangshi", name: "Empereur Jiangshi", ep: "Le mort qui ne se couche pas", el: "metal", hp: 5300, atk: 162, pdef: 55, mdef: 62,
     hint: "Son Talisman maudit empêche les soins : garde des boucliers. En phase 2 il renvoie la magie.",
     moves: {
@@ -4780,7 +4783,7 @@ const NEG = ["burn", "poison", "bleed", "atkdown", "healblock", "shieldblock", "
 const DOTS = ["burn", "poison", "bleed"];
 const STL = { buff: ["ATK↑", 1], atkdown: ["ATK↓", 0], dr: ["Garde", 1], taunt: ["Provoc.", 1], counter: ["Riposte", 1], regen: ["Régén.", 1], evade: ["Esquive", 1],
   execimm: ["Anti-exéc.", 1], vanish: ["Intouchable", 1], decoy: ["Leurre", 1], nxt: ["Prochain+", 1], ash: ["Cendres", 1],
-  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1],
+  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1], cond: ["Condamné", 0],
   burn: ["Brûlure", 0], poison: ["Poison", 0], bleed: ["Saign.", 0], healblock: ["Anti-soin", 0], defdown: ["DEF↓", 0], mark: ["Marque", 0], selfatk: ["ATK↑", 1], reflect: ["Renvoi", 1] };
 const sum = (st, k) => st.filter((s) => s.k === k).reduce((a, s) => a + (s.p || 0), 0);
 const md = () => (S.run && S.run.mods) || {};
@@ -4816,7 +4819,7 @@ function log(msg) { F.log.push(msg); if (F.log.length > 2) F.log.shift(); const 
 
 
 // ---- mécaniques propres aux boss, par mode (Normal / Héroïque / Mythique) ----
-const prot = (h, kind) => kind === "light" ? (h.shield > 0 || hDr(h) >= 0.15) : kind === "light2" ? (h.shield > 0 || hDr(h) >= 0.3) : kind === "both" ? (h.shield > 0 && hDr(h) >= 0.3) : kind === "shield" ? h.shield > 0 : kind === "sum60" ? hDr(h) + h.shield / h.maxHp >= 0.6 : (h.shield > 0 || hDr(h) >= 0.4);
+const prot = (h, kind) => kind === "light" ? (h.shield > 0 || hDr(h) >= 0.15) : kind === "light2" ? (h.shield > 0 || hDr(h) >= 0.3) : kind === "both" ? (h.shield > 0 && hDr(h) >= 0.3) : kind === "both3" ? (h.shield > 0 && hDr(h) >= 0.45) : kind === "shield" ? h.shield > 0 : kind === "sum60" ? hDr(h) + h.shield / h.maxHp >= 0.6 : (h.shield > 0 || hDr(h) >= 0.4);
 function killHero(h, why) { if (h.dead) return; h.hp = 0; h.dead = true; h.st = []; h.shield = 0; floatAt(heroEl(h), "Mort", "hurt"); log(why || `${h.c.name} est tombé.`); }
 function fatalLose(why) { F.heroes.forEach((h) => { h.hp = 0; h.dead = true; h.st = []; h.shield = 0; }); F.lost = true; pop("RÈGLE FATALE", "#ff2a2a"); log(why || "L'équipe est anéantie."); }
 const exposedNow = (b) => b.st.some((s) => s.k === "exposed");
@@ -4871,12 +4874,8 @@ function bossSetup(b) {
       b.p1 = ["follet", "charme", "mirage", "follet", "charme", "mirage"]; b.p2 = ["charme", "follet", "follet", "charme"];
       break;
     case "oni":
-      set("kanabo", { expose: "taunt", floor: { n: 0.4, h: 0.15, m: 0 } });
-      if (H) { b.rageOn = true; set("kanabo", { two: true, d: "Écrase les 2 alliés les plus affaiblis (la provocation en couvre un)." }); }
-      if (X) {
-        set("cri", { d: "ATK +30 % 2 tours. DEF +30 % jusqu'au Kanabō.", fx: { selfatk: { p: 0.3, d: 2 }, fer: 0.3 } });
-        set("kanabo", { sweep: 0.5, chain: true, fatal: true, d: "Écrase les 2 alliés les plus affaiblis. Tout héros sous 50 % PV sans bouclier meurt." });
-      }
+      b.rageOn = true; b.rageCap = { n: 0.25, h: 0.4, m: 0.6 }[M]; b.thr = { n: 0.04, h: 0.06, m: 0.08 }[M]; b.cycles = 0; b.charge = 0; b.chargeOn = false; b.escal = 0;
+      b.condAt = X ? "course" : "sentence"; b.shockPct = { n: 0.15, h: 0.25, m: 0.35 }[M]; b.condKind = { n: "light2", h: "both", m: "both3" }[M];
       break;
     case "jiangshi":
       set("talisman", { prot: "any", expose: "prot" });
@@ -4933,7 +4932,7 @@ function cloneBoss(b, mode) {
 const MODEINFO = {
   kappa: { h: ["Plongée enflée : toute attaque reçue pendant la Plongée le soigne de 5 %.", "Marée basse : le Déluge arrive dès la phase 1."], m: ["Noyade : aucun soin possible pendant la Plongée.", "⚠ FATAL : un Déluge sans protection (bouclier ou −40 % de dégâts) = défaite."] },
   kitsune: { h: ["Illusion alternée : le Mirage alterne avec un Reflet (renvoi de 30 % de la magie).", "Charme contagieux : un héros charmé non purgé frappe un allié (−40 % PV)."], m: ["Neuf queues : jauge 0-9, +1 par tour où un héros emploie le mauvais type de dégâts.", "⚠ FATAL : 9 queues, ou un Charme non purgé (mort du charmé)."] },
-  oni: { h: ["Kanabō double : frappe les 2 alliés les plus affaiblis (la provocation en couvre un).", "Rage rouge : chaque coup physique reçu donne +5 % d'ATK jusqu'au Kanabō."], m: ["Armure de fer : +30 % de DEF après chaque Cri, jusqu'au Kanabō.", "Fureur : s'il n'est pas Exposé, il enchaîne un second Kanabō.", "⚠ FATAL : au Kanabō, tout héros sous 50 % PV sans bouclier meurt."] },
+  oni: { h: ["Rage rouge : chaque coup physique reçu donne +5 % d'ATK (plafond +40 %).", "P2 : un Condamné est désigné ; brise le Kanabō avec 6 % de PV de dégâts, ou protège-le (bouclier ET +DEF2)."], m: ["Rage plafonnée à +60 %. Le Condamné n'est désigné qu'au 2e tour.", "⚠ Kanabō : bouclier ET +DEF3 requis ; onde de choc 35 % PV max sur les autres."] },
   jiangshi: { h: ["Talisman scellé : bloque aussi les boucliers (pas la réduction de dégâts).", "Rituel de sang : chaque Morsure réussie donne +5 % d'ATK tant qu'il n'est pas Exposé."], m: ["Dernier souffle : renaît à 30 % PV, Talisman actif jusqu'à la fin.", "Sceau total : renvoie 100 % de la magie.", "⚠ FATAL : un arcaniste sous 60 % PV qui lance un sort pendant le Sceau meurt."] },
   tengu: { h: ["Vent changeant : la Garde du vent alterne avec le Vent d'ouest (renvoi de 50 % de la magie).", "Plumes tranchantes : 5 coups."], m: ["Plumes de rapace : les coups peuvent viser deux fois le même héros.", "Œil de la tempête : tous les 4 tours, Tornade et ATK −30 % cumulatif.", "⚠ FATAL : un héros touché 2 fois par les Plumes en un tour meurt (sauf réduction ≥ 50 %)."] },
   gasha: { h: ["Os régénérés : l'Armure non brisée en un tour se reforme pleine.", "Cri des morts : ATK −30 %."], m: ["Éclats d'os : briser l'Armure inflige 180 % à l'équipe.", "L'Étreinte ignore la provocation.", "⚠ FATAL : Étreinte sur un héros sous 60 % PV = mort définitive."] },
@@ -5003,6 +5002,7 @@ function bossTargets() {
   if (mv.t === "aoe" || mv.t === "multi") return al;
   const vis = al.filter((h) => !h.st.some((s) => s.k === "vanish")), pool = vis.length ? vis : al;
   const isT = (h) => h.st.some((s) => s.k === "taunt"), tt = mv.noTaunt ? null : al.find(isT);
+  if (mv.cond) return F.heroes.filter((h) => !h.dead && h.st.some((s) => s.k === "cond"));
   if (mv.t === "exec" && b.threads) {
     const th = pool.filter((h) => h.st.some((s) => s.k === "thread"));
     if (th.length) { const tk = mv.noTaunt ? null : al.find((h) => isT(h) && hDr(h) >= 0.5); return [tk || th[0]]; }
@@ -5525,7 +5525,7 @@ function dmgBoss(h, m, o = {}) {
   if (b.hp <= 0) return 0;
   (F.attackers = F.attackers || new Set()).add(h.id);
   if (F.phase === "player" && b.gauge && b.gauge.max && ((type === "p" && b.st.some((s) => s.k === "evade")) || (type === "m" && b.st.some((s) => s.k === "reflect" && s.type === "m")))) F.wrong = true;
-  if (b.rageOn && type === "p") b.rage = (b.rage || 0) + 0.05;
+  if (b.rageOn && type === "p") b.rage = Math.min(b.rageCap || 9, (b.rage || 0) + 0.05);
   if (type === "p") { const ev = b.st.find((s) => s.k === "evade"); if (ev && Math.random() < ev.p) { floatAt(bs, "Esquive", "info"); return 0; } }
   let d = hAtk(h) * m * 100 / (100 + bDef(type) * (1 - (o.pen || 0)));
   const weak = weakTo(b.el) === el;
@@ -5554,10 +5554,11 @@ function dmgBoss(h, m, o = {}) {
   if (b.phase === 2 && b.regrow > 0 && !b.rgCut && exposedNow(b) && d >= 0.03 * b.maxHp) { b.rgCut = true; b.regrow = Math.max(0, b.regrow - 3); b.gauge.v = b.regrow; floatAt(bs, "Renaissance −3", "info"); }
   if (b.bowl > 0 && d >= b.bowlThr * b.maxHp) { b.bowl--; bowlChip(b); floatAt(bs, "Bol −10 %", "info"); log(b.bowl ? `Le bol se vide : −${b.bowl * 10} % de dégâts subis.` : "Le bol est brisé !"); }
   if (b.phase === 1 && b.hp > 0 && (b.bowl !== undefined ? b.bowl === 0 : b.queues !== undefined ? false : b.hp / b.maxHp < 0.5)) {
-    b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
+    b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); if (b.rage) b.rage *= 0.5; log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
     if (b.threads) markThreads();
     if (!b.stun) pickIntent();
   }
+  if (b.chargeOn) { b.charge += toHp; const th = b.thr * b.maxHp; b.gauge = { n: "Charge du Kanabō", v: Math.min(100, Math.round(100 * b.charge / th)), max: 100 }; }
   h._dealt = (h._dealt || 0) + toHp;
   return toHp;
 }
@@ -5850,7 +5851,34 @@ async function bossAct(mv) {
     if (fx.shieldblock) addSt(h, { k: "shieldblock", d: fx.shieldblock });
     if (fx.charmed) addSt(h, { k: "charmed", d: 2 });
   };
-  if (mv.t === "single" || mv.t === "charm" || mv.t === "exec") {
+  if (mv.k === "sentence" || (mv.k === "course" && b.condAt === "course")) {
+    const n = b.cycles >= 2 ? 2 : 1;
+    const pick = alive().filter((h) => !h.st.some((s) => s.k === "cond")).sort((x, y) => (y._dealt || 0) - (x._dealt || 0)).slice(0, n);
+    pick.forEach((h) => addSt(h, { k: "cond", d: 99 }));
+    if (mv.k === "sentence" || !b.chargeOn) { b.charge = 0; b.chargeOn = true; b.gauge = { n: "Charge du Kanabō", v: 0, max: 100 }; }
+    log(`Sentence : ${pick.map((h) => h.c.name).join(" et ")} condamné${pick.length > 1 ? "s" : ""}.`); pop("CONDAMNÉ", "#ff5a4a");
+  } else if (mv.k === "course" && b.condAt === "sentence" && !b.chargeOn) { b.chargeOn = true; b.charge = 0; b.gauge = { n: "Charge du Kanabō", v: 0, max: 100 };
+  } else if (mv.cond) {
+    const cs = bossTargets(), broken = b.charge >= b.thr * b.maxHp;
+    b.chargeOn = false; b.gauge = null; b.survived = false;
+    if (broken || !cs.length) { log("Le Kanabō est brisé !"); floatAt(bossEl(), "Kanabō brisé", "info"); cs.forEach((h) => { h.st = h.st.filter((s) => s.k !== "cond"); }); b.cycles++; exposeBoss(b); }
+    else {
+      b.survived = true; if (b.escal < 0.29) { b.escal += 0.1; b.enr += 0.1; floatAt(bossEl(), "ATK +10 %", "info"); }
+      for (const t of cs) {
+        const ok = prot(t, b.condKind);
+        bossHitFx(t, mv, b.el);
+        hurtHero(t, bAtk() * mv.m, { type: "p", floorPct: ok ? 0.01 : 0 });
+        if (!ok && !t.dead) killHero(t, `${t.c.name} est écrasé : condamné sans protection.`);
+        if (t.dead) b.survived = false;
+        t.st = t.st.filter((s) => s.k !== "cond");
+      }
+      alive().forEach((h) => { if (!cs.includes(h)) hurtHero(h, Math.round(h.maxHp * b.shockPct), { raw: true, type: "p", noCounter: true, floorPct: M === "n" ? 0.01 : 0 }); });
+      b.cycles++;
+    }
+  } else if (mv.k === "souffle") {
+    if (b.survived) { addSt(b, { k: "exposed", p: 0.25, d: 1 }); log(`${b.name} est essoufflé : dégâts ×1,25.`); floatAt(bossEl(), "Essoufflé", "info"); }
+    b.survived = false;
+  } else if (mv.t === "single" || mv.t === "charm" || mv.t === "exec") {
     const ts = mv.t === "exec" ? bossTargets() : bossTargets().slice(0, 1);
     for (const t of ts) {
       const dc = t.st.find((s) => s.k === "decoy");
@@ -5902,7 +5930,7 @@ async function bossAct(mv) {
     if (ok) exposeBoss(b);
   }
   if (mv.k === "kanabo") {
-    b.rage = 0; b.fer = 0;
+    b.fer = 0;
     if (mv.chain && b.phase >= 2) { if (!b.chained && !exposedNow(b)) { b.chained = true; b.queue.unshift("kanabo"); log(`${b.name} enchaîne, furieux !`); } else b.chained = false; }
   }
   if (fxOn()) { const P = bossP(); if (P) { if (fx.selfheal) fxPlus(P, "#7dffb0"); if (fx.shield || fx.reflect || fx.evade || fx.dr) fxRing(P, "#8fd0ff", 1.2); if (fx.selfatk || fx.enrage) fxRise(P, "#ff5a3a"); } }
