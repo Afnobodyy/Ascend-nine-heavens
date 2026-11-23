@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 122; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 123; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5692,7 +5692,7 @@ async function useSkill(hi, si, ti) {
         if (gn) { setGivre(b, (b.givreN || 0) - gn); if (fx.givreUlt && gn >= 5) gelBoss(b); }
         break; }
       case "givre": bossDebuffFx("#9fe8ff"); setGivre(b, Math.min(5, (b.givreN || 0) + fx.n)); floatAt(bossEl(), `Givre ${b.givreN}/5`, "info"); break;
-      case "dot": { dotFx(h, skEl(h, sk)); const weak = weakTo(b.el) === skEl(h, sk); addSt(b, { k: fx.s, ...(fx.stack ? { type: "stk" + Math.random() } : {}), dmg: Math.round(hAtk(h) * fx.m * pw * (weak ? 1.5 : 1)), d: fx.d + (fx.dPer || 0) * (h.charge || 0) + (fx.s === "burn" && F.relic === "phenix" ? 1 : 0) }); break; }
+      case "dot": { dotFx(h, skEl(h, sk)); const weak = weakTo(b.el) === skEl(h, sk); addSt(b, { k: fx.s, ...(fx.stack ? { type: "stk" + Math.random() } : {}), dt: h.dt, dmg: Math.round(hAtk(h) * fx.m * pw * (weak ? 1.5 : 1)), d: fx.d + (fx.dPer || 0) * (h.charge || 0) + (fx.s === "burn" && F.relic === "phenix" ? 1 : 0) }); break; }
       case "debuff": bossDebuffFx("#b46cff"); addSt(b, { k: fx.s + "down", p: fx.p, d: fx.d }); break;
       case "mark": bossDebuffFx("#ff6a9a"); addSt(b, { k: "mark", p: fx.p, d: fx.d }); break;
       case "heal": supportFx("heal", tg); tg.forEach((t) => healHero(t, hAtk(h) * fx.m * pw)); break;
@@ -5812,7 +5812,7 @@ async function bossTurn() {
   if (F.lost || !alive().length) return defeat();
   for (const s of b.st.filter((s) => DOTS.includes(s.k))) {
     if (b.hp <= 0) break;
-    b.hp = Math.max(0, b.hp - s.dmg);  update(); await sleep(260);
+    b.hp = Math.max(0, b.hp - Math.max(1, Math.round(s.dmg * 100 / (100 + bDef(s.dt || "m")))));  update(); await sleep(260);
   }
   if (b.hp <= 0 && await bossDown()) return;
   let delayed = false;
@@ -5831,7 +5831,7 @@ async function bossTurn() {
   // effets sur la durée des héros
   for (const h of alive()) {
     for (const s of h.st) {
-      if (DOTS.includes(s.k) && !s.fresh) hurtHero(h, s.dmg, { raw: true, noCounter: true, dot: true });
+      if (DOTS.includes(s.k) && !s.fresh) hurtHero(h, s.dmg, { type: "m", noCounter: true, dot: true });
       if (s.k === "regen" && !h.dead) healHero(h, h.maxHp * s.p, true);
     }
   }
