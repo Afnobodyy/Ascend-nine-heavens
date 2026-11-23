@@ -2146,7 +2146,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 147; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 148; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5695,7 +5695,8 @@ function dmgBoss(h, m, o = {}) {
   const crit = o.crit || Math.random() < 0.08 + (mods.crit || 0); if (crit) d *= 1.6;
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
   if (b.inCoffin) {
-    let r = d; for (let i = 0; i < b.tal.length && r > 0; i++) { const x = Math.min(b.tal[i], r); b.tal[i] -= x; r -= x; }
+    const ti = b.tal.findIndex((v) => v > 0); // un coup touche un seul talisman (le premier debout) ; l'excédent est perdu
+    if (ti >= 0) b.tal[ti] = Math.max(0, b.tal[ti] - d);
     const tot = b.tal.reduce((a, x) => a + x, 0); b.gauge.v = tot; floatAt(bs, tot ? "Talisman " + d : "Talismans détruits", "info"); flashCls(document.querySelector("#bstage .bimg"), "hit"); return 0;
   }
   if (b.skel && b.skel.length) { let r = d; const n0 = b.skel.length; while (b.skel.length && r >= b.skel[0]) r -= b.skel.shift(); if (b.skel.length < n0) { b.gauge.v = b.skel.length; floatAt(bs, `Squelette abattu ×${n0 - b.skel.length}`, "info"); } else if (b.skel.length) b.skel[0] -= r; }
