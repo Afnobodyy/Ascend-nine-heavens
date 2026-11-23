@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 126; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 127; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2555,10 +2555,10 @@ function varSk(id, i) {
 }
 const varGot = (id, i) => stars(id) >= 2 + i;
 const varOn = (id, i) => varGot(id, i) && !(S.owned[id].voff && S.owned[id].voff[i]);
-function toggleVar(id, i) {
+function toggleVar(id, i, equip) {
   const o = S.owned[id]; if (!o || !varGot(id, i)) return;
-  o.voff = o.voff || [0, 0]; const on = !o.voff[i] ? 0 : 1; // état actuel -> inverse
-  o.voff[i] = on ? 0 : 1;
+  o.voff = o.voff || [0, 0];
+  o.voff[i] = equip ? 0 : 1; // clic sur la variante : l'équiper ; clic sur le sort d'origine : le rééquiper
   if (!o.voff[i]) VAR[id].forEach((w, j) => { if (j !== i && w.slot === VAR[id][i].slot) o.voff[j] = 1; });
   save();
 }
@@ -5117,7 +5117,7 @@ const kitList = (id) => { const V = VAR[id], o = S.owned[id]; if (!V || !o) retu
   return `<div class="sk kitlist"><div class="sk-h"><b>Variantes de compétences</b><span>${V.filter((_, i) => varGot(id, i)).length} / 2 débloquées</span></div>` + V.map((v, i) => {
     const got = varGot(id, i), on = varOn(id, i), base = KITS[id][v.slot];
     const bcd = base.cd != null ? `Recharge ${base.cd} tours` : "", vcd = v.cd != null ? v.cd : base.cd;
-    return `<div class="kitrow"><div class="kopt base ${on ? "off" : "on"}"><i>${i ? "B" : "A"} · sort d'origine${on ? "" : " — équipé"}</i><b>${heroSp(id, v.slot, base.el, {})}${base.n}</b><em>${bcd}</em><p>${base.d}</p></div><div class="kopt ${on ? "on" : ""} ${got ? "" : "lock"}" ${got ? `data-act="vareq" data-id="${id}" data-i="${i}"` : ""}><i>${i ? "B" : "A"} · variante${got ? (on ? " — équipée" : " — touche pour équiper") : ""}</i><b>${got ? heroSp(id, v.slot, base.el, { v: i ? "B" : "A" }) + v.n : "🔒 " + (i ? "3" : "2") + " exemplaires requis"}</b>${got ? `<em>Recharge ${vcd} tours</em>` : ""}<p>${got ? v.d : "Une variante change l'usage d'une compétence, sans la rendre plus forte."}</p></div></div>`;
+    return `<div class="kitrow"><div class="kopt base ${on ? "off" : "on"}" ${got ? `data-act="vareq" data-set="0" data-id="${id}" data-i="${i}"` : ""}><i>${i ? "B" : "A"} · sort d'origine${on ? " — touche pour équiper" : " — équipé"}</i><b>${heroSp(id, v.slot, base.el, {})}${base.n}</b><em>${bcd}</em><p>${base.d}</p></div><div class="kopt ${on ? "on" : ""} ${got ? "" : "lock"}" ${got ? `data-act="vareq" data-set="1" data-id="${id}" data-i="${i}"` : ""}><i>${i ? "B" : "A"} · variante${got ? (on ? " — équipée" : " — touche pour équiper") : ""}</i><b>${got ? heroSp(id, v.slot, base.el, { v: i ? "B" : "A" }) + v.n : "🔒 " + (i ? "3" : "2") + " exemplaires requis"}</b>${got ? `<em>Recharge ${vcd} tours</em>` : ""}<p>${got ? v.d : "Une variante change l'usage d'une compétence, sans la rendre plus forte."}</p></div></div>`;
   }).join("") + `<p class="note">4 exemplaires : apparence alternative (illustration à venir).${o.fr ? ` Fragments : ${o.fr}.` : ""}</p></div>`; };
 
 // ---- combos amorce / finisseur ----
@@ -6202,7 +6202,7 @@ document.addEventListener("click", (e) => {
   switch (a) {
     case "go": go(t.dataset.to); break;
     case "detail": showDetail(t.dataset.id); break;
-    case "vareq": toggleVar(t.dataset.id, +t.dataset.i); document.querySelectorAll(".sheet").forEach((x) => x.remove()); showDetail(t.dataset.id); break;
+    case "vareq": toggleVar(t.dataset.id, +t.dataset.i, t.dataset.set === "1"); document.querySelectorAll(".sheet").forEach((x) => x.remove()); showDetail(t.dataset.id); break;
     case "eqalt": setAlt(t.dataset.id, +t.dataset.si, +t.dataset.v); document.querySelectorAll(".sheet").forEach((x) => x.remove()); showDetail(t.dataset.id); break;
     case "tog": toggleTeam(t.dataset.id); break;
     case "tfocus": teamFocus = t.dataset.id; renderTeam(); break;
