@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 106; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 107; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2129,8 +2129,8 @@ const ROLE = {
 };
 const RAR = {
   R: { n: "Rare",       c: "#3d8bff", mult: 1.0 },
-  E: { n: "Épique",     c: "#a75cff", mult: 1.2 },
-  L: { n: "Légendaire", c: "#ff8a1f", mult: 1.42 },
+  E: { n: "Épique",     c: "#a75cff", mult: 1 },
+  L: { n: "Légendaire", c: "#ff8a1f", mult: 1 },
 };
 const PITY = 30;
 
@@ -2181,7 +2181,7 @@ const CHARS = [
       { n: "Écailles de jade", d: "Équipe : bouclier 15 % PV et ATK +20 % (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "buff", p: 0.2, d: 2 }] },
     ] },
   // ---------- LAMES ----------
-  { id: "p1", name: "Kenta", title: "Rōnin errant", role: "phys", rar: "R", el: "metal",
+  { id: "p1", name: "Kenta", title: "Rōnin errant", role: "phys", rar: "E", el: "metal",
     look: { skin: "#e7bf96", hair: "#231a14", hs: "short", eye: "#22160e", robe: "#5b5f68", robe2: "#2e3036", trim: "#a33a2a", wpn: "katana", hg: "hat" },
     skills: [
       { n: "Iaijutsu", d: "Dégaine et frappe à 130 % ATK, esquive 50 % des attaques (1 tour).", cd: 0, tgt: "boss", fx: [{ k: "dmg", m: 1.3 }, { k: "evade", p: 0.5, d: 1 }] },
@@ -2195,7 +2195,7 @@ const CHARS = [
       { n: "Piège de lianes", d: "Frappe à 60 % ATK et réduit la DEF du boss de 25 % (2 tours).", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 0.6 }, { k: "debuff", s: "def", p: 0.25, d: 2 }] },
       { n: "Pluie de lances", el: "metal", d: "Quatre coups à 60 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 4 }] },
     ] },
-  { id: "p3", name: "Akane", title: "Danseuse aux lames jumelles", role: "phys", rar: "E", el: "feu",
+  { id: "p3", name: "Akane", title: "Danseuse aux lames jumelles", role: "phys", rar: "R", el: "feu",
     look: { skin: "#f4d4b6", hair: "#9c1c1c", hs: "long", eye: "#4a1010", robe: "#d94a2c", robe2: "#5a1410", trim: "#ffcf6b", wpn: "twin", hg: "pin" },
     skills: [
       { n: "Pas de flamme", d: "Deux coups à 70 % ATK, esquive 40 % des attaques (1 tour).", cd: 0, tgt: "boss", fx: [{ k: "dmg", m: 0.7, hits: 2 }, { k: "evade", p: 0.4, d: 1 }] },
@@ -2344,13 +2344,13 @@ const KITS = {
   // ---------- GARDIENS ----------
   t1: [
     { n: "Bâton lourd", d: "Frappe à 110 % ATK.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.1, post: 14 }] },
-    { n: "Vœu de la montagne", d: "Provoque 2 tours et réduit ses dégâts subis de 50 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.5, d: 2 }] },
-    { n: "Mur de prière", d: "Équipe : bouclier de 15 % PV et −20 % de dégâts subis (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "dr", p: 0.2, d: 2 }] },
+    { n: "Vœu de la montagne", d: "Provoque 2 tours et réduit ses dégâts subis de 50 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.45, d: 2 }] },
+    { n: "Mur de prière", d: "Équipe : bouclier de 15 % PV et +DEF1 (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "dr", p: 0.15, d: 2 }] },
     { n: "Mille prières, une montagne", d: "Tous les coups du boss ce tour visent Bao, qui subit 70 % de dégâts en moins.", cd: 6, tgt: "self", ult: 1, fx: [{ k: "soak", p: 0.7 }] },
   ],
   t2: [
     { n: "Estoc de lance", d: "Frappe à 120 % ATK et provoque 1 tour.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "taunt", d: 1, on: "self" }] },
-    { n: "Défi du pont", d: "Provoque 2 tours, −35 % de dégâts subis et riposte à 90 % ATK quand elle est frappée.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.35, d: 2 }, { k: "counter", p: 0.9, d: 2 }] },
+    { n: "Défi du pont", d: "Provoque 2 tours, +DEF2 et riposte à 90 % ATK quand elle est frappée.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.3, d: 2 }, { k: "counter", p: 0.9, d: 2 }] },
     { n: "Barrage", d: "Équipe : bouclier de 12 % PV.", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.12 }] },
     { n: "Le pont ne tombera pas", d: "Équipe immunisée aux exécutions pendant 2 tours. Hana riposte à 150 % ATK.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "execimm", d: 2 }, { k: "counter", p: 1.5, d: 2, on: "self" }] },
   ],
@@ -2363,18 +2363,18 @@ const KITS = {
   t4: [
     { n: "Coup d'éventail", d: "Frappe à 90 % ATK et réduit la DEF du boss de 10 % (2 tours).", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 0.9 }, { k: "debuff", s: "def", p: 0.1, d: 2 }] },
     { n: "Reflet-leurre", d: "Un allié reçoit un leurre : il absorbe la prochaine attaque à cible unique ou exécution qui le vise.", cd: 3, tgt: "ally", fx: [{ k: "decoy" }] },
-    { n: "Rempart d'acier", d: "Équipe : bouclier de 14 % PV et −15 % de dégâts subis (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.14 }, { k: "dr", p: 0.15, d: 2 }] },
+    { n: "Rempart d'acier", d: "Équipe : bouclier de 14 % PV et +DEF1 (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.14 }, { k: "dr", p: 0.15, d: 2 }] },
     { n: "Cent éventails, un seul miroir", d: "Renvoie au boss 100 % des dégâts subis par l'équipe ce tour.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "mirror" }] },
   ],
   t5: [
     { n: "Choc de carapace", d: "Frappe à 90 % ATK et bouclier perso de 6 % PV.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 0.9 }, { k: "shield", p: 0.06, on: "self" }] },
-    { n: "Carapace abyssale", d: "Provoque 2 tours et réduit ses dégâts subis de 50 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.5, d: 2 }] },
+    { n: "Carapace abyssale", d: "Provoque 2 tours et réduit ses dégâts subis de 50 %.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.45, d: 2 }] },
     { n: "Marée protectrice", d: "Équipe : retire les malus et régénère 6 % PV par tour (3 tours).", cd: 4, tgt: "allies", fx: [{ k: "cleanse" }, { k: "regen", p: 0.06, d: 3 }] },
-    { n: "Le Nord s'abat", d: "Équipe : −60 % de dégâts subis (2 tours) et le boss est retardé d'un tour.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "dr", p: 0.6, d: 2 }, { k: "delay" }] },
+    { n: "Le Nord s'abat", d: "Équipe : +DEF3 (2 tours) et le boss est retardé d'un tour.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "dr", p: 0.45, d: 2 }, { k: "delay" }] },
   ],
   t6: [
     { n: "Kesagiri", d: "Frappe à 120 % ATK et bouclier perso de 8 % PV.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "shield", p: 0.08, on: "self" }] },
-    { n: "Posture du dragon", d: "Provoque 2 tours, −30 % de dégâts subis et riposte à 100 % ATK.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.3, d: 2 }, { k: "counter", p: 1.0, d: 2 }] },
+    { n: "Posture du dragon", d: "Provoque 2 tours, +DEF2 et riposte à 100 % ATK.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.3, d: 2 }, { k: "counter", p: 1.0, d: 2 }] },
     { n: "Écailles de jade", d: "Équipe : bouclier de 15 % PV et ATK +20 % (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "buff", p: 0.2, d: 2 }] },
     { n: "Dragon Azur, tranche le ciel", d: "Frappe à 450 % ATK. ATK de l'équipe +30 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.5, post: 80 }, { k: "buff", p: 0.3, d: 2, on: "allies" }] },
   ],
@@ -2383,7 +2383,7 @@ const KITS = {
     { n: "Iaijutsu", d: "Frappe à 130 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.3, post: 20 }] },
     { n: "Posture d'iaï", d: "Esquive 80 % des attaques (1 tour), rengaine et la prochaine attaque inflige +60 % de dégâts.", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.8, d: 1 }, { k: "nxt", p: 0.6 }, { k: "sheathe" }] },
     { n: "Double entaille", d: "Deux coups à 85 % ATK. Le boss subit +20 % de dégâts (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.85, hits: 2 }, { k: "mark", p: 0.2, d: 2 }] },
-    { n: "Dernier iaï", d: "Coup unique à 500 % ATK qui ignore la défense.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 5.0, pen: 1, post: 90 }] },
+    { n: "Dernier iaï", d: "Coup unique à 350 % ATK qui ignore 50 % de la défense.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.5, pen: 0.5, post: 90 }] },
   ],
   p2: [
     { n: "Pointe de bambou", d: "Frappe à 100 % ATK puis Saignement (35 % ATK/tour, 2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0 }, { k: "dot", s: "bleed", m: 0.35, d: 2 }] },
@@ -2399,7 +2399,7 @@ const KITS = {
   ],
   p4: [
     { n: "Griffe du tigre", d: "Frappe à 100 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 15 }] },
-    { n: "Peau de tigre", d: "−50 % de dégâts subis (2 tours) et riposte à 40 % ATK.", cd: 3, tgt: "self", fx: [{ k: "dr", p: 0.5, d: 2 }, { k: "counter", p: 0.4, d: 2 }] },
+    { n: "Peau de tigre", d: "+DEF3 (2 tours) et riposte à 40 % ATK.", cd: 3, tgt: "self", fx: [{ k: "dr", p: 0.45, d: 2 }, { k: "counter", p: 0.4, d: 2 }] },
     { n: "Rugissement", d: "Frappe à 50 % ATK et réduit la DEF du boss de 30 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, post: 30 }, { k: "debuff", s: "def", p: 0.3, d: 2 }] },
     { n: "Tigre des cent montagnes", d: "Huit coups à 40 % ATK qui ignorent l'armure.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.4, hits: 8, pen: 1, post: 5 }] },
   ],
@@ -2420,7 +2420,7 @@ const KITS = {
     { n: "Ofuda de givre", d: "Sort à 100 % ATK, ATK du boss −10 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0 }, { k: "debuff", s: "atk", p: 0.1, d: 2 }] },
     { n: "Sceau purificateur", d: "Un allié : retire les malus et bouclier de 8 % PV.", cd: 3, tgt: "ally", fx: [{ k: "cleanse" }, { k: "shield", p: 0.08 }] },
     { n: "Shikigami de neige", d: "Trois esprits frappent à 75 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.75, hits: 3 }] },
-    { n: "Tempête de neige", d: "Sort à 250 % ATK, ATK du boss −40 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 2.5, post: 70 }, { k: "debuff", s: "atk", p: 0.4, d: 2 }] },
+    { n: "Tempête de neige", d: "Cinq coups à 70 % ATK, ATK du boss −40 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.7, hits: 5, post: 20 }, { k: "debuff", s: "atk", p: 0.4, d: 2 }] },
   ],
   m2: [
     { n: "Pilule explosive", d: "Sort à 100 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 28 }] },
@@ -2454,34 +2454,34 @@ const KITS = {
   ],
   // ---------- SOUTIENS ----------
   s1: [
-    { n: "Clochette", d: "Un allié : soigne 200 % ATK.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 2.0 }] },
-    { n: "Bourgeons", d: "Équipe : régénère 10 % PV par tour (3 tours) et −25 % de dégâts subis (2 tours).", cd: 3, tgt: "allies", fx: [{ k: "regen", p: 0.1, d: 3 }, { k: "dr", p: 0.25, d: 2 }] },
-    { n: "Racines de vie", d: "Un allié : retire les malus et soigne 50 % PV.", cd: 4, tgt: "ally", fx: [{ k: "cleanse" }, { k: "healPct", p: 0.5 }] },
-    { n: "Floraison", d: "Ressuscite les alliés tombés à 35 % PV et soigne l'équipe de 25 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.35 }, { k: "healPct", p: 0.25 }] },
+    { n: "Bourgeon", d: "Un allié : régénère 8 % PV par tour (3 tours), cumulable 2 fois.", cd: 2, tgt: "ally", fx: [{ k: "regen", p: 0.08, d: 3, stack: 2 }] },
+    { n: "Sève", d: "Équipe : régénère 5 % PV par tour (3 tours).", cd: 3, tgt: "allies", fx: [{ k: "regen", p: 0.05, d: 3 }] },
+    { n: "Épines venimeuses", d: "Pose un Poison sur le boss (2 tours). Aucun dégât direct.", cd: 3, tgt: "boss", fx: [{ k: "dot", s: "poison", m: 0.5, d: 2 }] },
+    { n: "Forêt vivante", d: "Équipe : régénère 10 % PV par tour (4 tours) et +DEF1 (2 tours).", cd: 7, tgt: "allies", ult: 1, fx: [{ k: "regen", p: 0.1, d: 4 }, { k: "dr", p: 0.15, d: 2 }] },
   ],
   s2: [
-    { n: "Air apaisant", d: "Un allié : soigne 170 % ATK et retire les malus.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.7 }, { k: "cleanse" }] },
-    { n: "Brume des eaux", d: "Équipe : bouclier de 15 % PV.", cd: 3, tgt: "allies", fx: [{ k: "shield", p: 0.15 }] },
-    { n: "Mélodie hypnotique", d: "ATK du boss −20 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.2, d: 2 }] },
-    { n: "Requiem des eaux", d: "Ressuscite les alliés tombés à 30 % PV, soigne l'équipe de 20 % PV et −30 % de dégâts subis (2 tours).", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.3 }, { k: "healPct", p: 0.2 }, { k: "dr", p: 0.3, d: 2 }] },
+    { n: "Note aiguë", d: "Sort à 90 % ATK et ATK du boss −15 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.9, post: 15 }, { k: "debuff", s: "atk", p: 0.15, d: 2 }] },
+    { n: "Brume des eaux", d: "Équipe : bouclier de 10 % PV.", cd: 3, tgt: "allies", fx: [{ k: "shield", p: 0.1 }] },
+    { n: "Mélodie hypnotique", d: "ATK du boss −30 % et DEF du boss −30 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "debuff", s: "def", p: 0.3, d: 2 }] },
+    { n: "Requiem", d: "Équipe : retire les malus, bouclier de 15 % PV et le boss est retardé d'un tour.", cd: 7, tgt: "allies", ult: 1, fx: [{ k: "cleanse" }, { k: "shield", p: 0.15 }, { k: "delay" }] },
   ],
   s3: [
-    { n: "Pétale soignant", d: "Un allié : soigne 220 % ATK.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 2.2 }] },
-    { n: "Pluie de pétales", d: "Équipe : soigne 20 % PV.", cd: 3, tgt: "allies", fx: [{ k: "healPct", p: 0.2 }] },
-    { n: "Bénédiction de cerisier", d: "Un allié : bouclier puissant de 35 % PV et retire les malus.", cd: 4, tgt: "ally", fx: [{ k: "shield", p: 0.35 }, { k: "cleanse" }] },
-    { n: "Hanami", d: "Ressuscite les alliés tombés à 35 % PV, soigne l'équipe de 20 % PV et ATK +30 % (2 tours).", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.35 }, { k: "healPct", p: 0.2 }, { k: "buff", p: 0.3, d: 2 }] },
+    { n: "Pétale soignant", d: "Un allié : soigne 160 % ATK.", cd: 2, tgt: "ally", fx: [{ k: "heal", m: 1.6 }] },
+    { n: "Pluie de pétales", d: "Équipe : soigne 20 % PV.", cd: 4, tgt: "allies", fx: [{ k: "healPct", p: 0.2 }] },
+    { n: "Bénédiction de cerisier", d: "Équipe : retire les malus, soigne 10 % PV les alliés sans malus.", cd: 4, tgt: "allies", fx: [{ k: "cleanse", heal: 0.1 }] },
+    { n: "Hanami", d: "Ressuscite les alliés tombés à 30 % PV et soigne l'équipe de 30 % PV.", cd: 8, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.3 }, { k: "healPct", p: 0.3 }] },
   ],
   s4: [
-    { n: "Thé vert", d: "Un allié : soigne 160 % ATK et bouclier de 8 % PV.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.6 }, { k: "shield", p: 0.08 }] },
+    { n: "Thé apaisant", d: "Un allié : soigne 160 % ATK.", cd: 2, tgt: "ally", fx: [{ k: "heal", m: 1.6 }] },
     { n: "Cérémonie du thé", d: "Les recharges des alliés sont réduites de 1.", cd: 3, tgt: "allies", fx: [{ k: "cdr", n: 1 }] },
-    { n: "Infusion millénaire", d: "Un allié : soigne 25 % PV et régénère 5 % PV par tour (3 tours).", cd: 4, tgt: "ally", fx: [{ k: "healPct", p: 0.25 }, { k: "regen", p: 0.05, d: 3 }] },
-    { n: "Pause du maître", d: "Les recharges des alliés sont réduites de 2 et l'équipe est soignée de 20 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "cdr", n: 2 }, { k: "healPct", p: 0.2 }] },
+    { n: "Défi du maître", d: "Provoque 1 tour, +DEF3 sur lui et riposte à 120 % ATK.", cd: 4, tgt: "self", fx: [{ k: "taunt", d: 1 }, { k: "dr", p: 0.45, d: 1 }, { k: "counter", p: 1.2, d: 1 }] },
+    { n: "Pause du maître", d: "Équipe : +DEF2 (1 tour) et recharges des alliés −2.", cd: 7, tgt: "allies", ult: 1, fx: [{ k: "dr", p: 0.3, d: 1 }, { k: "cdr", n: 2 }] },
   ],
   s5: [
-    { n: "Rayon de lune", d: "Un allié : soigne 200 % ATK.", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 2.0 }] },
-    { n: "Voile lunaire", d: "Équipe : bouclier de 12 % PV et retire les malus.", cd: 3, tgt: "allies", fx: [{ k: "shield", p: 0.12 }, { k: "cleanse" }] },
-    { n: "Lune d'argent", d: "Un allié : bouclier puissant de 35 % PV et immunité aux exécutions (1 tour).", cd: 4, tgt: "ally", fx: [{ k: "shield", p: 0.35 }, { k: "execimm", d: 1 }] },
-    { n: "Retour de l'âme", d: "Ressuscite les alliés tombés à 50 % PV et soigne les autres de 25 % PV.", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "revive", p: 0.5 }, { k: "healPct", p: 0.25 }] },
+    { n: "Lame de lune", d: "Sort à 110 % ATK. Soigne l'allié le plus bas de 50 % des dégâts infligés.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.1, post: 20 }, { k: "steal", p: 0.5, to: "low" }] },
+    { n: "Voile lunaire", d: "Sort à 80 % ATK. Soigne l'équipe de 30 % des dégâts infligés (répartis).", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 0.8, post: 15 }, { k: "steal", p: 0.3, to: "all", split: 1 }] },
+    { n: "Éclats d'argent", d: "Trois coups à 60 % ATK. Soigne l'allié le plus bas de 50 % des dégâts infligés.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 3, post: 10 }, { k: "steal", p: 0.5, to: "low" }] },
+    { n: "Pleine lune", d: "Sort à 300 % ATK. Soigne toute l'équipe de 50 % des dégâts infligés.", cd: 7, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.0, post: 70 }, { k: "steal", p: 0.5, to: "all" }] },
   ],
   s6: [
     { n: "Plume ardente", d: "Un allié : soigne 150 % ATK et ATK +15 % (2 tours). +1 braise (max 3).", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.5 }, { k: "buff", p: 0.15, d: 2 }, { k: "charge", n: 1, max: 3 }] },
@@ -4423,8 +4423,9 @@ let SEL = { boss: "kappa", mode: "n" };
 const cleared = (bid, m) => !!(S.prog && S.prog[bid] && S.prog[bid][m]);
 const bossOpen = (bid) => { const i = BOSSES.findIndex((b) => b.id === bid); return i <= 0 || cleared(BOSSES[i - 1].id, "n"); };
 const allCleared = (m) => BOSSES.every((b) => cleared(b.id, m));
-const modeOpen = (bid, m) => { const k = MODE_ORD.indexOf(m); return bossOpen(bid) && (k === 0 || allCleared(MODE_ORD[k - 1])); };
+const modeOpen = (bid, m) => { const k = MODE_ORD.indexOf(m), i = BOSSES.findIndex((b) => b.id === bid); return bossOpen(bid) && (k === 0 || (allCleared(MODE_ORD[k - 1]) && (i <= 0 || cleared(BOSSES[i - 1].id, m)))); };
 const modeLockTxt = (m) => { const k = MODE_ORD.indexOf(m); return k > 0 && !allCleared(MODE_ORD[k - 1]) ? `Bats les ${BOSSES.length} boss en ${MODES[MODE_ORD[k - 1]].n} pour débloquer le mode ${MODES[m].n}.` : ""; };
+const modeLockBoss = (bid, m) => { const k = MODE_ORD.indexOf(m), i = BOSSES.findIndex((b) => b.id === bid); return k > 0 && i > 0 && allCleared(MODE_ORD[k - 1]) && !cleared(BOSSES[i - 1].id, m) ? `Bats d'abord ${BOSSES[i - 1].name.split(",")[0]} en ${MODES[m].n}.` : ""; };
 const nextBoss = () => BOSSES.find((b) => !cleared(b.id, "n")) || BOSSES[0];
 function bossAt(floor) { const i = floor % BOSSES.length, loop = Math.floor(floor / BOSSES.length); return { b: BOSSES[i], i, loop }; }
 
@@ -5227,7 +5228,7 @@ function renderFightShell() {
 }
 const VIC = { atk: '<svg viewBox="0 0 24 24"><path d="M12 2l6 8h-4v7h-4v-7H6z" fill="currentColor"/><rect x="6" y="19" width="12" height="3" fill="currentColor"/></svg>', guard: '<svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>', poison: '<svg viewBox="0 0 24 24"><path d="M12 2C9 8 5 11 5 15a7 7 0 0014 0c0-4-4-7-7-13z" fill="currentColor"/><circle cx="9.5" cy="15" r="1.6" fill="#0c0709"/></svg>', burn: '<svg viewBox="0 0 24 24"><path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-4 2-7 2 1 3 2 4-5z" fill="currentColor"/></svg>' };
 const VKEY = { buff: "atk", selfatk: "atk", dr: "guard", poison: "poison", burn: "burn" };
-const vChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : n; const ic = VKEY[s.k]; return `<span class="vs ${ic ? "s-" + ic : good ? "good" : "bad"}" title="${label}">${ic ? VIC[ic] : label.slice(0, 3)}<sub>${s.d}</sub></span>`; }).join("");
+const vChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : s.k === "dr" ? "+DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : s.k === "defdown" || s.k === "mark" ? "−DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : n; const ic = VKEY[s.k]; return `<span class="vs ${ic ? "s-" + ic : good ? "good" : "bad"}" title="${label}">${ic ? VIC[ic] : label.slice(0, 3)}<sub>${s.d}</sub></span>`; }).join("");
 // buffs/debuffs ATK/DEF du boss : flèche ↑/↓ + ATK/DEF (sans valeur) ; les autres statuts en pastilles icône comme les héros
 const bossChips = (st) => {
   const mk = (n, up, d, tip) => `<span class="bfx ${up ? "up" : "dn"}" title="${tip}"><em>${up ? "↑" : "↓"}</em>${n}${d < 50 ? `<sub>${d}</sub>` : ""}</span>`;
@@ -5237,7 +5238,7 @@ const bossChips = (st) => {
   if (Math.abs(def) > 0.001) out.push(mk("DEF", def > 0, dur("defdown"), "DEF réduite"));
   return out.join("") + vChips(st.filter((s) => !["selfatk", "atkdown", "defdown"].includes(s.k)));
 };
-const stChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : n; return `<span class="st ${good ? "good" : "bad"}">${label}${s.d < 50 ? `<sub>${s.d}</sub>` : ""}</span>`; }).join("");
+const stChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : s.k === "dr" ? "+DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : s.k === "defdown" || s.k === "mark" ? "−DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : n; return `<span class="st ${good ? "good" : "bad"}">${label}${s.d < 50 ? `<sub>${s.d}</sub>` : ""}</span>`; }).join("");
 function update() {
   if (!F) return;
   const b = F.boss;
@@ -5543,6 +5544,7 @@ function dmgBoss(h, m, o = {}) {
     if (b.threads) markThreads();
     if (!b.stun) pickIntent();
   }
+  h._dealt = (h._dealt || 0) + toHp;
   return toHp;
 }
 function hurtHero(h, raw, o = {}) {
@@ -5634,6 +5636,7 @@ async function useSkill(hi, si, ti) {
   await sleep(scr ? (scr.lead != null ? scr.lead : Math.min(500, scr.block * .4)) : (dmgFx && melee ? 190 : 220));
   const allyT = sk.tgt === "ally" ? [F.heroes[ti]] : sk.tgt === "allies" ? F.heroes : [h];
   spotOn(h, sk, allyT);
+  h._dealt = 0;
   for (const fx of sk.fx) {
     let tg = (fx.on === "self" ? [h] : fx.on === "allies" ? F.heroes : allyT).filter((t) => t && !t.dead);
     if (fx.pick) tg = tg.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp).slice(0, fx.pick);
@@ -5651,12 +5654,14 @@ async function useSkill(hi, si, ti) {
       case "dr": if (si !== "foc") supportFx("guard", tg); tg.forEach((t) => addSt(t, { k: "dr", p: fx.p, d: fx.d })); break;
       case "buff": supportFx("buff", tg); tg.forEach((t) => addSt(t, { k: "buff", p: fx.p, d: fx.d })); break;
       case "counter": addSt(h, { k: "counter", p: fx.p * pw, d: fx.d }); break;
-      case "regen": supportFx("heal", tg); tg.forEach((t) => addSt(t, { k: "regen", p: fx.p * pw, d: fx.d })); break;
+      case "regen": supportFx("heal", tg); tg.forEach((t) => { if (fx.stack) { const rg = t.st.filter((x) => x.k === "regen"); if (rg.length >= fx.stack) t.st.splice(t.st.indexOf(rg[0]), 1); t.st.push({ k: "regen", p: fx.p * pw, d: fx.d, fresh: F.phase === "boss" }); } else addSt(t, { k: "regen", p: fx.p * pw, d: fx.d }); }); break;
+      case "steal": { const al = F.heroes.filter((t) => !t.dead), dl = h._dealt || 0; if (dl <= 0) break; const to = fx.to === "low" ? al.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp).slice(0, 1) : al; supportFx("heal", to); to.forEach((t) => healHero(t, dl * fx.p / (fx.split ? to.length : 1))); break; }
       case "evade": tg.forEach((t) => addSt(t, { k: "evade", p: fx.p, d: fx.d })); break;
       case "cleanse": supportFx("cleanse", tg); tg.forEach((t) => {
         const had = t.st.some((s) => NEG.includes(s.k) && !s.perm);
         if (fx.n) { let k = fx.n; t.st = t.st.filter((s) => { if (k > 0 && NEG.includes(s.k) && !s.perm) { k--; return false; } return true; }); }
         else t.st = t.st.filter((s) => !NEG.includes(s.k) || s.perm);
+        if (fx.heal && !had) healHero(t, t.maxHp * fx.heal);
         if (F.relic === "jiangshi") addSt(t, { k: "ward", d: 3 });
         if (F.relic === "kappa" && !F.rlUsed && had) { F.rlUsed = 1; healHero(t, t.maxHp * 0.1); }
       }); if (b.sun) { b.sun = false; log("Le soleil noir s'éteint."); } break;
@@ -5943,7 +5948,9 @@ function renderVictory() {
     <div class="reward">🎫 +1 ticket ${MODES[w.mode].n}</div>
     <p class="note">${w.first ? "Ticket bonifié : Épique et Légendaire ×1,5" : ""}${w.noKo ? " · ⭐ sans KO" : ""}</p>
     ${w.relic ? `<p class="note">${w.newRelic ? "Relique obtenue : " : "Relique : "}${RELICS[w.relic].k} ${RELICS[w.relic].n}</p>` : ""}${w.first ? `<p class="note">${[unlock, nx].filter(Boolean).join(" ")}</p>` : ""}
-    <button class="btn wide" data-act="go" data-to="boss">Retour aux boss</button></section></main>` + nav();
+    <button class="btn wide" data-act="go" data-to="home">Menu</button>
+    <button class="btn wide" data-act="go" data-to="boss">Affronter un boss</button>
+    <button class="btn ghost wide" data-act="go" data-to="summon">Invocations</button></section></main>` + nav();
 }
 function renderDefeat() {
   const l = S.lastRun || { boss: "", mode: "n" };
@@ -5951,8 +5958,9 @@ function renderDefeat() {
     <span class="floor">COMBAT PERDU</span><h1>Défaite</h1>
     <p class="note">${l.boss ? `Ton équipe est tombée face à ${l.boss} (${MODES[l.mode].n}).` : "Combat abandonné."}</p>
     <p class="note">Tes héros et ton jade sont conservés. Change d'équipe ou retente le combat.</p>
-    <button class="btn wide" data-act="go" data-to="boss">Retour aux boss</button>
-    <button class="btn ghost wide" data-act="go" data-to="team">Modifier l'équipe</button>
+    <button class="btn wide" data-act="go" data-to="home">Menu</button>
+    <button class="btn wide" data-act="go" data-to="boss">Affronter un boss</button>
+    <button class="btn ghost wide" data-act="go" data-to="summon">Invocations</button>
   </section></main>` + nav();
 }
 function abandon() {
@@ -6052,7 +6060,7 @@ document.addEventListener("click", (e) => {
     case "rules": showRules(); break;
     case "rules": showRules(); break;
     case "start": go("boss"); break;
-    case "bossmode": if (!modeOpen(t.dataset.b, t.dataset.m)) { toast(modeLockTxt(t.dataset.m) || "Boss verrouillé."); break; } SEL = { boss: t.dataset.b, mode: t.dataset.m }; go("team"); break;
+    case "bossmode": if (!modeOpen(t.dataset.b, t.dataset.m)) { toast(modeLockTxt(t.dataset.m) || modeLockBoss(t.dataset.b, t.dataset.m) || "Boss verrouillé."); break; } SEL = { boss: t.dataset.b, mode: t.dataset.m }; go("team"); break;
     case "prep": go("prep"); break;
     case "fight": startFight(); break;
     case "settings": settingsOpen(); break;
