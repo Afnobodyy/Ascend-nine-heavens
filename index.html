@@ -1028,7 +1028,7 @@ h1,h2,h3{font-family:var(--display);font-weight:800;margin:0;text-wrap:balance}
 /* barres */
 .bar{position:relative;height:12px;background:#0b0608;border-radius:4px;overflow:hidden;border:1px solid #000}
 .bar i{position:absolute;inset:0 auto 0 0;background:var(--bc,var(--jade));transition:width .35s ease}
-.bar i.sh{background:rgba(143,208,255,.75);left:auto;right:0}
+.bar i.sh{background:rgba(143,208,255,.75);left:0;right:auto}
 .bar span{position:absolute;inset:0;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;text-shadow:0 1px 2px #000}
 
 /* combat */
@@ -1183,8 +1183,7 @@ img.px{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 .cam.shake-s{animation:shake .3s linear}
 .cam.shake-b{animation:shakeb .6s linear}
 @keyframes shakeb{10%{transform:translate(-6px,3px)}20%{transform:translate(6px,-4px)}30%{transform:translate(-5px,2px)}45%{transform:translate(4px,3px)}60%{transform:translate(-3px,-2px)}80%{transform:translate(2px,1px)}}
-.breathe{position:relative;width:100%;height:100%;transform-origin:50% 100%;animation:breathe 3.2s ease-in-out infinite}
-@keyframes breathe{50%{transform:scale(1.012,1.025)}}
+.breathe{position:relative;width:100%;height:100%}
 .bob{display:block;position:relative;width:100%;height:100%;animation:bob 2.4s ease-in-out infinite}
 .pc.p1 .bob{animation-delay:-.8s}.pc.p2 .bob{animation-delay:-1.6s}
 @keyframes bob{50%{transform:translateY(-2%)}}
@@ -1200,8 +1199,6 @@ img.px{image-rendering:pixelated;image-rendering:crisp-edges;display:block}
 .bshadow{position:absolute;left:18%;right:-6%;bottom:0;height:10%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.75),transparent);transform:skewX(-30deg)}
 .bossbox.broken .bimg{filter:grayscale(.75) brightness(.75);transform:rotate(-5deg) translateY(3%)}
 .bossbox.reflect .bimg{filter:drop-shadow(0 0 10px #8fd0ff) drop-shadow(0 0 3px #fff)}
-.bossbox.lunge{animation:blunge .5s ease-in-out;transform-origin:50% 100%}
-@keyframes blunge{40%{transform:translateX(9%) scale(1.06)}}
 .party{position:absolute;inset:0;pointer-events:none}
 .pc{position:absolute;width:17%;aspect-ratio:56/72;pointer-events:auto;transition:transform .25s,filter .25s,opacity .25s}
 .pc.p0{right:15%;bottom:31%}.pc.p1{right:3%;bottom:18%}.pc.p2{right:17%;bottom:5%}
@@ -2108,7 +2105,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 132; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 133; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -5268,7 +5265,7 @@ function update() {
   const $ = (id) => document.getElementById(id);
   if (!$("bhp")) return;
   $("bhp").style.width = (b.hp / b.maxHp) * 100 + "%";
-  $("bsh").style.width = Math.min(100, (b.shield / b.maxHp) * 100) + "%";
+  { const r = Math.min(1, b.hp / b.maxHp), sh = $("bsh"); sh.style.left = r * 100 + "%"; sh.style.width = Math.min(100 - r * 100, (b.shield / b.maxHp) * 100) + "%"; }
   $("bhpt").textContent = `${fmt(b.hp)} / ${fmt(b.maxHp)}${b.shield > 0 ? " · bouclier " + fmt(b.shield) : ""}`;
   $("bphase").hidden = b.phase < 2; $("bphase").textContent = "PHASE " + b.phase;
   if (b.forms) { const k = "b:" + b.forms[Math.min(b.phase, b.forms.length) - 1], im = document.querySelector("#bstage .bimg"); if (im && im.dataset.px !== k && ART[k]) { im.dataset.px = k; im.src = ART[k]; } }
@@ -5289,7 +5286,7 @@ function update() {
   F.heroes.forEach((h, i) => {
     const el = $("hc" + i), pc = $("pc" + i);
     el.querySelector(".hpi").style.width = (h.hp / h.maxHp) * 100 + "%";
-    el.querySelector(".sh").style.width = Math.min(100, (h.shield / h.maxHp) * 100) + "%";
+    { const r = Math.min(1, h.hp / h.maxHp), sh = el.querySelector(".sh"); sh.style.left = r * 100 + "%"; sh.style.width = Math.min(100 - r * 100, (h.shield / h.maxHp) * 100) + "%"; }
     el.querySelector(".hpt").textContent = h.dead ? "Tombé" : `${fmt(h.hp)}${h.shield > 0 ? " +" + fmt(h.shield) : ""}`;
     el.querySelector(".hpt").classList.toggle("low", !h.dead && h.hp / h.maxHp < 0.3);
     el.querySelector(".hst").innerHTML = stChips(h.st);
@@ -5858,7 +5855,7 @@ async function bossAct(mv) {
   const mk = Object.keys(b.moves).find((k) => b.moves[k] === mv) || b.intent, AA = ATK["b:" + b.id], runMs = AA && AA.run ? 900 * TS / 2 : 0;
   F.bpxDone = false;
   const bmel = mv.type === "p" && mv.t !== "self" ? (runMs ? meleeGo(document.getElementById("bstage"), runMs) : meleeGo(document.getElementById("bstage"))) : null;
-  if (!bmel) { const bs = document.getElementById("bstage"); if (bs) bs.style.animationDuration = TS * 0.5 + "s"; flashCls(bs, "lunge"); }
+  
   const rp = bmel && runMs ? bossRun(b.id, (window.__fast || skipAnim || reduceMotion) ? 40 : runMs) : null;
   if (!rp) bossAtk(b.id, mk);
   if (bmel) await bmel.in;
