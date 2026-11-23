@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 131; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 132; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2361,7 +2361,7 @@ const KITS = {
     { n: "Le Rocher s'éveille", d: "Frappe à 450 % ATK et repousse la prochaine action du boss d'un tour.", cd: 7, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.5, post: 70 }, { k: "delay" }] },
   ],
   t4: [
-    { n: "Coup d'éventail", d: "Frappe à 90 % ATK et réduit la DEF du boss de 10 % (2 tours).", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 0.9 }, { k: "debuff", s: "def", p: 0.1, d: 2 }] },
+    { n: "Coup d'éventail", d: "Frappe à 90 % ATK et réduit la DEF du boss de 15 % (2 tours).", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 0.9 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
     { n: "Reflet-leurre", d: "Un allié reçoit un leurre : il absorbe la prochaine attaque à cible unique ou exécution qui le vise.", cd: 3, tgt: "ally", fx: [{ k: "decoy" }] },
     { n: "Rempart d'acier", d: "Équipe : bouclier de 14 % PV et +DEF1 (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.14 }, { k: "dr", p: 0.15, d: 2 }] },
     { n: "Cent éventails, un seul miroir", d: "Renvoie au boss 80 % des dégâts subis par l'équipe ce tour (plafonné à 40 % des PV max du boss).", cd: 6, tgt: "allies", ult: 1, fx: [{ k: "mirror" }] },
@@ -2375,14 +2375,14 @@ const KITS = {
   t6: [
     { n: "Kesagiri", d: "Frappe à 120 % ATK et bouclier perso de 8 % PV.", cd: 1, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "shield", p: 0.08, on: "self" }] },
     { n: "Posture du dragon", d: "Provoque 2 tours, +DEF2 et riposte à 100 % ATK.", cd: 3, tgt: "self", fx: [{ k: "taunt", d: 2 }, { k: "dr", p: 0.3, d: 2 }, { k: "counter", p: 1.0, d: 2 }] },
-    { n: "Écailles de jade", d: "Équipe : bouclier de 15 % PV et ATK +20 % (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "buff", p: 0.2, d: 2 }] },
+    { n: "Écailles de jade", d: "Équipe : bouclier de 15 % PV et ATK +15 % (2 tours).", cd: 4, tgt: "allies", fx: [{ k: "shield", p: 0.15 }, { k: "buff", p: 0.15, d: 2 }] },
     { n: "Dragon Azur, tranche le ciel", d: "Frappe à 420 % ATK. ATK de l'équipe +30 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.2, post: 80 }, { k: "buff", p: 0.3, d: 2, on: "allies" }] },
   ],
   // ---------- LAMES ----------
   p1: [
     { n: "Iaijutsu", d: "Frappe à 110 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.1, post: 20 }] },
     { n: "Posture d'iaï", d: "Esquive 80 % des attaques (1 tour), rengaine et la prochaine attaque inflige +60 % de dégâts.", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.8, d: 1 }, { k: "nxt", p: 0.6 }, { k: "sheathe" }] },
-    { n: "Double entaille", d: "Deux coups à 85 % ATK. Le boss subit +20 % de dégâts (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.85, hits: 2 }, { k: "mark", p: 0.2, d: 2 }] },
+    { n: "Double entaille", d: "Deux coups à 85 % ATK. Le boss subit +15 % de dégâts (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.85, hits: 2 }, { k: "mark", p: 0.15, d: 2 }] },
     { n: "Dernier iaï", d: "Coup unique à 350 % ATK qui ignore 50 % de la défense.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.5, pen: 0.5, post: 90 }] },
   ],
   p2: [
@@ -2410,7 +2410,7 @@ const KITS = {
     { n: "Le Roi Singe renverse le ciel", d: "Frappe à 450 % ATK. Esquive d'équipe 60 % (1 tour).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 4.5, post: 90 }, { k: "evade", p: 0.6, d: 1, on: "allies" }] },
   ],
   p6: [
-    { n: "Rayon lunaire", d: "Frappe à 120 % ATK, le boss subit +10 % de dégâts (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.1, d: 2 }] },
+    { n: "Rayon lunaire", d: "Frappe à 120 % ATK, le boss subit +15 % de dégâts (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "mark", p: 0.15, d: 2 }] },
     { n: "Marque lunaire", d: "Le boss subit +30 % de dégâts (2 tours). Aucune attaque.", cd: 3, tgt: "boss", fx: [{ k: "mark", p: 0.3, d: 2 }] },
     { n: "Éclipse", d: "Frappe à 300 % ATK, ×1,6 si le boss a moins de 35 % PV.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 3.0, exec: 1.6 }] },
     { n: "Trou noir", d: "Frappe à 350 % ATK, ×1,5 si le boss a moins de 35 % PV.", cd: 7, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.5, exec: 1.5, post: 100 }] },
@@ -2432,12 +2432,12 @@ const KITS = {
     { n: "Kitsunebi", d: "Deux feux follets à 55 % ATK puis Brûlure (25 % ATK/tour, 2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.55, hits: 2 }, { k: "dot", s: "burn", m: 0.25, d: 2 }] },
     { n: "Illusion", d: "ATK du boss −30 % et DEF −15 % (2 tours).", cd: 3, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 2 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
     { n: "Tornade de flammes", d: "Six coups à 50 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 6 }] },
-    { n: "Danse des cent feux", d: "Neuf flammes à 39 % ATK, Brûlure (40 % ATK/tour, 3 tours) et ATK du boss −20 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.39, hits: 9, post: 5 }, { k: "dot", s: "burn", m: 0.4, d: 3 }, { k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+    { n: "Danse des cent feux", d: "Neuf flammes à 39 % ATK, Brûlure (40 % ATK/tour, 3 tours) et ATK du boss −15 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.39, hits: 9, post: 5 }, { k: "dot", s: "burn", m: 0.4, d: 3 }, { k: "debuff", s: "atk", p: 0.15, d: 2 }] },
   ],
   m4: [
     { n: "Trait de pinceau", d: "Sort à 120 % ATK, DEF du boss −15 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.2, post: 25 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
     { n: "Calligraphie protectrice", d: "Équipe : bouclier de 10 % PV. Un allié : retire un malus.", cd: 3, tgt: "ally", fx: [{ k: "shield", p: 0.1, on: "allies" }, { k: "cleanse" }] },
-    { n: "Encre empoisonnée", d: "Poison (30 % ATK/tour, 3 tours) et ATK du boss −20 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dot", s: "poison", m: 0.3, d: 3 }, { k: "debuff", s: "atk", p: 0.2, d: 2 }] },
+    { n: "Encre empoisonnée", d: "Poison (30 % ATK/tour, 3 tours) et ATK du boss −15 % (2 tours).", cd: 4, tgt: "boss", fx: [{ k: "dot", s: "poison", m: 0.3, d: 3 }, { k: "debuff", s: "atk", p: 0.15, d: 2 }] },
     { n: "Poème de la tempête", d: "Sort à 360 % ATK. DEF du boss −30 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 3.6, post: 70 }, { k: "debuff", s: "def", p: 0.3, d: 2 }] },
   ],
   m5: [
@@ -2485,7 +2485,7 @@ const KITS = {
   ],
   s6: [
     { n: "Plume ardente", d: "Un allié : soigne 150 % ATK et ATK +15 % (2 tours). +1 braise (max 3).", cd: 1, tgt: "ally", fx: [{ k: "heal", m: 1.5 }, { k: "buff", p: 0.15, d: 2 }, { k: "charge", n: 1, max: 3 }] },
-    { n: "Hymne du soleil", d: "Équipe : ATK +35 % (2 tours). +1 braise (max 3).", cd: 3, tgt: "allies", fx: [{ k: "buff", p: 0.35, d: 2 }, { k: "charge", n: 1, max: 3 }] },
+    { n: "Hymne du soleil", d: "Équipe : ATK +30 % (2 tours). +1 braise (max 3).", cd: 3, tgt: "allies", fx: [{ k: "buff", p: 0.3, d: 2 }, { k: "charge", n: 1, max: 3 }] },
     { n: "Flamme purificatrice", d: "Consomme les braises : frappe à 150 % ATK + 40 % ATK par braise, puis Brûlure (30 % ATK/tour, 3 tours + 1 par braise).", cd: 4, tgt: "boss", discharge: 1, fx: [{ k: "dmg", m: 1.5, perCharge: 0.4, post: 20 }, { k: "dot", s: "burn", m: 0.3, d: 3, dPer: 1 }] },
     { n: "Renaissance", d: "Ressuscite les alliés tombés à 40 % PV (+10 % par braise, consommées) et soigne l'équipe de 25 % PV.", cd: 7, tgt: "allies", ult: 1, discharge: 1, fx: [{ k: "revive", p: 0.4, pPer: 0.1 }, { k: "healPct", p: 0.25 }] },
   ],
@@ -2502,19 +2502,19 @@ const VARDEF = [
   { o: "Racines profondes", n: "Racines de soin", d: "Provoque 1 tour, bouclier perso de 25 % PV et soigne un allié de 10 % PV.", tgt: "ally", fx: [{ k: "taunt", d: 1 }, { k: "shield", p: 0.25, on: "self" }, { k: "healPct", p: 0.1 }] },
   { o: "Grand séisme", n: "Faille", d: "Frappe à 140 % ATK et repousse la prochaine action du boss d'un tour.", cd: 5, tgt: "boss", fx: [{ k: "dmg", m: 1.4, post: 30 }, { k: "delay" }] },
   { o: "Reflet-leurre", n: "Leurre double", d: "Deux alliés reçoivent un leurre (un seul coup chacun).", cd: 5, tgt: "allies", fx: [{ k: "decoy", pick: 2 }] },
-  { o: "Rempart d'acier", n: "Rempart ciblé", d: "Un allié : bouclier de 25 % PV et −25 % de dégâts subis (2 tours).", tgt: "ally", fx: [{ k: "shield", p: 0.25 }, { k: "dr", p: 0.25, d: 2 }] },
+  { o: "Rempart d'acier", n: "Rempart ciblé", d: "Un allié : bouclier de 25 % PV et −30 % de dégâts subis (2 tours).", tgt: "ally", fx: [{ k: "shield", p: 0.25 }, { k: "dr", p: 0.3, d: 2 }] },
   { o: "Carapace abyssale", n: "Carapace partagée", d: "Équipe : −30 % de dégâts subis (1 tour), sans provocation.", tgt: "allies", fx: [{ k: "dr", p: 0.3, d: 1 }] },
   { o: "Marée protectrice", n: "Marée vive", d: "Un allié : retire les malus, soigne 25 % PV et bouclier de 10 % PV.", tgt: "ally", fx: [{ k: "cleanse" }, { k: "healPct", p: 0.25 }, { k: "shield", p: 0.1 }] },
-  { o: "Posture du dragon", n: "Posture offensive", d: "Provoque 1 tour, riposte à 160 % ATK et ATK +25 % (2 tours), sans réduction de dégâts.", tgt: "self", fx: [{ k: "taunt", d: 1 }, { k: "counter", p: 1.6, d: 1 }, { k: "buff", p: 0.25, d: 2 }] },
+  { o: "Posture du dragon", n: "Posture offensive", d: "Provoque 1 tour, riposte à 160 % ATK et ATK +30 % (2 tours), sans réduction de dégâts.", tgt: "self", fx: [{ k: "taunt", d: 1 }, { k: "counter", p: 1.6, d: 1 }, { k: "buff", p: 0.3, d: 2 }] },
   { o: "Écailles de jade", n: "Écailles solaires", d: "Équipe : bouclier de 8 % PV et retire un malus.", tgt: "allies", fx: [{ k: "shield", p: 0.08 }, { k: "cleanse", n: 1 }] },
   { o: "Iaijutsu", n: "Iaido lent", d: "Frappe à 190 % ATK.", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 1.9, post: 28 }] },
   { o: "Posture d'iaï", n: "Garde d'iaï", d: "Esquive 100 % des attaques (1 tour), rengaine et la prochaine attaque inflige +30 % de dégâts.", tgt: "self", fx: [{ k: "evade", p: 1, d: 1 }, { k: "nxt", p: 0.3 }, { k: "sheathe" }] },
   { o: "Pointe de bambou", n: "Cinq poisons", d: "Frappe à 60 % ATK et pose un Poison qui s'empile (25 % ATK/tour, 3 tours).", tgt: "boss", fx: [{ k: "dmg", m: 0.6 }, { k: "dot", s: "poison", m: 0.25, d: 3, stack: 1 }] },
-  { o: "Disparition", n: "Fumigène", d: "Équipe : −35 % de dégâts subis (1 tour).", tgt: "allies", fx: [{ k: "dr", p: 0.35, d: 1 }] },
+  { o: "Disparition", n: "Fumigène", d: "Équipe : −30 % de dégâts subis (1 tour).", tgt: "allies", fx: [{ k: "dr", p: 0.3, d: 1 }] },
   { o: "Pas de flamme", n: "Pas rapide", d: "Trois coups à 50 % ATK. Esquive 25 % des attaques (1 tour).", tgt: "boss", fx: [{ k: "dmg", m: 0.5, hits: 3 }, { k: "evade", p: 0.25, d: 1 }] },
-  { o: "Danse embrasée", n: "Brasier ciblé", d: "Un allié : ATK +80 % (2 tours).", tgt: "ally", fx: [{ k: "buff", p: 0.8, d: 2 }] },
-  { o: "Peau de tigre", n: "Peau de pierre", d: "−70 % de dégâts subis (1 tour), sans riposte.", tgt: "self", fx: [{ k: "dr", p: 0.7, d: 1 }] },
-  { o: "Rugissement", n: "Rugissement long", d: "Frappe à 30 % ATK et réduit la DEF du boss de 20 % (4 tours).", tgt: "boss", fx: [{ k: "dmg", m: 0.3, post: 15 }, { k: "debuff", s: "def", p: 0.2, d: 4 }] },
+  { o: "Danse embrasée", n: "Brasier ciblé", d: "Un allié : ATK +75 % (2 tours).", tgt: "ally", fx: [{ k: "buff", p: 0.75, d: 2 }] },
+  { o: "Peau de tigre", n: "Peau de pierre", d: "−75 % de dégâts subis (1 tour), sans riposte.", tgt: "self", fx: [{ k: "dr", p: 0.75, d: 1 }] },
+  { o: "Rugissement", n: "Rugissement long", d: "Frappe à 30 % ATK et réduit la DEF du boss de 15 % (4 tours).", tgt: "boss", fx: [{ k: "dmg", m: 0.3, post: 15 }, { k: "debuff", s: "def", p: 0.15, d: 4 }] },
   { o: "Clones de poil", n: "Clone sacrifié", d: "Un clone prend le prochain coup à cible unique visant l'équipe.", tgt: "self", fx: [{ k: "tdecoy" }] },
   { o: "Bâton des mille lieues", n: "Bâton court", d: "Frappe à 160 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.6, post: 30 }] },
   { o: "Marque lunaire", n: "Lune pleine", d: "Le boss subit +45 % de dégâts (1 tour). Aucune attaque.", tgt: "boss", fx: [{ k: "mark", p: 0.45, d: 1 }] },
