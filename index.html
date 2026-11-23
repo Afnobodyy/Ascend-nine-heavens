@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 121; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 122; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2417,10 +2417,10 @@ const KITS = {
   ],
   // ---------- ARCANISTES ----------
   m1: [
-    { n: "Ofuda de givre", d: "Sort à 100 % ATK, ATK du boss −10 % (2 tours).", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0 }, { k: "debuff", s: "atk", p: 0.1, d: 2 }] },
-    { n: "Sceau purificateur", d: "Un allié : retire les malus et bouclier de 8 % PV.", cd: 3, tgt: "ally", fx: [{ k: "cleanse" }, { k: "shield", p: 0.08 }] },
-    { n: "Shikigami de neige", d: "Trois esprits frappent à 75 % ATK.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 0.75, hits: 3 }] },
-    { n: "Tempête de neige", d: "Cinq coups à 70 % ATK, ATK du boss −40 % (2 tours).", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.7, hits: 5, post: 20 }, { k: "debuff", s: "atk", p: 0.4, d: 2 }] },
+    { n: "Ofuda de givre", d: "Trois orbes à 30 % ATK : 1 Givre par orbe.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 0.3, hits: 3 }, { k: "givre", n: 3 }] },
+    { n: "Souffle polaire", d: "Sort à 60 % ATK et pose 2 Givre.", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 0.6 }, { k: "givre", n: 2 }] },
+    { n: "Éclat de givre", d: "Consomme tous les Givre : 100 % ATK + 20 % ATK par Givre.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 1.0, perGivre: 0.2, consume: 5 }] },
+    { n: "Tempête de neige", d: "Cinq coups à 50 % ATK, DEF du boss −15 %. Consomme les Givre : +40 % ATK à 3-4 Givre, +50 % ATK et Gel du boss à 5.", cd: 6, tgt: "boss", ult: 1, fx: [{ k: "dmg", m: 0.5, hits: 5, post: 20, givreUlt: 1 }, { k: "debuff", s: "def", p: 0.15, d: 2 }] },
   ],
   m2: [
     { n: "Pilule explosive", d: "Sort à 100 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.0, post: 28 }] },
@@ -2519,8 +2519,9 @@ const VARDEF = [
   { o: "Bâton des mille lieues", n: "Bâton court", d: "Frappe à 160 % ATK.", cd: 2, tgt: "boss", fx: [{ k: "dmg", m: 1.6, post: 30 }] },
   { o: "Marque lunaire", n: "Lune pleine", d: "Le boss subit +45 % de dégâts (1 tour). Aucune attaque.", tgt: "boss", fx: [{ k: "mark", p: 0.45, d: 1 }] },
   { o: "Éclipse", n: "Double éclipse", d: "Frappe à 400 % ATK, sans bonus sous 35 % PV.", tgt: "boss", fx: [{ k: "dmg", m: 4.0, post: 70 }] },
-  { o: "Ofuda de givre", n: "Ofuda double", d: "Deux sorts à 60 % ATK.", tgt: "boss", fx: [{ k: "dmg", m: 0.6, hits: 2 }] },
-  { o: "Sceau purificateur", n: "Sceau de glace", d: "Équipe : retire les malus, sans bouclier.", tgt: "allies", fx: [{ k: "cleanse" }] },
+  { o: "Ofuda de givre", n: "Ofuda concentré", d: "Un gros orbe à 120 % ATK et 2 Givre.", tgt: "boss", fx: [{ k: "dmg", m: 1.2 }, { k: "givre", n: 2 }] },
+  { o: "Souffle polaire", n: "Bouclier de givre", d: "Bouclier de 15 % PV sur Yuki et 2 Givre, aucun dégât.", tgt: "self", fx: [{ k: "shield", p: 0.15 }, { k: "givre", n: 2 }] },
+  { o: "Éclat de givre", n: "Éclat contrôlé", d: "Consomme au plus 3 Givre : 100 % ATK + 30 % ATK par Givre.", tgt: "boss", fx: [{ k: "dmg", m: 1.0, perGivre: 0.3, consume: 3 }] },
   { o: "Fumée protectrice", n: "Fumée commune", d: "Équipe : bouclier de 10 % PV, Feng inclus.", tgt: "allies", fx: [{ k: "shield", p: 0.1 }] },
   { o: "Grand fourneau", n: "Fourneau lent", d: "Explosion à 160 % ATK puis Brûlure forte (50 % ATK/tour, 3 tours).", tgt: "boss", fx: [{ k: "dmg", m: 1.6, post: 10 }, { k: "dot", s: "burn", m: 0.5, d: 3 }] },
   { o: "Illusion", n: "Illusion longue", d: "ATK du boss −30 % et DEF −15 % pendant 3 tours.", cd: 4, tgt: "boss", fx: [{ k: "debuff", s: "atk", p: 0.3, d: 3 }, { k: "debuff", s: "def", p: 0.15, d: 3 }] },
@@ -3868,9 +3869,9 @@ const PXS = {
     { n: "Trou noir", block: 3500, L: [{ sky: 1, dur: 4200 }, { e: "shootingstars", back: 1, cover: 1, dur: 4200, t0: 200 }, { e: "blackhole", back: 1, at: "screen", m: "C", fitH: 0.95, dur: 4000, t0: 300 }] },
   ],
   m1: [
-    { n: "Ofuda de givre", block: 1200, L: [{ e: "snowflakeburst", at: "boss", m: "C", k: 2.6 }] },
-    { n: "Sceau purificateur", block: 1000, L: [{ e: "runecircle", at: "ally", m: "F", k: 2, dur: 2200, opts: { palette: PXC.ice } }] },
-    { n: "Shikigami de neige", block: 2200, L: [{ e: "magicmissile", at: "self", m: "F", flip: 1, k: 2.4, speed: 1.5, rep: 3, gap: 450, reachTo: "boss", opts: { palette: PXC.ice } }] },
+    { n: "Souffle polaire", block: 1200, L: [{ e: "snowflakeburst", at: "boss", m: "C", k: 2.6 }] },
+    { n: "Éclat de givre", block: 1000, L: [{ e: "runecircle", at: "boss", m: "C", k: 2, dur: 2200, opts: { palette: PXC.ice } }] },
+    { n: "Ofuda de givre", block: 2200, L: [{ e: "magicmissile", at: "self", m: "F", flip: 1, k: 2.4, speed: 1.5, rep: 3, gap: 450, reachTo: "boss", opts: { palette: PXC.ice } }] },
     { n: "Tempête de neige", block: 3000, L: [{ e: "blizzard", at: "screen", cover: 1, dur: 3500 }] },
   ],
   m2: [
@@ -4787,7 +4788,7 @@ const NEG = ["burn", "poison", "bleed", "atkdown", "healblock", "shieldblock", "
 const DOTS = ["burn", "poison", "bleed"];
 const STL = { buff: ["ATK↑", 1], atkdown: ["ATK↓", 0], dr: ["Garde", 1], taunt: ["Provoc.", 1], counter: ["Riposte", 1], regen: ["Régén.", 1], evade: ["Esquive", 1],
   execimm: ["Anti-exéc.", 1], vanish: ["Intouchable", 1], decoy: ["Leurre", 1], nxt: ["Prochain+", 1], ash: ["Cendres", 1],
-  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1], cond: ["Condamné", 0], cyclone: ["Cyclone", 0], gel: ["Gelé", 0], vague: ["Désigné", 0], vent: ["Vent contraire", 0],
+  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1], cond: ["Condamné", 0], cyclone: ["Cyclone", 0], givre: ["Givre", 0], gel: ["Gelé", 0], vague: ["Désigné", 0], vent: ["Vent contraire", 0],
   burn: ["Brûlure", 0], poison: ["Poison", 0], bleed: ["Saign.", 0], healblock: ["Anti-soin", 0], defdown: ["DEF↓", 0], mark: ["Marque", 0], selfatk: ["ATK↑", 1], reflect: ["Renvoi", 1] };
 const sum = (st, k) => st.filter((s) => s.k === k).reduce((a, s) => a + (s.p || 0), 0);
 const md = () => (S.run && S.run.mods) || {};
@@ -4862,6 +4863,12 @@ function coffinCheck(b) {
   b.hp = thr; b.cof++; b.inCoffin = true; b.cofT = b.cofDur; b.tal = Array.from({ length: b.talN }, () => Math.round(b.talPct * b.maxHp)); b.talMax = b.tal.reduce((a, x) => a + x, 0);
   b.gauge = { n: "Talismans", v: b.talMax, max: b.talMax }; b.queue = []; b.intent = "cercueil";
   pop("CERCUEIL", "#9be0c0"); log(`${b.name} se retire dans son cercueil : détruis les talismans (${b.cofDur} tours) !`);
+}
+function setGivre(b, n) { b.givreN = Math.max(0, n); b.st = b.st.filter((s) => s.k !== "givre"); if (b.givreN > 0) b.st.push({ k: "givre", n: b.givreN, d: 999 }); }
+function gelBoss(b) {
+  const mv = b.moves[b.intent];
+  if (b.gelImm > 0 || (mv && mv.fatal)) { floatAt(bossEl(), "Insensible au Gel", "info"); log(`${b.name} résiste au Gel.`); return; }
+  b.delay = (b.delay || 0) + 1; b.gelImm = 3; floatAt(bossEl(), "Gelé", "info"); pop("GEL", "#9fe8ff"); log(`${b.name} est gelé : il saute son prochain tour.`);
 }
 function bowlChip(b) { b.st = b.st.filter((s) => s.k !== "bowl"); if (b.bowl > 0) b.st.push({ k: "bowl", p: 0.1 * b.bowl, d: 999 }); }
 function bossSetup(b) {
@@ -4970,7 +4977,9 @@ function startFight() {
   pickIntent();
   renderFightShell();
   newRound(true);
+  const f0 = F;
   log(`${boss.name} vous barre la route.`);
+  if (boss.first) { F.phase = "boss"; F.busy = true; setTimeout(() => { if (F === f0) bossTurn(); }, window.__fast ? 30 : 900); }
 }
 // règles de mode : Normal soigne l'équipe entre les phases (30 %, à régler), pas Héroïque ni Mythique
 function phaseHeal(b) {
@@ -5065,8 +5074,8 @@ const ALT = {
        { n: "Bond de nuage", d: "Frappe à 300 % ATK et recharge ses sorts. COMBO Thé et lance : ATK boostée → +60 % de puissance.", cd: 5, tgt: "boss", fin: "the", fx: [{ k: "dmg", m: 3.0, post: 40 }, { k: "cdself", n: 5 }] }],
   p6: [{ n: "Lune montante", d: "Frappe à 50 % ATK, le boss subit +20 % de dégâts (3 tours). Amorce du combo Chasse à la lune.", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 0.5 }, { k: "mark", p: 0.2, d: 3 }] },
        { n: "Trou noir", d: "Frappe à 350 % ATK, ×2 si le boss a moins de 35 % PV.", cd: 5, tgt: "boss", fx: [{ k: "dmg", m: 3.5, exec: 2.0 }] }],
-  m1: [{ n: "Sceau de glace", d: "Sort à 60 % ATK, ATK du boss −30 % (2 tours). Amorce du combo Conduction.", cd: 3, tgt: "boss", fx: [{ k: "dmg", m: 0.6 }, { k: "debuff", s: "atk", p: 0.3, d: 2 }] },
-       { n: "Blizzard de shikigami", d: "Cinq coups à 60 % ATK. COMBO Vapeur : boss brûlé → DEF du boss −30 % (2 tours).", cd: 5, tgt: "boss", fin: "vapeur", fx: [{ k: "dmg", m: 0.6, hits: 5 }] }],
+  m1: [{ n: "Bouclier de givre", d: "Bouclier de 15 % PV sur Yuki et 2 Givre, aucun dégât.", cd: 3, tgt: "self", fx: [{ k: "shield", p: 0.15 }, { k: "givre", n: 2 }] },
+       { n: "Éclat contrôlé", d: "Consomme au plus 3 Givre : 100 % ATK + 30 % ATK par Givre.", cd: 4, tgt: "boss", fx: [{ k: "dmg", m: 1.0, perGivre: 0.3, consume: 3 }] }],
   m2: [{ n: "Pilule fumigène", d: "Équipe : retire les malus et −25 % de dégâts subis (1 tour).", cd: 3, tgt: "allies", fx: [{ k: "cleanse" }, { k: "dr", p: 0.25, d: 1 }] },
        { n: "Alchimie interdite", d: "Explosion à 300 % ATK.", cd: 5, tgt: "boss", fx: [{ k: "dmg", m: 3.0, post: 20 }] }],
   m3: [{ n: "Mirage", d: "Esquive 90 % des attaques (1 tour) et ATK du boss −15 %.", cd: 3, tgt: "self", fx: [{ k: "evade", p: 0.9, d: 1 }, { k: "debuff", s: "atk", p: 0.15, d: 1 }] },
@@ -5248,7 +5257,7 @@ function renderFightShell() {
 }
 const VIC = { atk: '<svg viewBox="0 0 24 24"><path d="M12 2l6 8h-4v7h-4v-7H6z" fill="currentColor"/><rect x="6" y="19" width="12" height="3" fill="currentColor"/></svg>', guard: '<svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="currentColor"/></svg>', poison: '<svg viewBox="0 0 24 24"><path d="M12 2C9 8 5 11 5 15a7 7 0 0014 0c0-4-4-7-7-13z" fill="currentColor"/><circle cx="9.5" cy="15" r="1.6" fill="#0c0709"/></svg>', burn: '<svg viewBox="0 0 24 24"><path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-4 2-7 2 1 3 2 4-5z" fill="currentColor"/></svg>' };
 const VKEY = { buff: "atk", selfatk: "atk", dr: "guard", poison: "poison", burn: "burn" };
-const vChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : s.k === "dr" ? "+DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : s.k === "bowl" ? "Bol −" + Math.round((s.p || 0) * 100) + " %" : s.k === "defdown" || s.k === "mark" ? "−DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : n; const ic = VKEY[s.k]; return `<span class="vs ${ic ? "s-" + ic : good ? "good" : "bad"}" title="${label}">${ic ? VIC[ic] : label.slice(0, 3)}<sub>${s.d}</sub></span>`; }).join("");
+const vChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : s.k === "dr" ? "+DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : s.k === "bowl" ? "Bol −" + Math.round((s.p || 0) * 100) + " %" : s.k === "givre" ? "Givre " + s.n : s.k === "defdown" || s.k === "mark" ? "−DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : n; const ic = VKEY[s.k]; return `<span class="vs ${ic ? "s-" + ic : good ? "good" : "bad"}" title="${label}">${ic ? VIC[ic] : label.slice(0, 3)}<sub>${s.d}</sub></span>`; }).join("");
 // buffs/debuffs ATK/DEF du boss : flèche ↑/↓ + ATK/DEF (sans valeur) ; les autres statuts en pastilles icône comme les héros
 const bossChips = (st) => {
   const mk = (n, up, d, tip) => `<span class="bfx ${up ? "up" : "dn"}" title="${tip}"><em>${up ? "↑" : "↓"}</em>${n}${d < 50 ? `<sub>${d}</sub>` : ""}</span>`;
@@ -5258,7 +5267,7 @@ const bossChips = (st) => {
   if (Math.abs(def) > 0.001) out.push(mk("DEF", def > 0, dur("defdown"), "DEF réduite"));
   return out.join("") + vChips(st.filter((s) => !["selfatk", "atkdown", "defdown"].includes(s.k)));
 };
-const stChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : s.k === "dr" ? "+DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : s.k === "bowl" ? "Bol −" + Math.round((s.p || 0) * 100) + " %" : s.k === "defdown" || s.k === "mark" ? "−DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : n; return `<span class="st ${good ? "good" : "bad"}">${label}${s.d < 50 ? `<sub>${s.d}</sub>` : ""}</span>`; }).join("");
+const stChips = (st) => st.map((s) => { const [n, good] = STL[s.k] || [s.k, 1]; const label = s.k === "reflect" ? (s.type === "p" ? "Renvoi phys." : "Renvoi mag.") : s.k === "dr" ? "+DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : s.k === "bowl" ? "Bol −" + Math.round((s.p || 0) * 100) + " %" : s.k === "givre" ? "Givre " + s.n : s.k === "defdown" || s.k === "mark" ? "−DEF" + Math.max(1, Math.round((s.p || 0) / 0.15)) : n; return `<span class="st ${good ? "good" : "bad"}">${label}${s.d < 50 ? `<sub>${s.d}</sub>` : ""}</span>`; }).join("");
 function update() {
   if (!F) return;
   const b = F.boss;
@@ -5677,9 +5686,12 @@ async function useSkill(hi, si, ti) {
     let tg = (fx.on === "self" ? [h] : fx.on === "allies" ? F.heroes : allyT).filter((t) => t && !t.dead);
     if (fx.pick) tg = tg.slice().sort((x, y) => x.hp / x.maxHp - y.hp / y.maxHp).slice(0, fx.pick);
     switch (fx.k) {
-      case "dmg":
-        for (let i = 0; i < (fx.hits || 1); i++) { if (b.hp <= 0 || h.dead) break; const big = !!sk.ult; sfxHit(skEl(h, sk), melee, big, i); await hitFx(h, i, big, skEl(h, sk)); dmgBoss(h, (fx.m + (fx.perCharge || 0) * Math.min(h.charge || 0, sk.capCh || 99)) * pw * (fx.expMul && b.st.some((x) => x.k === "exposed") ? fx.expMul : 1), { ...fx, ...CM, pen: Math.max(fx.pen || 0, penX), el: skEl(h, sk) }); update(); await sleep(fx.hits > 1 ? 190 : 330); }
-        break;
+      case "dmg": {
+        const gn = fx.consume ? Math.min(b.givreN || 0, fx.consume) : fx.givreUlt ? (b.givreN || 0) : 0, gb = fx.givreUlt ? (gn >= 5 ? 0.1 : gn >= 3 ? 0.08 : 0) : (fx.perGivre || 0) * gn;
+        for (let i = 0; i < (fx.hits || 1); i++) { if (b.hp <= 0 || h.dead) break; const big = !!sk.ult; sfxHit(skEl(h, sk), melee, big, i); await hitFx(h, i, big, skEl(h, sk)); dmgBoss(h, (fx.m + gb + (fx.perCharge || 0) * Math.min(h.charge || 0, sk.capCh || 99)) * pw * (fx.expMul && b.st.some((x) => x.k === "exposed") ? fx.expMul : 1), { ...fx, ...CM, pen: Math.max(fx.pen || 0, penX), el: skEl(h, sk) }); update(); await sleep(fx.hits > 1 ? 190 : 330); }
+        if (gn) { setGivre(b, (b.givreN || 0) - gn); if (fx.givreUlt && gn >= 5) gelBoss(b); }
+        break; }
+      case "givre": bossDebuffFx("#9fe8ff"); setGivre(b, Math.min(5, (b.givreN || 0) + fx.n)); floatAt(bossEl(), `Givre ${b.givreN}/5`, "info"); break;
       case "dot": { dotFx(h, skEl(h, sk)); const weak = weakTo(b.el) === skEl(h, sk); addSt(b, { k: fx.s, ...(fx.stack ? { type: "stk" + Math.random() } : {}), dmg: Math.round(hAtk(h) * fx.m * pw * (weak ? 1.5 : 1)), d: fx.d + (fx.dPer || 0) * (h.charge || 0) + (fx.s === "burn" && F.relic === "phenix" ? 1 : 0) }); break; }
       case "debuff": bossDebuffFx("#b46cff"); addSt(b, { k: fx.s + "down", p: fx.p, d: fx.d }); break;
       case "mark": bossDebuffFx("#ff6a9a"); addSt(b, { k: "mark", p: fx.p, d: fx.d }); break;
@@ -5826,7 +5838,7 @@ async function bossTurn() {
   update();
   if (!alive().length) { await sleep(400); return defeat(); }
   const tick = (u) => { u.st = u.st.filter((s) => { if (s.fresh) { s.fresh = false; return true; } s.d--; return s.d > 0; }); };
-  tick(b); F.heroes.forEach(tick);
+  tick(b); F.heroes.forEach(tick); if (b.gelImm > 0) b.gelImm--;
   if (b.thirstMax && b.phase === 2) { b.thirst = Math.min(b.thirstMax, b.thirst + 1); b.gauge.v = b.thirst; }
   if (b.phase === 2 && b.queues !== undefined) { b.regrow = Math.min(9, b.regrow + 1); b.gauge.v = b.regrow; }
   if (!b.stun && !delayed) pickIntent();
