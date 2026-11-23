@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 113; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 114; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2596,14 +2596,14 @@ const BOSSES = [
     },
     p1: ["massue", "seisme", "cri", "massue"], p2: ["sentence", "course", "kanabo", "souffle"] },
   { id: "jiangshi", name: "Empereur Jiangshi", ep: "Le mort qui ne se couche pas", el: "metal", hp: 5300, atk: 162, pdef: 55, mdef: 62,
-    hint: "Son Talisman maudit empêche les soins : garde des boucliers. En phase 2 il renvoie la magie.",
+    hint: "À 80 % et 60 % PV il se réfugie dans son cercueil : détruis les talismans. Ensuite, sa Soif se remplit : protège-toi de la Morsure et du Festin.",
     moves: {
       morsure: { n: "Morsure vampirique", t: "single", m: 1.1, type: "p", d: "Frappe et se soigne de la moitié des dégâts.", fx: { drain: 0.5 } },
       souffle: { n: "Souffle putride", t: "aoe", m: 0.5, type: "m", d: "Touche l'équipe et inflige Poison.", fx: { poison: { m: 0.22, d: 3 } } },
-      talisman: { n: "Talisman maudit", t: "aoe", m: 0.3, type: "m", d: "Bloque les soins de l'équipe pendant 2 tours.", fx: { healblock: 2 } },
-      sceau: { n: "Sceau de jade", t: "self", d: "Renvoie 50 % des dégâts magiques pendant 2 tours.", fx: { reflect: { type: "m", p: 0.5, d: 2 } } },
+      cercueil: { n: "Cercueil de jade", t: "self", d: "Invulnérable : les talismans sacrifient l'équipe. Détruis-les." },
+      festin: { n: "Festin", t: "self", d: "Vide les PV de toute l'équipe et se soigne." },
     },
-    p1: ["morsure", "souffle", "morsure", "talisman"], p2: ["sceau", "morsure", "souffle", "talisman", "morsure"] },
+    p1: ["morsure", "souffle", "morsure", "souffle"], p2: ["morsure", "souffle", "morsure", "souffle"] },
   { id: "tengu", name: "Tengu des Cimes", ep: "Seigneur des vents", el: "bois", hp: 6000, atk: 172, pdef: 58, mdef: 58,
     hint: "La Garde du vent renvoie les coups physiques. La Tornade arrive en phase 2 : prépare des boucliers.",
     moves: {
@@ -4851,6 +4851,14 @@ function kitsuneQueue(b, ok) {
     if (b.queues >= 9) { b.phase = 2; b.step = 0; b.queue = []; b.gauge = { n: "Renaissance", v: 0, max: 9 }; b.regrow = 0; phaseHeal(b); log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a"); if (!b.stun) pickIntent(); }
   } else if ((b.mode || "n") === "m" && b.queues > 0) { b.queues--; b.gauge.v = b.queues; floatAt(bossEl(), `Queue perdue ${b.queues}/9`, "info"); }
 }
+function coffinCheck(b) {
+  if (!b.coffinT || b.inCoffin || b.phase !== 1 || b.cof >= b.coffinT.length || b.hp <= 0) return;
+  const thr = Math.round(b.coffinT[b.cof] * b.maxHp);
+  if (b.hp > thr) return;
+  b.hp = thr; b.cof++; b.inCoffin = true; b.cofT = b.cofDur; b.tal = Array.from({ length: b.talN }, () => Math.round(b.talPct * b.maxHp)); b.talMax = b.tal.reduce((a, x) => a + x, 0);
+  b.gauge = { n: "Talismans", v: b.talMax, max: b.talMax }; b.queue = []; b.intent = "cercueil";
+  pop("CERCUEIL", "#9be0c0"); log(`${b.name} se retire dans son cercueil : détruis les talismans (${b.cofDur} tours) !`);
+}
 function bowlChip(b) { b.st = b.st.filter((s) => s.k !== "bowl"); if (b.bowl > 0) b.st.push({ k: "bowl", p: 0.1 * b.bowl, d: 999 }); }
 function bossSetup(b) {
   const M = b.mode || "n", H = M !== "n", X = M === "m", mv = b.moves;
@@ -4878,12 +4886,10 @@ function bossSetup(b) {
       b.condAt = X ? "course" : "sentence"; b.shockPct = { n: 0.15, h: 0.25, m: 0.35 }[M]; b.condKind = { n: "light2", h: "both", m: "both3" }[M];
       break;
     case "jiangshi":
-      set("talisman", { prot: "any", expose: "prot" });
-      if (H) { set("talisman", { d: "Bloque les soins ET les boucliers de l'équipe pendant 2 tours.", fx: { healblock: 2, shieldblock: 2 } }); set("morsure", { blood: true }); }
-      if (X) {
-        b.births = [0.3]; b.permBlock = true;
-        set("sceau", { d: "Renvoie 100 % des dégâts magiques pendant 2 tours. Un arcaniste sous 60 % PV qui lance un sort meurt.", fx: { reflect: { type: "m", p: 1, d: 2 } }, fatal: true });
-      }
+      b.coffinT = [0.8, 0.6]; b.cof = 0; b.inCoffin = false; b.look = M === "n" ? 3 : 2;
+      b.talN = { n: 2, h: 2, m: 3 }[M]; b.talPct = { n: 0.04, h: 0.045, m: 0.04 }[M]; b.cofDur = { n: 3, h: 3, m: 2 }[M]; b.talHit = { n: 0.03, h: 0.04, m: 0.05 }[M]; b.talHeal = { n: 0.075, h: 0.1, m: 0.1 }[M];
+      b.thirstMax = { n: 10, h: 8, m: 6 }[M]; b.thirst = 0; b.bigThr = { n: 0.03, h: 0.04, m: 0.05 }[M]; b.festPct = { n: 0.3, h: 0.4, m: 0.5 }[M]; b.festKind = { n: "light2", h: "both", m: "both3" }[M];
+      set("morsure", { d: "Frappe et se soigne de 60 % des dégâts. Bouclier : pas de soin. Provocation + protection : Exposé.", fx: { drain: 0.6 }, expose: "jade", thirst: 2 });
       break;
     case "tengu":
       set("plumes", { prot: "any", expose: "prot", floor: { n: 0.3, h: 0.25, m: 0 }, disperse: true });
@@ -4933,7 +4939,7 @@ const MODEINFO = {
   kappa: { h: ["Plongée enflée : toute attaque reçue pendant la Plongée le soigne de 5 %.", "Marée basse : le Déluge arrive dès la phase 1."], m: ["Noyade : aucun soin possible pendant la Plongée.", "⚠ FATAL : un Déluge sans protection (bouclier ou −40 % de dégâts) = défaite."] },
   kitsune: { h: ["Illusion alternée : le Mirage alterne avec un Reflet (renvoi de 30 % de la magie).", "Charme contagieux : un héros charmé non purgé frappe un allié (−40 % PV)."], m: ["Neuf queues : jauge 0-9, +1 par tour où un héros emploie le mauvais type de dégâts.", "⚠ FATAL : 9 queues, ou un Charme non purgé (mort du charmé)."] },
   oni: { h: ["Rage rouge : chaque coup physique reçu donne +5 % d'ATK (plafond +40 %).", "P2 : un Condamné est désigné ; brise le Kanabō avec 6 % de PV de dégâts, ou protège-le (bouclier ET +DEF2)."], m: ["Rage plafonnée à +60 %. Le Condamné n'est désigné qu'au 2e tour.", "⚠ Kanabō : bouclier ET +DEF3 requis ; onde de choc 35 % PV max sur les autres."] },
-  jiangshi: { h: ["Talisman scellé : bloque aussi les boucliers (pas la réduction de dégâts).", "Rituel de sang : chaque Morsure réussie donne +5 % d'ATK tant qu'il n'est pas Exposé."], m: ["Dernier souffle : renaît à 30 % PV, Talisman actif jusqu'à la fin.", "Sceau total : renvoie 100 % de la magie.", "⚠ FATAL : un arcaniste sous 60 % PV qui lance un sort pendant le Sceau meurt."] },
+  jiangshi: { h: ["Cercueil : 2 talismans (4,5 % PV max) à détruire en 3 tours, sinon il se soigne.", "Soif 8 : Festin = 40 % PV max à tous (bouclier ET +DEF2 requis)."], m: ["3 talismans, cercueil 2 tours, pression 5 %/talisman.", "⚠ Soif 6 : Festin 50 % PV max, bouclier ET +DEF3 requis sinon mort."] },
   tengu: { h: ["Vent changeant : la Garde du vent alterne avec le Vent d'ouest (renvoi de 50 % de la magie).", "Plumes tranchantes : 5 coups."], m: ["Plumes de rapace : les coups peuvent viser deux fois le même héros.", "Œil de la tempête : tous les 4 tours, Tornade et ATK −30 % cumulatif.", "⚠ FATAL : un héros touché 2 fois par les Plumes en un tour meurt (sauf réduction ≥ 50 %)."] },
   gasha: { h: ["Os régénérés : l'Armure non brisée en un tour se reforme pleine.", "Cri des morts : ATK −30 %."], m: ["Éclats d'os : briser l'Armure inflige 180 % à l'équipe.", "L'Étreinte ignore la provocation.", "⚠ FATAL : Étreinte sur un héros sous 60 % PV = mort définitive."] },
   ryujin: { h: ["Marée montante : +5 % d'ATK du boss par tour.", "Perle éclaboussante : le bouclier de la Perle, non brisé le tour même, renvoie 20 %."], m: ["Tsunami annoncé 3 tours à l'avance : bouclier + réduction cumulés ≥ 60 % requis.", "Colère : +15 % d'ATK cumulatif par tour.", "⚠ FATAL : un Tsunami sans protection suffisante = défaite."] },
@@ -5537,6 +5543,11 @@ function dmgBoss(h, m, o = {}) {
   d *= 1 - Math.min(0.6, sum(b.st, "dr"));
   const crit = o.crit || Math.random() < 0.08 + (mods.crit || 0); if (crit) d *= 1.6;
   d = Math.max(1, Math.round(d * (0.92 + Math.random() * 0.16)));
+  if (b.inCoffin) {
+    let r = d; for (let i = 0; i < b.tal.length && r > 0; i++) { const x = Math.min(b.tal[i], r); b.tal[i] -= x; r -= x; }
+    const tot = b.tal.reduce((a, x) => a + x, 0); b.gauge.v = tot; floatAt(bs, tot ? "Talisman " + d : "Talismans détruits", "info"); flashCls(document.querySelector("#bstage .bimg"), "hit"); return 0;
+  }
+  if (b.thirstMax && b.phase === 2 && d >= b.bigThr * b.maxHp) { b.thirst = Math.max(0, b.thirst - 2); b.gauge.v = b.thirst; floatAt(bs, "Soif −2", "info"); }
   let toHp = d; const hadSh = b.shield > 0, spl = b.splash;
   if (b.shield > 0) { const eff = type === "p" ? 0.35 : 1, abs = Math.min(b.shield, d * eff); b.shield = Math.round(b.shield - abs); toHp = Math.max(0, Math.round(d - abs / eff));  }
   if (b.shield <= 0) b.splash = false;
@@ -5553,8 +5564,9 @@ function dmgBoss(h, m, o = {}) {
   if (rf && d > 0) hurtHero(h, d * rf.p, { raw: true, noCounter: true });
   if (b.phase === 2 && b.regrow > 0 && !b.rgCut && exposedNow(b) && d >= 0.03 * b.maxHp) { b.rgCut = true; b.regrow = Math.max(0, b.regrow - 3); b.gauge.v = b.regrow; floatAt(bs, "Renaissance −3", "info"); }
   if (b.bowl > 0 && d >= b.bowlThr * b.maxHp) { b.bowl--; bowlChip(b); floatAt(bs, "Bol −10 %", "info"); log(b.bowl ? `Le bol se vide : −${b.bowl * 10} % de dégâts subis.` : "Le bol est brisé !"); }
+  coffinCheck(b);
   if (b.phase === 1 && b.hp > 0 && (b.bowl !== undefined ? b.bowl === 0 : b.queues !== undefined ? false : b.hp / b.maxHp < 0.5)) {
-    b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); if (b.rage) b.rage *= 0.5; log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
+    b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); if (b.rage) b.rage *= 0.5; if (b.thirstMax) { b.thirst = 0; b.gauge = { n: "Soif", v: 0, max: b.thirstMax }; } log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
     if (b.threads) markThreads();
     if (!b.stun) pickIntent();
   }
@@ -5800,9 +5812,12 @@ async function bossTurn() {
   if (!alive().length) { await sleep(400); return defeat(); }
   const tick = (u) => { u.st = u.st.filter((s) => { if (s.fresh) { s.fresh = false; return true; } s.d--; return s.d > 0; }); };
   tick(b); F.heroes.forEach(tick);
+  if (b.thirstMax && b.phase === 2) { b.thirst = Math.min(b.thirstMax, b.thirst + 1); b.gauge.v = b.thirst; }
   if (b.phase === 2 && b.queues !== undefined) { b.regrow = Math.min(9, b.regrow + 1); b.gauge.v = b.regrow; }
   if (!b.stun && !delayed) pickIntent();
   if (b.phase === 2 && b.queues !== undefined && b.regrow >= 9 && b.intent !== "queues") { b.queue.unshift(b.intent); b.intent = "queues"; }
+  if (b.inCoffin) b.intent = "cercueil";
+  else if (b.thirstMax && b.phase === 2 && b.thirst >= b.thirstMax && b.intent !== "festin") { b.queue.unshift(b.intent); b.intent = "festin"; }
   F.round++;
   if (b.tideMax && b.bowl === 0) { b.flood++; b.tide = 0.05 * b.flood; b.gauge.v = b.flood; floatAt(bossEl(), `Marée ${b.flood}/${b.tideMax}`, "info"); if (b.flood >= b.tideMax) { fatalLose("Le Déluge final engloutit l'équipe."); update(); await sleep(400); return defeat(); } }
   if (b.tideOn) { b.tide = (b.tide || 0) + 0.05; b.gauge.v = Math.round(b.tide * 100); floatAt(bossEl(), "Marée +5 %", "info"); }
@@ -5839,7 +5854,7 @@ async function bossAct(mv) {
     const d = hurtHero(h, bAtk() * m, { type: mv.type, floorPct: flo });
     if (mv.dieBelow && frac < mv.dieBelow && !h.dead) killHero(h, `${h.c.name} est broyé.`);
     if (mv.blood && d > 0 && !exposedNow(b)) b.blood = (b.blood || 0) + 0.05;
-    if (fx.drain && d > 0) { const v = Math.round(d * fx.drain); b.hp = Math.min(b.maxHp, b.hp + v);  }
+    if (fx.drain && d > 0 && !(b.thirstMax && e.sh)) { const v = Math.round(d * fx.drain); b.hp = Math.min(b.maxHp, b.hp + v);  }
     return d;
   };
   const neg = (h) => {
@@ -5851,7 +5866,30 @@ async function bossAct(mv) {
     if (fx.shieldblock) addSt(h, { k: "shieldblock", d: fx.shieldblock });
     if (fx.charmed) addSt(h, { k: "charmed", d: 2 });
   };
-  if (mv.k === "sentence" || (mv.k === "course" && b.condAt === "course")) {
+  if (mv.k === "cercueil") {
+    const live = b.tal.filter((x) => x > 0).length;
+    if (!live) { b.inCoffin = false; b.gauge = null; log("Tous les talismans sont détruits : l'Empereur sort, sans défense."); exposeBoss(b); }
+    else {
+      lightAt("party", "#9be0c0", false);
+      alive().forEach((h) => hurtHero(h, Math.round(h.maxHp * b.talHit * live), { raw: true, type: "m", noCounter: true, floorPct: 0.01 }));
+      b.cofT--;
+      if (b.cofT <= 0) {
+        b.inCoffin = false; b.gauge = null; const v = Math.round(b.maxHp * b.talHeal * live); b.hp = Math.min(b.maxHp, b.hp + v);
+        floatAt(bossEl(), "+" + v, "heal"); log(`${b.name} sort du cercueil et se soigne (${live} talisman${live > 1 ? "s" : ""}).`);
+        alive().forEach((h) => hurtHero(h, bAtk() * 0.7, { type: "p" }));
+      }
+    }
+  } else if (mv.k === "festin") {
+    let tot = 0;
+    alive().forEach((h) => {
+      const ok = prot(h, b.festKind), hp0 = h.hp;
+      if (ok) hurtHero(h, Math.round(h.maxHp * b.festPct), { raw: true, type: "p", noCounter: true, floorPct: 0.01 });
+      else if (M === "m") killHero(h, `${h.c.name} est vidé de son sang.`);
+      else hurtHero(h, h.hp - 1, { raw: true, type: "p", noCounter: true, floorPct: 0.01 });
+      tot += Math.max(0, hp0 - (h.dead ? 0 : h.hp));
+    });
+    const v = Math.round(tot / 2); b.hp = Math.min(b.maxHp, b.hp + v); floatAt(bossEl(), "+" + v, "heal"); b.thirst = 0; b.gauge.v = 0;
+  } else if (mv.k === "sentence" || (mv.k === "course" && b.condAt === "course")) {
     const n = b.cycles >= 2 ? 2 : 1;
     const pick = alive().filter((h) => !h.st.some((s) => s.k === "cond")).sort((x, y) => (y._dealt || 0) - (x._dealt || 0)).slice(0, n);
     pick.forEach((h) => addSt(h, { k: "cond", d: 99 }));
@@ -5925,8 +5963,9 @@ async function bossAct(mv) {
     kitsuneQueue(b, ok);
   }
   if (mv.k === "queues" && b.queues !== undefined) { b.regrow = 0; b.gauge.v = 0; }
+  if (mv.thirst && b.thirstMax && b.phase === 2) { b.thirst = Math.min(b.thirstMax, b.thirst + mv.thirst); b.gauge.v = b.thirst; }
   if (mv.expose && b.hp > 0) {
-    const ok = mv.expose === "prot" ? hitLog.length > 0 && hitLog.every((e) => e.pr || e.ev) : mv.expose === "taunt" ? hitLog.some((e) => e.taunt) : mv.expose === "parry" ? parried || hitLog.some((e) => e.taunt) : false;
+    const ok = mv.expose === "prot" ? hitLog.length > 0 && hitLog.every((e) => e.pr || e.ev) : mv.expose === "taunt" ? hitLog.some((e) => e.taunt) : mv.expose === "jade" ? hitLog.some((e) => e.taunt && (e.sh || e.dr >= 0.3)) : mv.expose === "parry" ? parried || hitLog.some((e) => e.taunt) : false;
     if (ok) exposeBoss(b);
   }
   if (mv.k === "kanabo") {
