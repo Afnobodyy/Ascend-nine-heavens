@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 112; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 113; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -4943,7 +4943,7 @@ const MODEINFO = {
 const modeRules = (id, mode) => { const i = MODEINFO[id]; if (!i || mode === "n") return []; return mode === "m" ? [...i.h, ...i.m] : i.h; };
 
 // réglage par boss et par mode (issu de la simulation, étape 7) : multiplicateurs de PV et d'ATK en plus de MODES
-let TUNE = {"kappa":{"n":{"hp":2.6,"atk":1.4},"h":{"hp":3.83,"atk":2.24},"m":{"hp":2,"atk":1.52}},"kitsune":{"n":{"hp":2.7,"atk":1.48},"h":{"hp":3.36,"atk":2.07},"m":{"hp":2.83,"atk":1.87}},"oni":{"n":{"hp":2.65,"atk":1.46},"h":{"hp":2.54,"atk":1.75},"m":{"hp":1,"atk":1.0}},"jiangshi":{"n":{"hp":1.7,"atk":1.12},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"tengu":{"n":{"hp":1.53,"atk":1.12},"h":{"hp":2,"atk":1.52},"m":{"hp":1,"atk":1.0}},"gasha":{"n":{"hp":0.92,"atk":0.78},"h":{"hp":1,"atk":1.0},"m":{"hp":1,"atk":1.0}},"ryujin":{"n":{"hp":0.64,"atk":0.66},"h":{"hp":0.59,"atk":0.73},"m":{"hp":1,"atk":1.0}},"phenix":{"n":{"hp":0.52,"atk":0.58},"h":{"hp":0.35,"atk":0.54},"m":{"hp":1,"atk":1.0}},"aluna":{"n":{"hp":0.4,"atk":0.5},"h":{"hp":0.55,"atk":0.75},"m":{"hp":1,"atk":1.0}}};
+let TUNE = {"kappa":{"n":{"hp":2.6,"atk":1.4},"h":{"hp":2.773,"atk":2.24},"m":{"hp":2.647,"atk":1.52}},"kitsune":{"n":{"hp":2.7,"atk":1.48},"h":{"hp":2.88,"atk":2.07},"m":{"hp":2.749,"atk":1.87}},"oni":{"n":{"hp":2.65,"atk":1.46},"h":{"hp":2.827,"atk":1.75},"m":{"hp":2.698,"atk":1.0}},"jiangshi":{"n":{"hp":1.7,"atk":1.12},"h":{"hp":1.813,"atk":1.52},"m":{"hp":1.731,"atk":1.0}},"tengu":{"n":{"hp":1.53,"atk":1.12},"h":{"hp":1.632,"atk":1.52},"m":{"hp":1.558,"atk":1.0}},"gasha":{"n":{"hp":0.92,"atk":0.78},"h":{"hp":0.981,"atk":1.0},"m":{"hp":0.937,"atk":1.0}},"ryujin":{"n":{"hp":0.64,"atk":0.66},"h":{"hp":0.683,"atk":0.73},"m":{"hp":0.652,"atk":1.0}},"phenix":{"n":{"hp":0.52,"atk":0.58},"h":{"hp":0.555,"atk":0.54},"m":{"hp":0.529,"atk":1.0}},"aluna":{"n":{"hp":0.4,"atk":0.5},"h":{"hp":0.427,"atk":0.75},"m":{"hp":0.407,"atk":1.0}}};
 function startFight() {
   if (!modeOpen(SEL.boss, SEL.mode)) { toast(modeLockTxt(SEL.mode) || "Boss verrouillé."); return go("boss"); }
   const b = BOSSES.find((x) => x.id === SEL.boss) || BOSSES[0], bi = BOSSES.indexOf(b), loop = 0, k = 1, M = MODES[SEL.mode] || MODES.n;
