@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 119; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 120; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2632,14 +2632,19 @@ const BOSSES = [
     },
     p1: ["raz", "morsure", "raz", "morsure"], p2: ["colere", "raz", "morsure", "vague", "vague", "vague"] },
   { id: "phenix", name: "Phénix Noir", ep: "Cendre du Neuvième Ciel", el: "feu", hp: 10200, atk: 210, pdef: 66, mdef: 82,
-    hint: "Renaît une fois à 40 % PV. Supernova en phase 2 : protège l'équipe.",
+    hint: "Trois formes : Feu, Glace puis Foudre, chacune avec toute sa vie. Entre deux, un œuf : protège l'équipe de la pulsation.",
     moves: {
       cendre: { n: "Plumes de cendre", t: "aoe", m: 0.7, type: "m", d: "Touche l'équipe et inflige Brûlure.", fx: { burn: { m: 0.2, d: 2 } } },
       regard: { n: "Regard funèbre", t: "single", m: 1.5, type: "m", d: "Frappe magique sur une cible." },
       ailes: { n: "Ailes de braise", t: "self", d: "Renvoie 40 % des dégâts magiques pendant 2 tours.", fx: { reflect: { type: "m", p: 0.4, d: 2 } } },
       nova: { n: "Supernova", t: "aoe", m: 1.75, type: "m", big: 1, d: "Explosion solaire sur toute l'équipe." },
+      tempete: { n: "Tempête de givre", t: "aoe", m: 0.7, type: "m", d: "Touche l'équipe et réduit son ATK de 20 %.", fx: { atkdown: { p: 0.2, d: 2 } } },
+      gel: { n: "Gel", t: "self", d: "Gèle un héros : il saute son prochain tour (la provocation détourne le gel)." },
+      foudre: { n: "Foudre en chaîne", t: "self", big: 1, d: "La foudre saute d'un héros à l'autre, plus fort sur ceux sans bouclier." },
+      pulse: { n: "Pulsation de l'œuf", t: "self", big: 1, d: "Pulsation de l'élément quitté sur toute l'équipe." },
+      eclosion: { n: "Éclosion", t: "self", d: "Renaît avec toute sa vie et un nouvel élément." },
     },
-    p1: ["cendre", "regard", "ailes", "regard"], p2: ["ailes", "cendre", "nova", "regard"], rebirth: 0.4 },
+    p1: ["cendre", "regard", "cendre", "nova"], p2: ["cendre", "regard", "cendre", "nova"] },
   { id: "aluna", name: "Aluna, Reine des Enfers", ep: "Souveraine des Neuf Enfers", el: "bois", hp: 11800, atk: 225, pdef: 72, mdef: 88,
     hint: "Les Enfers ne la laissent jamais partir. Faible au Métal. Garde des ressources pour la fin.",
     forms: ["aluna", "aluna2", "aluna3"], rebirth: 0.33, fury3: 0.1,
@@ -4782,7 +4787,7 @@ const NEG = ["burn", "poison", "bleed", "atkdown", "healblock", "shieldblock", "
 const DOTS = ["burn", "poison", "bleed"];
 const STL = { buff: ["ATK↑", 1], atkdown: ["ATK↓", 0], dr: ["Garde", 1], taunt: ["Provoc.", 1], counter: ["Riposte", 1], regen: ["Régén.", 1], evade: ["Esquive", 1],
   execimm: ["Anti-exéc.", 1], vanish: ["Intouchable", 1], decoy: ["Leurre", 1], nxt: ["Prochain+", 1], ash: ["Cendres", 1],
-  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1], cond: ["Condamné", 0], cyclone: ["Cyclone", 0], vague: ["Désigné", 0], vent: ["Vent contraire", 0],
+  exposed: ["Exposé", 0], ward: ["Rempart", 1], swell: ["Plongée+", 1], dive: ["Noyade", 1], charmed: ["Charmé", 0], thread: ["Fil", 0], shieldblock: ["Anti-bouclier", 0], bowl: ["Bol", 1], cond: ["Condamné", 0], cyclone: ["Cyclone", 0], gel: ["Gelé", 0], vague: ["Désigné", 0], vent: ["Vent contraire", 0],
   burn: ["Brûlure", 0], poison: ["Poison", 0], bleed: ["Saign.", 0], healblock: ["Anti-soin", 0], defdown: ["DEF↓", 0], mark: ["Marque", 0], selfatk: ["ATK↑", 1], reflect: ["Renvoi", 1] };
 const sum = (st, k) => st.filter((s) => s.k === k).reduce((a, s) => a + (s.p || 0), 0);
 const md = () => (S.run && S.run.mods) || {};
@@ -4906,9 +4911,10 @@ function bossSetup(b) {
       if (X) set("colere", { d: "ATK +15 % cumulatif à chaque tour.", fx: { enrage: 0.15 }, wrath: true });
       break;
     case "phenix":
-      set("nova", { prot: "shield", expose: "prot", err: err({ team: 0.4 }, { team: 0.75, burn: 1 }, { lose: 1 }), fatal: X });
-      if (H) { b.births = [0.4, 0.2]; b.birthBurn = true; b.sister = true; }
-      if (X) { b.sunOn = true; b.birthNova = true; }
+      b.hpMul = 0.45; b.form = 0; b.formEl = ["feu", "eau", "metal"]; b.egg = 0; b.look = M === "n" ? 3 : 2;
+      b.pats = [["cendre", "regard", "cendre", "nova"], ["tempete", "regard", "gel", "regard"], ["foudre", "regard", "foudre", "regard"]];
+      b.pulsePct = { n: 0.3, h: 0.45, m: 1 }[M]; b.chainN = { n: 3, h: 4, m: 4 }[M];
+      set("nova", { prot: "light2", expose: "prot", err: err({ team: 0.4 }, { team: 0.75, burn: 1 }, { lose: 1 }), fatal: X });
       break;
     case "aluna":
       set("chev", { expose: "parry" }); set("tisseuse", { expose: "parry" });
@@ -4940,7 +4946,7 @@ const MODEINFO = {
 const modeRules = (id, mode) => { const i = MODEINFO[id]; if (!i || mode === "n") return []; return mode === "m" ? [...i.h, ...i.m] : i.h; };
 
 // réglage par boss et par mode (issu de la simulation, étape 7) : multiplicateurs de PV et d'ATK en plus de MODES
-let TUNE = {"kappa":{"n":{"hp":2.6,"atk":1.4},"h":{"hp":2.773,"atk":2.24},"m":{"hp":2.647,"atk":1.52}},"kitsune":{"n":{"hp":2.7,"atk":1.48},"h":{"hp":2.88,"atk":2.07},"m":{"hp":2.749,"atk":1.87}},"oni":{"n":{"hp":2.65,"atk":1.46},"h":{"hp":2.827,"atk":1.75},"m":{"hp":2.698,"atk":1.0}},"jiangshi":{"n":{"hp":1.7,"atk":1.12},"h":{"hp":1.813,"atk":1.52},"m":{"hp":1.731,"atk":1.0}},"tengu":{"n":{"hp":1.53,"atk":1.12},"h":{"hp":1.632,"atk":1.52},"m":{"hp":1.558,"atk":1.0}},"gasha":{"n":{"hp":0.92,"atk":0.78},"h":{"hp":0.981,"atk":1.0},"m":{"hp":0.937,"atk":1.0}},"ryujin":{"n":{"hp":0.64,"atk":0.66},"h":{"hp":0.683,"atk":0.73},"m":{"hp":0.652,"atk":1.0}},"phenix":{"n":{"hp":0.52,"atk":0.58},"h":{"hp":0.555,"atk":0.54},"m":{"hp":0.529,"atk":1.0}},"aluna":{"n":{"hp":0.4,"atk":0.5},"h":{"hp":0.427,"atk":0.75},"m":{"hp":0.407,"atk":1.0}}};
+let TUNE = {"kappa":{"n":{"hp":2.6,"atk":1.4},"h":{"hp":2.773,"atk":2.24},"m":{"hp":2.647,"atk":1.52}},"kitsune":{"n":{"hp":2.7,"atk":1.48},"h":{"hp":2.88,"atk":2.07},"m":{"hp":2.749,"atk":1.87}},"oni":{"n":{"hp":2.65,"atk":1.46},"h":{"hp":2.827,"atk":1.75},"m":{"hp":2.698,"atk":1.0}},"jiangshi":{"n":{"hp":1.7,"atk":1.12},"h":{"hp":1.813,"atk":1.52},"m":{"hp":1.731,"atk":1.0}},"tengu":{"n":{"hp":1.53,"atk":1.12},"h":{"hp":1.632,"atk":1.52},"m":{"hp":1.558,"atk":1.0}},"gasha":{"n":{"hp":0.92,"atk":0.78},"h":{"hp":0.981,"atk":1.0},"m":{"hp":0.937,"atk":1.0}},"ryujin":{"n":{"hp":0.64,"atk":0.66},"h":{"hp":0.683,"atk":0.73},"m":{"hp":0.652,"atk":1.0}},"phenix":{"n":{"hp":0.52,"atk":0.4},"h":{"hp":0.555,"atk":0.54},"m":{"hp":0.529,"atk":1.0}},"aluna":{"n":{"hp":0.4,"atk":0.5},"h":{"hp":0.427,"atk":0.75},"m":{"hp":0.407,"atk":1.0}}};
 function startFight() {
   if (!modeOpen(SEL.boss, SEL.mode)) { toast(modeLockTxt(SEL.mode) || "Boss verrouillé."); return go("boss"); }
   const b = BOSSES.find((x) => x.id === SEL.boss) || BOSSES[0], bi = BOSSES.indexOf(b), loop = 0, k = 1, M = MODES[SEL.mode] || MODES.n;
@@ -4958,6 +4964,7 @@ function startFight() {
   F = { boss, heroes, round: 1, phase: "player", active: 0, pending: null, busy: false, souls: m.soul || 0, log: [], over: false, gauge: 0, sel: null, acting: null, soak: null, mirrorOn: false, mirror: 0, lost: false, wrong: false, relic, rlUsed: 0, teamDecoy: false };
   if (boss.threads) markThreads();
   if (boss.bowl) bowlChip(boss);
+  if (boss.hpMul) { boss.maxHp = Math.round(boss.maxHp * boss.hpMul); boss.hp = boss.maxHp; }
   screen = "fight";
   musStart();
   pickIntent();
@@ -5511,7 +5518,7 @@ function nextActive() {
 }
 function newRound(first) {
   if (!first) F.heroes.forEach((h) => { h.cd = h.cd.map((c) => Math.max(0, c - 1)); });
-  F.heroes.forEach((h) => { h._prev = h._turn || 0; h._turn = 0; h.acted = h.dead || h.st.some((s) => s.k === "cyclone"); h.st = h.st.filter((s) => s.k !== "vent"); });
+  F.heroes.forEach((h) => { h._prev = h._turn || 0; h._turn = 0; h.acted = h.dead || h.st.some((s) => s.k === "cyclone" || s.k === "gel"); h.st = h.st.filter((s) => s.k !== "vent"); });
   if (F.boss && F.boss.windRatio && F.boss.phase >= 2 && alive().length) { const w = rnd(alive()); F.boss.windHero = F.heroes.indexOf(w); w.st.push({ k: "vent", d: 1 }); }
   F.soak = null; F.mirrorOn = false; F.mirror = 0; F.wrong = false; F.attackers = new Set(); if (F.boss) F.boss.rgCut = false;
   F.phase = "player"; F.pending = null; F.busy = false; F.plan = [];
@@ -5547,6 +5554,7 @@ function dmgBoss(h, m, o = {}) {
   if (b.skel && b.skel.length) { let r = d; const n0 = b.skel.length; while (b.skel.length && r >= b.skel[0]) r -= b.skel.shift(); if (b.skel.length < n0) { b.gauge.v = b.skel.length; floatAt(bs, `Squelette abattu ×${n0 - b.skel.length}`, "info"); } else if (b.skel.length) b.skel[0] -= r; }
   if (b.gigCap && b.phase >= 2 && d >= b.gigThr * b.maxHp && b.gig > 0) { const c = Math.min(0.1, b.gig); b.gig -= c; b.enr -= c; b.gauge.v = Math.round(b.gig * 100); floatAt(bs, "Gigantisme −10 %", "info"); }
   if (b.thirstMax && b.phase === 2 && d >= b.bigThr * b.maxHp) { b.thirst = Math.max(0, b.thirst - 2); b.gauge.v = b.thirst; floatAt(bs, "Soif −2", "info"); }
+  if (b.egg > 0) d = Math.max(1, Math.round(d * 0.01));
   if (b.pearlMax && b.pearl > 0) { const x = Math.min(b.pearl, d); b.pearl -= x; d -= x; b.gauge.v = b.pearl; if (b.pearl <= 0) { b.pearlOff = 3; b.gauge = { n: "Perle détruite", v: 0, max: b.pearlMax }; floatAt(bs, "Perle détruite", "info"); log("La Perle est détruite : plus de soin pendant 3 tours."); } if (d <= 0) { flashCls(document.querySelector("#bstage .bimg"), "hit"); return 0; } }
   let toHp = d; const hadSh = b.shield > 0, spl = b.splash;
   if (b.shield > 0) { const eff = type === "p" ? 0.35 : 1, abs = Math.min(b.shield, d * eff); b.shield = Math.round(b.shield - abs); toHp = Math.max(0, Math.round(d - abs / eff));  }
@@ -5565,7 +5573,7 @@ function dmgBoss(h, m, o = {}) {
   if (b.phase === 2 && b.regrow > 0 && !b.rgCut && exposedNow(b) && d >= 0.03 * b.maxHp) { b.rgCut = true; b.regrow = Math.max(0, b.regrow - 3); b.gauge.v = b.regrow; floatAt(bs, "Renaissance −3", "info"); }
   if (b.bowl > 0 && d >= b.bowlThr * b.maxHp) { b.bowl--; bowlChip(b); floatAt(bs, "Bol −10 %", "info"); log(b.bowl ? `Le bol se vide : −${b.bowl * 10} % de dégâts subis.` : "Le bol est brisé !"); }
   coffinCheck(b);
-  if (b.phase === 1 && b.hp > 0 && (b.bowl !== undefined ? b.bowl === 0 : b.queues !== undefined ? false : b.hp / b.maxHp < 0.5)) {
+  if (b.phase === 1 && b.hp > 0 && !b.pats && (b.bowl !== undefined ? b.bowl === 0 : b.queues !== undefined ? false : b.hp / b.maxHp < 0.5)) {
     b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); if (b.skel) { b.enr += 0.25 * b.skel.length; b.skel = []; b.gauge = { n: "Gigantisme", v: 0, max: Math.round(b.gigCap * 100) }; log("Les squelettes fusionnent : le Colosse se dresse !"); } if (b.rage) b.rage *= 0.5; if (b.thirstMax) { b.thirst = 0; b.gauge = { n: "Soif", v: 0, max: b.thirstMax }; } log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
     if (b.threads) markThreads();
     if (!b.stun) pickIntent();
@@ -5743,6 +5751,11 @@ async function rebirthCine(b, p) {
 }
 async function bossDown() {
   const b = F.boss;
+  if (b.pats && b.form < 2) {
+    b.egg = 2; b.hp = b.maxHp; b.st = []; b.shield = 0; b.queue = []; b.intent = "pulse"; b.step = 0;
+    pop("ŒUF", "#ff8a1f"); log(`${b.name} se change en œuf : 99 % de dégâts en moins pendant 2 tours.`); update(); await sleep(900);
+    return false;
+  }
   if (b.births && b.bn < b.births.length) {
     const p = b.births[b.bn++];
     if (b.forms) { await rebirthCine(b, p); return false; }
@@ -5818,6 +5831,7 @@ async function bossTurn() {
   if (b.phase === 2 && b.queues !== undefined) { b.regrow = Math.min(9, b.regrow + 1); b.gauge.v = b.regrow; }
   if (!b.stun && !delayed) pickIntent();
   if (b.phase === 2 && b.queues !== undefined && b.regrow >= 9 && b.intent !== "queues") { b.queue.unshift(b.intent); b.intent = "queues"; }
+  if (b.egg === 1) b.intent = "eclosion"; else if (b.egg === 2) b.intent = "pulse";
   if (b.inCoffin) b.intent = "cercueil";
   else if (b.thirstMax && b.phase === 2 && b.thirst >= b.thirstMax && b.intent !== "festin") { b.queue.unshift(b.intent); b.intent = "festin"; }
   F.round++;
@@ -5873,7 +5887,24 @@ async function bossAct(mv) {
     if (fx.shieldblock) addSt(h, { k: "shieldblock", d: fx.shieldblock });
     if (fx.charmed) addSt(h, { k: "charmed", d: 2 });
   };
-  if (mv.k === "vague") {
+  if (mv.k === "pulse") {
+    const el = b.formEl[b.form]; b.egg = 1;
+    alive().forEach((h) => {
+      const ok = h.shield > 0 || hDr(h) >= 0.3; bossHitFx(h, mv, el);
+      if (ok) hurtHero(h, bAtk() * 0.5, { type: "m", floorPct: 0.01 });
+      else if (M === "m") killHero(h, `${h.c.name} est consumé par la pulsation.`);
+      else hurtHero(h, Math.round(h.maxHp * b.pulsePct), { raw: true, type: "m", noCounter: true, floorPct: 0.01 });
+    });
+  } else if (mv.k === "eclosion") {
+    b.form++; b.egg = 0; b.el = b.formEl[b.form]; b.hp = b.maxHp; b.p1 = b.pats[b.form].slice(); b.p2 = b.pats[b.form].slice(); b.step = 0; b.queue = [];
+    pop("RENAISSANCE", "#ff8a1f"); log(`${b.name} renaît sous une nouvelle forme (${ELEM[b.el].n}) !`);
+  } else if (mv.k === "gel") {
+    const tt = taunter(), v = tt && !tt.st.some((s) => s.k === "gel") ? tt : rnd(alive().filter((h) => !h.st.some((s) => s.k === "gel")));
+    if (v) { addSt(v, { k: "gel", d: 1 }); floatAt(heroEl(v), "Gelé", "info"); log(`${v.c.name} est gelé.`); v.acted = true; }
+  } else if (mv.k === "foudre") {
+    const order = alive().sort(() => Math.random() - 0.5).slice(0, b.chainN);
+    order.forEach((h, i) => { bossHitFx(h, mv, "metal"); hurtHero(h, bAtk() * 0.8 * (1 + 0.15 * i) * (h.shield > 0 ? 0.5 : 1.2), { type: "m" }); });
+  } else if (mv.k === "vague") {
     const type = ["p", "m", "pure"][b.vague % 3]; b.vague++;
     const des = (b.curV || []).filter((h) => !h.dead), tt = des.find((h) => h.st.some((s) => s.k === "taunt")), ts = tt ? [tt] : des;
     ts.forEach((h) => {
