@@ -2108,7 +2108,7 @@ body:has(.fight) #fbgx{display:block}
 <div id="rot"><i>⟳</i><span>Tourne ton téléphone : Ascend: Nine Heavens se joue à l'horizontale (16:9).</span></div>
 <script src="pixelfx.js"></script>
 <script>
-const GAME_VERSION = 110; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
+const GAME_VERSION = 111; // numéro affiché sur l'accueil : à incrémenter avec `python3 bump_version.py` (garde sw.js synchronisé)
 // ===================== DONNÉES =====================
 const ELEM = {
   feu:   { n: "Feu",   c: "#ff6a3d", k: "火" },
@@ -2575,7 +2575,7 @@ const BOSSES = [
     },
     p1: ["griffe", "jet", "griffe", "plonge"], p2: ["griffe", "deluge", "jet", "plonge"] },
   { id: "kitsune", name: "Renarde aux Neuf Queues", ep: "Reine des illusions", el: "feu", hp: 3500, atk: 132, pdef: 30, mdef: 58,
-    hint: "Mirage fait rater 50 % des coups physiques : garde tes Lames pour après.",
+    hint: "Chaque attaque annoncée a une bonne réponse (bouclier/+DEF, provocation, ne pas attaquer pendant le Mirage) : chaque bonne réponse tranche une queue. À 9, phase 2.",
     moves: {
       follet: { n: "Feux follets", t: "aoe", m: 0.5, type: "m", d: "Touche l'équipe et inflige Brûlure.", fx: { burn: { m: 0.18, d: 2 } } },
       charme: { n: "Charme", t: "charm", m: 0.8, type: "m", d: "Frappe l'allié le plus fort et réduit son ATK de 30 %.", fx: { atkdown: { p: 0.3, d: 2 } } },
@@ -4816,7 +4816,7 @@ function log(msg) { F.log.push(msg); if (F.log.length > 2) F.log.shift(); const 
 
 
 // ---- mécaniques propres aux boss, par mode (Normal / Héroïque / Mythique) ----
-const prot = (h, kind) => kind === "shield" ? h.shield > 0 : kind === "sum60" ? hDr(h) + h.shield / h.maxHp >= 0.6 : (h.shield > 0 || hDr(h) >= 0.4);
+const prot = (h, kind) => kind === "light" ? (h.shield > 0 || hDr(h) >= 0.15) : kind === "light2" ? (h.shield > 0 || hDr(h) >= 0.3) : kind === "both" ? (h.shield > 0 && hDr(h) >= 0.3) : kind === "shield" ? h.shield > 0 : kind === "sum60" ? hDr(h) + h.shield / h.maxHp >= 0.6 : (h.shield > 0 || hDr(h) >= 0.4);
 function killHero(h, why) { if (h.dead) return; h.hp = 0; h.dead = true; h.st = []; h.shield = 0; floatAt(heroEl(h), "Mort", "hurt"); log(why || `${h.c.name} est tombé.`); }
 function fatalLose(why) { F.heroes.forEach((h) => { h.hp = 0; h.dead = true; h.st = []; h.shield = 0; }); F.lost = true; pop("RÈGLE FATALE", "#ff2a2a"); log(why || "L'équipe est anéantie."); }
 const exposedNow = (b) => b.st.some((s) => s.k === "exposed");
@@ -4840,6 +4840,14 @@ function onBirth(b) {
   if (b.threads) markThreads();
   b.sh = null; b.splash = false; b.rage = 0; b.fer = 0;
 }
+function kitsuneQueue(b, ok) {
+  if (ok) {
+    b.queues = Math.min(9, b.queues + 1); b.gauge.v = b.queues; floatAt(bossEl(), `Queue tranchée ${b.queues}/9`, "info"); log(`Bonne réponse : queue tranchée (${b.queues}/9).`);
+    if (b.queues === 3 || b.queues === 6) { b.enr += 0.1; pop("ATK +10 %", "#ff8a3a"); }
+    exposeBoss(b);
+    if (b.queues >= 9) { b.phase = 2; b.step = 0; b.queue = []; b.gauge = { n: "Renaissance", v: 0, max: 9 }; b.regrow = 0; phaseHeal(b); log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a"); if (!b.stun) pickIntent(); }
+  } else if ((b.mode || "n") === "m" && b.queues > 0) { b.queues--; b.gauge.v = b.queues; floatAt(bossEl(), `Queue perdue ${b.queues}/9`, "info"); }
+}
 function bowlChip(b) { b.st = b.st.filter((s) => s.k !== "bowl"); if (b.bowl > 0) b.st.push({ k: "bowl", p: 0.1 * b.bowl, d: 999 }); }
 function bossSetup(b) {
   const M = b.mode || "n", H = M !== "n", X = M === "m", mv = b.moves;
@@ -4855,13 +4863,12 @@ function bossSetup(b) {
       }
       break;
     case "kitsune":
-      if (H) {
-        mv.reflet = { k: "reflet", n: "Reflet", t: "self", d: "Renvoie 30 % de la magie pendant 2 tours.", fx: { reflect: { type: "m", p: 0.3, d: 2 } } };
-        b.p1 = ["follet", "charme", "mirage", "follet", "charme", "reflet"];
-        b.p2 = ["mirage", "follet", "queues", "charme", "reflet", "follet"];
-        set("charme", { d: "Frappe l'allié le plus fort, ATK −30 %, et le charme : non purgé, " + (X ? "il se jette dans les flammes." : "il frappe un allié."), fx: { atkdown: { p: 0.3, d: 2 }, charmed: 1 }, fatal: X });
-      }
-      if (X) b.gauge = { n: "Queues", v: 0, max: 9 };
+      b.queues = 0; b.gauge = { n: "Queues", v: 0, max: 9 }; b.regrow = 0; b.kn = { n: 1, h: 2, m: 3 }[M]; b.look = M === "n" ? 3 : 2;
+      set("follet", { d: "Touche l'équipe et brûle. Bonne réponse : au moins " + b.kn + " héros avec bouclier ou +DEF1.", prot: "light", kq: "prot" });
+      set("charme", { d: "Frappe l'allié le plus fort, ATK −30 %, et le charme. Bonne réponse : un héros en Provocation.", fx: { atkdown: { p: 0.3, d: 2 }, charmed: 1 }, kq: "taunt" });
+      set("mirage", { d: "Esquive 50 % des attaques physiques. Bonne réponse : n'attaque pas ce tour.", kq: "idle" });
+      set("queues", { d: "Éclat des neuf queues : " + (M === "n" ? "bouclier ou +DEF2 requis." : "bouclier ET +DEF2 requis."), prot: M === "n" ? "light2" : "both", err: err({ team: 0.35 }, { team: 0.7 }, { lose: 1 }), fatal: X });
+      b.p1 = ["follet", "charme", "mirage", "follet", "charme", "mirage"]; b.p2 = ["charme", "follet", "follet", "charme"];
       break;
     case "oni":
       set("kanabo", { expose: "taunt", floor: { n: 0.4, h: 0.15, m: 0 } });
@@ -5503,7 +5510,7 @@ function nextActive() {
 function newRound(first) {
   if (!first) F.heroes.forEach((h) => { h.cd = h.cd.map((c) => Math.max(0, c - 1)); });
   F.heroes.forEach((h) => { h.acted = h.dead; });
-  F.soak = null; F.mirrorOn = false; F.mirror = 0; F.wrong = false;
+  F.soak = null; F.mirrorOn = false; F.mirror = 0; F.wrong = false; F.attackers = new Set(); if (F.boss) F.boss.rgCut = false;
   F.phase = "player"; F.pending = null; F.busy = false; F.plan = [];
   nextActive(); update();
 }
@@ -5516,6 +5523,7 @@ function discover(b, el, type) {
 function dmgBoss(h, m, o = {}) {
   const b = F.boss, type = h.dt, mods = md(), bs = bossEl(), el = o.el || h.el;
   if (b.hp <= 0) return 0;
+  (F.attackers = F.attackers || new Set()).add(h.id);
   if (F.phase === "player" && b.gauge && b.gauge.max && ((type === "p" && b.st.some((s) => s.k === "evade")) || (type === "m" && b.st.some((s) => s.k === "reflect" && s.type === "m")))) F.wrong = true;
   if (b.rageOn && type === "p") b.rage = (b.rage || 0) + 0.05;
   if (type === "p") { const ev = b.st.find((s) => s.k === "evade"); if (ev && Math.random() < ev.p) { floatAt(bs, "Esquive", "info"); return 0; } }
@@ -5543,8 +5551,9 @@ function dmgBoss(h, m, o = {}) {
   const rf = b.st.find((s) => s.k === "reflect" && s.type === type);
   if (rf && rf.p >= 1 && d > 0 && h.c.role === "mag" && h.hp / h.maxHp < 0.6 && !h.dead) killHero(h, `${h.c.name} est terrassé par le Sceau.`);
   if (rf && d > 0) hurtHero(h, d * rf.p, { raw: true, noCounter: true });
+  if (b.phase === 2 && b.regrow > 0 && !b.rgCut && exposedNow(b) && d >= 0.03 * b.maxHp) { b.rgCut = true; b.regrow = Math.max(0, b.regrow - 3); b.gauge.v = b.regrow; floatAt(bs, "Renaissance −3", "info"); }
   if (b.bowl > 0 && d >= b.bowlThr * b.maxHp) { b.bowl--; bowlChip(b); floatAt(bs, "Bol −10 %", "info"); log(b.bowl ? `Le bol se vide : −${b.bowl * 10} % de dégâts subis.` : "Le bol est brisé !"); }
-  if (b.phase === 1 && b.hp > 0 && (b.bowl === undefined ? b.hp / b.maxHp < 0.5 : b.bowl === 0)) {
+  if (b.phase === 1 && b.hp > 0 && (b.bowl !== undefined ? b.bowl === 0 : b.queues !== undefined ? false : b.hp / b.maxHp < 0.5)) {
     b.phase = 2; b.step = 0; b.queue = []; phaseHeal(b); log(`${b.name} entre dans sa seconde phase !`); pop("PHASE 2", "#ff5a4a");
     if (b.threads) markThreads();
     if (!b.stun) pickIntent();
@@ -5749,14 +5758,14 @@ async function bossTurn() {
     } else if (a.kind === "armure" && M !== "n") { b.shield = a.full; a.t = 0; floatAt(bossEl(), "Os régénérés", "shield"); }
     else if (a.kind === "perle" && b.splashOn && a.t >= 1) b.splash = true;
   }
-  if (b.gauge && b.gauge.max) {
+  if (b.gauge && b.gauge.max && b.wrongOn) {
     if (F.wrong) { b.gauge.v++; floatAt(bossEl(), `Queue ${b.gauge.v}/${b.gauge.max}`, "info"); update(); if (b.gauge.v >= b.gauge.max) fatalLose("Les neuf queues se déploient."); }
     F.wrong = false;
   }
   for (const h of alive()) {
     const c = h.st.find((s) => s.k === "charmed"); if (!c) continue;
     h.st = h.st.filter((s) => s !== c);
-    if (M === "m") killHero(h, `${h.c.name}, charmé, se jette dans les flammes.`);
+    if (M === "m" && b.id !== "kitsune") killHero(h, `${h.c.name}, charmé, se jette dans les flammes.`);
     else { const v = rnd(alive().filter((x) => x !== h)); if (v) { log(`${h.c.name}, charmé, frappe ${v.c.name} !`); hurtHero(v, Math.round(v.maxHp * 0.4), { raw: true, type: "p", noCounter: true, floorPct: 0.01 }); } }
     update(); await sleep(500);
   }
@@ -5790,7 +5799,9 @@ async function bossTurn() {
   if (!alive().length) { await sleep(400); return defeat(); }
   const tick = (u) => { u.st = u.st.filter((s) => { if (s.fresh) { s.fresh = false; return true; } s.d--; return s.d > 0; }); };
   tick(b); F.heroes.forEach(tick);
+  if (b.phase === 2 && b.queues !== undefined) { b.regrow = Math.min(9, b.regrow + 1); b.gauge.v = b.regrow; }
   if (!b.stun && !delayed) pickIntent();
+  if (b.phase === 2 && b.queues !== undefined && b.regrow >= 9 && b.intent !== "queues") { b.queue.unshift(b.intent); b.intent = "queues"; }
   F.round++;
   if (b.tideMax && b.bowl === 0) { b.flood++; b.tide = 0.05 * b.flood; b.gauge.v = b.flood; floatAt(bossEl(), `Marée ${b.flood}/${b.tideMax}`, "info"); if (b.flood >= b.tideMax) { fatalLose("Le Déluge final engloutit l'équipe."); update(); await sleep(400); return defeat(); } }
   if (b.tideOn) { b.tide = (b.tide || 0) + 0.05; b.gauge.v = Math.round(b.tide * 100); floatAt(bossEl(), "Marée +5 %", "info"); }
@@ -5881,6 +5892,11 @@ async function bossAct(mv) {
     }
   }
   if (F.lost) { update(); if (bmel) await bmel.home(); await sleep(700); return; }
+  if (mv.kq && b.phase === 1 && b.hp > 0) {
+    const ok = mv.kq === "prot" ? hitLog.filter((e) => e.pr).length >= b.kn : mv.kq === "taunt" ? hitLog.some((e) => e.taunt) : !(F.attackers && F.attackers.size);
+    kitsuneQueue(b, ok);
+  }
+  if (mv.k === "queues" && b.queues !== undefined) { b.regrow = 0; b.gauge.v = 0; }
   if (mv.expose && b.hp > 0) {
     const ok = mv.expose === "prot" ? hitLog.length > 0 && hitLog.every((e) => e.pr || e.ev) : mv.expose === "taunt" ? hitLog.some((e) => e.taunt) : mv.expose === "parry" ? parried || hitLog.some((e) => e.taunt) : false;
     if (ok) exposeBoss(b);
